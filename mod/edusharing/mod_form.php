@@ -1,24 +1,18 @@
 <?php
-
-/**
- * This product Copyright 2010 metaVentis GmbH.  For detailed notice,
- * see the "NOTICE" file with this distribution.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * The main edusharing configuration form
@@ -26,10 +20,10 @@
  * It uses the standard core Moodle formslib. For more info about them, please
  * visit: http://docs.moodle.org/en/Development:lib/formslib.php
  *
- * @package   mod
+ * @package    mod
  * @subpackage edusharing
- * @copyright 2010 metaVentis GmbH
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -50,23 +44,19 @@ class mod_edusharing_mod_form extends moodleform_mod
 		global $CFG;
 		global $COURSE;
 
-		$es = new ESApp();
-		$app = $es->getApp(EDUSHARING_BASENAME);
-		$conf = $es->getHomeConf();
-		$app_id = $conf->prop_array['appid'];
-		$propArray = $conf->prop_array;
+		$appProperties = json_decode(get_config('edusharing', 'appProperties'));
 
 		try
 		{
 			// @TODO make dynamic
-			$ccauth = new CCWebServiceFactory($propArray['homerepid']);
-			$ticket = $ccauth->CCAuthenticationGetTicket($app_id);
+			$ccauth = new mod_edusharing_web_service_factory();
+			$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties -> appid);
 		}
 		catch(Exception $e)
 		{
 			error_log( print_r($e, true) );
 
-			print_error($ccauth->beautifyException($e));
+			print_error($e -> getMessage());
 			print_footer(" ");
 
 			return false;
@@ -90,55 +80,51 @@ class mod_edusharing_mod_form extends moodleform_mod
 		$mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
 	/// Adding the standard "intro" and "introformat" fields
+		//$this->add_intro_editor();
+	if (method_exists($this,'standard_intro_elements')) {
+      	$this->standard_intro_elements() ;
+     }else {
 		$this->add_intro_editor();
-
+	 }
+	 
 //-------------------------------------------------------------------------------
 	/// object-section
 		$mform->addElement('header', 'object_url_fieldset', get_string('object_url_fieldset', EDUSHARING_MODULE_NAME));
 
 		// object-uri
 		$mform->addElement('text', 'object_url', get_string('object_url', EDUSHARING_MODULE_NAME), array('readonly' => 'true'));
+		$mform->setType('object_url', PARAM_RAW_TRIMMED);
 		$mform->addRule('object_url', null, 'required', null, 'client');
 		$mform->addRule('object_url', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 		$mform->addHelpButton('object_url', 'object_url', EDUSHARING_MODULE_NAME);
 
-		$_my_lang = _edusharing_get_current_users_language_code();
+		$_my_lang = mod_edusharing_get_current_users_language_code();
 
-		// search-button
-		if ( empty($propArray['cc_gui_url']) ) {
-			trigger_error('No "cc_gui_url" configured.', E_ERROR);
-		}
-
-		$ccresource_search  = $propArray['cc_gui_url'];
+		$ccresource_search  = $appProperties -> cc_gui_url;
 		$ccresource_search .= "?mode=0";
-//		$ccresource_search .= "&user=".urlencode($_SESSION["U_SER"]->username);
-		$ccresource_search .= "&user=".urlencode(get_edu_auth_key());
+		$ccresource_search .= "&user=".urlencode(mod_edusharing_get_auth_key());
 		$ccresource_search .= "&locale=".$_my_lang;
 		$ccresource_search .= "&ticket=".$ticket;
 		$ccresource_search .= "&reurl=".urlencode($CFG->wwwroot."/mod/edusharing/makelink.php");
 
 		$searchbutton = $mform->addElement('button', 'searchbutton', get_string('searchrec', EDUSHARING_MODULE_NAME).'...');
 		$buttonattributes = array('title'=>get_string('searchrec', EDUSHARING_MODULE_NAME), 'onclick'=>"return window.open('"
-						  . "$ccresource_search', 'alfwin', 'menubar=0,location=0,directories=0,toolbar=0,"
+						  . "$ccresource_search', '_blank', 'menubar=0,location=0,directories=0,toolbar=0,"
 						  . "scrollbars,resizable,width=1000,height=580');");
 		$searchbutton->updateAttributes($buttonattributes);
 
-		// upload-button
-		if ( empty($propArray['cc_gui_url']) ) {
-			trigger_error('No "cc_gui_url" configured.', E_ERROR);
-		}
 
-		$ccresource_upload  = $propArray['cc_gui_url'];
+
+		$ccresource_upload  = $appProperties -> cc_gui_url;
 		$ccresource_upload .= "?mode=2";
-//		$ccresource_upload .= "&user=".urlencode($_SESSION["U_SER"]->username);
-		$ccresource_search .= "&user=".urlencode(get_edu_auth_key());
+		$ccresource_search .= "&user=".urlencode(mod_edusharing_get_auth_key());
 		$ccresource_upload .= "&locale=".$_my_lang;
 		$ccresource_upload .= "&ticket=".$ticket;
 		$ccresource_upload .= "&reurl=".urlencode($CFG->wwwroot."/mod/edusharing/makelink.php");
 
 		$uploadbutton = $mform->addElement('button', 'uploadbutton', get_string('uploadrec', EDUSHARING_MODULE_NAME).'...');
 		$buttonattributes = array('title'=>get_string('uploadrec', EDUSHARING_MODULE_NAME), 'onclick'=>"return window.open('"
-						  . "$ccresource_upload', 'alfwin', 'menubar=0,location=0,directories=0,toolbar=0,"
+						  . "$ccresource_upload', '_blank', 'menubar=0,location=0,directories=0,toolbar=0,"
 						  . "scrollbars,resizable,width=1000,height=580');");
 		$uploadbutton->updateAttributes($buttonattributes);
 
@@ -147,8 +133,8 @@ class mod_edusharing_mod_form extends moodleform_mod
 		$mform->addElement('header', 'version_fieldset', get_string('object_version_fieldset', EDUSHARING_MODULE_NAME));
 
 		$radioGroup=array();
-		$radioGroup[] = MoodleQuickForm::createElement('radio', 'object_version', '', get_string('object_version_use_latest', EDUSHARING_MODULE_NAME), 0, array());
-		$radioGroup[] = MoodleQuickForm::createElement('radio', 'object_version', '', get_string('object_version_use_exact', EDUSHARING_MODULE_NAME), 1, array());
+		$radioGroup[] = $mform->createElement('radio', 'object_version', '', get_string('object_version_use_latest', EDUSHARING_MODULE_NAME), 0, array());
+		$radioGroup[] = $mform->createElement('radio', 'object_version', '', get_string('object_version_use_exact', EDUSHARING_MODULE_NAME), 1, array());
 
 		$mform->addGroup($radioGroup, 'object_version', get_string('object_version', EDUSHARING_MODULE_NAME), array(' '), false);
 		$mform->setDefault('object_version', 0);
@@ -158,68 +144,29 @@ class mod_edusharing_mod_form extends moodleform_mod
 //-------------------------------------------------------------------------------
 	/// display-section
 		$mform->addElement('header', 'object_display_fieldset', get_string('object_display_fieldset', EDUSHARING_MODULE_NAME));
-
-		/*$mform->addElement('checkbox', 'force_download', get_string('force_download', EDUSHARING_MODULE_NAME));
-		$mform->addHelpButton('force_download', 'force_download', EDUSHARING_MODULE_NAME);
-		$mform->disabledIf('force_download', 'popup_window', 'eq', 1);
-         */
-
 		$window_options = array(0 => get_string('pagewindow', EDUSHARING_MODULE_NAME), 1 => get_string('newwindow', EDUSHARING_MODULE_NAME));
 		$mform->addElement('select', 'popup_window', get_string('display', EDUSHARING_MODULE_NAME), $window_options);
 		$mform->setDefault('popup_window', !empty($CFG->resource_popup));
 
-//not necessary because resources are shown self or blank
-
-		/*$mform->addElement('checkbox', 'show_course_blocks', get_string('show_course_blocks', EDUSHARING_MODULE_NAME));
-		$mform->setDefault('show_course_blocks', 0);
-		$mform->disabledIf('show_course_blocks', 'popup_window', 'eq', 1);
-		$mform->setAdvanced('show_course_blocks');
-
-		$mform->addElement('checkbox', 'show_directory_links', get_string('show_directory_links', EDUSHARING_MODULE_NAME));
-		$mform->disabledIf('show_directory_links', 'popup_window', 'eq', 0);
-		$mform->setAdvanced('show_directory_links');
-
-		$mform->addElement('checkbox', 'window_allow_resize', get_string('window_allow_resize', EDUSHARING_MODULE_NAME));
-		$mform->disabledIf('window_allow_resize', 'popup_window', 'eq', 0);
-		$mform->setAdvanced('window_allow_resize');
-
-		$mform->addElement('checkbox', 'window_allow_scroll', get_string('window_allow_scroll', EDUSHARING_MODULE_NAME));
-		$mform->disabledIf('window_allow_scroll', 'popup_window', 'eq', 0);
-		$mform->setAdvanced('window_allow_scroll');
-
-		$mform->addElement('checkbox', 'show_menu_bar', get_string('show_menu_bar', EDUSHARING_MODULE_NAME));
-		$mform->disabledIf('show_menu_bar', 'popup_window', 'eq', 0);
-		$mform->setAdvanced('show_menu_bar');
-
-		$mform->addElement('checkbox', 'show_location_bar', get_string('show_location_bar', EDUSHARING_MODULE_NAME));
-		$mform->disabledIf('show_location_bar', 'popup_window', 'eq', 0);
-		$mform->setAdvanced('show_location_bar');
-
-		$mform->addElement('checkbox', 'show_tool_bar', get_string('show_tool_bar', EDUSHARING_MODULE_NAME));
-		$mform->disabledIf('show_tool_bar', 'popup_window', 'eq', 0);
-		$mform->setAdvanced('show_tool_bar');
-
-		$mform->addElement('checkbox', 'show_status_bar', get_string('show_status_bar', EDUSHARING_MODULE_NAME));
-		$mform->disabledIf('show_status_bar', 'popup_window', 'eq', 0);
-		$mform->setAdvanced('show_status_bar');
-
-		$mform->addElement('text', 'window_width', get_string('window_width', EDUSHARING_MODULE_NAME));
-		$mform->disabledIf('window_width', 'popup_window', 'eq', 0);
-		$mform->setDefault('window_width', 600);
-		$mform->setAdvanced('window_width');
-
-		$mform->addElement('text', 'window_height', get_string('window_height', EDUSHARING_MODULE_NAME));
-		$mform->disabledIf('window_height', 'popup_window', 'eq', 0);
-		$mform->setDefault('window_height', 400);
-		$mform->setAdvanced('window_height');*/
 
 //-------------------------------------------------------------------------------
 		// add standard elements, common to all modules
 		$this->standard_coursemodule_elements();
 //-------------------------------------------------------------------------------
 		// add standard buttons, common to all modules
-		$this->add_action_buttons();
-
+		//$this->add_action_buttons();
+		
+		
+        $submit2label = get_string('savechangesandreturntocourse');
+        $mform = $this->_form;
+        $buttonarray = array();
+        if ($submit2label !== false && $this->courseformat->has_view_page()) {
+            $buttonarray[] = &$mform->createElement('submit', 'submitbutton2', $submit2label);
+        }
+        $buttonarray[] = &$mform->createElement('cancel');
+        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+        $mform->setType('buttonar', PARAM_RAW);
+        $mform->closeHeaderBefore('buttonar');
 	}
 
 	/**

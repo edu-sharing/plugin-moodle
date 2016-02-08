@@ -1,162 +1,81 @@
 <?php
+// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * @package    mod
+ * @subpackage edusharing
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 require_once (dirname(__FILE__) . '/../../config.php');
-define('CC_CONF_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
-define('CC_CONF_APPFILE', 'ccapp-registry.properties.xml');
+error_reporting(E_ERROR);
 
-require_once ($CFG -> dirroot . '/mod/edusharing/lib/ESApp.php');
-require_once ($CFG -> dirroot . '/mod/edusharing/lib/EsApplications.php');
-require_once ($CFG -> dirroot . '/mod/edusharing/lib/EsApplication.php');
-
-function getEntryElement($dom, $key, $val) {
-
-    $entry = $dom -> createElement('entry', $val);
-    $entry -> setAttribute("key", $key);
-    return $entry;
-};
-
-$impl = new DOMImplementation();
-$dtd = $impl -> createDocumentType('properties', '', 'http://java.sun.com/dtd/properties.dtd');
-
-$dom = $impl -> createDocument('1.0', '', $dtd);
-$dom -> encoding = 'UTF-8';
-$dom -> preserveWhiteSpace = false;
-$dom -> formatOutput = true;
-$element = $dom -> createElement('properties');
-$dom -> appendChild($element);
-
-if (empty($_SERVER['HTTPS'])) {
-    $prot = 'http://';
-} else {
-    $prot = 'https://';
-};
-
-$application = new ESApp();
-$application -> getApp('conf/esmain');
-$hc = $application -> getHomeConf();
+$appProperties = json_decode(get_config('edusharing', 'appProperties'));
 
 $parsedWwwroot = parse_url($CFG -> wwwroot);
 if ($_GET['wsScheme'] == 'http' || $_GET['wsScheme'] == 'https')
     $parsedWwwroot['scheme'] = $_GET['wsScheme'];
 if (isset($_GET['wsForceIpAddress']))
-    $parsedWwwroot['host'] = $hc -> prop_array['host'];
-$wsBaseUrl = $parsedWwwroot['scheme'];
-$wsBaseUrl .= '://';
-$wsBaseUrl .= $parsedWwwroot['host'];
-if (!empty($hc -> prop_array['port']))
+    $parsedWwwroot['host'] = $appProperties -> host;
+$wsBaseUrl = $parsedWwwroot['scheme'] . '://' . $parsedWwwroot['host'];
+if (!empty($appProperties -> port))
     $wsBaseUrl .= ':' . $hc -> prop_array['port'];
 $wsBaseUrl .= $parsedWwwroot['path'];
 
-if (empty($hc -> prop_array['public_key'])) {
-    require_once (dirname(__FILE__) . '/AppPropertyHelper.php');
-    $appPropertyHelper = new AppPropertyHelper($hc);
-    $appPropertyHelper -> addSslKeypairToHomeConfig();
-    $application = new ESApp();
-    $application -> getApp('conf/esmain');
-    $hc = $application -> getHomeConf();
+if (empty($appProperties -> signatureRedirector)) {
+    require_once (dirname(__FILE__) . '/mod_edusharing_app_property_helper.php');
+    $mod_edusharing_app_property_helper = new mod_edusharing_app_property_helper($hc);
+    $mod_edusharing_app_property_helper -> mod_edusharing_add_signature_redirector();
+    $appProperties = json_decode(get_config('edusharing', 'appProperties'));
 }
 
-if (empty($hc -> prop_array['signatureRedirector'])) {
-    require_once (dirname(__FILE__) . '/AppPropertyHelper.php');
-    $appPropertyHelper = new AppPropertyHelper($hc);
-    $appPropertyHelper -> addSignatureRedirector();
-    $application = new ESApp();
-    $application -> getApp('conf/esmain');
-    $hc = $application -> getHomeConf();
+if (empty($appProperties -> public_key)) {
+    require_once (dirname(__FILE__) . '/mod_edusharing_app_property_helper.php');
+    $mod_edusharing_app_property_helper = new mod_edusharing_app_property_helper($hc);
+    $mod_edusharing_app_property_helper -> mod_edusharing_add_ssl_keypair_to_home_config();
+    $appProperties = json_decode(get_config('edusharing', 'appProperties'));
 }
 
-// test param USERNAME
-$auth_by_app_username_prop = 'USERNAME';
-if (!empty($_GET['auth_by_app_username_prop'])) {
-    $auth_by_app_username_prop = $_GET['auth_by_app_username_prop'];
-}
 
-// test param auth_by_app_sendmail
-$auth_by_app_sendmail = 'false';
-if (!empty($_GET['auth_by_app_sendmail'])) {
-    $auth_by_app_sendmail = 'true';
-}
+$xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8" ?><!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"><properties></properties>');
 
-// test param blowfishkey
-$blowfishkey = 'thetestkey';
-if (!empty($hc -> prop_array['blowfishkey'])) {
-    $blowfishkey = $hc -> prop_array['blowfishkey'];
-} else if (!empty($_GET['blowfishkey'])) {
-    $blowfishkey = $_GET['blowfishkey'];
-}
+$entry = $xml -> addChild('entry', $appProperties -> appid);
+$entry -> addAttribute('key', 'appid');
+$entry = $xml -> addChild('entry', $appProperties -> type);
+$entry -> addAttribute('key', 'type');
+$entry = $xml -> addChild('entry', 'moodle');
+$entry -> addAttribute('key', 'subtype');
+$entry = $xml -> addChild('entry', parse_url($CFG -> wwwroot, PHP_URL_HOST));
+$entry -> addAttribute('key', 'domain');
+$entry = $xml -> addChild('entry', $appProperties -> host);
+$entry -> addAttribute('key', 'host');
+$entry = $xml -> addChild('entry', 'true');
+$entry -> addAttribute('key', 'trustedclient');
+$entry = $xml -> addChild('entry', 'moodle:course/update');
+$entry -> addAttribute('key', 'hasTeachingPermission');
+$entry = $xml -> addChild('entry', $appProperties -> blowfishkey);
+$entry -> addAttribute('key', 'blowfishkey');
+$entry = $xml -> addChild('entry', $appProperties -> blowfishiv);
+$entry -> addAttribute('key', 'blowfishiv');
+$entry = $xml -> addChild('entry', $appProperties -> public_key);
+$entry -> addAttribute('key', 'public_key');
+$entry = $xml -> addChild('entry', $appProperties -> signatureRedirector);
+$entry -> addAttribute('key', 'signatureRedirector');
 
-// test param blowfishiv
-$blowfishiv = 'initvect';
-if (!empty($hc -> prop_array['blowfishiv'])) {
-    $blowfishiv = $hc -> prop_array['blowfishiv'];
-} else if (!empty($_GET['blowfishiv'])) {
-    $blowfishiv = $_GET['blowfishiv'];
-}
-
-$entry = getEntryElement($dom, 'appid', $hc -> prop_array['appid']);
-$element -> appendChild($entry);
-
-if (!empty($hc -> prop_array['appcaption'])) {
-    $entry = getEntryElement($dom, 'appcaption', $hc -> prop_array['appcaption']);
-    $element -> appendChild($entry);
-}
-
-$entry = getEntryElement($dom, 'type', $hc -> prop_array['type']);
-$element -> appendChild($entry);
-
-$entry = getEntryElement($dom, 'subtype', 'moodle');
-$element -> appendChild($entry);
-
-$entry = getEntryElement($dom, 'domain', parse_url($CFG -> wwwroot, PHP_URL_HOST));
-$element -> appendChild($entry);
-
-$entry = getEntryElement($dom, 'host', $hc -> prop_array['host']);
-$element -> appendChild($entry);
-
-if (!empty($hc -> prop_array['port'])) {
-    $entry = getEntryElement($dom, 'port', $hc -> prop_array['port']);
-    $element -> appendChild($entry);
-}
-
-if (empty($hc -> prop_array['trustedclient'])) {
-    $hc -> prop_array['trustedclient'] = 'true';
-}
-
-$entry = getEntryElement($dom, 'trustedclient', $hc -> prop_array['trustedclient']);
-$element -> appendChild($entry);
-
-$entry = getEntryElement($dom, 'authenticationwebservice', $wsBaseUrl . '/mod/edusharing/services/authentication.php');
-$element -> appendChild($entry);
-
-$entry = getEntryElement($dom, 'authenticationwebservice_wsdl', $wsBaseUrl . '/mod/edusharing/services/authentication.php?wsdl');
-$element -> appendChild($entry);
-
-$entry = getEntryElement($dom, 'permissionwebservice', $wsBaseUrl . '/mod/edusharing/services/permission.php');
-$element -> appendChild($entry);
-
-$entry = getEntryElement($dom, 'permissionwebservice_wsdl', $wsBaseUrl . '/mod/edusharing/services/permission.php?wsdl');
-$element -> appendChild($entry);
-
-$entry = getEntryElement($dom, 'hasTeachingPermission', 'moodle:course/update');
-$element -> appendChild($entry);
-
-$entry = getEntryElement($dom, 'blowfishkey', $blowfishkey);
-$element -> appendChild($entry);
-
-$entry = getEntryElement($dom, 'blowfishiv', $blowfishiv);
-$element -> appendChild($entry);
-/*
-$entry = getEntryElement($dom, 'auth_by_app_username_prop', $auth_by_app_username_prop);
-$element -> appendChild($entry);
-
-$entry = getEntryElement($dom, 'auth_by_app_sendmail', $auth_by_app_sendmail);
-$element -> appendChild($entry);
-*/
-$entry = getEntryElement($dom, 'public_key', $hc -> prop_array['public_key']);
-$element -> appendChild($entry);
-
-$entry = getEntryElement($dom, 'signatureRedirector', $hc -> prop_array['signatureRedirector']);
-$element -> appendChild($entry);
-
-header("Content-Type: application/xhtml+xml; charset=utf-8");
-print $dom -> saveXML();
+header('Content-type: text/xml');
+print($xml->asXML());
+exit();

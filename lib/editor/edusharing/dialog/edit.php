@@ -1,9 +1,29 @@
 <?php
+// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * @package    editor
+ * @subpackage edusharing
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 require_once(dirname(__FILE__) . "/../../../../config.php");
 require_once($CFG->dirroot.'/lib/setup.php');
 
-session_get_instance();
 require_login();
 
 global $DB;
@@ -11,10 +31,6 @@ global $CFG;
 global $COURSE;
 global $SESSION;
 
-require_once($CFG->dirroot.'/mod/edusharing/lib/ESApp.php');
-require_once($CFG->dirroot.'/mod/edusharing/lib/EsApplication.php');
-require_once($CFG->dirroot.'/mod/edusharing/lib/EsApplications.php');
-require_once($CFG->dirroot.'/mod/edusharing/conf/cs_conf.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib/cclib.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
@@ -51,11 +67,7 @@ if ( empty($CFG->yui3version) )
     <br/>
 <?php
 
-//.oO get CC homeconf
-$es = new ESApp();
-$app = $es->getApp(EDUSHARING_BASENAME);
-$conf = $es->getHomeConf();
-$propArray = $conf->prop_array;
+$appProperties = json_decode(get_config('edusharing', 'appProperties'));
 
 $edusharing = new stdClass();
 $edusharing -> object_url = '';
@@ -74,13 +86,13 @@ $edusharing -> prev_src = $_GET['prev_src'];
 $edusharing -> window_version = $_GET['window_version'];
 $edusharing -> repotype = $_GET['repotype'];
 
-function getPreviewText($short) {
-    if($short)
+function getPreviewText($short = '') {
+    if($short == 'giveMeAShortext')
         return 'Lorem ipsum dolor';
     return 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 }
 
-$repository_id = $propArray['homerepid'];
+$repository_id = $appProperties -> homerepid;
 if ( ! $repository_id )
 {
     header('HTTP/1.1 500 Internal Server Error');
@@ -99,44 +111,36 @@ if ( ! $repository_id )
         <table>
             <tr>
                 <td><?php echo htmlentities(get_string('title', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
-                <td>:</td>
-                <td><input type="text" maxlength="50" style="width: 150px" name="title" id="title" value="<?php echo htmlspecialchars($edusharing->title, ENT_COMPAT, 'utf-8') ?>"></input></td>
-            </tr>
-            <tr class="dimension">
-                <td><?php echo htmlentities(get_string('window_width', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
-                <td>:</td>
-                <td><input type="text" maxlength="4" size="5" name="window_width" id="window_width"  value="<?php echo htmlspecialchars($edusharing->window_width, ENT_COMPAT, 'utf-8') ?>" onKeyup="setHeight()" /></td>
-            </tr>
-             <tr class="dimension heightProp">
-                <td><?php echo htmlentities(get_string('window_height', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
-                <td>:</td>
-                <td><input type="text" maxlength="4" size="5" name="window_height" id="window_height" value="<?php echo htmlspecialchars($edusharing->window_height, ENT_COMPAT, 'utf-8') ?>" onKeyup="setWidth()" /></td>
-            </tr>
-            <tr class="dimension heightProp">
-                <td></td>
-                <td></td>
-                <td><input type="checkbox" name="constrainProps" id="constrainProps" value="1" checked="checked"/><?php echo htmlspecialchars(get_string('constrainProportions', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
+                <td><input type="text" maxlength="50" style="width: 160px" name="title" id="title" value="<?php echo htmlspecialchars($edusharing->title, ENT_COMPAT, 'utf-8') ?>"></input></td>
             </tr>
             <tr class="versionShowTr">
                 <td><?php echo  htmlentities(get_string('version', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
-                <td>:</td>
                 <td>
                     <input type="radio" disabled value="latest" name="window_versionshow" <?php echo ($edusharing -> window_versionshow == 'latest')?'checked="checked"':''?> /><?php echo  htmlentities(get_string('versionLatest', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
                     <input type="radio" disabled value="current" name="window_versionshow" <?php echo ($edusharing -> window_versionshow == 'current')?'checked="checked"':''?> /><?php echo  htmlentities(get_string('versionCurrent', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
                 </td>
             </tr>
-            
-            <tr>
+            <tr id="floatTr">
                 <td><?php echo  htmlentities(get_string('float', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
-                <td>:</td>
                 <td>
-                    <input type="radio" value="left" name="window_float" <?php echo ($edusharing -> window_float == 'left')?'checked="checked"':''?> onClick="handleClick(this)"/><?php echo  htmlentities(get_string('floatLeft', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                    <input type="radio" value="none" name="window_float" <?php echo ($edusharing -> window_float == 'none')?'checked="checked"':''?> onClick="handleClick(this)"/><?php echo  htmlentities(get_string('floatNone', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                    <input type="radio" value="right" name="window_float" <?php echo ($edusharing -> window_float == 'right')?'checked="checked"':''?> onClick="handleClick(this)"/><?php echo  htmlentities(get_string('floatRight', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                    <input type="radio" value="inline" name="window_float" <?php echo ($edusharing -> window_float == 'inline')?'checked="checked"':''?> onClick="handleClick(this)"/><?php echo  htmlentities(get_string('floatInline', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                    <input type="radio" value="left" name="window_float" <?php echo ($edusharing -> window_float == 'left')?'checked="checked"':''?> onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatLeft', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                    <input type="radio" value="none" name="window_float" <?php echo ($edusharing -> window_float == 'none')?'checked="checked"':''?> onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatNone', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                    <input type="radio" value="right" name="window_float" <?php echo ($edusharing -> window_float == 'right')?'checked="checked"':''?> onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatRight', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                    <input type="radio" value="inline" name="window_float" <?php echo ($edusharing -> window_float == 'inline')?'checked="checked"':''?> onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatInline', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
                 </td>
             </tr>
-    
+            <tr class="dimension">
+                <td><?php echo htmlentities(get_string('window_width', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
+                <td><input type="text" maxlength="4" size="5" name="window_width" id="window_width"  value="<?php echo htmlspecialchars($edusharing->window_width, ENT_COMPAT, 'utf-8') ?>" onKeyup="editor_edusharing_set_height()" />&nbsp;px</td>
+            </tr>
+             <tr class="dimension heightProp">
+                <td><?php echo htmlentities(get_string('window_height', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
+                <td><input type="text" maxlength="4" size="5" name="window_height" id="window_height" value="<?php echo htmlspecialchars($edusharing->window_height, ENT_COMPAT, 'utf-8') ?>" onKeyup="editor_edusharing_set_width()" />&nbsp;px</td>
+            </tr>
+            <tr class="dimension heightProp">
+                <td></td>
+                <td><input type="checkbox" name="constrainProps" id="constrainProps" value="1" checked="checked"/><?php echo htmlspecialchars(get_string('constrainProportions', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
+            </tr>
         </table>
     </div>
     
@@ -155,41 +159,41 @@ if ( ! $repository_id )
 </form>
 <script type="text/javascript">
 
-    function handleClick(radio) {
-        refreshPreview(radio.value);
+    function editor_edusharing_handle_click(radio) {
+        editor_edusharing_refresh_preview(radio.value);
     }
     
-    function refreshPreview(float) {
+    function editor_edusharing_refresh_preview(float) {
         style = tinymce.plugins.edusharing.getStyle(float);
         document.getElementById('preview_resource_wrapper').style = style;
     }
 
-    function setWidth() {
-        if(!getRatioCbStatus())
+    function editor_edusharing_set_width() {
+        if(!editor_edusharing_get_ratio_cb_status())
             return;
-        document.getElementById('window_width').value = Math.round(document.getElementById('window_height').value / getRatio());
+        document.getElementById('window_width').value = Math.round(document.getElementById('window_height').value / editor_edusharing_get_ratio());
     }
     
-    function setHeight() {
-        if(!getRatioCbStatus())
+    function editor_edusharing_set_height() {
+        if(!editor_edusharing_get_ratio_cb_status())
             return;
-        document.getElementById('window_height').value = Math.round(document.getElementById('window_width').value * getRatio());
+        document.getElementById('window_height').value = Math.round(document.getElementById('window_width').value * editor_edusharing_get_ratio());
     }
     
-    function getRatioCbStatus() {
+    function editor_edusharing_get_ratio_cb_status() {
         return document.getElementById('constrainProps').checked;
     }
     
-    function getRatio() {
+    function editor_edusharing_get_ratio() {
         return document.getElementById('ratio').value;
     }
 
-    function setPreviewContent() {
+    function editor_edusharing_set_preview_content() {
         
         mimeSwitchHelper = '';
         mimetype = '<?php echo $edusharing->mimetype?>';
         repotype = '<?php echo $edusharing->repotype?>';
-        if(mimetype.indexOf('image') !== -1)
+        if(mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1 || mimetype.indexOf('bmp') !== -1)
            mimeSwitchHelper = 'image';
         else if(mimetype.indexOf('audio') !== -1)
            mimeSwitchHelper = 'audio';
@@ -209,11 +213,11 @@ if ( ! $repository_id )
         }
         document.getElementById('preview_resource_wrapper').innerHTML = content;
         
-        visDimensionInputs(mimeSwitchHelper);
-        visVersionInputs();
+        editor_edusharing_vis_dimension_inputs(mimeSwitchHelper);
+        editor_edusharing_vis_version_inputs();
     }
     
-    function visVersionInputs() {
+    function editor_edusharing_vis_version_inputs() {
         if(document.getElementById('repotype').value == 'YOUTUBE') {
             document.getElementsByClassName('versionShowTr')[0].style.visibility = 'hidden';
         } else {
@@ -222,7 +226,7 @@ if ( ! $repository_id )
 
     }
     
-    function visDimensionInputs(mimeSwitchHelper) {
+    function editor_edusharing_vis_dimension_inputs(mimeSwitchHelper) {
        console.log(mimeSwitchHelper);
        if(mimeSwitchHelper == 'image') {
            var dimensionsSet = document.getElementsByClassName('dimension');
@@ -246,8 +250,8 @@ if ( ! $repository_id )
        }
     }
     
-    refreshPreview('<?php echo $edusharing -> window_float?>');    
-    setPreviewContent();
+    editor_edusharing_refresh_preview('<?php echo $edusharing -> window_float?>');    
+    editor_edusharing_set_preview_content();
           
 </script>
 </body>

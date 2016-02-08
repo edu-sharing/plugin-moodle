@@ -19,13 +19,16 @@
  * TinyMCE text editor integration version file.
  *
  * @package    editor
- * @subpackage tinymce
- * @copyright  2009 Petr Skoda (http://skodak.org)
+ * @subpackage edusharing
+ * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
+$plugin->component = 'editor_edusharing';
+$plugin->dependencies = array(
+    'mod_edusharing' => 2016011401,
+);
+$plugin->version  = 2016012001;
+$plugin->requires = 2015051100;     // Requires moodle 2.9
 
-$plugin->version  = 2015060801;
-$plugin->requires = 2010070300;
-$plugin->release  = '1.8.0';

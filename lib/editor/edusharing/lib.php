@@ -1,18 +1,34 @@
 <?php
+// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * @package    editor
+ * @subpackage edusharing
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../tinymce/lib.php');
 
-require_once($CFG->dirroot.'/mod/edusharing/lib/ESApp.php');
-require_once($CFG->dirroot.'/mod/edusharing/lib/EsApplication.php');
-require_once($CFG->dirroot.'/mod/edusharing/lib/EsApplications.php');
-require_once($CFG->dirroot.'/mod/edusharing/conf/cs_conf.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib/cclib.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
-class edusharing_texteditor extends tinymce_texteditor
-{
+class edusharing_texteditor extends tinymce_texteditor {
 
     /**
      * The namespace used for edu-sharing's attributes
@@ -32,7 +48,7 @@ class edusharing_texteditor extends tinymce_texteditor
      *
      * @return string
      */
-    protected function init_edusharing_ticket()
+    protected function mod_edusharing_init_edusharing_ticket()
     {
         /*
          * use previously generated ticket if available. Generates conflict if
@@ -50,13 +66,11 @@ class edusharing_texteditor extends tinymce_texteditor
             $_SESSION['edusharing']['editor'] = array();
         }
 
-        $es = new ESApp();
-        $app = $es->getApp(EDUSHARING_BASENAME);
-        $conf = $es->getHomeConf();
-        $repository_id = $conf->prop_array['homerepid'];
+        $appProperties = json_decode(get_config('edusharing', 'appProperties'));
+        $repository_id = $appProperties -> homerepid;
 
-        $ccauth = new CCWebServiceFactory($repository_id);
-        $edusharing_ticket = $ccauth->CCAuthenticationGetTicket($conf->prop_array['appid']);
+        $ccauth = new mod_edusharing_web_service_factory();
+        $edusharing_ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties -> appid);
         if ( ! $edusharing_ticket ) {
             unset($_SESSION['edusharing']['editor']['ticket']);
             return false;
@@ -119,16 +133,13 @@ class edusharing_texteditor extends tinymce_texteditor
         // add edu-sharing functionaliy to tinymce ONLY when course-id available
         if ( $this->is_edusharing_context($options) )
         {
-            $edusharing_ticket = $this->init_edusharing_ticket();
-            if ( ! $edusharing_ticket )
-            {
-                //throw new Exception('Error initializing ticket.');
-            }
+            $edusharing_ticket = $this->mod_edusharing_init_edusharing_ticket();
 
             // register tinymce-plugin but DO NOT try to load it as this already happened
             $params['plugins'] .= ',-edusharing';
 
             // add tool-button
+		    if (empty($params['theme_advanced_buttons3_add'])) $params['theme_advanced_buttons3_add']='';
             $params['theme_advanced_buttons3_add'] .= ',|,edusharing';
 
             // additional params required by edu-sharing.net
@@ -137,7 +148,7 @@ class edusharing_texteditor extends tinymce_texteditor
             $params['extended_valid_elements'] .= 'a[href|data|type|width|height|alt|title|xmlns::'.self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
             $params['extended_valid_elements'] .= ',object[data|type|width|height|alt|title|xmlns::'.self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
             $params['extended_valid_elements'] .= ',img[style|longdesc|usemap|src|border|alt=|title|hspace|vspace|width|height|align|xmlns::'.self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
-
+            
             $params['moodle_wwwroot'] = $CFG->wwwroot;
             $params['edusharing_course_id'] = $COURSE->id;
             $params['edusharing_ticket'] = $edusharing_ticket;

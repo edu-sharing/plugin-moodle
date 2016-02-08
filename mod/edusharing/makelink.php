@@ -1,25 +1,18 @@
 <?php
-
-/**
- * This product Copyright 2010 metaVentis GmbH.  For detailed notice,
- * see the "NOTICE" file with this distribution.
- *
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
 
 /*
 	- called from ALFRESCO after selecting a node/resource in the opened popup window
@@ -27,19 +20,29 @@
 	- closes popup
 */
 
+/**
+ * @package    mod
+ * @subpackage edusharing
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 require_once('../../config.php');
 
-print_header();
+$PAGE->set_url($CFG->wwwroot.$SCRIPT);
+$PAGE->set_context(context_system::instance() );
 
-$alfresco_res = addslashes_js(optional_param('nodeId', '', PARAM_RAW));
+echo $OUTPUT->header();
+
+
+$eduResource = addslashes_js(optional_param('nodeId', '', PARAM_RAW));
 
 echo <<<content
 This page should have populated the add resource form with the url to the Repository item.<br /><br />
 <a href="#" onclick="window.close();">If this window does not close on its own, please click here.</a>
 <script type="text/javascript">
 	try{
-		opener.document.getElementById('id_object_url').value = '$alfresco_res';
+		opener.document.getElementById('id_object_url').value = '$eduResource';
 		opener.focus();
 	} catch(err)
 	{}

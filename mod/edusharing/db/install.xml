@@ -236,26 +236,7 @@
                     SEQUENCE="false"
                     COMMENT="Float display property"
                     DEFAULT="none"
-                    PREVIOUS="window_height"
-                    NEXT="window_versionshow" />
-                <FIELD
-                    NAME="window_versionshow"
-                    TYPE="char"
-                    LENGTH="20"
-                    NOTNULL="true"
-                    SEQUENCE="false"
-                    DEFAULT="latest"
-                    COMMENT="Usage of current or latest resource version"
-                    PREVIOUS="window_float"
-                    NEXT="window_version" />
-                <FIELD
-                    NAME="window_version"
-                    TYPE="char"
-                    LENGTH="20"
-                    NOTNULL="false"
-                    SEQUENCE="false"
-                    COMMENT="Usage version"
-                    PREVIOUS="window_versionshow" />
+                    PREVIOUS="window_height"/>
 			</FIELDS>
 			
 			<KEYS>

@@ -1,24 +1,18 @@
 <?php
-
-/**
- * This product Copyright 2010 metaVentis GmbH.  For detailed notice,
- * see the "NOTICE" file with this distribution.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * This file keeps track of upgrades to the edusharing module
@@ -31,10 +25,10 @@
  * here will all be database-neutral, using the functions defined in
  * lib/ddllib.php
  *
- * @package   mod
+ * @package    mod
  * @subpackage edusharing
- * @copyright 2010 metaVentis GmbH
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -53,84 +47,73 @@ function xmldb_edusharing_upgrade($oldversion=0) {
 
     $result = true;
 
-/// And upgrade begins here. For each one, you'll need one
-/// block of code similar to the next one. Please, delete
-/// this comment lines once this file start handling proper
-/// upgrade code.
+    if ($result && $oldversion < 2016011401) {
 
-/// if ($result && $oldversion < YYYYMMDD00) { //New version in version.php
-///     $result = result of "/lib/ddllib.php" function calls
-/// }
+        //usage2
+        try {
+            $xmldb_table = new xmldb_table('edusharing');       
+            $sql = 'UPDATE {edusharing} SET object_version = 0 WHERE window_versionshow = 1';
+            $DB->execute($sql);
+            $sql = 'UPDATE {edusharing} SET object_version = window_version WHERE window_versionshow = 0';
+            $DB->execute($sql);
+            $xmldb_field = new xmldb_field('window_versionshow');
+            $dbman ->drop_field($xmldb_table, $xmldb_field);
+            $xmldb_field = new xmldb_field('window_version');
+            $dbman ->drop_field($xmldb_table, $xmldb_field);
+        } catch(Exception $e) {
+            error_log($e);
+        }
+        
+        $homeConf = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'esmain'.DIRECTORY_SEPARATOR.'homeApplication.properties.xml';
+        if(file_exists($homeConf)) {
+            $app = new DOMDocument();
+            $app->load($homeConf);
+            $app->preserveWhiteSpace = false;
+            $entrys = $app->getElementsByTagName('entry');
+            foreach ($entrys as $entry) {
+                $homeAppProperties[$entry -> getAttribute('key')] = $entry -> nodeValue;
+            }
+            
+            $homeAppProperties['blowfishkey'] = 'thetestkey';
+            $homeAppProperties['blowfishiv'] = 'initvect';
+            
+            set_config('appProperties', json_encode($homeAppProperties), 'edusharing');   
+        }
 
-    /*
-     * edu-sharing instances come in 2 flavors: inline and course-module. As
-     * inline-objects do not carry a course-id and course-modules are assigned
-     * their course-id by moodle itself, we can drop this column now.
-     */
+        $repoConf = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'esmain'.DIRECTORY_SEPARATOR.'app-'. $homeAppProperties['homerepid'] .'.properties.xml';
+        if(file_exists($repoConf)) {
+            $app = new DOMDocument();
+            $app->load($repoConf);
+            $app->preserveWhiteSpace = false;
+            $entrys = $app->getElementsByTagName('entry');
+            foreach ($entrys as $entry) {
+                $repoProperties[$entry -> getAttribute('key')] = $entry -> nodeValue;
+            }
+            
+            $repoProperties['authenticationwebservice'] = str_replace('authentication', 'authbyapp', $repoProperties['authenticationwebservice']);
+            $repoProperties['authenticationwebservice_wsdl'] = str_replace('authentication', 'authbyapp', $repoProperties['authenticationwebservice_wsdl']);
+            if(mb_substr($repoProperties['usagewebservice'], -1) != '2')
+                $repoProperties['usagewebservice'] = $repoProperties['usagewebservice'] . '2';
+            $repoProperties['usagewebservice_wsdl'] = str_replace('usage?wsdl', 'usage2?wsdl', $repoProperties['usagewebservice_wsdl']);
+            $repoProperties['contenturl'] = $repoProperties['clientprotocol'] . '://' . $repoProperties['domain'] . ':' . $repoProperties['clientport'] . '/edu-sharing/renderingproxy';
+            
+            set_config('repProperties', json_encode($repoProperties), 'edusharing');   
+        }
 
-    if ($result && $oldversion < 2012051504)
-    {
-/*
-    	$table = new xmldb_table('edusharing');
+        try {
+            
+            include(dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'cs_conf.php');
 
-    	$index = new xmldb_index('course');
-    	$result = $dbman->drop_index($table, $index);
+            set_config('EDU_AUTH_KEY', EDU_AUTH_KEY, 'edusharing');
+            set_config('EDU_AUTH_PARAM_NAME_USERID', EDU_AUTH_PARAM_NAME_USERID, 'edusharing');
+            set_config('EDU_AUTH_PARAM_NAME_LASTNAME', EDU_AUTH_PARAM_NAME_LASTNAME, 'edusharing');
+            set_config('EDU_AUTH_PARAM_NAME_FIRSTNAME', EDU_AUTH_PARAM_NAME_FIRSTNAME, 'edusharing');
+            set_config('EDU_AUTH_PARAM_NAME_EMAIL', EDU_AUTH_PARAM_NAME_EMAIL, 'edusharing');
+        
+        } catch(Exception $e) {
+            error_log($e);
+        }
 
-    	$column = new xmldb_field('course');
-        $result = $dbman->drop_field($table, $column);
-*/
     }
-    
-    if ($result && $oldversion < 2013072301)
-    {
-
-        $xmldb_table = new xmldb_table('edusharing');
-
-        $xmldb_field = new xmldb_field('window_float', XMLDB_TYPE_CHAR, 20, null, true, false, 'none');
-        $dbman->add_field($xmldb_table, $xmldb_field);
-        
-        $xmldb_field = new xmldb_field('window_versionshow', XMLDB_TYPE_CHAR, 20, null, true, false, 'latest');
-        $dbman->add_field($xmldb_table, $xmldb_field);
-        
-        $xmldb_field = new xmldb_field('window_version', XMLDB_TYPE_CHAR, 20, null, false, false);
-        $dbman->add_field($xmldb_table, $xmldb_field);
-        
-    }
-    
-    /*
-     * 
-     * usage2 will come
-     * 
-    if ($result && $oldversion < 2015010800) {
-
-        $xmldb_table = new xmldb_table('edusharing');
-        
-        $sql = 'UPDATE {edusharing} SET object_version = 0 WHERE window_versionshow = 1';
-        $DB->execute($sql);
-        
-        $sql = 'UPDATE {edusharing} SET object_version = window_version WHERE window_versionshow = 0';
-        $DB->execute($sql);
-
-        $xmldb_field = new xmldb_field('window_versionshow');
-        $dbman ->drop_field($xmldb_table, $xmldb_field);
-        
-        $xmldb_field = new xmldb_field('window_version');
-        $dbman ->drop_field($xmldb_table, $xmldb_field);
-        
-        
-    }
-     * */
-
-/// And that's all. Please, examine and understand the 3 example blocks above. Also
-/// it's interesting to look how other modules are using this script. Remember that
-/// the basic idea is to have "blocks" of code (each one being executed only once,
-/// when the module version (version.php) is updated.
-
-/// Lines above (this included) MUST BE DELETED once you get the first version of
-/// yout module working. Each time you need to modify something in the module (DB
-/// related, you'll raise the version and add one upgrade block here.
-
-/// Final return of upgrade result (true/false) to Moodle. Must be
-/// always the last line in the script
     return $result;
 }

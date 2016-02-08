@@ -1,29 +1,30 @@
 <?php
-
-/**
- * This product Copyright 2010 metaVentis GmbH.  For detailed notice,
- * see the "NOTICE" file with this distribution.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
 
 /*
  - called from the /blocks/cc_search block
  - auth against alfresco repos. (ticket handshake / user sync)
  - opens external edu-sharingSearch in iFrame
+ */
+ 
+/**
+ * @package    block
+ * @subpackage edusharing_search
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once('../../../config.php');
 
@@ -31,30 +32,18 @@ global $DB;
 global $CFG;
 global $SESSION;
 
-require_once('../../../mod/edusharing/lib/ESApp.php');
-require_once('../../../mod/edusharing/lib/EsApplication.php');
-require_once('../../../mod/edusharing/lib/EsApplications.php');
-require_once('../../../mod/edusharing/conf/cs_conf.php');
 require_once('../../../mod/edusharing/lib/cclib.php');
 require_once('../../../mod/edusharing/lib.php');
 
-//.oO get CC homeconf
-$es = new ESApp();
-$app = $es->getApp(EDUSHARING_BASENAME);
-$conf = $es->getHomeConf();
-$propArray = $conf->prop_array;
+$appProperties = json_decode(get_config('edusharing', 'appProperties'));
 
-$PAGE->set_url('/blocks/edusharing_search/helper/cc_search.php',array('id' => $_GET['id'],'search'=>'test')).
-
-// Using http://127.0.0.1/moodle241/blocks/edusharing_search/helper/cc_search.php?id=1&search=test
-//$PAGE->set_url('/mod/mymodulename/view.php', array('id' => $cm->id));
-
-
-$id = optional_param('id', 0, PARAM_INT);      // course id
+$id = optional_param('id', 0, PARAM_INT);
 if ( ! $id ) {
     print_error("None or invalid course-id given.");
     exit();
 }
+
+$PAGE->set_url('/blocks/edusharing_search/helper/cc_search.php',array('id' => $id,'search'=>'test'));
 
 $course = $DB->get_record('course', array('id' => $id));
 if ( ! $course ) {
@@ -63,42 +52,26 @@ if ( ! $course ) {
 }
 
 require_login($course->id);
+echo $OUTPUT->header();
 
-$navlinks = array();
-$navlinks[] = array('name' => get_string('block_title', 'block_edusharing_search'), 'link' => null, 'type' => 'misc');
-$navigation = build_navigation($navlinks);
-
-
-//$PAGE->set_pagelayout('incourse');
-
-print_header("", "edu-sharing", $navigation, "", "", true, "&nbsp;", "edu-sharing");
-//print_heading();
-
-//$OUTPUT->heading(get_string('block_title','block_edusharing_search')).
-//echo $OUTPUT->heading(get_string('help'), 3, 'helptitle', 'uniqueid');
-
-$ccauth = new CCWebServiceFactory($propArray['homerepid']);
-$ticket = $ccauth->CCAuthenticationGetTicket($propArray['appid']);
-if ( ! $ticket )
-{
-    print_error($ccauth->beautifyException($ticket));
-  $OUTPUT->footer();
-//   $OUTPUT->heading().
-    exit;
+$ccauth = new mod_edusharing_web_service_factory();
+$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties -> appid);
+if ( ! $ticket ) {
+    exit();
 }
 
-if ( empty($propArray['cc_gui_url']) )
+if ( empty($appProperties -> cc_gui_url) )
 {
     trigger_error('No "cc_gui_url" configured.', E_ERROR);
 }
 
-$link = $propArray['cc_gui_url']; // link to the external cc-search
+$link = $appProperties -> cc_gui_url; // link to the external cc-search
 $link .= '?mode=0';
-$user = get_edu_auth_key();
+$user = mod_edusharing_get_auth_key();
 $link .= '&user='.urlencode($user);
 $link .= '&ticket='.urlencode($ticket);
 
-$_my_lang = _edusharing_get_current_users_language_code();
+$_my_lang = mod_edusharing_get_current_users_language_code();
 $link .= '&locale=' . urlencode($_my_lang);
 
 $link .= '&p_startsearch=1';   ////////// 0=suche  / 1=workspace

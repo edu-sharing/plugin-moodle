@@ -1,50 +1,26 @@
 <?php
+// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+
 /**
- * This product Copyright 2010 metaVentis GmbH.  For detailed notice,
- * see the "NOTICE" file with this distribution.
- * 
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * 
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * @package    mod
+ * @subpackage edusharing
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-/*
-	creates a XML file from given array...
-	note: only 3 levels working/needed yet:  root/block/element&value
-
-	example:
-						$data4xml = array("ccrender");
-
-						$data4xml[1]["ccuser"]["id"] = 'user@host.org';
-						$data4xml[1]["ccuser"]["name"] = "FirstName LastName";
-
-						$data4xml[1]["ccserver"]["ip"] = '127.0.0.1';
-						$data4xml[1]["ccserver"]["hostname"] = 'www.host.org';
-						$data4xml[1]["ccserver"]["mnet_localhost_id"] = '007-xxx-0815';
-						...
-
-						$XMLmaker = new RenderParameter();
-						$xml = $XMLmaker->getXML($data4xml);
-
-						//==== == =
-							header('Content-type: text/xml');
-							echo($xml);
-							die;
-						//==== == =
-*/
-
-class RenderParameter {
+class mod_edusharing_render_parameter {
 
 	var $dataArray;
 
@@ -52,12 +28,12 @@ class RenderParameter {
 		$this->dataArray = array();
 	}
 
-	public function getXML($p_dataarray) {
+	public function mod_edusharing_get_xml($p_dataarray) {
 		$this->dataArray = $p_dataarray;
-		return $this->makeXML();
+		return $this->mod_edusharing_make_xml();
 	}
 
-	protected function makeXML() {
+	protected function mod_edusharing_make_xml() {
 		$dom = new DOMDocument('1.0');
 		$root = $dom->createElement($this->dataArray[0], '');
 		$dom->appendChild($root);

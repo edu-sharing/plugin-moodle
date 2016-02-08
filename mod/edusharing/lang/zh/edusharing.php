@@ -1,35 +1,26 @@
 <?php
+// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This product Copyright 2010 metaVentis GmbH.  For detailed notice,
- * see the "NOTICE" file with this distribution.
+ * zh strings for edusharing
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * English strings for edusharing
- *
- * You can have a rather longer description of the file as well,
- * if you like, and it can span multiple lines.
- *
- * @package   mod
+ * @package    mod
  * @subpackage edusharing
- * @copyright 2010 metaVentis GmbH
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -113,3 +104,10 @@ $string['exc_UNKNOWN_ERROR'] = '未知错误';
 // metadata
 $string['conf_linktext'] = '点击此处将moodle连接到edu-sharing资源库和渲染服务';
 $string['filter_not_authorized'] = 'You are not authorized to access the requested content.';
+$string['connectToHomeRepository'] = 'Connect to Home Reposiory';
+$string['conf_linktext'] = 'To connect moodle to home repository click here';
+$string['appProperties'] = 'Application Properties';
+$string['homerepProperties'] = 'Home Repository Properties';
+$string['authparameters'] = 'Authentication Parameters';
+$string['save'] = 'Save changes';
+$string['emptyForDefault'] = 'empty for default';
