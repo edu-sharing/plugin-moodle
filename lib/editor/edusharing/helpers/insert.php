@@ -49,7 +49,7 @@ try
 	echo json_encode($edusharing);
 }
 catch(Exception $exception)
-{var_dump($exception);
+{
 	error_log( print_r($exception, true) );
 	header('HTTP/1.1 500 Internal Server Error', true, 500);
 }

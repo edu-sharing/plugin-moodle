@@ -34,3 +34,5 @@ $string['display_block'] = '阻止显示';
 $string['insert'] = '插入';
 $string['update'] = '保存';
 $string['cancel'] = '取消';
+
+$string['search'] = 'Search';

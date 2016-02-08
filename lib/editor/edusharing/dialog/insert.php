@@ -38,8 +38,8 @@ if ( empty($CFG->yui3version) )
     <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/yui/'.$CFG->yui3version.'/build/yui/yui.js', ENT_COMPAT, 'utf-8') ?>"></script>
     <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/tinymce/tiny_mce/'.$tinymce->version.'/tiny_mce_popup.js', ENT_COMPAT, 'utf-8') ?>"></script>
 
-    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/edusharing.js', ENT_COMPAT, 'utf-8') ?>"></script>
-    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/dialog.js', ENT_COMPAT, 'utf-8') ?>"></script>
+    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/edusharing.js?' . filemtime($CFG->libdir.'/editor/edusharing/js/edusharing.js'), ENT_COMPAT, 'utf-8') ?>"></script>
+    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/dialog.js?' . filemtime($CFG->libdir.'/editor/edusharing/js/dialog.js'), ENT_COMPAT, 'utf-8') ?>"></script>
     
     <link rel="stylesheet" media="all" href="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/dialog/css/edu.css', ENT_COMPAT, 'utf-8') ?>">
 
@@ -141,10 +141,25 @@ if ( ! $repository_conf ) {
     error_log('Error loading config for "'.$repository_id.'".');
 }
 
-$alfresco_webservice_url = $repository_conf->prop_array['alfresco_webservice_url'];
-if ( ! $alfresco_webservice_url ) {
-    error_log('No alfresco_base_url for "'.$repository_id.'".');
-}
+// could be simplified if repository would deliver domain instead of ip
+$alfresco_webservice_url =
+    $repository_conf->prop_array['clientprotocol'] . 
+    '://' .
+    $repository_conf->prop_array['domain'] . 
+    ':' .
+    $repository_conf->prop_array['clientport'] . 
+    parse_url($repository_conf->prop_array['alfresco_webservice_url'], PHP_URL_PATH);
+           
+
+// could be simplified if repository would deliver domain instead of ip
+$alfresco_webservice_url =
+    $repository_conf->prop_array['clientprotocol'] . 
+    '://' .
+    $repository_conf->prop_array['domain'] . 
+    ':' .
+    $repository_conf->prop_array['clientport'] . 
+    parse_url($repository_conf->prop_array['alfresco_webservice_url'], PHP_URL_PATH);
+           
 
 function getPreviewText($short) {
     if($short)
@@ -176,7 +191,7 @@ function getPreviewText($short) {
             <td><?php echo htmlentities(get_string('mediasrc', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
             <td>:</td>
             <td><input disabled style="width: 150px" type="text" maxlength="300" name="object_url" id="object_url" value="<?php echo htmlspecialchars($edusharing->object_url, ENT_COMPAT, 'utf-8') ?>" ></input>
-            <button type="button" name="search" value="2" onclick="window.open('<?php echo htmlspecialchars($link, ENT_COMPAT, 'utf-8'); ?>','_blank','width=1024,height=500,left=100,top=140,scrollbars=yes')">Suche</button>
+            <button type="button" name="search" value="2" onclick="window.open('<?php echo htmlspecialchars($link, ENT_COMPAT, 'utf-8'); ?>','_blank','width=1024,height=500,left=100,top=140,scrollbars=yes')"><?php echo htmlentities(get_string('search', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></button>
             </td>
         </tr>
         <tr>
@@ -323,7 +338,7 @@ function getPreviewText($short) {
            for(var i = 0; i < dimensionsSet.length; i++) {
                 dimensionsSet[i].style.visibility = 'visible';
             }
-       } else if(mimeSwitchHelper == 'video') {
+       } else if(mimeSwitchHelper == 'video' || mimeSwitchHelper == 'youtube') {
            var dimensionsSet = document.getElementsByClassName('dimension');
            for(var i = 0; i < dimensionsSet.length; i++) {
                 dimensionsSet[i].style.visibility = 'visible';

@@ -32,7 +32,7 @@ class block_edusharing_workspace extends block_base {
 
 	public function init() {
 		$this->title   = get_string('block_title', 'block_edusharing_workspace');
-		$this->version = 2014021200;
+		$this->version = 2015060901;
 	}
 
 	/**

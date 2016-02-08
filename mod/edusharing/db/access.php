@@ -55,6 +55,18 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
 
+
+'mod/edusharing:addinstance' => array(
+    'captype' => 'read',
+    'contextlevel' => CONTEXT_MODULE,
+    'legacy' => array(
+        'teacher' => CAP_ALLOW,
+        'editingteacher' => CAP_ALLOW,
+        'admin' => CAP_ALLOW
+    )
+),
+
+
 /***************************** remove these comment marks and modify the code as needed
     'mod/edusharing:view' => array(
         'captype' => 'read',

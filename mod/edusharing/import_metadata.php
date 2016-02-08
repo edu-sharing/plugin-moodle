@@ -303,7 +303,7 @@ libxml_use_internal_errors($internal_errors);
                     $entry -> nodeValue = $repoInfo['alfresco_webservice_url'];
                 break;
                 case 'cc_gui_url':
-                    $entry -> nodeValue = str_replace('/services/usage', '', $repoInfo['usagewebservice']);
+                    $entry -> nodeValue = $repoInfo['clientprotocol'] . '://' . $repoInfo['domain'] . ':' . $repoInfo['clientport'] . '/edu-sharing/';
                 break;
                 case 'private_key':
                     $entry -> nodeValue = $sslKeypair['privateKey'];

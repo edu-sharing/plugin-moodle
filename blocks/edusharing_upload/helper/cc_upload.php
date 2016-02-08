@@ -106,9 +106,7 @@ $link .= '&reurl='.urlencode($CFG->wwwroot.'/blocks/edusharing_upload/helper/clo
     $('html, body').css('overflow', 'hidden');
     $('#esContent').width($(document).width());
     $('#esContent').height($(document).height());
-    $('#esContent').html("<iframe id='childFrame' name='mainContent' src='<?php echo htmlentities($link)?>' width='100%' height='100%' scrolling='yes'  marginwidth='0' marginheight='0' frameborder='0'>&nbsp;</iframe><div id='closer' style='position:fixed; z-index: 501; min-width: 100px; top: 0; left: 50%; background: #1a5170; text-align: center; font-size: 1em; padding: 5px 20px 5px 20px; cursor: pointer;  -webkit-border-bottom-left-radius: 5px; -webkit-border-bottom-right-radius: 5px;-khtml-border-bottom-left-radius: 5px;-khtml-border-bottom-right-radius: 5px;-moz-border-radius-bottomleft: 5px;-moz-border-radius-bottomright: 5px;border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;color: #fff;'>◄&nbsp;&nbsp;Zur&uuml;ck zu &nbsp;\"<?php echo $COURSE->fullname?>\"</div>");
-    var margin_left = $('#closer').width()/2;
-    $('#closer').css('margin-left', -margin_left+'px');
+    $('#esContent').html("<div id='closer' style='font-size: 1em; padding: 5px 20px 5px 20px; cursor: pointer; color: #000; background: #eee; '>◄&nbsp;&nbsp;Zur&uuml;ck zu &nbsp;\"<?php echo $COURSE->fullname?>\"</div><iframe id='childFrame' name='mainContent' src='<?php echo htmlentities($link)?>' width='100%' height='100%' scrolling='yes'  marginwidth='0' marginheight='0' frameborder='0'>&nbsp;</iframe>");
     $('#closer').click(function(){window.location.href='<?php echo $_SERVER["HTTP_REFERER"]?>';})
 </script>
 

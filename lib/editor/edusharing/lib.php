@@ -57,14 +57,8 @@ class edusharing_texteditor extends tinymce_texteditor
 
         $ccauth = new CCWebServiceFactory($repository_id);
         $edusharing_ticket = $ccauth->CCAuthenticationGetTicket($conf->prop_array['appid']);
-        if ( ! $edusharing_ticket )
-        {
-            // smth went wrong, so remove stored ticket from session
+        if ( ! $edusharing_ticket ) {
             unset($_SESSION['edusharing']['editor']['ticket']);
-
-            //!!hupfer 14.04.2014 print_error('edusharing_error_no_ticket');
-        //  print_footer("edu-sharing");
-
             return false;
         }
 
@@ -184,7 +178,7 @@ class edusharing_texteditor extends tinymce_texteditor
         $OUTPUT->htmlattributes('xmlns:'.self::ATTRIBUTE_NAMESPACE_PREFIX.'="'.self::ATTRIBUTE_NAMESPACE_URI.'"');
 
         // tell tinymce to load plugin from non-standard plugin location
-        $PAGE->requires->js_init_code('tinymce.PluginManager.load("edusharing", "' . $CFG->wwwroot . '/lib/editor/edusharing/js/tinymce/plugin/editor_plugin.js");');
+        $PAGE->requires->js_init_code('tinymce.PluginManager.load("edusharing", "' . $CFG->wwwroot . '/lib/editor/edusharing/js/tinymce/plugin/editor_plugin.js?'.filemtime($CFG->libdir . '/editor/edusharing/js/tinymce/plugin/editor_plugin.js').'");');
 
         return parent::use_editor($elementid, $options, $filepicker_options);
     }

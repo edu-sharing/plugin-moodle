@@ -86,8 +86,7 @@ class CCWebServiceFactory {
             $_SESSION["USER"] -> ticket = $ticket;
             return $ticket;
         } catch(Exception $e) {
-            print('<pre>');
-            print_r($e);
+            print('Authentication failed');
         }
         
     }
@@ -121,6 +120,7 @@ class CCWebServiceFactory {
             catch(Exception $e)
             {
              // error_log( print_r($e, true) );
+             	print('Invalid ticket');
                 session_start();
             }
 
@@ -137,8 +137,7 @@ class CCWebServiceFactory {
             $_SESSION["USER"] -> ticket = $ticket;
             return $ticket;
         } catch(Exception $e) {
-            print('<pre>');
-            print_r($e);
+            print('Authentication failed');
             session_start();
         }
 

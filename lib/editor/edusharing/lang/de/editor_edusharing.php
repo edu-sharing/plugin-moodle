@@ -34,3 +34,5 @@ $string['display_block'] = 'Blockdisplay';
 $string['insert'] = 'Einfügen';
 $string['update'] = 'Speichern';
 $string['cancel'] = 'Abbrechen';
+
+$string['search'] = 'Suche';

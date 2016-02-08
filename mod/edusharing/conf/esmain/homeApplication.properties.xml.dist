@@ -13,5 +13,5 @@
 	<entry key="cc_gui_url"></entry>
 	<entry key="private_key"></entry>
 	<entry key="public_key"></entry>
-	<entry key="signatureRedirector">https://arni.rz.tu-ilmenau.de/moodleauth/filter/edusharing/signatureRedirector.php</entry>
+	<entry key="signatureRedirector"></entry>
 </properties>

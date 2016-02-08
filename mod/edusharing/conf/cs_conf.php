@@ -30,7 +30,7 @@ define ('CC_CONF_APPFILE','ccapp-registry.properties.xml');
 
 //param names for es authentication predefined by repository
 //if shibboleth attributes are defined these one must match!
-define('EDU_AUTH_PARAM_NAME_USERID', 'userid'); // change to userid
+define('EDU_AUTH_PARAM_NAME_USERID', 'userid'); 
 define('EDU_AUTH_PARAM_NAME_LASTNAME', 'lastname');
 define('EDU_AUTH_PARAM_NAME_FIRSTNAME', 'firstname');
 define('EDU_AUTH_PARAM_NAME_EMAIL', 'email');

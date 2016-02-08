@@ -37,9 +37,9 @@ if ( empty($CFG->yui3version) )
 
     <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/yui/'.$CFG->yui3version.'/build/yui/yui.js', ENT_COMPAT, 'utf-8') ?>"></script>
     <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/tinymce/tiny_mce/'.$tinymce->version.'/tiny_mce_popup.js', ENT_COMPAT, 'utf-8') ?>"></script>
-
-    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/edusharing.js', ENT_COMPAT, 'utf-8') ?>"></script>
-    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/dialog.js', ENT_COMPAT, 'utf-8') ?>"></script>
+    
+    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/edusharing.js?' . filemtime($CFG->libdir.'/editor/edusharing/js/edusharing.js'), ENT_COMPAT, 'utf-8') ?>"></script>
+    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/dialog.js?' . filemtime($CFG->libdir.'/editor/edusharing/js/dialog.js'), ENT_COMPAT, 'utf-8') ?>"></script>
     
     <link rel="stylesheet" media="all" href="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/dialog/css/edu.css', ENT_COMPAT, 'utf-8') ?>">
 </head>
@@ -121,8 +121,8 @@ if ( ! $repository_id )
                 <td><?php echo  htmlentities(get_string('version', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
                 <td>:</td>
                 <td>
-                    <input type="radio" value="latest" name="window_versionshow" <?php echo ($edusharing -> window_versionshow == 'latest')?'checked="checked"':''?> /><?php echo  htmlentities(get_string('versionLatest', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                    <input type="radio" value="current" name="window_versionshow" <?php echo ($edusharing -> window_versionshow == 'current')?'checked="checked"':''?> /><?php echo  htmlentities(get_string('versionCurrent', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                    <input type="radio" disabled value="latest" name="window_versionshow" <?php echo ($edusharing -> window_versionshow == 'latest')?'checked="checked"':''?> /><?php echo  htmlentities(get_string('versionLatest', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                    <input type="radio" disabled value="current" name="window_versionshow" <?php echo ($edusharing -> window_versionshow == 'current')?'checked="checked"':''?> /><?php echo  htmlentities(get_string('versionCurrent', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
                 </td>
             </tr>
             
@@ -229,7 +229,7 @@ if ( ! $repository_id )
            for(var i = 0; i < dimensionsSet.length; i++) {
                 dimensionsSet[i].style.visibility = 'visible';
             }
-       } else if(mimeSwitchHelper == 'video') {
+       } else if(mimeSwitchHelper == 'video' || mimeSwitchHelper == 'youtube') {
            var dimensionsSet = document.getElementsByClassName('dimension');
            for(var i = 0; i < dimensionsSet.length; i++) {
                 dimensionsSet[i].style.visibility = 'visible';

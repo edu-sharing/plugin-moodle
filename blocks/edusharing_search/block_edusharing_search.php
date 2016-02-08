@@ -39,7 +39,7 @@ class block_edusharing_search extends block_base
 	public function init()
 	{
 		$this->title   = get_string('block_title', 'block_edusharing_search');
-		$this->version = 2015010800;
+		$this->version = 2015060901;
 	}
 
 	/**
