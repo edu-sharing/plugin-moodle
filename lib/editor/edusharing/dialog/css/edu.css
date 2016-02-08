@@ -1,0 +1,66 @@
+/**
+ * @package    editor
+ * @subpackage edusharing
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+#preview {
+	width: 200px;
+	height: 250px;
+	border: 1px solid #999;
+	margin-left: 320px;
+	font-size: 0.6em;
+	padding: 5px;
+	color: #999;
+}
+
+#preview_resource_wrapper {
+	display: block; 
+	float: none;
+	margin: 5px 0;
+}
+
+.dimension.hidden {
+	display: none;
+}
+
+
+#form_wrapper td {
+	padding: 5px;
+	font-size: 12px;
+}
+
+#form_wrapper input, #form_wrapper button {
+	line-height: 16px;
+	font-size: 12px;
+}
+
+.edu_infomsg {
+	font-size: 12px;
+}
+
+#floatTr > td {
+	padding-top: 20px;
+	padding-bottom: 20px; 
+
+}
+
+#eduframe {
+	height:100%;
+	width:100%;
+	position:absolute;
+	top:0;left:0;
+	zIndex:888;
+	border:0;
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 100px 100px;
+	background-image: url('./../../../../../mod/edusharing/pix/icon.svg');
+	
+}
+
+#cancel {
+	margin-right: 10px !important; 
+}
