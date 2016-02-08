@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Search-config. Is taken for applications that can act like
+		both a client(LMS/repository) and a server application(repository)</comment>
+
+	<!-- says if application is allowd to act like a client -->
+	<entry
+		key="trustedclient">true</entry>
+
+	<!-- the type LMS, REPOSITORY -->
+	<entry
+		key="type">LMS</entry>
+	<entry
+		key="subtype">moodle</entry>
+
+	<!-- host: client: trusted host server: access url -->
+	<entry
+		key="host">127.0.0.1</entry>
+	<!-- <entry key="port">80</entry> -->
+
+	<!-- Caption of Apllication -->
+	<!-- <entry key="appcaption">local</entry> -->
+
+	<!-- ID of Apllication -->
+	<entry
+		key="appid">lms</entry>
+	<entry
+		key="homerepid">repository</entry>
+		
+	<!-- cc search/upload/workspace settings -->
+	<entry
+		key="cc_webservice_url">http://repository.domain.tld:8080/alfresco/api</entry>
+	<entry
+		key="cc_authentication_path">/authentication?wsdl</entry>
+	<entry
+		key="cc_gui_url">http://repository.domain.tld:8080/edu-sharing</entry>
+
+	<!-- Path to the Authentication Web Service -->
+	<entry key="authenticationwebservice">http://lms.domain.tld/mod/edusharing/services/authentication.php</entry>
+	<entry key="authenticationwebservice_wsdl">http://lms.domain.tld/mod/edusharing/services/authentication.php?wsdl</entry>
+
+	<!-- Path to the Permission Web Service -->
+	<entry key="permissionwebservice">http://lms.domain.tld/mod/edusharing/services/permission.php</entry>
+	<entry key="permissionwebservice_wsdl">http://lms.domain.tld/mod/edusharing/services/permission.php?wsdl</entry>
+
+<!-- QUESTIONABLE -->
+<!--
+	<entry key="scenario_auth_service">http://lms.domain.tld/service/authenticationservice.wsdl</entry> 
+	<entry key="scenario_service">http://lms.domain.tld/service/wsmccourse.wsdl</entry> 
+	<entry key="scenario_url">http://lms.domain.tld/roomfake.php</entry>
+-->
+	<entry
+		key="has_teaching_permission">moodle:course/update</entry>
+
+</properties>

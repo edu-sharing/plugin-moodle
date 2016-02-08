@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB
+	PATH="mod/edusharing/db"
+	VERSION="20120515"
+	COMMENT="XMLDB file for Moodle mod/edusharing"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+
+	<TABLES>
+
+		<!-- as of moodle 2.0 we require a table named excatly the same as the 
+			module. @see admin/modules.php, line 144 -->
+		<TABLE
+			NAME="edusharing"
+			COMMENT="Stores all created edu-sharing course-resources.">
+			<FIELDS>
+				<FIELD
+					NAME="id"
+					TYPE="int"
+					LENGTH="10"
+					NOTNULL="true"
+					UNSIGNED="true"
+					SEQUENCE="true"
+					NEXT="course" />
+				<FIELD
+					NAME="course"
+					TYPE="int"
+					LENGTH="10"
+					NOTNULL="true"
+					UNSIGNED="true"
+					SEQUENCE="false"
+					COMMENT="The course this edu-sharing activity belongs to"
+					PREVIOUS="id"
+					NEXT="name" />
+				<FIELD
+					NAME="name"
+					TYPE="char"
+					LENGTH="255"
+					NOTNULL="true"
+					SEQUENCE="false"
+					COMMENT="Name field for moodle instances"
+					PREVIOUS="course"
+					NEXT="intro" />
+				<FIELD
+					NAME="intro"
+					TYPE="text"
+					LENGTH="medium"
+					NOTNULL="false"
+					SEQUENCE="false"
+					COMMENT="General introduction of the edu-sharing activity"
+					PREVIOUS="name"
+					NEXT="introformat" />
+				<FIELD
+					NAME="introformat"
+					TYPE="int"
+					LENGTH="4"
+					NOTNULL="true"
+					UNSIGNED="true"
+					SEQUENCE="false"
+					COMMENT="Format of the intro field (MOODLE, HTML, MARKDOWN...)"
+					PREVIOUS="intro"
+					NEXT="timecreated" />
+				<FIELD
+					NAME="timecreated"
+					TYPE="int"
+					LENGTH="10"
+					NOTNULL="true"
+					UNSIGNED="true"
+					SEQUENCE="false"
+					PREVIOUS="introformat"
+					NEXT="timemodified" />
+				<FIELD
+					NAME="timemodified"
+					TYPE="int"
+					LENGTH="10"
+					NOTNULL="true"
+					UNSIGNED="true"
+					SEQUENCE="false"
+					PREVIOUS="timecreated"
+					NEXT="object_url" />
+				<FIELD
+					NAME="object_url"
+					TYPE="char"
+					LENGTH="255"
+					NOTNULL="true"
+					SEQUENCE="false"
+					COMMENT="The object-url like ccrep://repository/object-id"
+					PREVIOUS="timemodified"
+					NEXT="object_version" />
+				<FIELD
+					NAME="object_version"
+					TYPE="char"
+					LENGTH="32"
+					NOTNULL="true"
+					DEFAULT="0"
+					SEQUENCE="false"
+					COMMENT="The selected object-version to instantiate."
+					PREVIOUS="object_url"
+					NEXT="force_download" />
+				<FIELD
+					NAME="force_download"
+					TYPE="int"
+					LENGTH="1"
+					NOTNULL="true"
+					UNSIGNED="true"
+					DEFAULT="0"
+					SEQUENCE="false"
+					COMMENT="Force download of object-instance?"
+					PREVIOUS="object_version"
+					NEXT="popup_window" />
+				<FIELD
+					NAME="popup_window"
+					TYPE="int"
+					LENGTH="1"
+					NOTNULL="true"
+					UNSIGNED="true"
+					DEFAULT="0"
+					SEQUENCE="false"
+					COMMENT="Display object-instance in popup-window?"
+					PREVIOUS="force_download"
+					NEXT="show_course_blocks" />
+				<FIELD
+					NAME="show_course_blocks"
+					TYPE="int"
+					LENGTH="1"
+					NOTNULL="true"
+					UNSIGNED="true"
+					DEFAULT="0"
+					SEQUENCE="false"
+					COMMENT="Show course-blocks when using the same window?"
+					PREVIOUS="popup_window"
+					NEXT="show_directory_links" />
+				<FIELD
+					NAME="show_directory_links"
+					TYPE="int"
+					LENGTH="1"
+					NOTNULL="true"
+					UNSIGNED="true"
+					DEFAULT="0"
+					SEQUENCE="false"
+					COMMENT="Show directory-links in new window?"
+					PREVIOUS="show_course_blocks"
+					NEXT="show_menu_bar" />
+				<FIELD
+					NAME="show_menu_bar"
+					TYPE="int"
+					LENGTH="1"
+					NOTNULL="true"
+					UNSIGNED="true"
+					DEFAULT="0"
+					SEQUENCE="false"
+					COMMENT="Show menu-bar in new window?"
+					PREVIOUS="show_directory_links"
+					NEXT="show_location_bar" />
+				<FIELD
+					NAME="show_location_bar"
+					TYPE="int"
+					LENGTH="1"
+					NOTNULL="true"
+					UNSIGNED="true"
+					DEFAULT="0"
+					SEQUENCE="false"
+					COMMENT="Show location-bar in new window?"
+					PREVIOUS="show_menu_bar"
+					NEXT="show_tool_bar" />
+				<FIELD
+					NAME="show_tool_bar"
+					TYPE="int"
+					LENGTH="1"
+					NOTNULL="true"
+					UNSIGNED="true"
+					DEFAULT="0"
+					SEQUENCE="false"
+					COMMENT="Show tool-bar in new window?"
+					PREVIOUS="show_location_bar"
+					NEXT="show_status_bar" />
+
+				<FIELD
+					NAME="show_status_bar"
+					TYPE="int"
+					LENGTH="1"
+					NOTNULL="true"
+					UNSIGNED="true"
+					DEFAULT="0"
+					SEQUENCE="false"
+					COMMENT="Show status-bar in new window?"
+					PREVIOUS="show_tool_bar"
+					NEXT="window_allow_resize" />
+				<FIELD
+					NAME="window_allow_resize"
+					TYPE="int"
+					LENGTH="1"
+					NOTNULL="true"
+					UNSIGNED="true"
+					DEFAULT="0"
+					SEQUENCE="false"
+					COMMENT="Allow resizing in new window?"
+					PREVIOUS="show_status_bar"
+					NEXT="window_allow_scroll" />
+				<FIELD
+					NAME="window_allow_scroll"
+					TYPE="int"
+					LENGTH="1"
+					NOTNULL="true"
+					UNSIGNED="true"
+					DEFAULT="0"
+					SEQUENCE="false"
+					COMMENT="Allow scrolling in new window?"
+					PREVIOUS="window_allow_resize"
+					NEXT="window_width" />
+				<FIELD
+					NAME="window_width"
+					TYPE="int"
+					LENGTH="9"
+					NOTNULL="false"
+					UNSIGNED="true"
+					SEQUENCE="false"
+					COMMENT="Width when displaying new window."
+					PREVIOUS="window_allow_scroll"
+					NEXT="window_height" />
+				<FIELD
+					NAME="window_height"
+					TYPE="int"
+					LENGTH="9"
+					NOTNULL="false"
+					UNSIGNED="true"
+					SEQUENCE="false"
+					COMMENT="Height when displaying new window"
+					PREVIOUS="window_width"
+					NEXT="window_float" />
+		        <FIELD
+                    NAME="window_float"
+                    TYPE="char"
+                    LENGTH="20"
+                    NOTNULL="true"
+                    SEQUENCE="false"
+                    COMMENT="Float display property"
+                    DEFAULT="none"
+                    PREVIOUS="window_height"
+                    NEXT="window_versionshow" />
+                <FIELD
+                    NAME="window_versionshow"
+                    TYPE="char"
+                    LENGTH="20"
+                    NOTNULL="true"
+                    SEQUENCE="false"
+                    DEFAULT="latest"
+                    COMMENT="Usage of current or latest resource version"
+                    PREVIOUS="window_float"
+                    NEXT="window_version" />
+                <FIELD
+                    NAME="window_version"
+                    TYPE="char"
+                    LENGTH="20"
+                    NOTNULL="false"
+                    SEQUENCE="false"
+                    COMMENT="Usage version"
+                    PREVIOUS="window_versionshow" />
+			</FIELDS>
+			
+			<KEYS>
+				<KEY
+					NAME="primary"
+					TYPE="primary"
+					FIELDS="id" />
+			</KEYS>
+
+			<INDEXES>
+				<INDEX
+					NAME="course"
+					UNIQUE="false"
+					FIELDS="course" />
+			</INDEXES>
+			
+		</TABLE>
+
+	</TABLES>
+</XMLDB>

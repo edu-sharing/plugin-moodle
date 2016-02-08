@@ -1,0 +1,19 @@
+#preview {
+	width: 200px;
+	height: 250px;
+	border: 1px solid #999;
+	margin-left: 320px;
+	font-size: 0.6em;
+	padding: 5px;
+	color: #999;
+}
+
+#preview_resource_wrapper {
+	display: block; 
+	float: none;
+	margin: 5px 0;
+}
+
+.dimension.hidden {
+	display: none;
+}
