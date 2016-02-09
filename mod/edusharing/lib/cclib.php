@@ -62,7 +62,7 @@ class mod_edusharing_web_service_factory {
                 return $_SESSION["USER"] -> ticket;
                     
             try {
-                $eduService = new sigSoapClient($this -> authentication_service_wsdl, array());
+                $eduService = new mod_edusharing_sig_soap_client($this -> authentication_service_wsdl, array());
             } catch (Exception $e) {
                 print($this -> authentication_service_wsdl  . ' not reachable. Cannot utilize edu-sharing network.');
             }
