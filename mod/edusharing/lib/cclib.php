@@ -54,18 +54,21 @@ class mod_edusharing_web_service_factory {
 
     public function mod_edusharing_authentication_get_ticket($home_app_id) {
 
-        
-
+        //ticket available
         if (isset($_SESSION["USER"]->ticket)) {
+
+            //ticket is younger than 10s, we must not check
+            if(isset($_SESSION["USER"] -> ticketValidationTs) && time() - $_SESSION["USER"] -> ticketValidationTs < 10)
+                return $_SESSION["USER"] -> ticket;
                     
             try {
-                $eduService = new mod_edusharing_sig_soap_client($this -> authentication_service_wsdl, array());
+                $eduService = new sigSoapClient($this -> authentication_service_wsdl, array());
             } catch (Exception $e) {
                 print($this -> authentication_service_wsdl  . ' not reachable. Cannot utilize edu-sharing network.');
             }
 
             try {
-                // ticket available.. is it valid?
+                //ticket is older than 10s
                 $params = array(
                     "username" => mod_edusharing_get_auth_key(),
                     "ticket" => $_SESSION["USER"]->ticket
@@ -73,7 +76,8 @@ class mod_edusharing_web_service_factory {
                 
                 $alfReturn = $eduService->checkTicket($params);
                 
-                if ( $alfReturn->checkTicketReturn ) {  
+                if ( $alfReturn->checkTicketReturn ) {
+                  $_SESSION["USER"] -> ticketValidationTs = time();
 		          return $_SESSION["USER"]->ticket;
                 }
             }
@@ -88,12 +92,11 @@ class mod_edusharing_web_service_factory {
         // request new ticket
         $paramsTrusted = array("applicationId" => $home_app_id, "ticket" => session_id(), "ssoData" => mod_edusharing_get_auth_data());
         try {
-            session_write_close();
-
             $client = new mod_edusharing_sig_soap_client($this -> authentication_service_wsdl, array());
             $return = $client->authenticateByTrustedApp($paramsTrusted);
             $ticket = $return -> authenticateByTrustedAppReturn -> ticket;
             $_SESSION["USER"] -> ticket = $ticket;
+            $_SESSION["USER"] -> ticketValidationTs = time();
             return $ticket;
         } catch(Exception $e) {
             print('Cannot utilize edu-sharing network because authentication failed. Error message : ' . $e -> getMessage());
