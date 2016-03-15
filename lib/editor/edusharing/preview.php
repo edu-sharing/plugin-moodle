@@ -63,7 +63,9 @@ $sig = urlencode(mod_edusharing_get_signature($appProperties -> appid . $time));
 $url .= '&sig=' . $sig;
 $url .= '&ts=' . $time;
 
-$curl_handle = curl_init($url); 
+$curl_handle = curl_init($url);
+curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, 1);
 curl_setopt($curl_handle, CURLOPT_HEADER, 0);
 curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
