@@ -19,6 +19,7 @@
 	display: block; 
 	float: none;
 	margin: 5px 0;
+	color: #000;
 }
 
 .dimension.hidden {

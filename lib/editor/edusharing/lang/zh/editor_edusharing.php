@@ -29,6 +29,9 @@ $string['dialog_title'] = 'edu-sharing';
 $string['dialog_infomsg'] = '请选择提供商和用户设置参数';
 
 $string['title'] = '标题';
+$string['caption'] = '標題';
+$string['linktext'] = '鏈接文本';
+$string['titleAuthorLicense'] = '標題/作者/許可證';
 $string['window_width'] = '框架宽度';
 $string['window_height'] = '框架高度';
 $string['mediasrc'] = '对象URL';

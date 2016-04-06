@@ -29,6 +29,10 @@ $string['dialog_title'] = 'edu-sharing';
 $string['dialog_infomsg'] = 'Please select provider and set parameters';
 
 $string['title'] = 'Title';
+$string['caption'] = 'Caption';
+$string['linktext'] = 'Link text';
+$string['titleAuthorLicense'] = 'Title/author/license';
+
 $string['window_width'] = 'Width';
 $string['window_height'] = 'Height';
 $string['mediasrc'] = 'Object URL';
