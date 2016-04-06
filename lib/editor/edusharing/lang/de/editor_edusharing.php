@@ -29,6 +29,9 @@ $string['dialog_title'] = 'edu-sharing';
 $string['dialog_infomsg'] = 'Bitte wählen Sie ein edu-sharing Objekt aus.';
 
 $string['title'] = 'Titel';
+$string['caption'] = 'Untertitel';
+$string['linktext'] = 'Linktext';
+$string['titleAuthorLicense'] = 'Titel/Author/Lizenz';
 $string['window_width'] = 'Breite';
 $string['window_height'] = 'Höhe';
 $string['mediasrc'] = 'Quelle';

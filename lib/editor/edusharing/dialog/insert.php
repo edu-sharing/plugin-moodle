@@ -134,9 +134,7 @@ if ( $language )
 $link .= '&reurl='.urlencode($CFG->wwwroot."/lib/editor/edusharing/dialog/populate.php?");
 $previewUrl = $appProperties -> cc_gui_url . 'preview';
     
-function getPreviewText($short = '') {
-    if($short == 'giveMeAShortext')
-        return 'Lorem ipsum dolor';
+function getPreviewText() {
     return 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 }
 
@@ -166,7 +164,7 @@ function getPreviewText($short = '') {
 <div id="form_wrapper" style="float:left">
     <table>
         <tr>
-            <td><?php echo htmlentities(get_string('title', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
+            <td><span id="titleLabel"><?php echo htmlentities(get_string('caption', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></span></td>
             <td><input type="text" maxlength="50" style="width: 160px" name="title" id="title" value="<?php echo htmlspecialchars($edusharing->title, ENT_COMPAT, 'utf-8') ?>"></input>
                 <button type="button" name="search" value="2" onclick="editor_edusharing_show_repository_search(); return false;"><?php echo htmlentities(get_string('search', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></button>
             </td>
@@ -252,7 +250,9 @@ function getPreviewText($short = '') {
     
     function editor_edusharing_refresh_preview(float) {
         style = tinymce.plugins.edusharing.getStyle(float);
+        width = document.getElementById('preview_resource_wrapper').style.width;
         document.getElementById('preview_resource_wrapper').style = style;
+        document.getElementById('preview_resource_wrapper').style.width = width;
     }
     
     function editor_edusharing_handle_click(radio) {
@@ -286,7 +286,7 @@ function getPreviewText($short = '') {
     function editor_edusharing_set_preview_content() {
         mimeSwitchHelper = '';
         mimetype = document.getElementById('mimetype').value;
-        if(mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1 || mimetype.indexOf('bmp') !== -1)
+        if(mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1)
            mimeSwitchHelper = 'image';
         else if(mimetype.indexOf('audio') !== -1)
            mimeSwitchHelper = 'audio';
@@ -298,15 +298,35 @@ function getPreviewText($short = '') {
             mimeSwitchHelper = 'textlike';
         
         switch(mimeSwitchHelper) {
-            case 'image': content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/>'; break;
-            case 'youtube': content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/>'; break;
-            case 'video': content = '<img src="../images/video.png" width=80/>'; break;
-            case 'audio': content = '<img src="../images/audio.png" width=100/>'; break;
-            default: content = '<span style="color: #00F"><?php echo getPreviewText('giveMeAShortext')?></span>'; break;
+            case 'image': content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'youtube': content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'video': content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'audio': content = '<img src="../images/audio.png" width=100/><br/>Titel/Autor/Lizenz<br/>'; break;
+            default: content = '' ;
         }
+
+        if(mimeSwitchHelper != 'textlike') {
+            document.getElementById('preview_resource_wrapper').style.width = '80px';
+        } else {
+        	document.getElementById('preview_resource_wrapper').style.width = 'auto';
+        }
+        
+        content += '<span id="textpreview"></span>';
+
         document.getElementById('preview_resource_wrapper').innerHTML = content;
+        
+        if(mimeSwitchHelper == 'textlike') {
+        	setTextPreview();
+        	document.getElementById('textpreview').style.color = '#00F';
+        }
+        
         editor_edusharing_vis_dimension_inputs(mimeSwitchHelper);
+        editor_edusharing_set_title_options(mimeSwitchHelper);
         editor_edusharing_vis_version_inputs();
+    }
+
+    function setTextPreview() {
+       	document.getElementById('textpreview').innerHTML = document.getElementById('title').value;
     }
     
     function editor_edusharing_vis_version_inputs() {
@@ -316,6 +336,17 @@ function getPreviewText($short = '') {
             document.getElementsByClassName('versionShowTr')[0].style.visibility = 'visible';
         }
 
+    }
+
+    function editor_edusharing_set_title_options(mimeSwitchHelper) {
+        titleLabel = document.getElementById('titleLabel');
+		if(mimeSwitchHelper == 'textlike') {
+        	titleLabel.innerHTML = "<?php echo htmlspecialchars(get_string('linktext', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>";
+		} else {
+    		titleLabel.innerHTML = "<?php echo htmlspecialchars(get_string('caption', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>";
+    		document.getElementById('title').value = "";
+    		document.getElementById('textpreview').value = "";
+		}    
     }
     
     function editor_edusharing_vis_dimension_inputs(mimeSwitchHelper) {
@@ -342,6 +373,7 @@ function getPreviewText($short = '') {
        }
        
     }
+
     
     function editor_edusharing_shrink_dialog() {
         parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].style.width = '560px';
@@ -356,6 +388,18 @@ function getPreviewText($short = '') {
         parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].getElementsByTagName('iframe')[0].style.width = parent.parent.document.documentElement.clientWidth * 0.8 + 'px';
         parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].getElementsByTagName('iframe')[0].style.height = parent.parent.document.documentElement.clientHeight * 0.8 + 'px';
     }
+
+    onload = function () {
+        title = document.getElementById('title');
+        title.oninput = function() {
+        	setTextPreview();
+        }
+        title.onchange = title.oninput;
+        title.onkeypress = title.oninput;
+        title.onpaste = title.oninput;
+        title.onpropertychange = title.oninput;
+    }
+
     
 </script>
 
