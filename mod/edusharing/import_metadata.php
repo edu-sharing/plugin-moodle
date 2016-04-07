@@ -134,7 +134,7 @@ if (!empty( $_POST['mdataurl'])) {
         set_config('repProperties', json_encode($repProperties), 'edusharing');
         
         $homeAppProperties = new stdClass();
-        require_once(dirname(__FILE__) . '/mod_edusharing_app_property_helper.php');
+        require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
         $mod_edusharing_app_property_helper = new mod_edusharing_app_property_helper();
         $sslKeypair = $mod_edusharing_app_property_helper -> mod_edusharing_get_ssl_keypair();
         
@@ -146,6 +146,8 @@ if (!empty( $_POST['mdataurl'])) {
         $homeAppProperties -> private_key = $sslKeypair['privateKey'];
         $homeAppProperties -> public_key = $sslKeypair['publicKey'];
         $homeAppProperties -> signatureRedirector = $mod_edusharing_app_property_helper -> mod_edusharing_get_signatureRedirector();
+        $homeAppProperties -> blowfishkey = 'thetestkey';
+        $homeAppProperties -> blowfishiv = 'initvect';
         
         set_config('appProperties', json_encode($homeAppProperties), 'edusharing');
         
