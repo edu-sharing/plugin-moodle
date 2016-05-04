@@ -102,7 +102,7 @@ function mod_edusharing_get_auth_data() {
     }
     
     if(get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS') == 'yes') {
-    	$authParams[] = array('key' => 'globalgroups', $value => mod_edusharing_get_user_cohorts());
+    	$authParams[] = array('key' => 'globalgroups', 'value' => mod_edusharing_get_user_cohorts());
     }    
     return $authParams;
 }
