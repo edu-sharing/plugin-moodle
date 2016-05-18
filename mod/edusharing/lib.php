@@ -146,6 +146,7 @@ function edusharing_add_instance(stdClass $edusharing) {
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
+    $data4xml[1]["metadata"] = getUsageMetadata();
 
     // move popup settings to array
     if (!empty($edusharing->popup)) {
@@ -262,6 +263,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
+    $data4xml[1]["metadata"] = getUsageMetadata();
 
     // move popup settings to array
     if (!empty($edusharing->popup)) {
@@ -710,4 +712,41 @@ function _edusharing_fetch_object_version($nodeProperties)
     }
 
     return $object_version;
+}
+
+function getUsageMetadata() {
+
+	global $USER, $COURSE, $DB;
+
+	$usageMetaData = array();
+
+	$usageMetaData['courseId'] = $COURSE -> id;
+	$usageMetaData['courseFullname'] = $COURSE -> fullname;
+	$usageMetaData['courseShortname'] = $COURSE -> shortname;
+	$usageMetaData['courseSummary'] = $COURSE -> summary;
+
+	$category = $DB -> get_record('course_categories',array('id' => $COURSE -> category));
+
+	$usageMetaData['categoryId'] = $COURSE -> category;
+	$usageMetaData['categoryName'] = $category -> name;
+
+	//get users group memberships (no filtering for course)
+	$groupMemberships = $DB -> get_records('groups_members',array('userid' => $USER -> id));
+	if($groupMemberships) {
+		foreach($groupMemberships as $gm) {
+			$usageMetaData['groupMemberships'][] = $gm -> groupid;
+		}
+	}
+
+	//get users cohort memberships
+	$cohortMemberships = $DB -> get_records('cohort_members',array('userid' => $USER -> id));
+	if($cohortMemberships) {
+		foreach($cohortMemberships as $cm) {
+			$usageMetaData['cohortMemberships'][] = $cm -> cohortid;
+		}
+	}
+
+
+	return json_encode($usageMetaData);
+
 }
