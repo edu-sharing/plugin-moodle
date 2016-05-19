@@ -730,23 +730,6 @@ function getUsageMetadata() {
 	$usageMetaData['categoryId'] = $COURSE -> category;
 	$usageMetaData['categoryName'] = $category -> name;
 
-	//get users group memberships (no filtering for course)
-	$groupMemberships = $DB -> get_records('groups_members',array('userid' => $USER -> id));
-	if($groupMemberships) {
-		foreach($groupMemberships as $gm) {
-			$usageMetaData['groupMemberships'][] = $gm -> groupid;
-		}
-	}
-
-	//get users cohort memberships
-	$cohortMemberships = $DB -> get_records('cohort_members',array('userid' => $USER -> id));
-	if($cohortMemberships) {
-		foreach($cohortMemberships as $cm) {
-			$usageMetaData['cohortMemberships'][] = $cm -> cohortid;
-		}
-	}
-
-
-	return json_encode($usageMetaData);
+	return $usageMetaData;
 
 }
