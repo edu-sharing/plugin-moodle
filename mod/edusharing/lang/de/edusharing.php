@@ -111,3 +111,7 @@ $string['homerepProperties'] = 'Konfiguration Heim-Repositorium';
 $string['authparameters'] = 'Authentifizierungsparameter';
 $string['save'] = 'Änderungen sichern';
 $string['emptyForDefault'] = 'leer für';
+
+//auth parameters
+$string['convey_global_groups_yes'] = 'Globale Gruppen übermitteln';
+$string['convey_global_groups_no'] = 'Globale Gruppen nicht übermitteln';

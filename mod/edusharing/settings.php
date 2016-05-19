@@ -107,8 +107,8 @@ if ($ADMIN -> fulltree) {
     else
     	$checkNo = 'checked';
     $strAuth .= '<label>EDU_AUTH_CONVEYGLOBALGROUPS</label>
-    				&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsYes" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="yes" ' . $checkYes . '><label for="cohortsYes">&nbsp;Yes</label><br>
-    			 	&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsNo" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="no" ' . $checkNo . '><label for="cohortsNo">&nbsp;No</label>
+    				&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsYes" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="yes" ' . $checkYes . '><label for="cohortsYes">&nbsp;' . get_string('convey_global_groups_yes', 'edusharing') . '</label><br>
+    			 	&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsNo" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="no" ' . $checkNo . '><label for="cohortsNo">&nbsp;' . get_string('convey_global_groups_no', 'edusharing') . '</label>
     			 <br/><br/>';
     
     $settings -> add(new admin_setting_heading('edusharing', get_string('connectToHomeRepository', 'edusharing'), $str));

@@ -146,7 +146,7 @@ function edusharing_add_instance(stdClass $edusharing) {
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
-    $data4xml[1]["metadata"] = getUsageMetadata();
+    $data4xml[1]["metadata"] = mod_edusharing_get_usage_metadata($edusharing->course);
 
     // move popup settings to array
     if (!empty($edusharing->popup)) {
@@ -263,7 +263,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
-    $data4xml[1]["metadata"] = getUsageMetadata();
+    $data4xml[1]["metadata"] = mod_edusharing_get_usage_metadata($edusharing->course);
 
     // move popup settings to array
     if (!empty($edusharing->popup)) {
@@ -684,50 +684,23 @@ function mod_edusharing_get_repository_id_from_url($object_url)
     return $rep_id;
 }
 
-/**
- *
- * @param Node $contentNode
- *
- * @return string
- */
-function _edusharing_fetch_object_version($nodeProperties)
-{
-    $object_version = '0';
 
-    // versioned objects shall have this
-    if ( ! empty($nodeProperties['{http://www.campuscontent.de/model/lom/1.0}version']) )
-    {
-        $object_version = $nodeProperties['{http://www.campuscontent.de/model/lom/1.0}version'];
-    }
-    // fallback for non-versioned objects
-    else if ( ! empty($nodeProperties['{http://www.alfresco.org/model/content/1.0}versionLabel']) )
-    {
-        $object_version = $nodeProperties['{http://www.alfresco.org/model/content/1.0}versionLabel'];
-    }
-    // don't break non-versioning repositories
-    else
-    {
-        error_log('Error extracting object-version. Using fallback to "most-recent-version".');
-        $object_version = '0';
-    }
 
-    return $object_version;
-}
-
-function getUsageMetadata() {
-
-	global $USER, $COURSE, $DB;
-
+function mod_edusharing_get_usage_metadata($courseId) {
+	global $DB;
+	
+	if(empty($courseId))
+	       return '';
+	
+	$course = $DB -> get_record('course',array('id' => $courseId));
+	$category = $DB -> get_record('course_categories',array('id' => $course -> category));
+	
 	$usageMetaData = array();
-
-	$usageMetaData['courseId'] = $COURSE -> id;
-	$usageMetaData['courseFullname'] = $COURSE -> fullname;
-	$usageMetaData['courseShortname'] = $COURSE -> shortname;
-	$usageMetaData['courseSummary'] = $COURSE -> summary;
-
-	$category = $DB -> get_record('course_categories',array('id' => $COURSE -> category));
-
-	$usageMetaData['categoryId'] = $COURSE -> category;
+	$usageMetaData['courseId'] = $courseId;
+	$usageMetaData['courseFullname'] = $course -> fullname;
+	$usageMetaData['courseShortname'] = $course -> shortname;
+	$usageMetaData['courseSummary'] = $course -> summary;
+	$usageMetaData['categoryId'] = $course -> category;
 	$usageMetaData['categoryName'] = $category -> name;
 
 	return $usageMetaData;

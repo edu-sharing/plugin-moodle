@@ -123,7 +123,7 @@ function mod_edusharing_get_user_cohorts() {
 					'idnumber' => $cohort -> idnumber
 			);
 		}
-		return json_encode($ret);
+		return $ret;
 	}
 }
 
