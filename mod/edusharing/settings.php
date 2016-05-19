@@ -50,7 +50,7 @@ if ($ADMIN -> fulltree) {
         set_config('EDU_AUTH_PARAM_NAME_FIRSTNAME', trim($_REQUEST['EDU_AUTH_PARAM_NAME_FIRSTNAME']), 'edusharing');
         set_config('EDU_AUTH_PARAM_NAME_EMAIL', trim($_REQUEST['EDU_AUTH_PARAM_NAME_EMAIL']), 'edusharing');
         set_config('EDU_AUTH_AFFILIATION', trim($_REQUEST['EDU_AUTH_AFFILIATION']), 'edusharing');
-
+        set_config('EDU_AUTH_CONVEYGLOBALGROUPS', trim($_REQUEST['EDU_AUTH_CONVEYGLOBALGROUPS']), 'edusharing');
     }
     
     //(re)load config
@@ -95,8 +95,22 @@ if ($ADMIN -> fulltree) {
     $strAuth .= '<label for="EDU_AUTH_PARAM_NAME_USERID">EDU_AUTH_PARAM_NAME_LASTNAME</label><input style="width: 700px; height: auto;" id="EDU_AUTH_PARAM_NAME_LASTNAME" name="EDU_AUTH_PARAM_NAME_LASTNAME" type="text" value="' . get_config('edusharing', 'EDU_AUTH_PARAM_NAME_LASTNAME') . '"><br/>';
     $strAuth .= '<label for="EDU_AUTH_PARAM_NAME_FIRSTNAME">EDU_AUTH_PARAM_NAME_FIRSTNAME</label><input style="width: 700px; height: auto;" id="EDU_AUTH_PARAM_NAME_FIRSTNAME" name="EDU_AUTH_PARAM_NAME_FIRSTNAME" type="text" value="' . get_config('edusharing', 'EDU_AUTH_PARAM_NAME_FIRSTNAME') . '"><br/>';
     $strAuth .= '<label for="EDU_AUTH_PARAM_NAME_EMAIL">EDU_AUTH_PARAM_NAME_EMAIL</label><input style="width: 700px; height: auto;" id="EDU_AUTH_PARAM_NAME_EMAIL" name="EDU_AUTH_PARAM_NAME_EMAIL" type="text" value="' . get_config('edusharing', 'EDU_AUTH_PARAM_NAME_EMAIL') . '"><br/>';
+    
+    $strAuth .= '<br/>';
+    
     $strAuth .= '<label for="EDU_AUTH_AFFILIATION">EDU_AUTH_AFFILIATION</label><input style="width: 700px; height: auto;" id="EDU_AUTH_AFFILIATION" name="EDU_AUTH_AFFILIATION" type="text" value="' . get_config('edusharing', 'EDU_AUTH_AFFILIATION') . '"><br/>';
-
+   
+    $conveyCohorts = get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS');
+    $checkNo = $checkYes = '';
+    if($conveyCohorts == 'yes')
+    	$checkYes = 'checked';
+    else
+    	$checkNo = 'checked';
+    $strAuth .= '<label>EDU_AUTH_CONVEYGLOBALGROUPS</label>
+    				&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsYes" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="yes" ' . $checkYes . '><label for="cohortsYes">&nbsp;Yes</label><br>
+    			 	&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsNo" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="no" ' . $checkNo . '><label for="cohortsNo">&nbsp;No</label>
+    			 <br/><br/>';
+    
     $settings -> add(new admin_setting_heading('edusharing', get_string('connectToHomeRepository', 'edusharing'), $str));
     $settings -> add(new admin_setting_heading('app', get_string('appProperties', 'edusharing'), $strApp));
     $settings -> add(new admin_setting_heading('rep', get_string('homerepProperties', 'edusharing'), $strRep));
