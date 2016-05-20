@@ -230,7 +230,7 @@ class filter_edusharing extends moodle_text_filter {
         $repository_id = $this -> appProperties -> homerepid;
 
         $url = mod_edusharing_get_redirect_url($edusharing, $this -> appProperties, $this -> repProperties, DISPLAY_MODE_INLINE);
-        $inline = '<div class="eduContainer" data-type="esObject" data-url="'.$CFG->wwwroot.'/filter/edusharing/proxy.php?URL='.urlencode($url).'&amp;resId='.$edusharing->id.'&amp;title='.urlencode($renderParams['title']).'&amp;mimetype='.$renderParams['mimetype'].'"><div class="inner"><div class="spinner1"></div></div><div class="inner"><div class="spinner2"></div></div><div class="inner"><div class="spinner3"></div></div>edu sahring object</div>';
+        $inline = '<div class="eduContainer" data-type="esObject" data-url="'.$CFG->wwwroot.'/filter/edusharing/proxy.php?URL='.urlencode($url).'&amp;resId='.$edusharing->id.'&amp;title='.urlencode($renderParams['title']).'&amp;mimetype='.$renderParams['mimetype'].'"><div class="inner"><div class="spinner1"></div></div><div class="inner"><div class="spinner2"></div></div><div class="inner"><div class="spinner3"></div></div>edu sharing object</div>';
      
 
         return $inline;
