@@ -114,3 +114,5 @@ $string['filter_not_authorized'] = 'You are not authorized to access the request
 //auth parameters
 $string['convey_global_groups_yes'] = 'Convey cohorts';
 $string['convey_global_groups_no'] = 'Not convey cohorts';
+
+$string['mcryptrequired'] = 'The PHP extension mcrypt must be activated.';

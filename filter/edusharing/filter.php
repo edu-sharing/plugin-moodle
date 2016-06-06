@@ -127,7 +127,7 @@ class filter_edusharing extends moodle_text_filter {
 
             $DOM = new DOMDocument('1.0');
             $DOM -> formatOutput = true;
-            if (!$DOM -> loadXML($text)) {
+            if (!$DOM -> loadHTML($text)) {
                 throw new Exception('Error loading (X)-HTML to be filtered.');
             }
 
@@ -142,7 +142,7 @@ class filter_edusharing extends moodle_text_filter {
 
             $text = $DOM -> saveHTML($DOM -> documentElement);
         } catch(Exception $exception) {
-            error_log($exception -> getMessage());
+            trigger_error($exception -> getMessage(), E_USER_WARNING);
             return $memento;
         }
 
@@ -248,14 +248,13 @@ class filter_edusharing extends moodle_text_filter {
 
         $resource_id = $Placeholder -> getAttribute('es:resource_id');
         if (!$resource_id) {
-            //          throw new Exception('Error reading resource-id.');
+            trigger_error('Error reading resource-id.', E_USER_WARNING);
             return false;
         }
 
         $edusharing = $DB -> get_record(EDUSHARING_TABLE, array('id' => $resource_id));
         if (!$edusharing) {
-            //throw new Exception('Error loading resource from db.');
-            //$Placeholder -> parentNode -> removeChild($Placeholder);
+            trigger_error('Error loading resource from db.', E_USER_WARNING);
             return false;
         }
 

@@ -46,8 +46,7 @@ class filter_edusharing_edurender {
             curl_close($curl_handle);
 
         } catch(Exception $e) {
-            session_start();
-            error_log(print_r($e, true));
+            trigger_error($e -> getMessage(), E_USER_WARNING);
             curl_close($curl_handle);
             return false;
         }
@@ -88,8 +87,15 @@ class filter_edusharing_edurender {
 }
 
 require_login();
-
 $url = $_GET['URL'];
+
+$parts = parse_url($url);
+parse_str($parts['query'], $query);
+$coursecontext = context_course::instance($query['course_id']);
+if(!is_enrolled($coursecontext, $USER)) {
+    trigger_error('Unauthorized access', E_USER_ERROR);
+}
+
 $appProperties = json_decode(get_config('edusharing', 'appProperties'));
 $ts = $timestamp = round(microtime(true) * 1000);
 $url .= '&ts=' . $ts;

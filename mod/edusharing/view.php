@@ -44,7 +44,7 @@ if ($id) {
     $vId = $edusharing -> id;
     $courseId = $course -> id;
 } else {
-    error('You must specify a course_module ID or an instance ID');
+    trigger_error('You must specify a course_module ID or an instance ID', E_USER_WARNING);
 }
 
 $PAGE->set_url('/mod/edusharing/view.php?id='.$vId);
@@ -67,8 +67,7 @@ try {
 }
 catch(Exception $exception)
 {
-    error_log( print_r($exception, true) );
-    print_error($exception -> getMessage());
+    trigger_error($exception -> getMessage(), E_USER_WARNING);
     print_footer("edu-sharing");
     return false;
 }

@@ -115,3 +115,5 @@ $string['emptyForDefault'] = 'leer für';
 //auth parameters
 $string['convey_global_groups_yes'] = 'Globale Gruppen übermitteln';
 $string['convey_global_groups_no'] = 'Globale Gruppen nicht übermitteln';
+
+$string['mcryptrequired'] = 'Die PHP-Erweiterung mcrypt muss aktiviert sein.';
