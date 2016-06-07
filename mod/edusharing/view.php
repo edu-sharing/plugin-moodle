@@ -68,7 +68,6 @@ try {
 catch(Exception $exception)
 {
     trigger_error($exception -> getMessage(), E_USER_WARNING);
-    print_footer("edu-sharing");
     return false;
 }
 

@@ -99,5 +99,4 @@ $('#esContent').html("<div id='closer' style='font-size: 1em; padding: 5px 20px 
 <?php
 // ------------------------------------------------------------------------------------
 
-//print_footer(get_string('block_footer', 'block_edusharing_upload'));
 exit ;

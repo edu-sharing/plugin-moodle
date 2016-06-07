@@ -108,12 +108,8 @@ if ( ! empty($_GET['resource_id']) )
 
 
 $ccauth = new mod_edusharing_web_service_factory();
+
 $ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties -> appid);
-if ( ! $ticket )
-{
-    print_footer("edu-sharing");
-    exit();
-}
 
 $link = $appProperties -> cc_gui_url; // link to the external cc-search
 

@@ -98,5 +98,4 @@ $('#closer').click(function(){window.location.href='<?php echo $_SERVER["HTTP_RE
 <?php
 // ------------------------------------------------------------------------------------
 
-//print_footer("");
 exit ;
