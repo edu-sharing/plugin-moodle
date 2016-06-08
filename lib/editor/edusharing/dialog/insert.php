@@ -61,7 +61,7 @@ if ( empty($CFG->yui3version) )
 
 </head>
 
-<body">
+<body>
 
 <form>
     <h2><?php echo htmlentities(get_string('dialog_title', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></h2>
