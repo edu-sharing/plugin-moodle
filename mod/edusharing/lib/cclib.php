@@ -93,7 +93,7 @@ class mod_edusharing_web_service_factory {
         $paramsTrusted = array("applicationId" => $home_app_id, "ticket" => session_id(), "ssoData" => mod_edusharing_get_auth_data());
         try {
             $client = new mod_edusharing_sig_soap_client($this -> authentication_service_wsdl, array());
-            $return = $client -> __call('authenticateByTrustedApp', $paramsTrusted);
+            $return = $client -> authenticateByTrustedApp($paramsTrusted);
             $ticket = $return -> authenticateByTrustedAppReturn -> ticket;
             $_SESSION["USER"] -> ticket = $ticket;
             $_SESSION["USER"] -> ticketValidationTs = time();

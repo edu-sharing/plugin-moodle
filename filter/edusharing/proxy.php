@@ -86,15 +86,11 @@ class filter_edusharing_edurender {
 
 }
 
-require_login();
 $url = $_GET['URL'];
 
 $parts = parse_url($url);
 parse_str($parts['query'], $query);
-$coursecontext = context_course::instance($query['course_id']);
-if(!is_enrolled($coursecontext, $USER)) {
-    trigger_error('Unauthorized access', E_USER_ERROR);
-}
+require_login($query['course_id']);
 
 $appProperties = json_decode(get_config('edusharing', 'appProperties'));
 $ts = $timestamp = round(microtime(true) * 1000);
