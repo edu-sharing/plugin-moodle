@@ -57,7 +57,7 @@ class mod_edusharing_sig_soap_client extends SoapClient {
     }
     
     public function mod_edusharing_get_app_properties() {
-        if(empty($this->appProperties))
+        if (empty($this->appProperties))
             throw new Exception('No appProperties found');
         return $this->appProperties;
     }

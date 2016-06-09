@@ -28,16 +28,16 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
  
-    'mod/edusharing:addinstance' => array(
-        'riskbitmask' => RISK_SPAM,
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW,
-            'admin' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW
+    'mod/edusharing:addinstance'  => array(
+        'riskbitmask'  => RISK_SPAM,
+        'captype'  => 'write',
+        'contextlevel'  => CONTEXT_MODULE,
+        'archetypes'  => array(
+            'editingteacher'  => CAP_ALLOW,
+            'manager'  => CAP_ALLOW,
+            'admin'  => CAP_ALLOW,
+            'teacher'  => CAP_ALLOW
         ),
-        'clonepermissionsfrom' => 'moodle/course:manageactivities'
+        'clonepermissionsfrom'  => 'moodle/course:manageactivities'
     ),
 );

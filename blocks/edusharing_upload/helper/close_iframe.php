@@ -25,29 +25,29 @@ require_once(dirname(__FILE__) . '/../../../config.php');
 
 $location = $CFG->wwwroot;
 if ( $_GET['course_id']) {
-	$location .= '/course/view.php?id=' . intval($_GET['course_id']);
+    $location .= '/course/view.php?id=' . intval($_GET['course_id']);
 }
 
 ?>
 <html>
-	<head>
-	</head>
-	<body>
-		<font face="Arial"><b>Please wait... redirecting to MOODLE LMS<span id="progressDots" style="position:absolute;"></span></b></font>
-		<script type="text/javascript">
-			function showProgressDots(numberOfDots, maxDots) {
-				var dots = "";
-				for (x=0; x<=numberOfDots; x++) {
-					dots += ".";
-				}
-				document.getElementById('progressDots').innerHTML = dots;
-				if (numberOfDots >= maxDots) {
-					numberOfDots = -1;
-				}
-				timerHandle = setTimeout('showProgressDots('+(numberOfDots+1)+','+(maxDots)+')',200);
-			}
-			window.setTimeout('showProgressDots(0,8)',250);
-			top.location.href = '<?php echo htmlspecialchars($location, ENT_COMPAT, 'utf-8') ?>';
-		</script>
-	</body>
+    <head>
+    </head>
+    <body>
+        <font face="Arial"><b>Please wait... redirecting to MOODLE LMS<span id="progressDots" style="position:absolute;"></span></b></font>
+        <script type="text/javascript">
+            function showProgressDots(numberOfDots, maxDots) {
+                var dots = "";
+                for (x=0; x<=numberOfDots; x++) {
+                    dots += ".";
+                }
+                document.getElementById('progressDots').innerHTML = dots;
+                if (numberOfDots >= maxDots) {
+                    numberOfDots = -1;
+                }
+                timerHandle = setTimeout('showProgressDots('+(numberOfDots+1)+','+(maxDots)+')',200);
+            }
+            window.setTimeout('showProgressDots(0,8)',250);
+            top.location.href = '<?php echo htmlspecialchars($location, ENT_COMPAT, 'utf-8') ?>';
+        </script>
+    </body>
 </html>

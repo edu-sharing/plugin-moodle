@@ -20,42 +20,42 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 function getJQueryCodeSoThatMoodleLikesIt($) {
-		$.ajaxSetup({ cache: false });
-		
-		function renderEsObject(esObject, wrapper) {
-			var url = esObject.attr("data-url");
-			if(typeof wrapper == 'undefined')
-				var wrapper = esObject.parent();
-			$.get(url, function(data) {
-				wrapper.html('').append(data).css({height: 'auto', width: 'auto'});
-				if (data.toLowerCase().indexOf('data-view="lock"') >= 0)
-					setTimeout(function(){ renderEsObject(esObject, wrapper);}, 1111);
-			});
-			esObject.removeAttr("data-type");
-		}
-		
-		$("div[data-type='esObject']:near-viewport(400)").each(function() {
-			renderEsObject($(this));
-		})
-		
-		$(window).scroll(function() {
-			$("div[data-type='esObject']:near-viewport(400)").each(function() {
-				renderEsObject($(this));
-			})
-		});
+        $.ajaxSetup({ cache: false });
+        
+        function renderEsObject(esObject, wrapper) {
+            var url = esObject.attr("data-url");
+            if (typeof wrapper == 'undefined')
+                var wrapper = esObject.parent();
+            $.get(url, function(data) {
+                wrapper.html('').append(data).css({height: 'auto', width: 'auto'});
+                if (data.toLowerCase().indexOf('data-view="lock"') >= 0)
+                    setTimeout(function() { renderEsObject(esObject, wrapper);}, 1111);
+            });
+            esObject.removeAttr("data-type");
+        }
+        
+        $("div[data-type='esObject']:near-viewport(400)").each(function() {
+            renderEsObject($(this));
+        })
+        
+        $(window).scroll(function() {
+            $("div[data-type='esObject']:near-viewport(400)").each(function() {
+                renderEsObject($(this));
+            })
+        });
 }
 
-if(typeof require == 'undefined') {
-	$(document).ready(function() {
-		getJQueryCodeSoThatMoodleLikesIt($);
-	});
+if (typeof require == 'undefined') {
+    $(document).ready(function() {
+        getJQueryCodeSoThatMoodleLikesIt($);
+    });
 } else {
-	require(['jquery'], function($) {
-		$(document).ready(function() {
-			getJQueryCodeSoThatMoodleLikesIt($);
-		});
-	});
+    require(['jquery'], function($) {
+        $(document).ready(function() {
+            getJQueryCodeSoThatMoodleLikesIt($);
+        });
+    });
 }
 
-	
-	
+    
+    

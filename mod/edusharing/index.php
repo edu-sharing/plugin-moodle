@@ -27,7 +27,7 @@ require_once(dirname(__FILE__).'/lib.php');
 
 $id = required_param('id', PARAM_INT);   // course
 
-if (! $course = $DB->get_record('course', array('id' => $id))) {
+if (! $course = $DB->get_record('course', array('id'  => $id))) {
     trigger_error('Course ID is incorrect', E_USER_WARNING);
 }
 
@@ -35,7 +35,7 @@ require_course_login($course);
 
 add_to_log($course->id, 'edusharing', 'view all', "index.php?id=$course->id", '');
 
-$PAGE->set_url('mod/edusharing/view.php', array('id' => $id));
+$PAGE->set_url('mod/edusharing/view.php', array('id'  => $id));
 $PAGE->set_title($course->fullname);
 $PAGE->set_heading($course->shortname);
 

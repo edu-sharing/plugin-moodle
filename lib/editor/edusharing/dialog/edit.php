@@ -35,13 +35,11 @@ require_once($CFG->dirroot.'/mod/edusharing/lib/cclib.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
 $tinymce = get_texteditor('tinymce');
-if ( ! $tinymce )
-{
+if ( ! $tinymce ) {
     throw new RuntimeException('Could not get_texteditor("tinymce") for version-information.');
 }
 
-if ( empty($CFG->yui3version) )
-{
+if ( empty($CFG->yui3version) ) {
     throw new RuntimeException('Could not determine installed YUI-version.');
 }
 
@@ -91,8 +89,7 @@ function getPreviewText() {
 }
 
 $repository_id = $appProperties->homerepid;
-if ( ! $repository_id )
-{
+if ( ! $repository_id ) {
     header('HTTP/1.1 500 Internal Server Error');
     throw new Exception('No home-repository configured.');
 }
@@ -169,13 +166,13 @@ if ( ! $repository_id )
     }
 
     function editor_edusharing_set_width() {
-        if(!editor_edusharing_get_ratio_cb_status())
+        if (!editor_edusharing_get_ratio_cb_status())
             return;
         document.getElementById('window_width').value = Math.round(document.getElementById('window_height').value / editor_edusharing_get_ratio());
     }
     
     function editor_edusharing_set_height() {
-        if(!editor_edusharing_get_ratio_cb_status())
+        if (!editor_edusharing_get_ratio_cb_status())
             return;
         document.getElementById('window_height').value = Math.round(document.getElementById('window_width').value * editor_edusharing_get_ratio());
     }
@@ -193,39 +190,39 @@ if ( ! $repository_id )
         mimeSwitchHelper = '';
         mimetype = '<?php echo $edusharing->mimetype?>';
         repotype = '<?php echo $edusharing->repotype?>';
-        if(mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1)
+        if (mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1)
            mimeSwitchHelper = 'image';
-        else if(mimetype.indexOf('audio') !== -1)
+        else if (mimetype.indexOf('audio') !== -1)
            mimeSwitchHelper = 'audio';
-        else if(mimetype.indexOf('video') !== -1)
+        else if (mimetype.indexOf('video') !== -1)
             mimeSwitchHelper = 'video';
-        else if(document.getElementById('repotype').value == 'YOUTUBE')
+        else if (document.getElementById('repotype').value == 'YOUTUBE')
             mimeSwitchHelper = 'youtube';
         else
             mimeSwitchHelper = 'textlike';
         
         switch(mimeSwitchHelper) {
-	        case 'image': content = '<img src="<?php echo $edusharing->prev_src?>" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
-	        case 'youtube': content = '<img src="<?php echo $edusharing->prev_src?>" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
-	        case 'video': content = '<img src="<?php echo $edusharing->prev_src?>" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
-	        case 'audio': content = '<img src="../images/audio.png" width=100/><br/>' + document.getElementById('title').value + '<br/>'; break;
-	        default: content = '' ;
-	    }
+            case 'image': content = '<img src="<?php echo $edusharing->prev_src?>" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'youtube': content = '<img src="<?php echo $edusharing->prev_src?>" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'video': content = '<img src="<?php echo $edusharing->prev_src?>" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'audio': content = '<img src="../images/audio.png" width=100/><br/>' + document.getElementById('title').value + '<br/>'; break;
+            default: content = '' ;
+        }
 
-        if(mimeSwitchHelper != 'textlike') {
+        if (mimeSwitchHelper != 'textlike') {
             document.getElementById('preview_resource_wrapper').style.width = '80px';
         } else {
-        	document.getElementById('preview_resource_wrapper').style.width = 'auto';
+            document.getElementById('preview_resource_wrapper').style.width = 'auto';
         }
         
         content += '<span id="textpreview"></span>';
         
         document.getElementById('preview_resource_wrapper').innerHTML = content;
 
-    	setTextPreview();
+        setTextPreview();
         
-        if(mimeSwitchHelper == 'textlike') {
-        	document.getElementById('textpreview').style.color = '#00F';
+        if (mimeSwitchHelper == 'textlike') {
+            document.getElementById('textpreview').style.color = '#00F';
         }
         
         editor_edusharing_vis_dimension_inputs(mimeSwitchHelper);
@@ -234,11 +231,11 @@ if ( ! $repository_id )
     }
 
     function setTextPreview() {
-       	document.getElementById('textpreview').innerHTML = document.getElementById('title').value;
+           document.getElementById('textpreview').innerHTML = document.getElementById('title').value;
     }
     
     function editor_edusharing_vis_version_inputs() {
-        if(document.getElementById('repotype').value == 'YOUTUBE') {
+        if (document.getElementById('repotype').value == 'YOUTUBE') {
             document.getElementsByClassName('versionShowTr')[0].style.visibility = 'hidden';
         } else {
             document.getElementsByClassName('versionShowTr')[0].style.visibility = 'visible';
@@ -248,21 +245,21 @@ if ( ! $repository_id )
 
     function editor_edusharing_set_title_options(mimeSwitchHelper) {
         titleLabel = document.getElementById('titleLabel');
-		if(mimeSwitchHelper == 'textlike') {
-        	titleLabel.innerHTML = "<?php echo htmlspecialchars(get_string('linktext', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>";
-		} else {
-    		titleLabel.innerHTML = "<?php echo htmlspecialchars(get_string('caption', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>";
-		}    
+        if (mimeSwitchHelper == 'textlike') {
+            titleLabel.innerHTML = "<?php echo htmlspecialchars(get_string('linktext', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>";
+        } else {
+            titleLabel.innerHTML = "<?php echo htmlspecialchars(get_string('caption', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>";
+        }    
     }
     
     function editor_edusharing_vis_dimension_inputs(mimeSwitchHelper) {
        console.log(mimeSwitchHelper);
-       if(mimeSwitchHelper == 'image') {
+       if (mimeSwitchHelper == 'image') {
            var dimensionsSet = document.getElementsByClassName('dimension');
            for(var i = 0; i < dimensionsSet.length; i++) {
                 dimensionsSet[i].style.visibility = 'visible';
             }
-       } else if(mimeSwitchHelper == 'video' || mimeSwitchHelper == 'youtube') {
+       } else if (mimeSwitchHelper == 'video' || mimeSwitchHelper == 'youtube') {
            var dimensionsSet = document.getElementsByClassName('dimension');
            for(var i = 0; i < dimensionsSet.length; i++) {
                 dimensionsSet[i].style.visibility = 'visible';
@@ -286,7 +283,7 @@ if ( ! $repository_id )
     onload = function () {
         title = document.getElementById('title');
         title.oninput = function() {
-        	setTextPreview();
+            setTextPreview();
         }
         title.onchange = title.oninput;
         title.onkeypress = title.oninput;

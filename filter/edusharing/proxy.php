@@ -45,7 +45,7 @@ class filter_edusharing_edurender {
             $inline = curl_exec($curl_handle);
             curl_close($curl_handle);
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             trigger_error($e->getMessage(), E_USER_WARNING);
             curl_close($curl_handle);
             return false;

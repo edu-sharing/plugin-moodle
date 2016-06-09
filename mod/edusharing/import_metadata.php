@@ -27,85 +27,85 @@
 <head>
 <title>edu-sharing metadata import</title>
 <style type="text/css" id="vbulletin_css">
-	body {
-		background: #e4f3f9;
-		color: #000000;
-		font: 11pt verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif;
-		margin: 5px 10px 10px 10px;
-		padding: 0px;
-	}
-	table {
-		background: #e4f3f9;
-		color: #000000;
-		font: 10pt verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif;
-		margin: 5px 10px 10px 10px;
-		padding: 0px;
-	}
-	p {
-		margin: 10px;
-		padding: 20px;
-		background: #AEF2AC;
-	}
-	fieldset {
-		margin: 10px;
-		border: 1px solid #ddd;
-	}
+    body {
+        background: #e4f3f9;
+        color: #000000;
+        font: 11pt verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif;
+        margin: 5px 10px 10px 10px;
+        padding: 0px;
+    }
+    table {
+        background: #e4f3f9;
+        color: #000000;
+        font: 10pt verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif;
+        margin: 5px 10px 10px 10px;
+        padding: 0px;
+    }
+    p {
+        margin: 10px;
+        padding: 20px;
+        background: #AEF2AC;
+    }
+    fieldset {
+        margin: 10px;
+        border: 1px solid #ddd;
+    }
 </style>
 </head>
 <body>
 <?php
 
-		// customize
-		define('IMPORT_METADATA', true);
+        // customize
+        define('IMPORT_METADATA', true);
 
-		require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
+        require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 
-		if(!is_siteadmin()) {
-		  echo 'Access denied!';
-		  exit();
+        if (!is_siteadmin()) {
+          echo 'Access denied!';
+          exit();
         }
 
-		define ('CC_CONF_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
-		define ('CC_CONF_APPFILE','ccapp-registry.properties.xml');
+        define ('CC_CONF_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+        define ('CC_CONF_APPFILE','ccapp-registry.properties.xml');
 
-		if (!IMPORT_METADATA) die('metadata import disabled');
+        if (!IMPORT_METADATA) die('metadata import disabled');
 
-		function getForm($url){
+        function getForm($url) {
 
-		$form = '
-		<form action="import_metadata.php" method="post" name="mdform">
-			<fieldset>
-				<legend>
-					Import application metadata
-				</legend>
-				<table>
-					<tr>
-						<td colspan="2"> Example metadata endpoints:
-						<br>
-						<table>
-							<tr>
-								<td>Repository: </td><td><a href="javascript:void();" onclick="document.forms[0].mdataurl.value=\'http://your-server-name/edu-sharing/metadata?format=lms\'">http://edu-sharing-server/edu-sharing/metadata?format=lms</a>
-								<br>
-								</td>
-							</tr>
-						</td>
-					</tr>
-					<tr>
-						<td><label for="metadata">Metadata endpoint:</label></td>
-						<td>
-						<input type="text" size="80" id="metadata" name="mdataurl" value="'.$url.'">
-						<input type="submit" value="import">
-						</td>
-					</tr>
-				</table>
-			</fieldset>
-		</form>';
+        $form = '
+        <form action="import_metadata.php" method="post" name="mdform">
+            <fieldset>
+                <legend>
+                    Import application metadata
+                </legend>
+                <table>
+                    <tr>
+                        <td colspan="2"> Example metadata endpoints:
+                        <br>
+                        <table>
+                            <tr>
+                                <td>Repository: </td><td><a href="javascript:void();" onclick="document.forms[0].mdataurl.value=\'http://your-server-name/edu-sharing/metadata?format=lms\'">http://edu-sharing-server/edu-sharing/metadata?format=lms</a>
+                                <br>
+                                </td>
+                            </tr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="metadata">Metadata endpoint:</label></td>
+                        <td>
+                        <input type="text" size="80" id="metadata" name="mdataurl" value="'.$url.'">
+                        <input type="submit" value="import">
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </form>';
 
-		return $form;
+        return $form;
 
-		}
+        }
 
-		$filename='';
+        $filename='';
 
 if (!empty( $_POST['mdataurl'])) {
 
@@ -115,7 +115,7 @@ if (!empty( $_POST['mdataurl'])) {
     
         libxml_use_internal_errors(true);
     
-        if ($xml->load($_POST['mdataurl']) == false){
+        if ($xml->load($_POST['mdataurl']) == false) {
             echo ('<p style="background: #FF8170">could not load '.$_POST['mdataurl'].' please check url')."<br></p>";
             echo getForm($_POST['mdataurl']);
             exit();
@@ -126,7 +126,7 @@ if (!empty( $_POST['mdataurl'])) {
         $xml->formatOutput = true;
         $entrys = $xml->getElementsByTagName('entry');
         $repProperties = new stdClass();
-        foreach ($entrys as $entry){
+        foreach ($entrys as $entry) {
             $key = $entry->getAttribute('key');
             $repProperties->$key = $entry->nodeValue;
         }
@@ -158,7 +158,7 @@ if (!empty( $_POST['mdataurl'])) {
         set_config('EDU_AUTH_PARAM_NAME_EMAIL', 'email', 'edusharing');
         set_config('EDU_AUTH_AFFILIATION', $CFG->siteidentifier, 'edusharing');
         
-        if(empty($sslKeypair['privateKey']))
+        if (empty($sslKeypair['privateKey']))
             echo 'Generating of SSL keys failed. Please check your configuration.';
         else
             echo 'Import sucessfull.';

@@ -53,8 +53,7 @@ class mod_edusharing_web_service extends SoapClient
 
    private $ticket;
 
-   public function __construct($wsdl, $options = array('trace' => true, 'exceptions' => true), $ticket = null)
-   {
+   public function __construct($wsdl, $options = array('trace'  => true, 'exceptions'  => true), $ticket = null) {
       // Store the current ticket
       $this->ticket = $ticket;
 
@@ -62,15 +61,12 @@ class mod_edusharing_web_service extends SoapClient
       @ parent::__construct($wsdl, $options); // if SOAP server is unreachable (unable to get WSDL file) suppress the php warning... errorhandling kicks in later.
    }
 
-   public function __call($function_name, $arguments)
-   {
+   public function __call($function_name, $arguments) {
       return $this->__soapCall($function_name, $arguments);
    }
 
-   public function __soapCall($function_name, $arguments, $options=array(), $input_headers=array(), &$output_headers=array())
-   {
-      if (isset($this->ticket))
-      {
+   public function __soapCall($function_name, $arguments, $options=array(), $input_headers=array(), &$output_headers=array()) {
+      if (isset($this->ticket)) {
          // Automatically add a security header
          $input_headers[] = new SoapHeader($this->securityExtNS, "Security", null, 1);
       }
@@ -78,19 +74,16 @@ class mod_edusharing_web_service extends SoapClient
       return parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
    }
 
-   public function __doRequest($request, $location, $action, $version,$one_way = 0)
-   {
+   public function __doRequest($request, $location, $action, $version, $one_way = 0) {
       // If this request requires authentication we have to manually construct the
       // security headers.
-      if (isset($this->ticket))
-      {
+      if (isset($this->ticket)) {
          $dom = new DOMDocument("1.0");
          $dom->loadXML($request);
 
          $securityHeader = $dom->getElementsByTagName("Security");
 
-         if ($securityHeader->length != 1)
-         {
+         if ($securityHeader->length != 1) {
             throw new Exception("Expected length: 1, Received: " . $securityHeader->length . ". No Security Header, or more than one element called Security!");
          }
 

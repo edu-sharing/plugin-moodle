@@ -31,7 +31,7 @@ global $DB;
 
 $resourceId = $_GET['resourceId'];
 
-if (!$edusharing = $DB->get_record(EDUSHARING_TABLE, array('id' => $resourceId))) {
+if (!$edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resourceId))) {
     trigger_error('Error loading edusharing-object from database.', E_USER_WARNING);
 }
 

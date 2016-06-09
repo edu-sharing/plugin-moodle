@@ -60,12 +60,12 @@ function xmldb_edusharing_upgrade($oldversion=0) {
             $dbman->drop_field($xmldb_table, $xmldb_field);
             $xmldb_field = new xmldb_field('window_version');
             $dbman->drop_field($xmldb_table, $xmldb_field);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             error_log($e);
         }
         
         $homeConf = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'esmain'.DIRECTORY_SEPARATOR.'homeApplication.properties.xml';
-        if(file_exists($homeConf)) {
+        if (file_exists($homeConf)) {
             $app = new DOMDocument();
             $app->load($homeConf);
             $app->preserveWhiteSpace = false;
@@ -81,7 +81,7 @@ function xmldb_edusharing_upgrade($oldversion=0) {
         }
 
         $repoConf = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'esmain'.DIRECTORY_SEPARATOR.'app-'. $homeAppProperties['homerepid'] .'.properties.xml';
-        if(file_exists($repoConf)) {
+        if (file_exists($repoConf)) {
             $app = new DOMDocument();
             $app->load($repoConf);
             $app->preserveWhiteSpace = false;
@@ -92,7 +92,7 @@ function xmldb_edusharing_upgrade($oldversion=0) {
             
             $repoProperties['authenticationwebservice'] = str_replace('authentication', 'authbyapp', $repoProperties['authenticationwebservice']);
             $repoProperties['authenticationwebservice_wsdl'] = str_replace('authentication', 'authbyapp', $repoProperties['authenticationwebservice_wsdl']);
-            if(mb_substr($repoProperties['usagewebservice'], -1) != '2')
+            if (mb_substr($repoProperties['usagewebservice'], -1) != '2')
                 $repoProperties['usagewebservice'] = $repoProperties['usagewebservice'] . '2';
             $repoProperties['usagewebservice_wsdl'] = str_replace('usage?wsdl', 'usage2?wsdl', $repoProperties['usagewebservice_wsdl']);
             $repoProperties['contenturl'] = $repoProperties['clientprotocol'] . '://' . $repoProperties['domain'] . ':' . $repoProperties['clientport'] . '/edu-sharing/renderingproxy';
@@ -110,7 +110,7 @@ function xmldb_edusharing_upgrade($oldversion=0) {
             set_config('EDU_AUTH_PARAM_NAME_FIRSTNAME', EDU_AUTH_PARAM_NAME_FIRSTNAME, 'edusharing');
             set_config('EDU_AUTH_PARAM_NAME_EMAIL', EDU_AUTH_PARAM_NAME_EMAIL, 'edusharing');
         
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             error_log($e);
         }
 

@@ -43,7 +43,7 @@ $eduObj_resourceVersion = addslashes_js(optional_param('resourceVersion', '', PA
 $eduObj_height = addslashes_js(optional_param('h', '', PARAM_RAW));
 $eduObj_width = addslashes_js(optional_param('w', '600', PARAM_RAW));
 $eduObj_ratio = '';
-if(!empty($eduObj_height) && !empty($eduObj_width))
+if (!empty($eduObj_height) && !empty($eduObj_width))
     $eduObj_ratio = (int)$eduObj_height / (int)$eduObj_width;
 $eduObj_version = addslashes_js(optional_param('v', '1.0', PARAM_RAW));
 $eduObj_repoType = addslashes_js(optional_param('repoType', '', PARAM_RAW));
@@ -69,7 +69,7 @@ $eduObj_repoType = addslashes_js(optional_param('repoType', '', PARAM_RAW));
             for (var i = 0; i < inputs.length; i++) {
                 inputs[i].disabled = false;
             }
-    } catch(err) {
+    } catch (err) {
         alert('Error populating form-fields.' + err);
     }
     
@@ -78,7 +78,7 @@ $eduObj_repoType = addslashes_js(optional_param('repoType', '', PARAM_RAW));
         parent.document.getElementById('eduframe').style.display="none";
         parent.editor_edusharing_set_preview_content();
         parent.focus();
-    } catch(err) {
+    } catch (err) {
         alert('Error updating dialog.' + err);
     }
     

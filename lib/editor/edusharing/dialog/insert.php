@@ -35,13 +35,11 @@ require_once($CFG->dirroot.'/mod/edusharing/lib/cclib.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
 $tinymce = get_texteditor('tinymce');
-if ( ! $tinymce )
-{
+if ( ! $tinymce ) {
     throw new RuntimeException('Could not get_texteditor("tinymce") for version-information.');
 }
 
-if ( empty($CFG->yui3version) )
-{
+if ( empty($CFG->yui3version) ) {
     throw new RuntimeException('Could not determine installed YUI-version.');
 }
 
@@ -89,11 +87,10 @@ $edusharing->window_version = '';
 
 $repository_id = $appProperties->homerepid;
 
-if ( ! empty($_GET['resource_id']) )
-{
+if ( ! empty($_GET['resource_id']) ) {
     $resource_id = $_GET['resource_id'];
 
-    $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id' => $resource_id));
+    $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resource_id));
     if ( ! $edusharing ) {
         header('HTTP/1.1 500 Internal Server Error');
         throw new Exception('Error loading edusharing-resource.');
@@ -122,8 +119,7 @@ $link .= '?user='.urlencode($user);
 $link .= '&ticket='.urlencode($ticket);
 
 $language = mod_edusharing_get_current_users_language_code();
-if ( $language )
-{
+if ( $language ) {
     $link .= '&locale=' . urlencode($language);
 }
 
@@ -225,13 +221,13 @@ function getPreviewText() {
     }
 
     function editor_edusharing_set_width() {
-        if(!editor_edusharing_get_ratio_cb_status())
+        if (!editor_edusharing_get_ratio_cb_status())
             return;
         document.getElementById('window_width').value = Math.round(document.getElementById('window_height').value / editor_edusharing_get_ratio());
     }
     
     function editor_edusharing_set_height() {
-        if(!editor_edusharing_get_ratio_cb_status())
+        if (!editor_edusharing_get_ratio_cb_status())
             return;
         document.getElementById('window_height').value = Math.round(document.getElementById('window_width').value * editor_edusharing_get_ratio());
     }
@@ -265,7 +261,7 @@ function getPreviewText() {
         var remoterepo ='';
         console.log(repository_id+' - '+object_url_parts[2]);
 
-        if ( repository_id != object_url_parts[2]){
+        if ( repository_id != object_url_parts[2]) {
               remoterepo = '&repoId='+object_url_parts[2];
         }
 
@@ -282,13 +278,13 @@ function getPreviewText() {
     function editor_edusharing_set_preview_content() {
         mimeSwitchHelper = '';
         mimetype = document.getElementById('mimetype').value;
-        if(mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1)
+        if (mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1)
            mimeSwitchHelper = 'image';
-        else if(mimetype.indexOf('audio') !== -1)
+        else if (mimetype.indexOf('audio') !== -1)
            mimeSwitchHelper = 'audio';
-        else if(mimetype.indexOf('video') !== -1)
+        else if (mimetype.indexOf('video') !== -1)
             mimeSwitchHelper = 'video';
-        else if(document.getElementById('repotype').value == 'YOUTUBE')
+        else if (document.getElementById('repotype').value == 'YOUTUBE')
             mimeSwitchHelper = 'youtube';
         else
             mimeSwitchHelper = 'textlike';
@@ -301,19 +297,19 @@ function getPreviewText() {
             default: content = '' ;
         }
 
-        if(mimeSwitchHelper != 'textlike') {
+        if (mimeSwitchHelper != 'textlike') {
             document.getElementById('preview_resource_wrapper').style.width = '80px';
         } else {
-        	document.getElementById('preview_resource_wrapper').style.width = 'auto';
+            document.getElementById('preview_resource_wrapper').style.width = 'auto';
         }
         
         content += '<span id="textpreview"></span>';
 
         document.getElementById('preview_resource_wrapper').innerHTML = content;
         
-        if(mimeSwitchHelper == 'textlike') {
-        	setTextPreview();
-        	document.getElementById('textpreview').style.color = '#00F';
+        if (mimeSwitchHelper == 'textlike') {
+            setTextPreview();
+            document.getElementById('textpreview').style.color = '#00F';
         }
         
         editor_edusharing_vis_dimension_inputs(mimeSwitchHelper);
@@ -322,11 +318,11 @@ function getPreviewText() {
     }
 
     function setTextPreview() {
-       	document.getElementById('textpreview').innerHTML = document.getElementById('title').value;
+           document.getElementById('textpreview').innerHTML = document.getElementById('title').value;
     }
     
     function editor_edusharing_vis_version_inputs() {
-        if(document.getElementById('repotype').value == 'YOUTUBE') {
+        if (document.getElementById('repotype').value == 'YOUTUBE') {
             document.getElementsByClassName('versionShowTr')[0].style.visibility = 'hidden';
         } else {
             document.getElementsByClassName('versionShowTr')[0].style.visibility = 'visible';
@@ -336,23 +332,23 @@ function getPreviewText() {
 
     function editor_edusharing_set_title_options(mimeSwitchHelper) {
         titleLabel = document.getElementById('titleLabel');
-		if(mimeSwitchHelper == 'textlike') {
-        	titleLabel.innerHTML = "<?php echo htmlspecialchars(get_string('linktext', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>";
-		} else {
-    		titleLabel.innerHTML = "<?php echo htmlspecialchars(get_string('caption', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>";
-    		document.getElementById('title').value = "";
-    		document.getElementById('textpreview').value = "";
-		}    
+        if (mimeSwitchHelper == 'textlike') {
+            titleLabel.innerHTML = "<?php echo htmlspecialchars(get_string('linktext', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>";
+        } else {
+            titleLabel.innerHTML = "<?php echo htmlspecialchars(get_string('caption', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>";
+            document.getElementById('title').value = "";
+            document.getElementById('textpreview').value = "";
+        }    
     }
     
     function editor_edusharing_vis_dimension_inputs(mimeSwitchHelper) {
        
-       if(mimeSwitchHelper == 'image') {
+       if (mimeSwitchHelper == 'image') {
            var dimensionsSet = document.getElementsByClassName('dimension');
            for(var i = 0; i < dimensionsSet.length; i++) {
                 dimensionsSet[i].style.visibility = 'visible';
             }
-       } else if(mimeSwitchHelper == 'video' || mimeSwitchHelper == 'youtube') {
+       } else if (mimeSwitchHelper == 'video' || mimeSwitchHelper == 'youtube') {
            var dimensionsSet = document.getElementsByClassName('dimension');
            for(var i = 0; i < dimensionsSet.length; i++) {
                 dimensionsSet[i].style.visibility = 'visible';
@@ -388,7 +384,7 @@ function getPreviewText() {
     onload = function () {
         title = document.getElementById('title');
         title.oninput = function() {
-        	setTextPreview();
+            setTextPreview();
         }
         title.onchange = title.oninput;
         title.onkeypress = title.oninput;

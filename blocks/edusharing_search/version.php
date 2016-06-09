@@ -24,7 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'block_edusharing_search';
 $plugin->dependencies = array(
-    'mod_edusharing' => 2016011401,
+    'mod_edusharing'  => 2016011401,
 );
 $plugin->version = 2016060801;
 $plugin->requires = 2015051100;     // Requires moodle 2.9

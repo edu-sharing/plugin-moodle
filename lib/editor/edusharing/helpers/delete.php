@@ -29,33 +29,29 @@ require_login();
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
 $input = file_get_contents('php://input');
-if ( ! $input )
-{
-	throw new Exception('Error reading json-data from request-body.');
+if ( ! $input ) {
+    throw new Exception('Error reading json-data from request-body.');
 }
 
 $delete = json_decode($input);
-if ( ! $delete )
-{
-	throw new Exception('Error decoding json-data for edusharing-object.');
+if ( ! $delete ) {
+    throw new Exception('Error decoding json-data for edusharing-object.');
 }
 
 $where = array(
-		'id' => $delete->id,
-		'course' => $delete->course,
+        'id'  => $delete->id,
+        'course'  => $delete->course,
 );
 $edusharing = $DB->get_record(EDUSHARING_TABLE, $where);
-if ( ! $edusharing )
-{
-	trigger_error('Resource "'.$delete->id.'" not found for course "'.$delete->course.'".', E_USER_WARNING);
+if ( ! $edusharing ) {
+    trigger_error('Resource "'.$delete->id.'" not found for course "'.$delete->course.'".', E_USER_WARNING);
 
-	header('HTTP/1.1 404 Not found', true, 404);
-	exit();
+    header('HTTP/1.1 404 Not found', true, 404);
+    exit();
 }
 
-if ( ! edusharing_delete_instance($edusharing->id) )
-{
-	trigger_error('Error deleting edu-sharing-instance "'.$edusharing->id.'"', E_USER_WARNING);
+if ( ! edusharing_delete_instance($edusharing->id) ) {
+    trigger_error('Error deleting edu-sharing-instance "'.$edusharing->id.'"', E_USER_WARNING);
 
-	header('', true, 500);
+    header('', true, 500);
 }

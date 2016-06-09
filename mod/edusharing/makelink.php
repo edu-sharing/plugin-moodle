@@ -15,9 +15,9 @@
 // along with Moodle. If not, see <http://www.gnu.org/licenses/>.
 
 /*
-	- called from ALFRESCO after selecting a node/resource in the opened popup window
-	- transfers the node-id into the Location field of the opener (edit resource window)
-	- closes popup
+    - called from ALFRESCO after selecting a node/resource in the opened popup window
+    - transfers the node-id into the Location field of the opener (edit resource window)
+    - closes popup
 */
 
 /**
@@ -41,12 +41,11 @@ echo <<<content
 This page should have populated the add resource form with the url to the Repository item.<br /><br />
 <a href="#" onclick="window.close();">If this window does not close on its own, please click here.</a>
 <script type="text/javascript">
-	try{
-		opener.document.getElementById('id_object_url').value = '$eduResource';
-		opener.focus();
-	} catch(err)
-	{}
-	window.close();
+    try{
+        opener.document.getElementById('id_object_url').value = '$eduResource';
+        opener.focus();
+    } catch (err) {}
+    window.close();
 </script>
 content;
 

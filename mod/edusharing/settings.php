@@ -29,15 +29,15 @@ global $CFG;
 if ($ADMIN->fulltree) {
 
 
-    if(isset($_POST['section']) && $_POST['section'] == 'modsettingedusharing') {
+    if (isset($_POST['section']) && $_POST['section'] == 'modsettingedusharing') {
         $appProperties = json_decode(get_config('edusharing', 'appProperties'), true);
         $repProperties = json_decode(get_config('edusharing', 'repProperties'), true);
         $appPropertiesRequest = $repPropertiesRequest = array();
         
-        foreach($_REQUEST as $key => $value) {
-            if(strpos($key, 'app_') !== false && !empty($value))
+        foreach ($_REQUEST as $key  => $value) {
+            if (strpos($key, 'app_') !== false && !empty($value))
                 $appProperties[str_replace('app_', '', $key)] = trim($value);
-            if(strpos($key, 'rep_') !== false && !empty($value))
+            if (strpos($key, 'rep_') !== false && !empty($value))
                 $repProperties[str_replace('rep_', '', $key)] = trim($value);
         }
         
@@ -64,8 +64,8 @@ if ($ADMIN->fulltree) {
 
     ksort($appProperties);
     $strApp = '';
-    foreach ($appProperties as $key => $value) {
-        if(strpos($key, '_key') !== false) {
+    foreach ($appProperties as $key  => $value) {
+        if (strpos($key, '_key') !== false) {
              $strApp .= '<label for="app_' . $key . '">mod_edusharing/' . $key . '</label>' . '<textarea style="width: 700px" id="app_' . $key . '" name="app_' . $key . '">'.$value.'</textarea><br/>';
         } else {
             $strApp .= '<label for="app_' . $key . '">mod_edusharing/' . $key . '</label>' . '<input style="width: 700px; height: auto;" id="app_' . $key . '" name="app_' . $key . '" type="text" value="' . $value . '"><br/>';
@@ -74,8 +74,8 @@ if ($ADMIN->fulltree) {
     
     ksort($repProperties);
     $strRep = '';
-    foreach ($repProperties as $key => $value) {
-        if(strpos($key, '_key') !== false) {
+    foreach ($repProperties as $key  => $value) {
+        if (strpos($key, '_key') !== false) {
              $strRep .= '<label for="rep_' . $key . '">mod_edusharing/' . $key . '</label>' . '<textarea style="width: 700px" id="rep_' . $key . '" name="rep_' . $key . '">'.$value.'</textarea><br/>';
         } else {
             $strRep .= '<label for="rep_' . $key . '">mod_edusharing/' . $key . '</label>' . '<input style="width: 700px; height: auto;" id="rep_' . $key . '" name="rep_' . $key . '" type="text" value="' . $value . '"><br/>';
@@ -102,14 +102,14 @@ if ($ADMIN->fulltree) {
    
     $conveyCohorts = get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS');
     $checkNo = $checkYes = '';
-    if($conveyCohorts == 'yes')
-    	$checkYes = 'checked';
+    if ($conveyCohorts == 'yes')
+        $checkYes = 'checked';
     else
-    	$checkNo = 'checked';
+        $checkNo = 'checked';
     $strAuth .= '<label>EDU_AUTH_CONVEYGLOBALGROUPS</label>
-    				&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsYes" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="yes" ' . $checkYes . '><label for="cohortsYes">&nbsp;' . get_string('convey_global_groups_yes', 'edusharing') . '</label><br>
-    			 	&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsNo" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="no" ' . $checkNo . '><label for="cohortsNo">&nbsp;' . get_string('convey_global_groups_no', 'edusharing') . '</label>
-    			 <br/><br/>';
+                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsYes" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="yes" ' . $checkYes . '><label for="cohortsYes">&nbsp;' . get_string('convey_global_groups_yes', 'edusharing') . '</label><br>
+                     &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsNo" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="no" ' . $checkNo . '><label for="cohortsNo">&nbsp;' . get_string('convey_global_groups_no', 'edusharing') . '</label>
+                 <br/><br/>';
     
     $settings->add(new admin_setting_heading('edusharing', get_string('connectToHomeRepository', 'edusharing'), $str));
     $settings->add(new admin_setting_heading('app', get_string('appProperties', 'edusharing'), $strApp));

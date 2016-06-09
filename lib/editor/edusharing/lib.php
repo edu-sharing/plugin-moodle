@@ -48,8 +48,7 @@ class edusharing_texteditor extends tinymce_texteditor {
      *
      * @return string
      */
-    protected function mod_edusharing_init_edusharing_ticket()
-    {
+    protected function mod_edusharing_init_edusharing_ticket() {
         /*
          * use previously generated ticket if available. Generates conflict if
         * repository-session closes too early.
@@ -91,18 +90,15 @@ class edusharing_texteditor extends tinymce_texteditor {
      *
      * @return bool
      */
-    protected function is_edusharing_context(array $options)
-    {
+    protected function is_edusharing_context(array $options) {
         global $COURSE;
 
-        if ( empty($options['context']) )
-        {
+        if ( empty($options['context']) ) {
             return false;
         }
 
         $result = false;
-        switch( $options['context']->contextlevel )
-        {
+        switch( $options['context']->contextlevel ) {
             case CONTEXT_COURSE:
             case CONTEXT_MODULE:
             case CONTEXT_BLOCK:
@@ -120,8 +116,7 @@ class edusharing_texteditor extends tinymce_texteditor {
      * (non-PHPdoc)
      * @see tinymce_texteditor::get_init_params()
      */
-    protected function get_init_params($elementid, array $options=null)
-    {
+    protected function get_init_params($elementid, array $options=null) {
         global $CFG;
         global $COURSE;
         global $PAGE;
@@ -131,15 +126,14 @@ class edusharing_texteditor extends tinymce_texteditor {
         $params = parent::get_init_params($elementid, $options);
 
         // add edu-sharing functionaliy to tinymce ONLY when course-id available
-        if ( $this->is_edusharing_context($options) )
-        {
+        if ( $this->is_edusharing_context($options) ) {
             $edusharing_ticket = $this->mod_edusharing_init_edusharing_ticket();
 
             // register tinymce-plugin but DO NOT try to load it as this already happened
             $params['plugins'] .= ',-edusharing';
 
             // add tool-button
-		    if (empty($params['theme_advanced_buttons3_add'])) $params['theme_advanced_buttons3_add']='';
+            if (empty($params['theme_advanced_buttons3_add'])) $params['theme_advanced_buttons3_add']='';
             $params['theme_advanced_buttons3_add'] .= ',|,edusharing';
 
             // additional params required by edu-sharing.net
@@ -175,8 +169,7 @@ class edusharing_texteditor extends tinymce_texteditor {
      * (non-PHPdoc)
      * @see tinymce_texteditor::use_editor()
      */
-    public function use_editor($elementid, array $options=null, $filepicker_options=null)
-    {
+    public function use_editor($elementid, array $options=null, $filepicker_options=null) {
         global $CFG;
         global $COURSE;
         global $PAGE;

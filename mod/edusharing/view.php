@@ -33,13 +33,13 @@ $n  = optional_param('n', 0, PARAM_INT);  // edusharing instance ID - it should 
 
 if ($id) {
     $cm         = get_coursemodule_from_id('edusharing', $id, 0, false, MUST_EXIST);
-    $course     = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-    $edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id' => $cm->instance), '*', MUST_EXIST);
+    $course     = $DB->get_record('course', array('id'  => $cm->course), '*', MUST_EXIST);
+    $edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id'  => $cm->instance), '*', MUST_EXIST);
     $vId = $id;
     $courseId = $course->id;
 } elseif ($n) {
-    $edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id' => $n), '*', MUST_EXIST);
-    $course     = $DB->get_record('course', array('id' => $edusharing->course), '*', MUST_EXIST);
+    $edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id'  => $n), '*', MUST_EXIST);
+    $course     = $DB->get_record('course', array('id'  => $edusharing->course), '*', MUST_EXIST);
     $cm         = get_coursemodule_from_instance('edusharing', $edusharing->id, $course->id, false, MUST_EXIST);
     $vId = $edusharing->id;
     $courseId = $course->id;
@@ -60,13 +60,12 @@ try {
 
     $wsdl = $repProperties->authenticationwebservice_wsdl;
     $alfservice = new mod_edusharing_sig_soap_client($wsdl, array());
-    $paramsTrusted = array("applicationId" => $appProperties->appid, "ticket" => session_id(), "ssoData" => mod_edusharing_get_auth_data(),'repoId' => $appProperties->homerepid);
+    $paramsTrusted = array("applicationId"  => $appProperties->appid, "ticket"  => session_id(), "ssoData"  => mod_edusharing_get_auth_data(),'repoId'  => $appProperties->homerepid);
     $alfReturn = $alfservice->authenticateByTrustedApp($paramsTrusted);
     $ticket = $alfReturn->authenticateByTrustedAppReturn->ticket;
 
 }
-catch(Exception $exception)
-{
+catch (Exception $exception) {
     trigger_error($exception->getMessage(), E_USER_WARNING);
     return false;
 }
@@ -79,12 +78,12 @@ $redirect_url .= '&sig=' . urlencode(mod_edusharing_get_signature($appProperties
 $redirect_url .= '&signed=' . urlencode($appProperties->appid . $ts);
 
 $backlink = '';
-if(empty($edusharing->popup_window))
+if (empty($edusharing->popup_window))
     $backlink = urlencode($CFG->wwwroot . '/course/view.php?id=' . $courseId);
 //if resource was opened with $edusharing->popup_window disregarded
-if(!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'modedit.php') !== false)
+if (!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'modedit.php') !== false)
     $backlink = urlencode($_SERVER['HTTP_REFERER']);
-if(!empty($backlink))
+if (!empty($backlink))
     $redirect_url .= '&backLink=' . $backlink;    
 
 redirect($redirect_url);

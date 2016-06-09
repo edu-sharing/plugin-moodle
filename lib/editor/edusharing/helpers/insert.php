@@ -30,44 +30,39 @@ require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
 try {
 
-	$input = file_get_contents('php://input');
-	if ( ! $input )
-	{
-		throw new Exception('Error reading json-data from request-body.');
-	}
+    $input = file_get_contents('php://input');
+    if ( ! $input ) {
+        throw new Exception('Error reading json-data from request-body.');
+    }
 
-	$edusharing = json_decode($input);
-	if ( ! $edusharing )
-	{
-		throw new Exception('Error decoding json-data for edusharing-object.');
-	}
+    $edusharing = json_decode($input);
+    if ( ! $edusharing ) {
+        throw new Exception('Error decoding json-data for edusharing-object.');
+    }
 
-	$edusharing->intro = '';
-	$edusharing->introformat = FORMAT_MOODLE;
+    $edusharing->intro = '';
+    $edusharing->introformat = FORMAT_MOODLE;
 
-	$edusharing = mod_edusharing_postprocess($edusharing);
-	if ( ! $edusharing )
-	{
-		trigger_error('Error post-processing resource "'.$edusharing->id.'".', E_USER_WARNING);
+    $edusharing = mod_edusharing_postprocess($edusharing);
+    if ( ! $edusharing ) {
+        trigger_error('Error post-processing resource "'.$edusharing->id.'".', E_USER_WARNING);
 
-		header('HTTP/1.1 500 Internal Server Error', true, 500);
-		exit();
-	}
-	$id = edusharing_add_instance($edusharing);
-	if ( ! $id )
-	{
-		throw new Exception('Error adding edu-sharing instance.');
-	}
+        header('HTTP/1.1 500 Internal Server Error', true, 500);
+        exit();
+    }
+    $id = edusharing_add_instance($edusharing);
+    if ( ! $id ) {
+        throw new Exception('Error adding edu-sharing instance.');
+    }
 
-	$edusharing->id = $id;
+    $edusharing->id = $id;
 
-	$edusharing->src = $CFG->wwwroot . '/lib/editor/edusharing/images/edusharing.png';
+    $edusharing->src = $CFG->wwwroot . '/lib/editor/edusharing/images/edusharing.png';
 
-	header('Content-type: application/json', true, 200);
-	echo json_encode($edusharing);
+    header('Content-type: application/json', true, 200);
+    echo json_encode($edusharing);
 }
-catch(Exception $exception)
-{
-	trigger_error($exception->getMessage(), E_USER_WARNING);
-	header('HTTP/1.1 500 Internal Server Error', true, 500);
+catch (Exception $exception) {
+    trigger_error($exception->getMessage(), E_USER_WARNING);
+    header('HTTP/1.1 500 Internal Server Error', true, 500);
 }

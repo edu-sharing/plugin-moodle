@@ -40,7 +40,7 @@ class filter_edusharing extends moodle_text_filter {
     protected static $globalconfig;
 
     /**
-     * Hold repository-tickets as $repository_id => $ticket.
+     * Hold repository-tickets as $repository_id  => $ticket.
      *
      * @var array
      */
@@ -80,11 +80,11 @@ class filter_edusharing extends moodle_text_filter {
         reset_text_filters_cache();
         
         //ensure that user exists in repository
-        if (isloggedin()){
+        if (isloggedin()) {
             $ccauth = new mod_edusharing_web_service_factory();
             $ccauth->mod_edusharing_authentication_get_ticket($this->appProperties->appid);
         }
-	}
+    }
     /**
      * Apply the filter to the text
      *
@@ -137,7 +137,7 @@ class filter_edusharing extends moodle_text_filter {
             $this->scripts = array();
 
             $text = $DOM->saveHTML($DOM->documentElement);
-        } catch(Exception $exception) {
+        } catch (Exception $exception) {
             trigger_error($exception->getMessage(), E_USER_WARNING);
             return $memento;
         }
@@ -244,7 +244,7 @@ class filter_edusharing extends moodle_text_filter {
             return false;
         }
 
-        $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id' => $resource_id));
+        $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resource_id));
         if (!$edusharing) {
             trigger_error('Error loading resource from db.', E_USER_WARNING);
             return false;

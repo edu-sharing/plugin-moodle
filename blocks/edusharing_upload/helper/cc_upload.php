@@ -44,9 +44,9 @@ if (!$id) {
     exit();
 }
 
-$PAGE->set_url('/blocks/edusharing_upload/helper/cc_upload.php', array('id' => $id));
+$PAGE->set_url('/blocks/edusharing_upload/helper/cc_upload.php', array('id'  => $id));
 
-$course = $DB->get_record('course', array('id' => $id));
+$course = $DB->get_record('course', array('id'  => $id));
 if (!$course) {
     trigger_error("Course not found.", E_USER_WARNING);
     exit();
@@ -94,7 +94,7 @@ $('#esContent').width($(document).width());
 $('#esContent').height($(document).height());
 $('#esContent').html("<div id='closer' style='font-size: 1em; padding: 5px 20px 5px 20px; cursor: pointer; color: #000; background: #eee; '>◄&nbsp;&nbsp;Zur&uuml;ck zu &nbsp;\"<?php echo $COURSE->fullname?>\"</div><iframe id='childFrame' name='mainContent' src='<?php echo htmlentities($link)?>
     ' width='100% ' height='100% ' scrolling='yes'  marginwidth='0' marginheight='0' frameborder='0'>&nbsp;</iframe>");
-    $('#closer').click(function(){window.location.href='<?php echo $_SERVER["HTTP_REFERER"]?>';})</script>
+    $('#closer').click(function() {window.location.href='<?php echo $_SERVER["HTTP_REFERER"]?>';})</script>
 
 <?php
 // ------------------------------------------------------------------------------------

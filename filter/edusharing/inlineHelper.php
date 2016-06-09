@@ -30,8 +30,8 @@ require_login();
 
 $resId = optional_param('resId', 0, PARAM_INT); // edusharing instance ID 
 
-if ($resId){
-	$edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id' => $resId), '*', MUST_EXIST);
+if ($resId) {
+    $edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resId), '*', MUST_EXIST);
 } else {
     trigger_error('You must specify an instance ID', E_USER_WARNING);
 }

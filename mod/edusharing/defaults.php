@@ -22,8 +22,8 @@
  */
 
 $defaults = array(
-	'_use_config_plugins' => true,
-	'nodeName' => '',
-	
+    '_use_config_plugins'  => true,
+    'nodeName'  => '',
+    
 );
 
