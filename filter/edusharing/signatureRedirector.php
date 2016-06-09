@@ -28,7 +28,7 @@ $url = $_REQUEST['url'];
 $appProperties = json_decode(get_config('edusharing', 'appProperties'));
 $ts = $timestamp = round(microtime(true) * 1000);
 $url .= '&ts=' . $ts;
-$url .= '&sig=' . rawurlencode(mod_edusharing_get_signature($appProperties -> appid . $ts));
+$url .= '&sig=' . rawurlencode(mod_edusharing_get_signature($appProperties->appid . $ts));
 
 header("Location: " . $url);
 exit(0);

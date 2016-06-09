@@ -70,27 +70,27 @@ if ( empty($CFG->yui3version) )
 $appProperties = json_decode(get_config('edusharing', 'appProperties'));
 
 $edusharing = new stdClass();
-$edusharing -> object_url = '';
-$edusharing -> course_id = $COURSE->id;
-$edusharing -> id = 0;
-$edusharing -> resource_type = '';
-$edusharing -> resource_version = '';
-$edusharing -> title = $_GET['title'];
-$edusharing -> window_width = $_GET['window_width'];
-$edusharing -> window_height = $_GET['window_height'];
-$edusharing -> mimetype = $_GET['mimetype'];
-$edusharing -> window_float = $_GET['window_float'];
-$edusharing -> window_versionshow = $_GET['window_versionshow'];
-$edusharing -> ratio = (int)$edusharing -> window_height / (int)$edusharing -> window_width;
-$edusharing -> prev_src = $_GET['prev_src'];
-$edusharing -> window_version = $_GET['window_version'];
-$edusharing -> repotype = $_GET['repotype'];
+$edusharing->object_url = '';
+$edusharing->course_id = $COURSE->id;
+$edusharing->id = 0;
+$edusharing->resource_type = '';
+$edusharing->resource_version = '';
+$edusharing->title = $_GET['title'];
+$edusharing->window_width = $_GET['window_width'];
+$edusharing->window_height = $_GET['window_height'];
+$edusharing->mimetype = $_GET['mimetype'];
+$edusharing->window_float = $_GET['window_float'];
+$edusharing->window_versionshow = $_GET['window_versionshow'];
+$edusharing->ratio = (int)$edusharing->window_height / (int)$edusharing->window_width;
+$edusharing->prev_src = $_GET['prev_src'];
+$edusharing->window_version = $_GET['window_version'];
+$edusharing->repotype = $_GET['repotype'];
 
 function getPreviewText() {
     return 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 }
 
-$repository_id = $appProperties -> homerepid;
+$repository_id = $appProperties->homerepid;
 if ( ! $repository_id )
 {
     header('HTTP/1.1 500 Internal Server Error');
@@ -101,9 +101,9 @@ if ( ! $repository_id )
 
 <!--        {#edusharing_dlg.resourceVersion} -->
     <input type="hidden" maxlength="30" size="15" name="resourceversion" id="resourceversion" />
-    <input type="hidden" maxlength="30" size="30" name="repotype" id="repotype" value="<?php echo $edusharing -> repotype?>"/>
-    <input type="hidden" value="<?php echo $edusharing -> ratio?>" id="ratio" />
-    <input type="hidden" value="<?php echo $edusharing -> window_version?>" id="window_version" />  
+    <input type="hidden" maxlength="30" size="30" name="repotype" id="repotype" value="<?php echo $edusharing->repotype?>"/>
+    <input type="hidden" value="<?php echo $edusharing->ratio?>" id="ratio" />
+    <input type="hidden" value="<?php echo $edusharing->window_version?>" id="window_version" />  
       
     <div id="form_wrapper" style="float:left">
         <table>
@@ -114,17 +114,17 @@ if ( ! $repository_id )
             <tr class="versionShowTr">
                 <td><?php echo  htmlentities(get_string('version', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
                 <td>
-                    <input type="radio" disabled value="latest" name="window_versionshow" <?php echo ($edusharing -> window_versionshow == 'latest')?'checked="checked"':''?> /><?php echo  htmlentities(get_string('versionLatest', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                    <input type="radio" disabled value="current" name="window_versionshow" <?php echo ($edusharing -> window_versionshow == 'current')?'checked="checked"':''?> /><?php echo  htmlentities(get_string('versionCurrent', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                    <input type="radio" disabled value="latest" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'latest') ? 'checked="checked"' : ''?> /><?php echo  htmlentities(get_string('versionLatest', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                    <input type="radio" disabled value="current" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'current') ? 'checked="checked"' : ''?> /><?php echo  htmlentities(get_string('versionCurrent', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
                 </td>
             </tr>
             <tr id="floatTr">
                 <td><?php echo  htmlentities(get_string('float', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
                 <td>
-                    <input type="radio" value="left" name="window_float" <?php echo ($edusharing -> window_float == 'left')?'checked="checked"':''?> onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatLeft', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                    <input type="radio" value="none" name="window_float" <?php echo ($edusharing -> window_float == 'none')?'checked="checked"':''?> onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatNone', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                    <input type="radio" value="right" name="window_float" <?php echo ($edusharing -> window_float == 'right')?'checked="checked"':''?> onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatRight', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                    <input type="radio" value="inline" name="window_float" <?php echo ($edusharing -> window_float == 'inline')?'checked="checked"':''?> onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatInline', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                    <input type="radio" value="left" name="window_float" <?php echo ($edusharing->window_float == 'left')?'checked="checked"': ''?> onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatLeft', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                    <input type="radio" value="none" name="window_float" <?php echo ($edusharing->window_float == 'none')?'checked="checked"': ''?> onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatNone', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                    <input type="radio" value="right" name="window_float" <?php echo ($edusharing->window_float == 'right')?'checked="checked"': ''?> onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatRight', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                    <input type="radio" value="inline" name="window_float" <?php echo ($edusharing->window_float == 'inline')?'checked="checked"': ''?> onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatInline', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
                 </td>
             </tr>
             <tr class="dimension">
@@ -205,9 +205,9 @@ if ( ! $repository_id )
             mimeSwitchHelper = 'textlike';
         
         switch(mimeSwitchHelper) {
-	        case 'image': content = '<img src="<?php echo $edusharing -> prev_src?>" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
-	        case 'youtube': content = '<img src="<?php echo $edusharing -> prev_src?>" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
-	        case 'video': content = '<img src="<?php echo $edusharing -> prev_src?>" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+	        case 'image': content = '<img src="<?php echo $edusharing->prev_src?>" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+	        case 'youtube': content = '<img src="<?php echo $edusharing->prev_src?>" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+	        case 'video': content = '<img src="<?php echo $edusharing->prev_src?>" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
 	        case 'audio': content = '<img src="../images/audio.png" width=100/><br/>' + document.getElementById('title').value + '<br/>'; break;
 	        default: content = '' ;
 	    }
@@ -279,7 +279,7 @@ if ( ! $repository_id )
        }
     }
     
-    editor_edusharing_refresh_preview('<?php echo $edusharing -> window_float?>');    
+    editor_edusharing_refresh_preview('<?php echo $edusharing->window_float?>');    
     editor_edusharing_set_preview_content();
     setTextPreview();
 

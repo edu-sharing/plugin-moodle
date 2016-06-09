@@ -21,8 +21,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once (dirname(__FILE__) . '/../../config.php');
-require_once (dirname(__FILE__) . '/../../mod/edusharing/lib.php');
+require_once(dirname(__FILE__) . '/../../config.php');
+require_once(dirname(__FILE__) . '/../../mod/edusharing/lib.php');
 
 class filter_edusharing_edurender {
 
@@ -46,7 +46,7 @@ class filter_edusharing_edurender {
             curl_close($curl_handle);
 
         } catch(Exception $e) {
-            trigger_error($e -> getMessage(), E_USER_WARNING);
+            trigger_error($e->getMessage(), E_USER_WARNING);
             curl_close($curl_handle);
             return false;
         }
@@ -60,13 +60,13 @@ class filter_edusharing_edurender {
         error_reporting(0);
         $resId = $_GET['resId'];
 
-        $html = str_replace(array("\r\n", "\r", "\n"), '', $html);
+        $html = str_replace(array("\n", "\r", "\n"), '', $html);
         //$html = str_replace('\'', '\\\'', $html);
 
         /*
          * replaces {{{LMS_INLINE_HELPER_SCRIPT}}}
          */
-        $html = str_replace("{{{LMS_INLINE_HELPER_SCRIPT}}}", $CFG -> wwwroot . "/filter/edusharing/inlineHelper.php?resId=" . $resId, $html);
+        $html = str_replace("{{{LMS_INLINE_HELPER_SCRIPT}}}", $CFG->wwwroot . "/filter/edusharing/inlineHelper.php?resId=" . $resId, $html);
 
         /*
          * replaces <es:title ...>...</es:title>
@@ -95,9 +95,9 @@ require_login($query['course_id']);
 $appProperties = json_decode(get_config('edusharing', 'appProperties'));
 $ts = $timestamp = round(microtime(true) * 1000);
 $url .= '&ts=' . $ts;
-$url .= '&sig=' . urlencode(mod_edusharing_get_signature($appProperties -> appid . $ts));
-$url .= '&signed=' . urlencode($appProperties -> appid . $ts);
+$url .= '&sig=' . urlencode(mod_edusharing_get_signature($appProperties->appid . $ts));
+$url .= '&signed=' . urlencode($appProperties->appid . $ts);
 
 $e = new filter_edusharing_edurender();
-$html = $e -> filter_edusharing_get_render_html($url);
-$e -> filter_edusharing_display($html);
+$html = $e->filter_edusharing_get_render_html($url);
+$e->filter_edusharing_display($html);

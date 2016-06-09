@@ -25,9 +25,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once ($CFG -> dirroot . '/mod/edusharing/lib/cclib.php');
-require_once ($CFG -> dirroot . '/mod/edusharing/lib.php');
-require_once ($CFG -> dirroot . '/mod/edusharing/locallib.php');
+require_once($CFG->dirroot . '/mod/edusharing/lib/cclib.php');
+require_once($CFG->dirroot . '/mod/edusharing/lib.php');
+require_once($CFG->dirroot . '/mod/edusharing/locallib.php');
 
 class filter_edusharing extends moodle_text_filter {
 
@@ -73,8 +73,8 @@ class filter_edusharing extends moodle_text_filter {
     public function __construct($context, array $localconfig) {
         parent::__construct($context, $localconfig);
         
-        $this -> appProperties = json_decode(get_config('edusharing', 'appProperties'));
-        $this -> repProperties = json_decode(get_config('edusharing', 'repProperties'));
+        $this->appProperties = json_decode(get_config('edusharing', 'appProperties'));
+        $this->repProperties = json_decode(get_config('edusharing', 'repProperties'));
 
         // to force the re-generation of filtered texts we just ...
         reset_text_filters_cache();
@@ -82,7 +82,7 @@ class filter_edusharing extends moodle_text_filter {
         //ensure that user exists in repository
         if (isloggedin()){
             $ccauth = new mod_edusharing_web_service_factory();
-            $ccauth -> mod_edusharing_authentication_get_ticket($this -> appProperties -> appid);
+            $ccauth->mod_edusharing_authentication_get_ticket($this->appProperties->appid);
         }
 	}
     /**
@@ -100,22 +100,18 @@ class filter_edusharing extends moodle_text_filter {
         global $PAGE;
 
         // disable page-caching to "renew" render-session-data
-        $PAGE -> set_cacheable(false);
+        $PAGE->set_cacheable(false);
 
         //@todo ensure not to include jQuery twice
-        $PAGE -> requires -> js('/mod/edusharing/js/jquery.min.js');
-        $PAGE -> requires -> js('/mod/edusharing/js/jquery-near-viewport.min.js');
-        $PAGE -> requires -> js('/filter/edusharing/edu.js');
+        $PAGE->requires->js('/mod/edusharing/js/jquery.min.js');
+        $PAGE->requires->js('/mod/edusharing/js/jquery-near-viewport.min.js');
+        $PAGE->requires->js('/filter/edusharing/edu.js');
 
         if (!isset($options['originalformat'])) {
             // if the format is not specified, we are probably called by {@see format_string()}
             // in that case, it would be dangerous to replace URL with the link because it could
             // be stripped. therefore, we do nothing
             return $text;
-        }
-
-        if (in_array($options['originalformat'], explode(',', $this -> get_global_config('formats')))) {
-            // $this->convert_urls_into_links($text);
         }
 
         // store unfiltered text to return in case of error
@@ -126,32 +122,28 @@ class filter_edusharing extends moodle_text_filter {
             $text = '<?xml version="1.0" encoding="utf-8" ?><div>' . $text . '</div>';
 
             $DOM = new DOMDocument('1.0');
-            $DOM -> formatOutput = true;
-            if (!$DOM -> loadHTML($text)) {
+            $DOM->formatOutput = true;
+            if (!$DOM->loadHTML($text)) {
                 throw new Exception('Error loading (X)-HTML to be filtered.');
             }
 
-            $this -> filter_edusharing_traverse($DOM -> documentElement);
+            $this->filter_edusharing_traverse($DOM->documentElement);
 
             foreach ($this->scripts as $script) {
                 $script = new DOMElement('script', $script);
-                $DOM -> documentElement -> appendChild($script);
+                $DOM->documentElement->appendChild($script);
             }
 
-            $this -> scripts = array();
+            $this->scripts = array();
 
-            $text = $DOM -> saveHTML($DOM -> documentElement);
+            $text = $DOM->saveHTML($DOM->documentElement);
         } catch(Exception $exception) {
-            trigger_error($exception -> getMessage(), E_USER_WARNING);
+            trigger_error($exception->getMessage(), E_USER_WARNING);
             return $memento;
         }
 
         return $text;
     }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // internal implementation starts here
-    ////////////////////////////////////////////////////////////////////////////
 
     /**
      * Returns the global filter setting
@@ -164,12 +156,12 @@ class filter_edusharing extends moodle_text_filter {
      * @return string|object|null
      */
     protected function get_global_config($name = null) {
-        $this -> load_global_config();
+        $this->load_global_config();
         if (is_null($name)) {
             return self::$globalconfig;
 
         } elseif (array_key_exists($name, self::$globalconfig)) {
-            return self::$globalconfig -> {$name};
+            return self::$globalconfig->{$name};
 
         } else {
             return null;
@@ -198,13 +190,13 @@ class filter_edusharing extends moodle_text_filter {
 
         while (!empty($Nodes)) {
             $Node = array_shift($Nodes);
-            if ($Node -> hasChildNodes()) {
+            if ($Node->hasChildNodes()) {
                 foreach ($Node->childNodes as $ChildNode) {
                     $Nodes[] = $ChildNode;
                 }
             }
 
-            if ($Node -> nodeType != XML_ELEMENT_NODE) {
+            if ($Node->nodeType != XML_ELEMENT_NODE) {
                 continue;
             }
 
@@ -222,14 +214,14 @@ class filter_edusharing extends moodle_text_filter {
     protected function filter_edusharing_render_inline(stdClass $edusharing, $renderParams) {
         global $CFG;
 
-        $object_url = $edusharing -> object_url;
+        $object_url = $edusharing->object_url;
         if (!$object_url) {
             throw new Exception('Empty object-url.');
         }
 
-        $repository_id = $this -> appProperties -> homerepid;
+        $repository_id = $this->appProperties->homerepid;
 
-        $url = mod_edusharing_get_redirect_url($edusharing, $this -> appProperties, $this -> repProperties, DISPLAY_MODE_INLINE);
+        $url = mod_edusharing_get_redirect_url($edusharing, $this->appProperties, $this->repProperties, DISPLAY_MODE_INLINE);
         $inline = '<div class="eduContainer" data-type="esObject" data-url="'.$CFG->wwwroot.'/filter/edusharing/proxy.php?URL='.urlencode($url).'&amp;resId='.$edusharing->id.'&amp;title='.urlencode($renderParams['title']).'&amp;mimetype='.$renderParams['mimetype'].'"><div class="inner"><div class="spinner1"></div></div><div class="inner"><div class="spinner2"></div></div><div class="inner"><div class="spinner3"></div></div>edu sharing object</div>';
      
 
@@ -246,43 +238,43 @@ class filter_edusharing extends moodle_text_filter {
         global $COURSE;
         global $DB;
 
-        $resource_id = $Placeholder -> getAttribute('es:resource_id');
+        $resource_id = $Placeholder->getAttribute('es:resource_id');
         if (!$resource_id) {
             trigger_error('Error reading resource-id.', E_USER_WARNING);
             return false;
         }
 
-        $edusharing = $DB -> get_record(EDUSHARING_TABLE, array('id' => $resource_id));
+        $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id' => $resource_id));
         if (!$edusharing) {
             trigger_error('Error loading resource from db.', E_USER_WARNING);
             return false;
         }
 
-        $renderParams['title'] = $Placeholder -> getAttribute('title');
-        $renderParams['mimetype'] = $Placeholder -> getAttribute('es:mimetype');
-        $rendered = $this -> filter_edusharing_render_inline($edusharing, $renderParams);
+        $renderParams['title'] = $Placeholder->getAttribute('title');
+        $renderParams['mimetype'] = $Placeholder->getAttribute('es:mimetype');
+        $rendered = $this->filter_edusharing_render_inline($edusharing, $renderParams);
 
         if ($rendered) {
             // enforce single-root node for XML comliance
             $rendered = '<div>' . $rendered . '</div>';
 
             $DOM = new DOMDocument('1.0', 'utf-8');
-            if (!$DOM -> loadXML($rendered)) {
+            if (!$DOM->loadXML($rendered)) {
                 return false;
             }
 
-            $this -> filter_edusharing_replace_render_tokens($DOM -> documentElement, $edusharing);
+            $this->filter_edusharing_replace_render_tokens($DOM->documentElement, $edusharing);
 
-            $RenderNode = $Placeholder -> ownerDocument -> importNode($DOM -> documentElement, true);
-            $RenderNode -> setAttribute('id', 'edu_wrapper_' . $edusharing -> id);
+            $RenderNode = $Placeholder->ownerDocument->importNode($DOM->documentElement, true);
+            $RenderNode->setAttribute('id', 'edu_wrapper_' . $edusharing->id);
 
-            $RenderNode -> setAttribute('class', 'edu_wrapper');
+            $RenderNode->setAttribute('class', 'edu_wrapper');
 
             if (strpos($renderParams['mimetype'], 'image') !== false)
-                $RenderNode -> setAttribute('data-id', $edusharing -> id);
+                $RenderNode->setAttribute('data-id', $edusharing->id);
 
-            $Placeholder -> parentNode -> insertBefore($RenderNode, $Placeholder);
-            $Placeholder -> parentNode -> removeChild($Placeholder);
+            $Placeholder->parentNode->insertBefore($RenderNode, $Placeholder);
+            $Placeholder->parentNode->removeChild($Placeholder);
 
             $StyleAttr = '';
 
@@ -302,17 +294,17 @@ class filter_edusharing extends moodle_text_filter {
                     break;
             }
 
-            if ($edusharing -> window_width) {
-                $StyleAttr .= ' width: ' . $edusharing -> window_width . 'px;';
-                $RenderNode -> setAttribute('width', $edusharing -> window_width);
+            if ($edusharing->window_width) {
+                $StyleAttr .= ' width: ' . $edusharing->window_width . 'px;';
+                $RenderNode->setAttribute('width', $edusharing->window_width);
             }
 
-            if ($edusharing -> window_height) {
-                $StyleAttr .= ' height: ' . $edusharing -> window_height . 'px;';
-                $RenderNode -> setAttribute('height', $edusharing -> window_height);
+            if ($edusharing->window_height) {
+                $StyleAttr .= ' height: ' . $edusharing->window_height . 'px;';
+                $RenderNode->setAttribute('height', $edusharing->window_height);
             }
 
-            $RenderNode -> setAttribute('style', $StyleAttr);
+            $RenderNode->setAttribute('style', $StyleAttr);
 
             return true;
         }
@@ -329,15 +321,15 @@ class filter_edusharing extends moodle_text_filter {
         global $COURSE;
         global $DB;
 
-        if ($Node -> nodeType == XML_ELEMENT_NODE) {
+        if ($Node->nodeType == XML_ELEMENT_NODE) {
             // do not use foreach to iterate over DomNodes
-            for ($i = 0; $i < $Node -> childNodes -> length; ++$i) {
-                $this -> filter_edusharing_traverse($Node -> childNodes -> item($i));
+            for ($i = 0; $i < $Node->childNodes->length; ++$i) {
+                $this->filter_edusharing_traverse($Node->childNodes->item($i));
             }
 
-            if ($Node -> hasAttribute('es:resource_id')) {
-                if (!$this -> filter_edusharing_filter_node($Node)) {
-                    $Node -> parentNode -> removeChild($Node);
+            if ($Node->hasAttribute('es:resource_id')) {
+                if (!$this->filter_edusharing_filter_node($Node)) {
+                    $Node->parentNode->removeChild($Node);
                 }
             }
         }

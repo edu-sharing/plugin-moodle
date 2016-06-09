@@ -55,17 +55,17 @@ require_login($course->id);
 echo $OUTPUT->header();
 
 $ccauth = new mod_edusharing_web_service_factory();
-$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties -> appid);
+$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties->appid);
 if ( ! $ticket ) {
     exit();
 }
 
-if ( empty($appProperties -> cc_gui_url) )
+if ( empty($appProperties->cc_gui_url) )
 {
     trigger_error('No "cc_gui_url" configured.', E_USER_WARNING);
 }
 
-$link = $appProperties -> cc_gui_url; // link to the external cc-search
+$link = $appProperties->cc_gui_url; // link to the external cc-search
 $link .= '?mode=0';
 $user = mod_edusharing_get_auth_key();
 $link .= '&user='.urlencode($user);
@@ -74,7 +74,7 @@ $link .= '&ticket='.urlencode($ticket);
 $_my_lang = mod_edusharing_get_current_users_language_code();
 $link .= '&locale=' . urlencode($_my_lang);
 
-$link .= '&p_startsearch=1';   ////////// 0=suche  / 1=workspace
+$link .= '&p_startsearch=1';
 
 $search = trim(optional_param('search', '', PARAM_NOTAGS)); // query for the external cc-search
 if (!empty($search)) {

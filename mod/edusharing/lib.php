@@ -128,16 +128,16 @@ function edusharing_add_instance(stdClass $edusharing) {
     if(isset($edusharing->object_version)) {
         if($edusharing->object_version == 1) {
             $updateVersion = true;
-            $edusharing -> object_version = '';
+            $edusharing->object_version = '';
         } else {
-            $edusharing -> object_version = 0;
+            $edusharing->object_version = 0;
         }
     } else {
 
         if(isset($edusharing->window_versionshow) && $edusharing->window_versionshow == 'current')
-            $edusharing->object_version = $edusharing -> window_version;
+            $edusharing->object_version = $edusharing->window_version;
         else
-            $edusharing -> object_version = 0;
+            $edusharing->object_version = 0;
     }
     
 
@@ -170,41 +170,41 @@ function edusharing_add_instance(stdClass $edusharing) {
     $myXML  = new mod_edusharing_render_parameter();
     $xml = $myXML->mod_edusharing_get_xml($data4xml);
 
-    $id = $DB -> insert_record(EDUSHARING_TABLE, $edusharing);
+    $id = $DB->insert_record(EDUSHARING_TABLE, $edusharing);
 
     $SoapClientParams = array();
 
-    $client = new mod_edusharing_sig_soap_client($repProperties -> usagewebservice_wsdl, $SoapClientParams); 
+    $client = new mod_edusharing_sig_soap_client($repProperties->usagewebservice_wsdl, $SoapClientParams); 
     
     try {
         
         session_write_close();
 
         $params = array(
-            "eduRef" => $edusharing -> object_url,
+            "eduRef" => $edusharing->object_url,
             "user" => mod_edusharing_get_auth_key(),
-            "lmsId" => $appProperties -> appid,
-            "courseId" => $edusharing -> course,
-            "userMail" => $_SESSION["USER"] -> email,
+            "lmsId" => $appProperties->appid,
+            "courseId" => $edusharing->course,
+            "userMail" => $_SESSION["USER"]->email,
             "fromUsed" => '2002-05-30T09:00:00',
             "toUsed" => '2222-05-30T09:00:00',
             "distinctPersons" => '0',
-            "version" => $edusharing -> object_version,
+            "version" => $edusharing->object_version,
             "resourceId" => $id,
             "xmlParams" => $xml,
         );
       
-        $setUsage = $client -> setUsage($params);
+        $setUsage = $client->setUsage($params);
         
         if(isset($updateVersion) && $updateVersion === true) {
-            $edusharing -> object_version = $setUsage -> setUsageReturn -> usageVersion;
-            $edusharing -> id = $id;
-            $DB -> update_record(EDUSHARING_TABLE, $edusharing);
+            $edusharing->object_version = $setUsage->setUsageReturn->usageVersion;
+            $edusharing->id = $id;
+            $DB->update_record(EDUSHARING_TABLE, $edusharing);
         }
         
     } catch (Exception $e) {
-        $DB -> delete_records(EDUSHARING_TABLE, array('id' => $id));
-        trigger_error($e -> getMessage());
+        $DB->delete_records(EDUSHARING_TABLE, array('id' => $id));
+        trigger_error($e->getMessage());
         return false;
     }
     
@@ -287,7 +287,7 @@ function edusharing_update_instance(stdClass $edusharing) {
         // stop session to avoid deadlock during edu-sharing call-backs
         session_write_close();
 
-        $connectionUrl = $repProperties -> usagewebservice_wsdl;
+        $connectionUrl = $repProperties->usagewebservice_wsdl;
         if ( ! $connectionUrl )
         {
             trigger_error('Missing config-param "usagewebservice_wsdl".', E_USER_WARNING);
@@ -296,31 +296,31 @@ function edusharing_update_instance(stdClass $edusharing) {
         $client = new mod_edusharing_sig_soap_client($connectionUrl, array());
 
         $params = array(
-            "eduRef" => $edusharing -> object_url,
+            "eduRef" => $edusharing->object_url,
             "user" => mod_edusharing_get_auth_key(),
-            "lmsId" => $appProperties -> appid,
-            "courseId" => $edusharing -> course,
-            "userMail" => $_SESSION["USER"] -> email,
+            "lmsId" => $appProperties->appid,
+            "courseId" => $edusharing->course,
+            "userMail" => $_SESSION["USER"]->email,
             "fromUsed" => '2002-05-30T09:00:00',
             "toUsed" => '2222-05-30T09:00:00',
             "distinctPersons" => '0',
-            "version" => $memento -> object_version,
-            "resourceId" => $edusharing -> id,
+            "version" => $memento->object_version,
+            "resourceId" => $edusharing->id,
             "xmlParams" => $xml,
         );
        
         
-        $setUsage = $client -> setUsage($params);
-        $edusharing->version = $memento -> object_version;
+        $setUsage = $client->setUsage($params);
+        $edusharing->version = $memento->object_version;
         // throws exception on error, so no further checking required
         $DB->update_record(EDUSHARING_TABLE, $edusharing);
     }
     catch(SoapFault $exception)
     {
         // roll back
-        $DB -> update_record(EDUSHARING_TABLE, $memento);
+        $DB->update_record(EDUSHARING_TABLE, $memento);
 
-        trigger_error($exception -> getMessage(), E_USER_WARNING);
+        trigger_error($exception->getMessage(), E_USER_WARNING);
 
         return false;
     }
@@ -354,7 +354,7 @@ function edusharing_delete_instance($id)
         // stop session to avoid deadlock during edu-sharing call-backs
         session_write_close();
 
-        $connectionUrl = $repProperties -> usagewebservice_wsdl;
+        $connectionUrl = $repProperties->usagewebservice_wsdl;
         if ( ! $connectionUrl )
         {
             throw new Exception('No "usagewebservice_wsdl" configured.');
@@ -363,16 +363,16 @@ function edusharing_delete_instance($id)
         $ccwsusage = new mod_edusharing_sig_soap_client($connectionUrl, array());        
 
         $params = array(
-            'eduRef' => $edusharing -> object_url,
+            'eduRef' => $edusharing->object_url,
            //'repoId' => $repository_id,
            'user' => mod_edusharing_get_auth_key(),
-           'lmsId' => $appProperties -> appid,
-           'courseId' => $edusharing -> course,
+           'lmsId' => $appProperties->appid,
+           'courseId' => $edusharing->course,
            //'parentNodeId' => $object_id,
-           'resourceId' => $edusharing -> id
+           'resourceId' => $edusharing->id
         );
 
-        $ccwsusage -> deleteUsage($params);
+        $ccwsusage->deleteUsage($params);
         
         // restart stopped session
         session_start();
@@ -382,8 +382,8 @@ function edusharing_delete_instance($id)
         trigger_error($exception->getmessage(), E_USER_WARNING);
     }
 
-    // Usage is removed -> can delete from DATABASE now
-    $DB -> delete_records(EDUSHARING_TABLE, array('id' => $edusharing->id));
+    // Usage is removed->can delete from DATABASE now
+    $DB->delete_records(EDUSHARING_TABLE, array('id' => $edusharing->id));
 
     return true;
 
@@ -548,12 +548,11 @@ function edusharing_get_coursemodule_info($coursemodule)
     $info = new cached_cm_info();
 
     $resource = $DB->get_record(EDUSHARING_TABLE, array('id' => $coursemodule->instance));
-    if ( ! $resource )
-    {
+    if ( ! $resource ) {
         trigger_error('Resource not found.', E_USER_WARNING);
     }
 
-    if(!empty($resource -> popup_window)) {
+    if (!empty($resource->popup_window)) {
         $info->onclick = 'this.target=\'_blank\';';
     }
 
@@ -581,34 +580,23 @@ function mod_edusharing_postprocess($edusharing)
 
     $edusharing->timeupdated = time();
 
-    if (!empty($edusharing->force_download))
-    {
+    if (!empty($edusharing->force_download)) {
         $edusharing->force_download = 1;
-        $edusharing->popup_window= 0;
-    }
-    else if (!empty($edusharing->popup_window))
-    {
+        $edusharing->popup_window = 0;
+    } else if (!empty($edusharing->popup_window)) {
         $edusharing->force_download = 0;
         $edusharing->options = '';
-    }
-    else
-    {
-        if (empty($edusharing->blockdisplay))
-        {
+    } else {
+        if (empty($edusharing->blockdisplay)) {
             $edusharing->options = '';
         }
 
         $edusharing->popup_window = '';
     }
 
-    //$edusharing->window_versionshow = 1;
-    //if($edusharing->window_versionshow == 'current' && isset($edusharing->window_versionshow))
-    //    $edusharing->window_versionshow = 0;
-    
     $edusharing->tracking = empty($edusharing->tracking) ? 0 : $edusharing->tracking;
 
-    if ( ! $edusharing->course )
-    {
+    if ( ! $edusharing->course ) {
         $edusharing->course = $COURSE->id;
     }
 
@@ -623,11 +611,9 @@ function mod_edusharing_postprocess($edusharing)
  * @throws Exception
  * @return string
  */
-function _edusharing_get_object_id_from_url($object_url)
-{
+function _edusharing_get_object_id_from_url($object_url) {
     $object_id = parse_url($object_url, PHP_URL_PATH);
-    if ( ! $object_id )
-    {
+    if ( ! $object_id ) {
         trigger_error('Error reading object-id from object-url.', E_USER_WARNING);
         return false;
     }
@@ -664,16 +650,16 @@ function mod_edusharing_get_usage_metadata($courseId) {
 	if(empty($courseId))
 	       return '';
 	
-	$course = $DB -> get_record('course',array('id' => $courseId));
-	$category = $DB -> get_record('course_categories',array('id' => $course -> category));
+	$course = $DB->get_record('course', array('id' => $courseId));
+	$category = $DB->get_record('course_categories', array('id' => $course->category));
 	
 	$usageMetaData = array();
 	$usageMetaData['courseId'] = $courseId;
-	$usageMetaData['courseFullname'] = $course -> fullname;
-	$usageMetaData['courseShortname'] = $course -> shortname;
-	$usageMetaData['courseSummary'] = $course -> summary;
-	$usageMetaData['categoryId'] = $course -> category;
-	$usageMetaData['categoryName'] = $category -> name;
+	$usageMetaData['courseFullname'] = $course->fullname;
+	$usageMetaData['courseShortname'] = $course->shortname;
+	$usageMetaData['courseSummary'] = $course->summary;
+	$usageMetaData['categoryId'] = $course->category;
+	$usageMetaData['categoryName'] = $category->name;
 
 	return $usageMetaData;
 

@@ -35,13 +35,13 @@ if (!$edusharing = $DB->get_record(EDUSHARING_TABLE, array('id' => $resourceId))
     trigger_error('Error loading edusharing-object from database.', E_USER_WARNING);
 }
 
-$courseId = $edusharing -> course;
+$courseId = $edusharing->course;
 
 $appProperties = json_decode(get_config('edusharing', 'appProperties'));
 
-$previewService = $appProperties -> cc_gui_url . '/' . 'preview';
+$previewService = $appProperties->cc_gui_url . '/' . 'preview';
 
-$objectUrlParts = str_replace('ccrep://', '', $edusharing -> object_url);
+$objectUrlParts = str_replace('ccrep://', '', $edusharing->object_url);
 $objectUrlParts = explode('/', $objectUrlParts);
 
 $repoId = $objectUrlParts[0];
@@ -50,15 +50,15 @@ $nodeId = $objectUrlParts[1];
 $time = round(microtime(true) * 1000);
 
 $url = $previewService;
-$url .= '?appId=' . $appProperties -> appid;
+$url .= '?appId=' . $appProperties->appid;
 $url .= '&courseId=' . $courseId;
 $url .= '&repoId=' . $repoId;
-$url .= '&proxyRepId=' . $appProperties -> homerepid;
+$url .= '&proxyRepId=' . $appProperties->homerepid;
 $url .= '&nodeId=' . $nodeId;
 $url .= '&resourceId=' . $resourceId;
-$url .= '&version=' . $edusharing -> object_version;
+$url .= '&version=' . $edusharing->object_version;
 
-$sig = urlencode(mod_edusharing_get_signature($appProperties -> appid . $time));
+$sig = urlencode(mod_edusharing_get_signature($appProperties->appid . $time));
 
 $url .= '&sig=' . $sig;
 $url .= '&ts=' . $time;

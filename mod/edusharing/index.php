@@ -35,8 +35,6 @@ require_course_login($course);
 
 add_to_log($course->id, 'edusharing', 'view all', "index.php?id=$course->id", '');
 
-/// Print the header
-
 $PAGE->set_url('mod/edusharing/view.php', array('id' => $id));
 $PAGE->set_title($course->fullname);
 $PAGE->set_heading($course->shortname);
@@ -86,7 +84,5 @@ foreach ($edusharings as $edusharing) {
 
 echo $OUTPUT->heading(get_string('modulenameplural', 'mod_edusharing'), 2);
 print_table($table);
-
-/// Finish the page
 
 echo $OUTPUT->footer();

@@ -82,12 +82,12 @@ $edusharing->title = '';
 $edusharing->window_width = '';
 $edusharing->window_height = '';
 $edusharing->mimetype = '';
-$edusharing -> window_float = 'none';
-$edusharing -> window_versionshow = 'latest';
-$edusharing -> repo_type = '';
-$edusharing -> window_version = '';
+$edusharing->window_float = 'none';
+$edusharing->window_versionshow = 'latest';
+$edusharing->repo_type = '';
+$edusharing->window_version = '';
 
-$repository_id = $appProperties -> homerepid;
+$repository_id = $appProperties->homerepid;
 
 if ( ! empty($_GET['resource_id']) )
 {
@@ -109,9 +109,9 @@ if ( ! empty($_GET['resource_id']) )
 
 $ccauth = new mod_edusharing_web_service_factory();
 
-$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties -> appid);
+$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties->appid);
 
-$link = $appProperties -> cc_gui_url; // link to the external cc-search
+$link = $appProperties->cc_gui_url; // link to the external cc-search
 
 $link .= '/search';
 
@@ -128,13 +128,13 @@ if ( $language )
 }
 
 $link .= '&reurl='.urlencode($CFG->wwwroot."/lib/editor/edusharing/dialog/populate.php?");
-$previewUrl = $appProperties -> cc_gui_url . 'preview';
+$previewUrl = $appProperties->cc_gui_url . 'preview';
     
 function getPreviewText() {
     return 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 }
 
-//
+
 ?>
     <input type="hidden" name="preview_url" value="<?php echo htmlspecialchars($previewUrl, ENT_COMPAT, 'utf-8'); ?>" />
     <input type="hidden" name="edu_ticket" value="<?php echo htmlspecialchars($ticket, ENT_COMPAT, 'utf-8'); ?>" />
@@ -168,18 +168,18 @@ function getPreviewText() {
         <tr class="versionShowTr">
             <td><?php echo  htmlentities(get_string('version', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
             <td>
-                <input type="radio" value="latest" name="window_versionshow" <?php echo ($edusharing -> window_versionshow == 'latest')?'checked="checked"':''?> /><?php echo  htmlentities(get_string('versionLatest', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                <input type="radio" value="current" name="window_versionshow" <?php echo ($edusharing -> window_versionshow == 'current')?'checked="checked"':''?> /><?php echo  htmlentities(get_string('versionCurrent', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="latest" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'latest')?'checked="checked"': ''?> /><?php echo  htmlentities(get_string('versionLatest', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="current" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'current')?'checked="checked"': ''?> /><?php echo  htmlentities(get_string('versionCurrent', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
             </td>
         </tr>
         
         <tr id="floatTr">
             <td><?php echo  htmlentities(get_string('float', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
             <td>
-                <input type="radio" value="left" name="window_float" <?php echo ($edusharing -> window_float == 'left')?'checked="checked"':''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatLeft', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                <input type="radio" value="none" name="window_float" <?php echo ($edusharing -> window_float == 'none')?'checked="checked"':''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatNone', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                <input type="radio" value="right" name="window_float" <?php echo ($edusharing -> window_float == 'right')?'checked="checked"':''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatRight', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                <input type="radio" value="inline" name="window_float" <?php echo ($edusharing -> window_float == 'inline')?'checked="checked"':''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatInline', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="left" name="window_float" <?php echo ($edusharing->window_float == 'left')?'checked="checked"': ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatLeft', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="none" name="window_float" <?php echo ($edusharing->window_float == 'none')?'checked="checked"': ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatNone', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="right" name="window_float" <?php echo ($edusharing->window_float == 'right')?'checked="checked"': ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatRight', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="inline" name="window_float" <?php echo ($edusharing->window_float == 'inline')?'checked="checked"': ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatInline', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
             </td>
         </tr>
            <tr class="dimension">

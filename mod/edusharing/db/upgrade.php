@@ -57,9 +57,9 @@ function xmldb_edusharing_upgrade($oldversion=0) {
             $sql = 'UPDATE {edusharing} SET object_version = window_version WHERE window_versionshow = 0';
             $DB->execute($sql);
             $xmldb_field = new xmldb_field('window_versionshow');
-            $dbman ->drop_field($xmldb_table, $xmldb_field);
+            $dbman->drop_field($xmldb_table, $xmldb_field);
             $xmldb_field = new xmldb_field('window_version');
-            $dbman ->drop_field($xmldb_table, $xmldb_field);
+            $dbman->drop_field($xmldb_table, $xmldb_field);
         } catch(Exception $e) {
             error_log($e);
         }
@@ -71,7 +71,7 @@ function xmldb_edusharing_upgrade($oldversion=0) {
             $app->preserveWhiteSpace = false;
             $entrys = $app->getElementsByTagName('entry');
             foreach ($entrys as $entry) {
-                $homeAppProperties[$entry -> getAttribute('key')] = $entry -> nodeValue;
+                $homeAppProperties[$entry->getAttribute('key')] = $entry->nodeValue;
             }
             
             $homeAppProperties['blowfishkey'] = 'thetestkey';
@@ -87,7 +87,7 @@ function xmldb_edusharing_upgrade($oldversion=0) {
             $app->preserveWhiteSpace = false;
             $entrys = $app->getElementsByTagName('entry');
             foreach ($entrys as $entry) {
-                $repoProperties[$entry -> getAttribute('key')] = $entry -> nodeValue;
+                $repoProperties[$entry->getAttribute('key')] = $entry->nodeValue;
             }
             
             $repoProperties['authenticationwebservice'] = str_replace('authentication', 'authbyapp', $repoProperties['authenticationwebservice']);

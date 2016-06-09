@@ -27,15 +27,15 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
  
-require_once ('../../../config.php');
+require_once('../../../config.php');
 
 global $DB;
 global $CFG;
 global $SESSION;
 global $PAGE;
 
-require_once ('../../../mod/edusharing/lib/cclib.php');
-require_once ('../../../mod/edusharing/lib.php');
+require_once('../../../mod/edusharing/lib/cclib.php');
+require_once('../../../mod/edusharing/lib.php');
 
 $id = optional_param('id', 0, PARAM_INT);
 // course id
@@ -46,29 +46,29 @@ if (!$id) {
 
 $PAGE->set_url('/blocks/edusharing_workspace/helper/cc_workspace.php', array('id' => $id));
 
-$course = $DB -> get_record('course', array('id' => $id));
+$course = $DB->get_record('course', array('id' => $id));
 if (!$course) {
     trigger_error("Course not found.", E_USER_WARNING);
     exit();
 }
 
-require_login($course -> id);
+require_login($course->id);
 
 $appProperties = json_decode(get_config('edusharing', 'appProperties'));
 
-echo $OUTPUT -> header();
+echo $OUTPUT->header();
 
 $ccauth = new mod_edusharing_web_service_factory();
-$ticket = $ccauth -> mod_edusharing_authentication_get_ticket($appProperties -> appid);
+$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties->appid);
 if (!$ticket) {
     exit();
 }
 
-if (empty($appProperties -> cc_gui_url)) {
+if (empty($appProperties->cc_gui_url)) {
     trigger_error('No "cc_gui_url" configured.', E_USER_WARNING);
 }
 
-$link = $appProperties -> cc_gui_url;
+$link = $appProperties->cc_gui_url;
 // link to the external cc-workspace
 $link .= '?mode=1';
 

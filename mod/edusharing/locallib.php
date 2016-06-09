@@ -50,20 +50,20 @@ function mod_edusharing_get_auth_key() {
     
     switch($EDU_AUTH_KEY) {
         case 'id':
-            return $user_data -> id;
+            return $user_data->id;
         break;
         
         case 'idnumber':
-            return $user_data -> idnumber;
+            return $user_data->idnumber;
         break;
         
         case 'email':
-            return $user_data -> email;
+            return $user_data->email;
         break;
         
         case 'username':
         default:
-            return $user_data -> username;
+            return $user_data->username;
     }
 }
 
@@ -94,9 +94,9 @@ function mod_edusharing_get_auth_data() {
 
         $authParams = array(
 	        		array('key' => $EDU_AUTH_PARAM_NAME_USERID, 'value' => mod_edusharing_get_auth_key()),
-	                array('key' => $EDU_AUTH_PARAM_NAME_LASTNAME, 'value' => $user_data -> lastname),
-	                array('key' => $EDU_AUTH_PARAM_NAME_FIRSTNAME, 'value' => $user_data -> firstname),
-	                array('key' => $EDU_AUTH_PARAM_NAME_EMAIL, 'value' => $user_data -> email),
+	                array('key' => $EDU_AUTH_PARAM_NAME_LASTNAME, 'value' => $user_data->lastname),
+	                array('key' => $EDU_AUTH_PARAM_NAME_FIRSTNAME, 'value' => $user_data->firstname),
+	                array('key' => $EDU_AUTH_PARAM_NAME_EMAIL, 'value' => $user_data->email),
 	                array('key' => 'affiliation', 'value' => $EDU_AUTH_AFFILIATION),
                	);
     }
@@ -112,15 +112,15 @@ function mod_edusharing_get_auth_data() {
  * */
 function mod_edusharing_get_user_cohorts() {
 	global $DB, $USER;
-	$cohortMemberships = $DB -> get_records('cohort_members',array('userid' => $USER -> id));
+	$cohortMemberships = $DB->get_records('cohort_members',array('userid' => $USER->id));
 	if($cohortMemberships) {
 		foreach($cohortMemberships as $cohortMembership) {
-			$cohort = $DB -> get_record('cohort', array('id' => $cohortMembership -> cohortid));	
+			$cohort = $DB->get_record('cohort', array('id' => $cohortMembership->cohortid));	
 			$ret[] = array(
-					'id' => $cohortMembership -> cohortid,
-					'contextid' => $cohort -> contextid,
-					'name' => $cohort -> name,
-					'idnumber' => $cohort -> idnumber
+					'id' => $cohortMembership->cohortid,
+					'contextid' => $cohort->contextid,
+					'name' => $cohort->name,
+					'idnumber' => $cohort->idnumber
 			);
 		}
 		return $ret;
@@ -141,15 +141,15 @@ function mod_edusharing_get_redirect_url(
 {
     global $USER;
     
-    $url = $appProperties -> cc_gui_url . '/renderingproxy';
+    $url = $appProperties->cc_gui_url . '/renderingproxy';
 
-    $url .= '?app_id='.urlencode($appProperties -> appid);
+    $url .= '?app_id='.urlencode($appProperties->appid);
 
     $sessionId = session_id();
     $url .= '&session='.urlencode($sessionId);
 
 
-    $rep_id = mod_edusharing_get_repository_id_from_url($edusharing -> object_url);
+    $rep_id = mod_edusharing_get_repository_id_from_url($edusharing->object_url);
     $url .= '&rep_id='.urlencode($rep_id);
 
     $resourceRefenerence = str_replace('/', '', parse_url($edusharing->object_url, PHP_URL_PATH));
@@ -170,8 +170,8 @@ function mod_edusharing_get_redirect_url(
     $url .= '&version=' . urlencode($edusharing->object_version);
     $url .= '&language=' . urlencode($USER->lang);
 
-    $ES_KEY = $appProperties -> blowfishkey;
-    $ES_IV = $appProperties -> blowfishiv;
+    $ES_KEY = $appProperties->blowfishkey;
+    $ES_IV = $appProperties->blowfishiv;
 
     $res = mcrypt_module_open(MCRYPT_BLOWFISH, '', MCRYPT_MODE_CBC, '');
     mcrypt_generic_init($res, $ES_KEY, $ES_IV);
@@ -185,7 +185,7 @@ function mod_edusharing_get_redirect_url(
 function mod_edusharing_get_signature($data) {
 
     $appProperties = json_decode(get_config('edusharing', 'appProperties'));
-    $priv_key = $appProperties -> private_key;
+    $priv_key = $appProperties->private_key;
     $pkeyid = openssl_get_privatekey($priv_key);      
     openssl_sign($data, $signature, $pkeyid);
     $signature = base64_encode($signature);

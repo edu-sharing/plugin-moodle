@@ -50,11 +50,11 @@ class mod_edusharing_mod_form extends moodleform_mod
 		{
 			// @TODO make dynamic
 			$ccauth = new mod_edusharing_web_service_factory();
-			$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties -> appid);
+			$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties->appid);
 		}
 		catch(Exception $e)
 		{
-			trigger_error($e -> getMessage(), E_USER_WARNING);
+			trigger_error($e->getMessage(), E_USER_WARNING);
 
 			return false;
 		}
@@ -62,10 +62,10 @@ class mod_edusharing_mod_form extends moodleform_mod
 		$mform =& $this->_form;
 
 //-------------------------------------------------------------------------------
-	/// Adding the "general" fieldset, where all the common settings are showed
+	// Adding the "general" fieldset, where all the common settings are showed
 		$mform->addElement('header', 'general', get_string('general', 'form'));
 
-	/// Adding the standard "name" field
+	// Adding the standard "name" field
 		$mform->addElement('text', 'name', get_string('edusharingname', EDUSHARING_MODULE_NAME), array('size'=>'64'));
 		if (!empty($CFG->formatstringstriptags)) {
 			$mform->setType('name', PARAM_TEXT);
@@ -76,7 +76,7 @@ class mod_edusharing_mod_form extends moodleform_mod
 		$mform->addRule('name', null, 'required', null, 'client');
 		$mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
-	/// Adding the standard "intro" and "introformat" fields
+	// Adding the standard "intro" and "introformat" fields
 		//$this->add_intro_editor();
 	if (method_exists($this,'standard_intro_elements')) {
       	$this->standard_intro_elements() ;
@@ -85,7 +85,7 @@ class mod_edusharing_mod_form extends moodleform_mod
 	 }
 	 
 //-------------------------------------------------------------------------------
-	/// object-section
+	// object-section
 		$mform->addElement('header', 'object_url_fieldset', get_string('object_url_fieldset', EDUSHARING_MODULE_NAME));
 
 		// object-uri
@@ -97,7 +97,7 @@ class mod_edusharing_mod_form extends moodleform_mod
 
 		$_my_lang = mod_edusharing_get_current_users_language_code();
 
-		$ccresource_search  = $appProperties -> cc_gui_url;
+		$ccresource_search  = $appProperties->cc_gui_url;
 		$ccresource_search .= "?mode=0";
 		$ccresource_search .= "&user=".urlencode(mod_edusharing_get_auth_key());
 		$ccresource_search .= "&locale=".$_my_lang;
@@ -112,7 +112,7 @@ class mod_edusharing_mod_form extends moodleform_mod
 
 
 
-		$ccresource_upload  = $appProperties -> cc_gui_url;
+		$ccresource_upload  = $appProperties->cc_gui_url;
 		$ccresource_upload .= "?mode=2";
 		$ccresource_search .= "&user=".urlencode(mod_edusharing_get_auth_key());
 		$ccresource_upload .= "&locale=".$_my_lang;
@@ -126,7 +126,7 @@ class mod_edusharing_mod_form extends moodleform_mod
 		$uploadbutton->updateAttributes($buttonattributes);
 
 //-------------------------------------------------------------------------------
-	/// version-section
+	// version-section
 		$mform->addElement('header', 'version_fieldset', get_string('object_version_fieldset', EDUSHARING_MODULE_NAME));
 
 		$radioGroup=array();
@@ -139,7 +139,7 @@ class mod_edusharing_mod_form extends moodleform_mod
 		$mform->addHelpButton('object_version', 'object_version', EDUSHARING_MODULE_NAME);
 
 //-------------------------------------------------------------------------------
-	/// display-section
+	// display-section
 		$mform->addElement('header', 'object_display_fieldset', get_string('object_display_fieldset', EDUSHARING_MODULE_NAME));
 		$window_options = array(0 => get_string('pagewindow', EDUSHARING_MODULE_NAME), 1 => get_string('newwindow', EDUSHARING_MODULE_NAME));
 		$mform->addElement('select', 'popup_window', get_string('display', EDUSHARING_MODULE_NAME), $window_options);

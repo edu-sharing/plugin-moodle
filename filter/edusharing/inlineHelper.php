@@ -31,12 +31,12 @@ require_login();
 $resId = optional_param('resId', 0, PARAM_INT); // edusharing instance ID 
 
 if ($resId){
-	$edusharing  = $DB -> get_record(EDUSHARING_TABLE, array('id' => $resId), '*', MUST_EXIST);
+	$edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id' => $resId), '*', MUST_EXIST);
 } else {
     trigger_error('You must specify an instance ID', E_USER_WARNING);
 }
 
-require_login($edusharing -> course, true);
+require_login($edusharing->course, true);
 
 $appProperties = json_decode(get_config('edusharing', 'appProperties'));
 $repProperties = json_decode(get_config('edusharing', 'repProperties'));
@@ -45,8 +45,8 @@ $redirect_url = mod_edusharing_get_redirect_url($edusharing, $appProperties, $re
 
 $ts = $timestamp = round(microtime(true) * 1000);
 $redirect_url .= '&ts=' . $ts;
-$redirect_url .= '&sig=' . urlencode(mod_edusharing_get_signature($appProperties -> appid . $ts));  
-$redirect_url .= '&signed=' . urlencode($appProperties -> appid . $ts);
+$redirect_url .= '&sig=' . urlencode(mod_edusharing_get_signature($appProperties->appid . $ts));  
+$redirect_url .= '&signed=' . urlencode($appProperties->appid . $ts);
 
 redirect($redirect_url);
 

@@ -27,10 +27,10 @@ class mod_edusharing_app_property_helper {
     }
 
     public function mod_edusharing_add_ssl_keypair_to_home_config() {
-        $sslKeypair = $this -> mod_edusharing_get_ssl_keypair();
+        $sslKeypair = $this->mod_edusharing_get_ssl_keypair();
         $appProperties = json_decode(get_config('edusharing', 'appProperties'));
-        $appProperties -> public_key = $sslKeypair['publicKey'];
-        $appProperties -> private_key = $sslKeypair['privateKey'];
+        $appProperties->public_key = $sslKeypair['publicKey'];
+        $appProperties->private_key = $sslKeypair['privateKey'];
         set_config('appProperties', json_encode($homeAppProperties), 'edusharing');
     }
     
@@ -46,9 +46,9 @@ class mod_edusharing_app_property_helper {
     }
     
     public function mod_edusharing_add_signature_redirector() {
-        $sslKeypair = $this -> mod_edusharing_get_ssl_keypair();
+        $sslKeypair = $this->mod_edusharing_get_ssl_keypair();
         $appProperties = json_decode(get_config('edusharing', 'appProperties'));
-        $appProperties -> signatureRedirector = $this -> mod_edusharing_get_signatureRedirector();
+        $appProperties->signatureRedirector = $this->mod_edusharing_get_signatureRedirector();
         set_config('appProperties', json_encode($homeAppProperties), 'edusharing');
     }
 

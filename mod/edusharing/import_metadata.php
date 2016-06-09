@@ -56,7 +56,7 @@
 <?php
 
 		// customize
-		define('import_metadata', true);
+		define('IMPORT_METADATA', true);
 
 		require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 
@@ -68,7 +68,7 @@
 		define ('CC_CONF_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 		define ('CC_CONF_APPFILE','ccapp-registry.properties.xml');
 
-		if (!import_metadata) die('metadata import disabled');
+		if (!IMPORT_METADATA) die('metadata import disabled');
 
 		function getForm($url){
 
@@ -122,13 +122,13 @@ if (!empty( $_POST['mdataurl'])) {
         }
     
     
-        $xml -> preserveWhiteSpace = false;
-        $xml -> formatOutput = true;
+        $xml->preserveWhiteSpace = false;
+        $xml->formatOutput = true;
         $entrys = $xml->getElementsByTagName('entry');
         $repProperties = new stdClass();
         foreach ($entrys as $entry){
-            $key = $entry -> getAttribute('key');
-            $repProperties -> $key = $entry -> nodeValue;
+            $key = $entry->getAttribute('key');
+            $repProperties->$key = $entry->nodeValue;
         }
     
         set_config('repProperties', json_encode($repProperties), 'edusharing');
@@ -136,18 +136,18 @@ if (!empty( $_POST['mdataurl'])) {
         $homeAppProperties = new stdClass();
         require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
         $mod_edusharing_app_property_helper = new mod_edusharing_app_property_helper();
-        $sslKeypair = $mod_edusharing_app_property_helper -> mod_edusharing_get_ssl_keypair();
+        $sslKeypair = $mod_edusharing_app_property_helper->mod_edusharing_get_ssl_keypair();
         
-        $homeAppProperties -> host = $_SERVER['SERVER_ADDR'];
-        $homeAppProperties -> appid = uniqid('moodle_');
-        $homeAppProperties -> type = 'LMS';
-        $homeAppProperties -> homerepid = $repProperties -> appid;
-        $homeAppProperties -> cc_gui_url = $repProperties -> clientprotocol . '://' . $repProperties -> domain . ':' . $repProperties -> clientport . '/edu-sharing/';
-        $homeAppProperties -> private_key = $sslKeypair['privateKey'];
-        $homeAppProperties -> public_key = $sslKeypair['publicKey'];
-        $homeAppProperties -> signatureRedirector = $mod_edusharing_app_property_helper -> mod_edusharing_get_signatureRedirector();
-        $homeAppProperties -> blowfishkey = 'thetestkey';
-        $homeAppProperties -> blowfishiv = 'initvect';
+        $homeAppProperties->host = $_SERVER['SERVER_ADDR'];
+        $homeAppProperties->appid = uniqid('moodle_');
+        $homeAppProperties->type = 'LMS';
+        $homeAppProperties->homerepid = $repProperties->appid;
+        $homeAppProperties->cc_gui_url = $repProperties->clientprotocol . '://' . $repProperties->domain . ':' . $repProperties->clientport . '/edu-sharing/';
+        $homeAppProperties->private_key = $sslKeypair['privateKey'];
+        $homeAppProperties->public_key = $sslKeypair['publicKey'];
+        $homeAppProperties->signatureRedirector = $mod_edusharing_app_property_helper->mod_edusharing_get_signatureRedirector();
+        $homeAppProperties->blowfishkey = 'thetestkey';
+        $homeAppProperties->blowfishiv = 'initvect';
         
         set_config('appProperties', json_encode($homeAppProperties), 'edusharing');
         
@@ -156,7 +156,7 @@ if (!empty( $_POST['mdataurl'])) {
         set_config('EDU_AUTH_PARAM_NAME_LASTNAME', 'lastname', 'edusharing');
         set_config('EDU_AUTH_PARAM_NAME_FIRSTNAME', 'firstname', 'edusharing');
         set_config('EDU_AUTH_PARAM_NAME_EMAIL', 'email', 'edusharing');
-        set_config('EDU_AUTH_AFFILIATION', $CFG -> siteidentifier, 'edusharing');
+        set_config('EDU_AUTH_AFFILIATION', $CFG->siteidentifier, 'edusharing');
         
         if(empty($sslKeypair['privateKey']))
             echo 'Generating of SSL keys failed. Please check your configuration.';
@@ -165,7 +165,7 @@ if (!empty( $_POST['mdataurl'])) {
         exit();
     
     } catch (Exception $e) {
-        echo $e -> getMessage();
+        echo $e->getMessage();
         exit();
     }
 

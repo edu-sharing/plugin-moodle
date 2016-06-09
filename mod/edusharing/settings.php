@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die ;
 global $CFG;
 
-if ($ADMIN -> fulltree) {
+if ($ADMIN->fulltree) {
 
 
     if(isset($_POST['section']) && $_POST['section'] == 'modsettingedusharing') {
@@ -60,7 +60,7 @@ if ($ADMIN -> fulltree) {
 
 
     $str_txt = get_string('conf_linktext', 'edusharing');
-    $str = '<h4 class="main"><a href="' . $CFG -> wwwroot . '/mod/edusharing/import_metadata.php?sesskey=' . $USER -> sesskey . '" target="_blank">' . $str_txt . '</a></h4>';
+    $str = '<h4 class="main"><a href="' . $CFG->wwwroot . '/mod/edusharing/import_metadata.php?sesskey=' . $USER->sesskey . '" target="_blank">' . $str_txt . '</a></h4>';
 
     ksort($appProperties);
     $strApp = '';
@@ -111,10 +111,10 @@ if ($ADMIN -> fulltree) {
     			 	&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsNo" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="no" ' . $checkNo . '><label for="cohortsNo">&nbsp;' . get_string('convey_global_groups_no', 'edusharing') . '</label>
     			 <br/><br/>';
     
-    $settings -> add(new admin_setting_heading('edusharing', get_string('connectToHomeRepository', 'edusharing'), $str));
-    $settings -> add(new admin_setting_heading('app', get_string('appProperties', 'edusharing'), $strApp));
-    $settings -> add(new admin_setting_heading('rep', get_string('homerepProperties', 'edusharing'), $strRep));
+    $settings->add(new admin_setting_heading('edusharing', get_string('connectToHomeRepository', 'edusharing'), $str));
+    $settings->add(new admin_setting_heading('app', get_string('appProperties', 'edusharing'), $strApp));
+    $settings->add(new admin_setting_heading('rep', get_string('homerepProperties', 'edusharing'), $strRep));
     $strAuth .= $strSubmit;
-    $settings -> add(new admin_setting_heading('auth', get_string('authparameters', 'edusharing'), $strAuth));
+    $settings->add(new admin_setting_heading('auth', get_string('authparameters', 'edusharing'), $strAuth));
 
 }
