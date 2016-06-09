@@ -44,7 +44,7 @@ if ($id) {
     $vId = $edusharing -> id;
     $courseId = $course -> id;
 } else {
-    error('You must specify a course_module ID or an instance ID');
+    trigger_error('You must specify a course_module ID or an instance ID', E_USER_WARNING);
 }
 
 $PAGE->set_url('/mod/edusharing/view.php?id='.$vId);
@@ -52,14 +52,11 @@ $PAGE->set_url('/mod/edusharing/view.php?id='.$vId);
 
 require_login($course, true, $cm);
 
-//@todo triguger an event
 $appProperties = json_decode(get_config('edusharing', 'appProperties'));
 $repProperties = json_decode(get_config('edusharing', 'repProperties'));
 
 // authenticate to assure requesting user exists in home-repository
 try {
-    // stop session to avoid deadlock during edu-sharing call-backs
-    session_write_close();
 
     $wsdl = $repProperties -> authenticationwebservice_wsdl;
     $alfservice = new mod_edusharing_sig_soap_client($wsdl, array());
@@ -67,19 +64,10 @@ try {
     $alfReturn = $alfservice->authenticateByTrustedApp($paramsTrusted);
     $ticket = $alfReturn -> authenticateByTrustedAppReturn -> ticket;
 
-    // restart stopped session
-    session_start();
 }
 catch(Exception $exception)
 {
-    // restart stopped session
-    session_start();
-
-    error_log( print_r($exception, true) );
-
-    print_error($exception -> getMessage());
-    print_footer("edu-sharing");
-
+    trigger_error($exception -> getMessage(), E_USER_WARNING);
     return false;
 }
 

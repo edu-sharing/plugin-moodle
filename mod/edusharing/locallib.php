@@ -81,11 +81,10 @@ function mod_edusharing_get_auth_data() {
     }
     
     if(array_key_exists('sso', $_SESSION) && !empty($_SESSION['sso'])) {
-        $sso = array();
+        $authParams = array();
         foreach($_SESSION['sso'] as $key => $value) {
-            $sso[] = array('key' => $key, 'value' => $value);
+            $authParams[] = array('key' => $key, 'value' => $value);
         }
-        return $sso;
     } else {
         $EDU_AUTH_PARAM_NAME_USERID = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
         $EDU_AUTH_PARAM_NAME_LASTNAME = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_LASTNAME');
@@ -93,13 +92,39 @@ function mod_edusharing_get_auth_data() {
         $EDU_AUTH_PARAM_NAME_EMAIL = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_EMAIL');
         $EDU_AUTH_AFFILIATION = get_config('edusharing', 'EDU_AUTH_AFFILIATION');
 
-        return array(array('key' => $EDU_AUTH_PARAM_NAME_USERID, 'value' => mod_edusharing_get_auth_key()),
-                     array('key' => $EDU_AUTH_PARAM_NAME_LASTNAME, 'value' => $user_data -> lastname),
-                     array('key' => $EDU_AUTH_PARAM_NAME_FIRSTNAME, 'value' => $user_data -> firstname),
-                     array('key' => $EDU_AUTH_PARAM_NAME_EMAIL, 'value' => $user_data -> email),
-                     array('key' => 'affiliation', 'value' => $EDU_AUTH_AFFILIATION),
-               );
+        $authParams = array(
+	        		array('key' => $EDU_AUTH_PARAM_NAME_USERID, 'value' => mod_edusharing_get_auth_key()),
+	                array('key' => $EDU_AUTH_PARAM_NAME_LASTNAME, 'value' => $user_data -> lastname),
+	                array('key' => $EDU_AUTH_PARAM_NAME_FIRSTNAME, 'value' => $user_data -> firstname),
+	                array('key' => $EDU_AUTH_PARAM_NAME_EMAIL, 'value' => $user_data -> email),
+	                array('key' => 'affiliation', 'value' => $EDU_AUTH_AFFILIATION),
+               	);
     }
+    
+    if(get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS') == 'yes') {
+    	$authParams[] = array('key' => 'globalgroups', 'value' => mod_edusharing_get_user_cohorts());
+    }    
+    return $authParams;
+}
+
+/*
+ * get cohorts the user belongs to
+ * */
+function mod_edusharing_get_user_cohorts() {
+	global $DB, $USER;
+	$cohortMemberships = $DB -> get_records('cohort_members',array('userid' => $USER -> id));
+	if($cohortMemberships) {
+		foreach($cohortMemberships as $cohortMembership) {
+			$cohort = $DB -> get_record('cohort', array('id' => $cohortMembership -> cohortid));	
+			$ret[] = array(
+					'id' => $cohortMembership -> cohortid,
+					'contextid' => $cohort -> contextid,
+					'name' => $cohort -> name,
+					'idnumber' => $cohort -> idnumber
+			);
+		}
+		return $ret;
+	}
 }
 
 /**
@@ -130,7 +155,7 @@ function mod_edusharing_get_redirect_url(
     $resourceRefenerence = str_replace('/', '', parse_url($edusharing->object_url, PHP_URL_PATH));
     if ( empty($resourceRefenerence) )
     {
-        trigger_error('Error replacing resource-url "'.$edusharing->object_url.'".', E_ERROR);
+        trigger_error('Error replacing resource-url "'.$edusharing->object_url.'".', E_USER_WARNING);
     }
 
     $url .= '&obj_id='.urlencode($resourceRefenerence);

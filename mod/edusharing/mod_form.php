@@ -54,10 +54,7 @@ class mod_edusharing_mod_form extends moodleform_mod
 		}
 		catch(Exception $e)
 		{
-			error_log( print_r($e, true) );
-
-			print_error($e -> getMessage());
-			print_footer(" ");
+			trigger_error($e -> getMessage(), E_USER_WARNING);
 
 			return false;
 		}

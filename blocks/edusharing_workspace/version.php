@@ -26,5 +26,5 @@ $plugin->component = 'block_edusharing_workspace';
 $plugin->dependencies = array(
     'mod_edusharing' => 2016011401,
 );
-$plugin->version = 2016010602;
+$plugin->version = 2016060801;
 $plugin->requires = 2015051100;     // Requires moodle 2.9

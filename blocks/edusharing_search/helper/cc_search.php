@@ -39,7 +39,7 @@ $appProperties = json_decode(get_config('edusharing', 'appProperties'));
 
 $id = optional_param('id', 0, PARAM_INT);
 if ( ! $id ) {
-    print_error("None or invalid course-id given.");
+    trigger_error("None or invalid course-id given.", E_USER_WARNING);
     exit();
 }
 
@@ -47,7 +47,7 @@ $PAGE->set_url('/blocks/edusharing_search/helper/cc_search.php',array('id' => $i
 
 $course = $DB->get_record('course', array('id' => $id));
 if ( ! $course ) {
-    print_error("Course not found.");
+    trigger_error("Course not found.", E_USER_WARNING);
     exit();
 }
 
@@ -62,7 +62,7 @@ if ( ! $ticket ) {
 
 if ( empty($appProperties -> cc_gui_url) )
 {
-    trigger_error('No "cc_gui_url" configured.', E_ERROR);
+    trigger_error('No "cc_gui_url" configured.', E_USER_WARNING);
 }
 
 $link = $appProperties -> cc_gui_url; // link to the external cc-search

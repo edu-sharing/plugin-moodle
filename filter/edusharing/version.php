@@ -26,5 +26,5 @@ $plugin->component = 'filter_edusharing';
 $plugin->dependencies = array(
     'mod_edusharing' => 2016011401,
 );
-$plugin->version = 2016010801;
+$plugin->version = 2016060802;
 $plugin->requires = 2015051100;     // Requires moodle 2.9

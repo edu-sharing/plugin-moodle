@@ -47,7 +47,7 @@ $where = array(
 $edusharing = $DB->get_record(EDUSHARING_TABLE, $where);
 if ( ! $edusharing )
 {
-	error_log('Resource "'.$delete->id.'" not found for course "'.$delete->course.'".');
+	trigger_error('Resource "'.$delete->id.'" not found for course "'.$delete->course.'".', E_USER_WARNING);
 
 	header('HTTP/1.1 404 Not found', true, 404);
 	exit();
@@ -55,7 +55,7 @@ if ( ! $edusharing )
 
 if ( ! edusharing_delete_instance($edusharing->id) )
 {
-	error_log('Error deleting edu-sharing-instance "'.$edusharing->id.'"');
+	trigger_error('Error deleting edu-sharing-instance "'.$edusharing->id.'"', E_USER_WARNING);
 
 	header('', true, 500);
 }

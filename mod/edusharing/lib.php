@@ -146,6 +146,7 @@ function edusharing_add_instance(stdClass $edusharing) {
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
+    $data4xml[1]["metadata"] = mod_edusharing_get_usage_metadata($edusharing->course);
 
     // move popup settings to array
     if (!empty($edusharing->popup)) {
@@ -168,7 +169,6 @@ function edusharing_add_instance(stdClass $edusharing) {
 
     $myXML  = new mod_edusharing_render_parameter();
     $xml = $myXML->mod_edusharing_get_xml($data4xml);
-
 
     $id = $DB -> insert_record(EDUSHARING_TABLE, $edusharing);
 
@@ -202,13 +202,10 @@ function edusharing_add_instance(stdClass $edusharing) {
             $DB -> update_record(EDUSHARING_TABLE, $edusharing);
         }
         
-        session_start();
-
     } catch (Exception $e) {
-        session_start();
         $DB -> delete_records(EDUSHARING_TABLE, array('id' => $id));
-        echo $e -> getMessage();
-        throw new Exception($e -> getMessage());
+        trigger_error($e -> getMessage());
+        return false;
     }
     
     return $id;
@@ -262,6 +259,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
+    $data4xml[1]["metadata"] = mod_edusharing_get_usage_metadata($edusharing->course);
 
     // move popup settings to array
     if (!empty($edusharing->popup)) {
@@ -292,7 +290,7 @@ function edusharing_update_instance(stdClass $edusharing) {
         $connectionUrl = $repProperties -> usagewebservice_wsdl;
         if ( ! $connectionUrl )
         {
-            trigger_error('Missing config-param "usagewebservice_wsdl".', E_ERROR);
+            trigger_error('Missing config-param "usagewebservice_wsdl".', E_USER_WARNING);
         }
 
         $client = new mod_edusharing_sig_soap_client($connectionUrl, array());
@@ -316,21 +314,13 @@ function edusharing_update_instance(stdClass $edusharing) {
         $edusharing->version = $memento -> object_version;
         // throws exception on error, so no further checking required
         $DB->update_record(EDUSHARING_TABLE, $edusharing);
-
-        // restart stopped session
-        session_start();
     }
     catch(SoapFault $exception)
     {
-        error_log(print_r($exception, true));
-
-        // restart stopped session
-        session_start();
-
         // roll back
         $DB -> update_record(EDUSHARING_TABLE, $memento);
 
-        print_error($exception -> getMessage());
+        trigger_error($exception -> getMessage(), E_USER_WARNING);
 
         return false;
     }
@@ -389,16 +379,7 @@ function edusharing_delete_instance($id)
     }
     catch(Exception $exception)
     {
-        error_log( print_r($exception, true) );
-
-        // restart stopped session
-        session_start();
-
-        if ('Node does not exist' != substr($exception->getMessage(), 0, 19))
-        {
-            $Message = $exception -> getMessage();
-            //throw new Exception($Message);
-        }
+        trigger_error($exception->getmessage(), E_USER_WARNING);
     }
 
     // Usage is removed -> can delete from DATABASE now
@@ -535,10 +516,6 @@ function edusharing_scale_used_anywhere($scaleid)
  */
 function edusharing_install()
 {
-    global $DB;
-    global $CFG;
-    
-    error_log('Installing mod_edusharing');
     return true;
 }
 
@@ -550,8 +527,6 @@ function edusharing_install()
  */
 function edusharing_uninstall()
 {
-    error_log('Uninstalling mod_edusharing');
-
     return true;
 }
 
@@ -575,7 +550,7 @@ function edusharing_get_coursemodule_info($coursemodule)
     $resource = $DB->get_record(EDUSHARING_TABLE, array('id' => $coursemodule->instance));
     if ( ! $resource )
     {
-        trigger_error('Resource not found.', E_ERROR);
+        trigger_error('Resource not found.', E_USER_WARNING);
     }
 
     if(!empty($resource -> popup_window)) {
@@ -650,12 +625,11 @@ function mod_edusharing_postprocess($edusharing)
  */
 function _edusharing_get_object_id_from_url($object_url)
 {
-    error_log($object_url);
-
     $object_id = parse_url($object_url, PHP_URL_PATH);
     if ( ! $object_id )
     {
-        throw new Exception('Error reading object-id from object-url.');
+        trigger_error('Error reading object-id from object-url.', E_USER_WARNING);
+        return false;
     }
 
     $object_id = str_replace('/', '', $object_id);
@@ -682,32 +656,25 @@ function mod_edusharing_get_repository_id_from_url($object_url)
     return $rep_id;
 }
 
-/**
- *
- * @param Node $contentNode
- *
- * @return string
- */
-function _edusharing_fetch_object_version($nodeProperties)
-{
-    $object_version = '0';
 
-    // versioned objects shall have this
-    if ( ! empty($nodeProperties['{http://www.campuscontent.de/model/lom/1.0}version']) )
-    {
-        $object_version = $nodeProperties['{http://www.campuscontent.de/model/lom/1.0}version'];
-    }
-    // fallback for non-versioned objects
-    else if ( ! empty($nodeProperties['{http://www.alfresco.org/model/content/1.0}versionLabel']) )
-    {
-        $object_version = $nodeProperties['{http://www.alfresco.org/model/content/1.0}versionLabel'];
-    }
-    // don't break non-versioning repositories
-    else
-    {
-        error_log('Error extracting object-version. Using fallback to "most-recent-version".');
-        $object_version = '0';
-    }
 
-    return $object_version;
+function mod_edusharing_get_usage_metadata($courseId) {
+	global $DB;
+	
+	if(empty($courseId))
+	       return '';
+	
+	$course = $DB -> get_record('course',array('id' => $courseId));
+	$category = $DB -> get_record('course_categories',array('id' => $course -> category));
+	
+	$usageMetaData = array();
+	$usageMetaData['courseId'] = $courseId;
+	$usageMetaData['courseFullname'] = $course -> fullname;
+	$usageMetaData['courseShortname'] = $course -> shortname;
+	$usageMetaData['courseSummary'] = $course -> summary;
+	$usageMetaData['categoryId'] = $course -> category;
+	$usageMetaData['categoryName'] = $category -> name;
+
+	return $usageMetaData;
+
 }

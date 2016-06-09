@@ -47,7 +47,7 @@ $where = array(
 $edusharing = $DB->get_record(EDUSHARING_TABLE, $where);
 if ( ! $edusharing )
 {
-	error_log('Resource "'.$update->id.'" not found for course "'.$update->course.'".');
+	trigger_error('Resource "'.$update->id.'" not found for course "'.$update->course.'".', E_USER_WARNING);
 
 	header('HTTP/1.1 404 Not found', true, 404);
 	exit();
@@ -60,7 +60,7 @@ if ( ! $edusharing )
 $edusharing = mod_edusharing_postprocess($update);
 if ( ! $edusharing )
 {
-	error_log('Error post-processing resource "'.$edusharing->id.'".');
+	trigger_error('Error post-processing resource "'.$edusharing->id.'".', E_USER_WARNING);
 
 	header('HTTP/1.1 500 Internal Server Error', true, 500);
 	exit();
@@ -68,7 +68,7 @@ if ( ! $edusharing )
 
 if ( ! edusharing_update_instance($edusharing) )
 {
-	error_log('Error updating resource "'.$edusharing->id.'".');
+	trigger_error('Error updating resource "'.$edusharing->id.'".', E_USER_WARNING);
 
 	header('HTTP/1.1 500 Internal Server Error', true, 500);
 	exit();

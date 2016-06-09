@@ -40,7 +40,7 @@ require_once ('../../../mod/edusharing/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 
 if (!$id) {
-    print_error("None or invalid course-id given.");
+    trigger_error("None or invalid course-id given.", E_USER_WARNING);
     exit();
 }
 
@@ -48,7 +48,7 @@ $PAGE->set_url('/blocks/edusharing_upload/helper/cc_upload.php', array('id' => $
 
 $course = $DB -> get_record('course', array('id' => $id));
 if (!$course) {
-    print_error("Course not found.");
+    trigger_error("Course not found.", E_USER_WARNING);
     exit();
 }
 
@@ -65,7 +65,7 @@ if (!$ticket) {
 }
 
 if (empty($appProperties -> cc_gui_url)) {
-    trigger_error('No "cc_gui_url" configured.', E_ERROR);
+    trigger_error('No "cc_gui_url" configured.', E_USER_WARNING);
 }
 
 $link = $appProperties -> cc_gui_url;
@@ -99,5 +99,4 @@ $('#esContent').html("<div id='closer' style='font-size: 1em; padding: 5px 20px 
 <?php
 // ------------------------------------------------------------------------------------
 
-//print_footer(get_string('block_footer', 'block_edusharing_upload'));
 exit ;

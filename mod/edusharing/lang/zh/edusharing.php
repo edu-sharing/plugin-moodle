@@ -111,3 +111,10 @@ $string['homerepProperties'] = 'Home Repository Properties';
 $string['authparameters'] = 'Authentication Parameters';
 $string['save'] = 'Save changes';
 $string['emptyForDefault'] = 'empty for default';
+
+//auth parameters
+$string['convey_global_groups_yes'] = 'Convey cohorts';
+$string['convey_global_groups_no'] = 'Not convey cohorts';
+
+
+$string['mcryptrequired'] = 'The PHP extension mcrypt must be activated.';

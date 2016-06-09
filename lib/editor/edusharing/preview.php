@@ -32,7 +32,7 @@ global $DB;
 $resourceId = $_GET['resourceId'];
 
 if (!$edusharing = $DB->get_record(EDUSHARING_TABLE, array('id' => $resourceId))) {
-    throw new Exception('Error loading edusharing-object from database.');
+    trigger_error('Error loading edusharing-object from database.', E_USER_WARNING);
 }
 
 $courseId = $edusharing -> course;

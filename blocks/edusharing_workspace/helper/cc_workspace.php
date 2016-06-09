@@ -40,8 +40,7 @@ require_once ('../../../mod/edusharing/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 // course id
 if (!$id) {
-    error_log("None or invalid course-id given.");
-    print_error("None or invalid course-id given.");
+    trigger_error("None or invalid course-id given.", E_USER_WARNING);
     exit();
 }
 
@@ -49,8 +48,7 @@ $PAGE->set_url('/blocks/edusharing_workspace/helper/cc_workspace.php', array('id
 
 $course = $DB -> get_record('course', array('id' => $id));
 if (!$course) {
-    error_log("Course not found.");
-    print_error("Course not found.");
+    trigger_error("Course not found.", E_USER_WARNING);
     exit();
 }
 
@@ -67,7 +65,7 @@ if (!$ticket) {
 }
 
 if (empty($appProperties -> cc_gui_url)) {
-    trigger_error('No "cc_gui_url" configured.', E_ERROR);
+    trigger_error('No "cc_gui_url" configured.', E_USER_WARNING);
 }
 
 $link = $appProperties -> cc_gui_url;
@@ -100,5 +98,4 @@ $('#closer').click(function(){window.location.href='<?php echo $_SERVER["HTTP_RE
 <?php
 // ------------------------------------------------------------------------------------
 
-//print_footer("");
 exit ;

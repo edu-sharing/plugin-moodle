@@ -42,7 +42,7 @@ class mod_edusharing_web_service_factory {
         $repProperties = json_decode(get_config('edusharing', 'repProperties'));    
         $this -> authentication_service_wsdl = $repProperties -> authenticationwebservice_wsdl;
         if ( empty($this -> authentication_service_wsdl) ) {
-            error_log('No "authenticationwebservice_wsdl" configured.');
+            trigger_error('No "authenticationwebservice_wsdl" configured.', E_USER_WARNING);
         }
     }
 
@@ -64,7 +64,7 @@ class mod_edusharing_web_service_factory {
             try {
                 $eduService = new mod_edusharing_sig_soap_client($this -> authentication_service_wsdl, array());
             } catch (Exception $e) {
-                print($this -> authentication_service_wsdl  . ' not reachable. Cannot utilize edu-sharing network.');
+                trigger_error($this -> authentication_service_wsdl  . ' not reachable. Cannot utilize edu-sharing network.', E_USER_WARNING);
             }
 
             try {
@@ -82,8 +82,8 @@ class mod_edusharing_web_service_factory {
                 }
             }
             catch(Exception $e) {
-             	print('Invalid ticket. Cannot utilize edu-sharing network.');
-                error_log($e);
+             	trigger_error('Invalid ticket. Cannot utilize edu-sharing network.', E_USER_WARNING);
+             	error_log($e);
             }
 
         }
@@ -93,13 +93,13 @@ class mod_edusharing_web_service_factory {
         $paramsTrusted = array("applicationId" => $home_app_id, "ticket" => session_id(), "ssoData" => mod_edusharing_get_auth_data());
         try {
             $client = new mod_edusharing_sig_soap_client($this -> authentication_service_wsdl, array());
-            $return = $client->authenticateByTrustedApp($paramsTrusted);
+            $return = $client -> authenticateByTrustedApp($paramsTrusted);
             $ticket = $return -> authenticateByTrustedAppReturn -> ticket;
             $_SESSION["USER"] -> ticket = $ticket;
             $_SESSION["USER"] -> ticketValidationTs = time();
             return $ticket;
         } catch(Exception $e) {
-            print('Cannot utilize edu-sharing network because authentication failed. Error message : ' . $e -> getMessage());
+            trigger_error('Cannot utilize edu-sharing network because authentication failed. Error message: ' . $e -> getMessage(), E_USER_WARNING);
             error_log($e);
         }
 

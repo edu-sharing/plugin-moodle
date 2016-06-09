@@ -48,7 +48,7 @@ try {
 	$edusharing = mod_edusharing_postprocess($edusharing);
 	if ( ! $edusharing )
 	{
-		error_log('Error post-processing resource "'.$edusharing->id.'".');
+		trigger_error('Error post-processing resource "'.$edusharing->id.'".', E_USER_WARNING);
 
 		header('HTTP/1.1 500 Internal Server Error', true, 500);
 		exit();
@@ -68,6 +68,6 @@ try {
 }
 catch(Exception $exception)
 {
-	error_log( print_r($exception, true) );
+	trigger_error($exception -> getMessage(), E_USER_WARNING);
 	header('HTTP/1.1 500 Internal Server Error', true, 500);
 }
