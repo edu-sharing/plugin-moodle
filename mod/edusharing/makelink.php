@@ -35,14 +35,14 @@ $PAGE->set_context(context_system::instance() );
 echo $OUTPUT->header();
 
 
-$eduResource = addslashes_js(optional_param('nodeId', '', PARAM_RAW));
+$eduresource = addslashes_js(optional_param('nodeId', '', PARAM_RAW));
 
 echo <<<content
 This page should have populated the add resource form with the url to the Repository item.<br /><br />
 <a href="#" onclick="window.close();">If this window does not close on its own, please click here.</a>
 <script type="text/javascript">
     try{
-        opener.document.getElementById('id_object_url').value = '$eduResource';
+        opener.document.getElementById('id_object_url').value = '$eduresource';
         opener.focus();
     } catch (err) {}
     window.close();

@@ -68,10 +68,10 @@ if ($course->format == 'weeks') {
 
 foreach ($edusharings as $edusharing) {
     if (!$edusharing->visible) {
-        //Show dimmed if the mod is hidden
+        // Show dimmed if the mod is hidden
         $link = '<a class="dimmed" href="view.php?id='.$edusharing->coursemodule.'">'.format_string($edusharing->name).'</a>';
     } else {
-        //Show normal if the mod is visible
+        // Show normal if the mod is visible
         $link = '<a href="view.php?id='.$edusharing->coursemodule.'">'.format_string($edusharing->name).'</a>';
     }
 

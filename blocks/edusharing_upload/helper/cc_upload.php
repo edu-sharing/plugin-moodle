@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle. If not, see <http://www.gnu.org/licenses/>.
 
- 
  /*
  - called from the /blocks/cc_upload block
  - auth against alfresco repos. (ticket handshake / user sync)
@@ -27,7 +26,7 @@
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 require_once('../../../config.php');
 
 global $DB;
@@ -54,21 +53,21 @@ if (!$course) {
 
 require_login($course->id);
 
-$appProperties = json_decode(get_config('edusharing', 'appProperties'));
+$appproperties = json_decode(get_config('edusharing', 'appProperties'));
 
 echo $OUTPUT->header();
 
 $ccauth = new mod_edusharing_web_service_factory();
-$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties->appid);
+$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appproperties->appid);
 if (!$ticket) {
     exit();
 }
 
-if (empty($appProperties->cc_gui_url)) {
+if (empty($appproperties->cc_gui_url)) {
     trigger_error('No "cc_gui_url" configured.', E_USER_WARNING);
 }
 
-$link = $appProperties->cc_gui_url;
+$link = $appproperties->cc_gui_url;
 // link to the external cc-upload
 $link .= '?mode=2';
 $user = mod_edusharing_get_auth_key();
@@ -76,14 +75,12 @@ $link .= '&user=' . urlencode($user);
 
 $link .= '&ticket=' . urlencode($ticket);
 
-$_my_lang = mod_edusharing_get_current_users_language_code();
-$link .= '&locale=' . urlencode($_my_lang);
+$mylang = mod_edusharing_get_current_users_language_code();
+$link .= '&locale=' . urlencode($mylang);
 
 $link .= '&reurl=' . urlencode($CFG->wwwroot . '/blocks/edusharing_upload/helper/close_iframe.php?course_id=' . $course->id);
 
-// ------------------------------------------------------------------------------------
-//  open the external edu-sharingSearch page in iframe
-// ------------------------------------------------------------------------------------
+// Open the external edu-sharingSearch page in iframe
 ?>
 
 <div id="esContent" style="position: fixed; top: 0; left: 0; z-index: 9900;"></div>
@@ -99,4 +96,4 @@ $('#esContent').html("<div id='closer' style='font-size: 1em; padding: 5px 20px 
 <?php
 // ------------------------------------------------------------------------------------
 
-exit ;
+exit();

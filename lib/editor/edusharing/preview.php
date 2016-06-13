@@ -22,56 +22,56 @@
  */
 
 // create preview link with signature
-require_once dirname(__FILE__) . '/../../../config.php';
-require_once dirname(__FILE__) . '/../../../mod/edusharing/locallib.php';
+require_once(dirname(__FILE__) . '/../../../config.php');
+require_once(dirname(__FILE__) . '/../../../mod/edusharing/locallib.php');
 
 require_login();
 
 global $DB;
 
-$resourceId = $_GET['resourceId'];
+$resourceid = $_GET['resourceId'];
 
-if (!$edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resourceId))) {
+if (!$edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resourceid))) {
     trigger_error('Error loading edusharing-object from database.', E_USER_WARNING);
 }
 
-$courseId = $edusharing->course;
+$curlhandle = $edusharing->course;
 
-$appProperties = json_decode(get_config('edusharing', 'appProperties'));
+$appproperties = json_decode(get_config('edusharing', 'appProperties'));
 
-$previewService = $appProperties->cc_gui_url . '/' . 'preview';
+$previewservice = $appproperties->cc_gui_url . '/' . 'preview';
 
-$objectUrlParts = str_replace('ccrep://', '', $edusharing->object_url);
-$objectUrlParts = explode('/', $objectUrlParts);
+$objecturlparts = str_replace('ccrep://', '', $edusharing->object_url);
+$objecturlparts = explode('/', $objecturlparts);
 
-$repoId = $objectUrlParts[0];
-$nodeId = $objectUrlParts[1];
+$repoid = $objecturlparts[0];
+$nodeid = $objecturlparts[1];
 
 $time = round(microtime(true) * 1000);
 
-$url = $previewService;
-$url .= '?appId=' . $appProperties->appid;
-$url .= '&courseId=' . $courseId;
-$url .= '&repoId=' . $repoId;
-$url .= '&proxyRepId=' . $appProperties->homerepid;
-$url .= '&nodeId=' . $nodeId;
-$url .= '&resourceId=' . $resourceId;
+$url = $previewservice;
+$url .= '?appId=' . $appproperties->appid;
+$url .= '&courseId=' . $curlhandle;
+$url .= '&repoId=' . $repoid;
+$url .= '&proxyRepId=' . $appproperties->homerepid;
+$url .= '&nodeId=' . $nodeid;
+$url .= '&resourceId=' . $resourceid;
 $url .= '&version=' . $edusharing->object_version;
 
-$sig = urlencode(mod_edusharing_get_signature($appProperties->appid . $time));
+$sig = urlencode(mod_edusharing_get_signature($appproperties->appid . $time));
 
 $url .= '&sig=' . $sig;
 $url .= '&ts=' . $time;
 
-$curl_handle = curl_init($url);
-curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, 1);
-curl_setopt($curl_handle, CURLOPT_HEADER, 0);
-curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($curl_handle, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-$output = curl_exec($curl_handle); 
-$mimetype = curl_getinfo($curl_handle, CURLINFO_CONTENT_TYPE);
-curl_close($curl_handle);      
+$curlhandle = curl_init($url);
+curl_setopt($curlhandle, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($curlhandle, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($curlhandle, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($curlhandle, CURLOPT_HEADER, 0);
+curl_setopt($curlhandle, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($curlhandle, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+$output = curl_exec($curlhandle);
+$mimetype = curl_getinfo($curlhandle, CURLINFO_CONTENT_TYPE);
+curl_close($curlhandle);
 header('Content-type: ' . $mimetype);echo $output;
 exit();

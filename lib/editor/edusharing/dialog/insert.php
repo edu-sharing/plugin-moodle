@@ -46,15 +46,15 @@ if ( empty($CFG->yui3version) ) {
 ?><html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title><?php echo htmlentities(get_string('dialog_title', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></title>
-    
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    
+
     <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/yui/'.$CFG->yui3version.'/build/yui/yui.js', ENT_COMPAT, 'utf-8') ?>"></script>
     <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/tinymce/tiny_mce/'.$tinymce->version.'/tiny_mce_popup.js', ENT_COMPAT, 'utf-8') ?>"></script>
 
     <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/edusharing.js?' . filemtime($CFG->libdir.'/editor/edusharing/js/edusharing.js'), ENT_COMPAT, 'utf-8') ?>"></script>
     <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/dialog.js?' . filemtime($CFG->libdir.'/editor/edusharing/js/dialog.js'), ENT_COMPAT, 'utf-8') ?>"></script>
-    
+
     <link rel="stylesheet" media="all" href="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/dialog/css/edu.css', ENT_COMPAT, 'utf-8') ?>">
 
 </head>
@@ -68,7 +68,7 @@ if ( empty($CFG->yui3version) ) {
     <br/>
 <?php
 
-$appProperties = json_decode(get_config('edusharing', 'appProperties'));
+$appproperties = json_decode(get_config('edusharing', 'appProperties'));
 
 $edusharing = new stdClass();
 $edusharing->object_url = '';
@@ -85,19 +85,19 @@ $edusharing->window_versionshow = 'latest';
 $edusharing->repo_type = '';
 $edusharing->window_version = '';
 
-$repository_id = $appProperties->homerepid;
+$repositoryid = $appproperties->homerepid;
 
 if ( ! empty($_GET['resource_id']) ) {
-    $resource_id = $_GET['resource_id'];
+    $resourceid = $_GET['resource_id'];
 
-    $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resource_id));
+    $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resourceid));
     if ( ! $edusharing ) {
         header('HTTP/1.1 500 Internal Server Error');
         throw new Exception('Error loading edusharing-resource.');
     }
 
-    $repository_id = mod_edusharing_get_repository_id_from_url($edusharing->object_url);
-    if ( ! $repository_id ) {
+    $repositoryid = mod_edusharing_get_repository_id_from_url($edusharing->object_url);
+    if ( ! $repositoryid ) {
         header('HTTP/1.1 500 Internal Server Error');
         throw new Exception('Error reading repository-id from object-url.');
     }
@@ -106,9 +106,9 @@ if ( ! empty($_GET['resource_id']) ) {
 
 $ccauth = new mod_edusharing_web_service_factory();
 
-$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties->appid);
+$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appproperties->appid);
 
-$link = $appProperties->cc_gui_url; // link to the external cc-search
+$link = $appproperties->cc_gui_url; // link to the external cc-search
 
 $link .= '/search';
 
@@ -124,15 +124,14 @@ if ( $language ) {
 }
 
 $link .= '&reurl='.urlencode($CFG->wwwroot."/lib/editor/edusharing/dialog/populate.php?");
-$previewUrl = $appProperties->cc_gui_url . 'preview';
-    
-function getPreviewText() {
+$previewurl = $appproperties->cc_gui_url . 'preview';
+
+function get_preview_text() {
     return 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 }
 
-
 ?>
-    <input type="hidden" name="preview_url" value="<?php echo htmlspecialchars($previewUrl, ENT_COMPAT, 'utf-8'); ?>" />
+    <input type="hidden" name="preview_url" value="<?php echo htmlspecialchars($previewurl, ENT_COMPAT, 'utf-8'); ?>" />
     <input type="hidden" name="edu_ticket" value="<?php echo htmlspecialchars($ticket, ENT_COMPAT, 'utf-8'); ?>" />
 
     <input type="hidden"  maxlength="30" name="mimetype" id="mimetype" />
@@ -142,7 +141,7 @@ function getPreviewText() {
 
 <!--        {#edusharing_dlg.resourceVersion} -->
     <input type="hidden" maxlength="30" size="15" name="resourceversion" id="resourceversion" />
-    
+
        <input type="hidden" maxlength="30" size="30" name="repotype" id="repotype" />
 <!--        {#edusharing_dlg.resourceid}-->
     <input type="hidden" maxlength="30" size="15" name="resource_id" id="resource_id"  value="<?php echo htmlspecialchars($edusharing->resource_id, ENT_COMPAT, 'utf-8') ?>" />
@@ -164,18 +163,18 @@ function getPreviewText() {
         <tr class="versionShowTr">
             <td><?php echo  htmlentities(get_string('version', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
             <td>
-                <input type="radio" value="latest" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'latest')?'checked="checked"': ''?> /><?php echo  htmlentities(get_string('versionLatest', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                <input type="radio" value="current" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'current')?'checked="checked"': ''?> /><?php echo  htmlentities(get_string('versionCurrent', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="latest" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'latest') ? 'checked="checked"' : ''?> /><?php echo  htmlentities(get_string('versionLatest', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="current" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'current') ? 'checked="checked"' : ''?> /><?php echo  htmlentities(get_string('versionCurrent', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
             </td>
         </tr>
-        
+
         <tr id="floatTr">
             <td><?php echo  htmlentities(get_string('float', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
             <td>
-                <input type="radio" value="left" name="window_float" <?php echo ($edusharing->window_float == 'left')?'checked="checked"': ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatLeft', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                <input type="radio" value="none" name="window_float" <?php echo ($edusharing->window_float == 'none')?'checked="checked"': ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatNone', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                <input type="radio" value="right" name="window_float" <?php echo ($edusharing->window_float == 'right')?'checked="checked"': ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatRight', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                <input type="radio" value="inline" name="window_float" <?php echo ($edusharing->window_float == 'inline')?'checked="checked"': ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatInline', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="left" name="window_float" <?php echo ($edusharing->window_float == 'left') ? 'checked="checked"' : ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatLeft', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="none" name="window_float" <?php echo ($edusharing->window_float == 'none') ? 'checked="checked"' : ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatNone', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="right" name="window_float" <?php echo ($edusharing->window_float == 'right') ? 'checked="checked"' : ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatRight', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="inline" name="window_float" <?php echo ($edusharing->window_float == 'inline') ? 'checked="checked"' : ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatInline', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
             </td>
         </tr>
            <tr class="dimension">
@@ -193,12 +192,12 @@ function getPreviewText() {
 
     </table>
     </div>
-    
+
     <div id="preview">
-        <?php echo  getPreviewText()?>
+        <?php echo  get_preview_text()?>
         <div id="preview_resource_wrapper"></div>
-        <?php echo  getPreviewText()?>
-        
+        <?php echo  get_preview_text()?>
+
     </div>
     <div style="clear:both" class="mceActionPanel">
         <input type="button" id="insert" name="insert" class="button" value="<?php echo htmlspecialchars(get_string('insert', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>" onclick="edusharingDialog.on_click_insert(this.form);" />
@@ -225,36 +224,36 @@ function getPreviewText() {
             return;
         document.getElementById('window_width').value = Math.round(document.getElementById('window_height').value / editor_edusharing_get_ratio());
     }
-    
+
     function editor_edusharing_set_height() {
         if (!editor_edusharing_get_ratio_cb_status())
             return;
         document.getElementById('window_height').value = Math.round(document.getElementById('window_width').value * editor_edusharing_get_ratio());
     }
-    
+
     function editor_edusharing_get_ratio_cb_status() {
         return document.getElementById('constrainProps').checked;
     }
-    
+
     function editor_edusharing_get_ratio() {
         return document.getElementById('ratio').value;
     }
-    
+
     function editor_edusharing_refresh_preview(float) {
         style = tinymce.plugins.edusharing.getStyle(float);
         width = document.getElementById('preview_resource_wrapper').style.width;
         document.getElementById('preview_resource_wrapper').style = style;
         document.getElementById('preview_resource_wrapper').style.width = width;
     }
-    
+
     function editor_edusharing_handle_click(radio) {
         editor_edusharing_refresh_preview(radio.value);
     }
-    
+
     function editor_edusharing_get_resource_preview() {
-        
+
             // splitting object-url to get object-id
-        var repository_id = '<?php echo $repository_id; ?>';
+        var repository_id = '<?php echo $repositoryid; ?>';
         var object_url_parts = document.getElementById('object_url').value.split('/');
         var object_id = object_url_parts[3];
 
@@ -274,7 +273,7 @@ function getPreviewText() {
 
         return preview_url;
     }
-    
+
     function editor_edusharing_set_preview_content() {
         mimeSwitchHelper = '';
         mimetype = document.getElementById('mimetype').value;
@@ -288,12 +287,12 @@ function getPreviewText() {
             mimeSwitchHelper = 'youtube';
         else
             mimeSwitchHelper = 'textlike';
-        
+
         switch(mimeSwitchHelper) {
-            case 'image': content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
-            case 'youtube': content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
-            case 'video': content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
-            case 'audio': content = '<img src="../images/audio.png" width=100/><br/>Titel/Autor/Lizenz<br/>'; break;
+            case 'image' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'youtube' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'video' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'audio' : content = '<img src="../images/audio.png" width=100/><br/>Titel/Autor/Lizenz<br/>'; break;
             default: content = '' ;
         }
 
@@ -302,16 +301,16 @@ function getPreviewText() {
         } else {
             document.getElementById('preview_resource_wrapper').style.width = 'auto';
         }
-        
+
         content += '<span id="textpreview"></span>';
 
         document.getElementById('preview_resource_wrapper').innerHTML = content;
-        
+
         if (mimeSwitchHelper == 'textlike') {
             setTextPreview();
             document.getElementById('textpreview').style.color = '#00F';
         }
-        
+
         editor_edusharing_vis_dimension_inputs(mimeSwitchHelper);
         editor_edusharing_set_title_options(mimeSwitchHelper);
         editor_edusharing_vis_version_inputs();
@@ -320,7 +319,7 @@ function getPreviewText() {
     function setTextPreview() {
            document.getElementById('textpreview').innerHTML = document.getElementById('title').value;
     }
-    
+
     function editor_edusharing_vis_version_inputs() {
         if (document.getElementById('repotype').value == 'YOUTUBE') {
             document.getElementsByClassName('versionShowTr')[0].style.visibility = 'hidden';
@@ -338,11 +337,11 @@ function getPreviewText() {
             titleLabel.innerHTML = "<?php echo htmlspecialchars(get_string('caption', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>";
             document.getElementById('title').value = "";
             document.getElementById('textpreview').value = "";
-        }    
+        }
     }
-    
+
     function editor_edusharing_vis_dimension_inputs(mimeSwitchHelper) {
-       
+
        if (mimeSwitchHelper == 'image') {
            var dimensionsSet = document.getElementsByClassName('dimension');
            for(var i = 0; i < dimensionsSet.length; i++) {
@@ -363,17 +362,17 @@ function getPreviewText() {
                 dimensionsSet[i].style.visibility = 'hidden';
             }
        }
-       
+
     }
 
-    
+
     function editor_edusharing_shrink_dialog() {
         parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].style.width = '560px';
         parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].style.height = '440px';
         parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].getElementsByTagName('iframe')[0].style.width = '560px';
         parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].getElementsByTagName('iframe')[0].style.height = '440px';
     }
-    
+
     function editor_edusharing_enlarge_dialog() {
         parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].style.width = parent.parent.document.documentElement.clientWidth * 0.8 + 'px';
         parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].style.height = parent.parent.document.documentElement.clientHeight * 0.8 + 'px';
@@ -392,7 +391,7 @@ function getPreviewText() {
         title.onpropertychange = title.oninput;
     }
 
-    
+
 </script>
 
 </html>

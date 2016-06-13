@@ -111,7 +111,7 @@ $string['save'] = 'Save changes';
 $string['emptyForDefault'] = 'empty for default';
 $string['filter_not_authorized'] = 'You are not authorized to access the requested content.';
 
-//auth parameters
+// auth parameters
 $string['convey_global_groups_yes'] = 'Convey cohorts';
 $string['convey_global_groups_no'] = 'Not convey cohorts';
 

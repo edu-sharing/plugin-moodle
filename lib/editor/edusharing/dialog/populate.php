@@ -29,24 +29,22 @@
 
 require_once(dirname(__FILE__) . '/../../../../config.php');
 
-/**
- * 
- * @todo get original height and width + version
- *
- */
 
-$eduObj_res = addslashes_js(optional_param('nodeId', '', PARAM_RAW));
-$eduObj_title = addslashes_js(optional_param('title', '', PARAM_RAW));
-$eduObj_mimetype = addslashes_js(optional_param('mimeType', '', PARAM_RAW));
-$eduObj_resourceType = addslashes_js(optional_param('resourceType', '', PARAM_RAW));
-$eduObj_resourceVersion = addslashes_js(optional_param('resourceVersion', '', PARAM_RAW));
-$eduObj_height = addslashes_js(optional_param('h', '', PARAM_RAW));
-$eduObj_width = addslashes_js(optional_param('w', '600', PARAM_RAW));
-$eduObj_ratio = '';
-if (!empty($eduObj_height) && !empty($eduObj_width))
-    $eduObj_ratio = (int)$eduObj_height / (int)$eduObj_width;
-$eduObj_version = addslashes_js(optional_param('v', '1.0', PARAM_RAW));
-$eduObj_repoType = addslashes_js(optional_param('repoType', '', PARAM_RAW));
+// @todo get original height and width + version
+
+
+$eduobjres = addslashes_js(optional_param('nodeId', '', PARAM_RAW));
+$eduobjtitle = addslashes_js(optional_param('title', '', PARAM_RAW));
+$eduobjmimetype = addslashes_js(optional_param('mimeType', '', PARAM_RAW));
+$eduobjresourcetype = addslashes_js(optional_param('resourceType', '', PARAM_RAW));
+$eduobjresourceversion = addslashes_js(optional_param('resourceVersion', '', PARAM_RAW));
+$eduobjheight = addslashes_js(optional_param('h', '', PARAM_RAW));
+$eduobjwidth = addslashes_js(optional_param('w', '600', PARAM_RAW));
+$eduobjratio = '';
+if (!empty($eduobjheight) && !empty($eduobjwidth))
+    $eduobjratio = (int)$eduobjheight / (int)$eduobjwidth;
+$eduobjversion = addslashes_js(optional_param('v', '1.0', PARAM_RAW));
+$eduobjrepotype = addslashes_js(optional_param('repoType', '', PARAM_RAW));
 
 ?>
 <html>
@@ -55,16 +53,16 @@ $eduObj_repoType = addslashes_js(optional_param('repoType', '', PARAM_RAW));
 <body>
 <script type="text/javascript">
     try{
-        parent.document.getElementById('object_url').value = '<?php echo $eduObj_res ?>';
-        parent.document.getElementById('title').value = '<?php echo $eduObj_title ?>';
-        parent.document.getElementById('mimetype').value = '<?php echo $eduObj_mimetype ?>';
-        parent.document.getElementById('resourcetype').value = '<?php echo $eduObj_resourceType ?>';
-        parent.document.getElementById('resourceversion').value = '<?php echo $eduObj_resourceVersion ?>';
-        parent.document.getElementById('window_height').value = '<?php echo $eduObj_height ?>';
-        parent.document.getElementById('window_width').value = '<?php echo $eduObj_width ?>';
-        parent.document.getElementById('ratio').value = '<?php echo  $eduObj_ratio?>';
-        parent.document.getElementById('window_version').value = '<?php echo  $eduObj_version?>';
-        parent.document.getElementById('repotype').value = '<?php echo  $eduObj_repoType?>';
+        parent.document.getElementById('object_url').value = '<?php echo $eduobjres ?>';
+        parent.document.getElementById('title').value = '<?php echo $eduobjtitle ?>';
+        parent.document.getElementById('mimetype').value = '<?php echo $eduobjmimetype ?>';
+        parent.document.getElementById('resourcetype').value = '<?php echo $eduobjresourcetype ?>';
+        parent.document.getElementById('resourceversion').value = '<?php echo $eduobjresourceversion ?>';
+        parent.document.getElementById('window_height').value = '<?php echo $eduobjheight ?>';
+        parent.document.getElementById('window_width').value = '<?php echo $eduobjwidth ?>';
+        parent.document.getElementById('ratio').value = '<?php echo  $eduobjratio?>';
+        parent.document.getElementById('window_version').value = '<?php echo  $eduobjversion?>';
+        parent.document.getElementById('repotype').value = '<?php echo  $eduobjrepotype?>';
         var inputs = parent.document.getElementsByTagName("input");
             for (var i = 0; i < inputs.length; i++) {
                 inputs[i].disabled = false;

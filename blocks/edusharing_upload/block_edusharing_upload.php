@@ -20,7 +20,7 @@
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 class block_edusharing_upload extends block_base {
 
     public function init() {
@@ -33,14 +33,14 @@ class block_edusharing_upload extends block_base {
      * @see blocks/block_base::get_content()
      */
     public function get_content() {
-        if ($this->content !== NULL) {
+        if ($this->content !== null) {
             return $this->content;
         }
 
         global $CFG;
         global $COURSE;
 
-        $this->content =  new stdClass;
+        $this->content = new stdClass;
         $this->content->text = '<form action="'.htmlentities($CFG->wwwroot.'/blocks/edusharing_upload/helper/cc_upload.php').'" method="get"><input type="hidden" name="id" value="'.htmlentities($COURSE->id).'" /><input type="submit" value="'.htmlentities(get_string('button_text', 'block_edusharing_upload')).'" /></form>';
 
         return $this->content;

@@ -21,101 +21,112 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
-
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
-
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-
+ *
  * As a special exception to the terms and conditions of version 2.0 of
  * the GPL, you may redistribute this Program in connection with Free/Libre
  * and Open Source Software ("FLOSS") applications as described in Alfresco's
- * FLOSS exception.  You should have recieved a copy of the text describing
+ * FLOSS exception. You should have recieved a copy of the text describing
  * the FLOSS exception, and it is also available here:
  * http://www.alfresco.com/legal/licensing"
  */
 
- /**
- * @package    mod
+/**
+ *
+ * @package mod
  * @subpackage edusharing
- * @copyright  metaVentis GmbH — http://metaventis.com
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright metaVentis GmbH — http://metaventis.com
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_edusharing_web_service extends SoapClient
-{
-   private $securityExtNS = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
-   private $wsUtilityNS   = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd";
-   private $passwordType  = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText";
+class mod_edusharing_web_service extends SoapClient {
 
-   private $ticket;
+    private $securityextns = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
 
-   public function __construct($wsdl, $options = array('trace'  => true, 'exceptions'  => true), $ticket = null) {
-      // Store the current ticket
-      $this->ticket = $ticket;
+    private $wsutilityns = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd";
 
-      // Call the base class
-      @ parent::__construct($wsdl, $options); // if SOAP server is unreachable (unable to get WSDL file) suppress the php warning... errorhandling kicks in later.
-   }
+    private $passwordtype = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText";
 
-   public function __call($function_name, $arguments) {
-      return $this->__soapCall($function_name, $arguments);
-   }
+    private $ticket;
 
-   public function __soapCall($function_name, $arguments, $options=array(), $input_headers=array(), &$output_headers=array()) {
-      if (isset($this->ticket)) {
-         // Automatically add a security header
-         $input_headers[] = new SoapHeader($this->securityExtNS, "Security", null, 1);
-      }
+    public function __construct($wsdl, $options = array('trace'  => true, 'exceptions'  => true), $ticket = null) {
+        // Store the current ticket
+        $this->ticket = $ticket;
 
-      return parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
-   }
+        // Call the base class
+        @ parent::__construct($wsdl, $options); // if SOAP server is unreachable (unable to get WSDL
+                                                // file) suppress the php warning... errorhandling
+                                                // kicks in later.
+    }
 
-   public function __doRequest($request, $location, $action, $version, $one_way = 0) {
-      // If this request requires authentication we have to manually construct the
-      // security headers.
-      if (isset($this->ticket)) {
-         $dom = new DOMDocument("1.0");
-         $dom->loadXML($request);
+    public function __call($functionname, $arguments) {
+        return $this->__soapCall($functionname, $arguments);
+    }
 
-         $securityHeader = $dom->getElementsByTagName("Security");
+    public function __soapCall($functionname, $arguments, $options = array(), $inputheaders = array(),
+            &$outputheaders = array()) {
+        if (isset($this->ticket)) {
+            // Automatically add a security header
+            $inputheaders[] = new SoapHeader($this->securityExtNS, "Security", null, 1);
+        }
 
-         if ($securityHeader->length != 1) {
-            throw new Exception("Expected length: 1, Received: " . $securityHeader->length . ". No Security Header, or more than one element called Security!");
-         }
+        return parent::__soapCall($functionname, $arguments, $options, $inputheaders,
+                $outputheaders);
+    }
 
-         $securityHeader = $securityHeader->item(0);
+    public function __doRequest($request, $location, $action, $version, $oneway = 0) {
+        // If this request requires authentication we have to manually construct the
+        // security headers.
+        if (isset($this->ticket)) {
+            $dom = new DOMDocument("1.0");
+            $dom->loadXML($request);
 
-         // Construct Timestamp Header
-         $timeStamp = $dom->createElementNS($this->wsUtilityNS, "Timestamp");
-         $createdDate = date("Y-m-d\TH:i:s\Z", mktime(date("H")+24, date("i"), date("s"), date("m"), date("d"), date("Y")));
-         $expiresDate = date("Y-m-d\TH:i:s\Z", mktime(date("H")+25, date("i"), date("s"), date("m"), date("d"), date("Y")));
-         $created = new DOMElement("Created", $createdDate, $this->wsUtilityNS);
-         $expires = new DOMElement("Expires", $expiresDate, $this->wsUtilityNS);
-         $timeStamp->appendChild($created);
-         $timeStamp->appendChild($expires);
+            $securityheader = $dom->getElementsByTagName("Security");
 
-         // Construct UsernameToken Header
-         $userNameToken = $dom->createElementNS($this->securityExtNS, "UsernameToken");
-         $userName = new DOMElement("Username", "username", $this->securityExtNS);
-         $passWord = $dom->createElementNS($this->securityExtNS, "Password");
-         $typeAttr = new DOMAttr("Type", $this->passwordType);
-         $passWord->appendChild($typeAttr);
-         $passWord->appendChild($dom->createTextNode($this->ticket));
-         $userNameToken->appendChild($userName);
-         $userNameToken->appendChild($passWord);
+            if ($securityheader->length != 1) {
+                throw new Exception(
+                        "Expected length: 1, Received: " . $securityheader->length .
+                                 ". No Security Header, or more than one element called Security!");
+            }
 
-         // Construct Security Header
-         $securityHeader->appendChild($timeStamp);
-         $securityHeader->appendChild($userNameToken);
+            $securityheader = $securityheader->item(0);
 
-         // Save the XML Request
-         $request = $dom->saveXML();
-      }
+            // Construct Timestamp Header
+            $timestamp = $dom->createElementNS($this->wsUtilityNS, "Timestamp");
+            $createddate = date("Y-m-d\TH:i:s\Z",
+                    mktime(date("H") + 24, date("i"), date("s"), date("m"), date("d"), date("Y")));
+            $expiresdate = date("Y-m-d\TH:i:s\Z",
+                    mktime(date("H") + 25, date("i"), date("s"), date("m"), date("d"), date("Y")));
+            $created = new DOMElement("Created", $createddate, $this->wsUtilityNS);
+            $expires = new DOMElement("Expires", $expiresdate, $this->wsUtilityNS);
+            $timestamp->appendChild($created);
+            $timestamp->appendChild($expires);
 
-      return parent::__doRequest($request, $location, $action, $version,$one_way);
-   }
+            // Construct UsernameToken Header
+            $usernametoken = $dom->createElementNS($this->securityExtNS, "UsernameToken");
+            $username = new DOMElement("Username", "username", $this->securityExtNS);
+            $password = $dom->createElementNS($this->securityExtNS, "Password");
+            $typeattr = new DOMAttr("Type", $this->passwordType);
+            $password->appendChild($typeattr);
+            $password->appendChild($dom->createTextNode($this->ticket));
+            $usernametoken->appendChild($username);
+            $usernametoken->appendChild($password);
+
+            // Construct Security Header
+            $securityheader->appendChild($timestamp);
+            $securityheader->appendChild($usernametoken);
+
+            // Save the XML Request
+            $request = $dom->saveXML();
+        }
+
+        return parent::__doRequest($request, $location, $action, $version, $oneway);
+    }
 }

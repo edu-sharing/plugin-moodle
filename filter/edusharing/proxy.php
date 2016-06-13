@@ -26,28 +26,28 @@ require_once(dirname(__FILE__) . '/../../mod/edusharing/lib.php');
 
 class filter_edusharing_edurender {
 
-    function filter_edusharing_get_render_html($url) {
+    public function filter_edusharing_get_render_html($url) {
 
         $inline = "";
         try {
-            $curl_handle = curl_init($url);
-            if (!$curl_handle) {
+            $curlhandle = curl_init($url);
+            if (!$curlhandle) {
                 throw new Exception('Error initializing CURL.');
             }
-            curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($curl_handle, CURLOPT_HEADER, 0);
+            curl_setopt($curlhandle, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($curlhandle, CURLOPT_HEADER, 0);
             // DO NOT RETURN HTTP HEADERS
-            curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curlhandle, CURLOPT_RETURNTRANSFER, 1);
             // RETURN THE CONTENTS OF THE CALL
-            curl_setopt($curl_handle, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-            curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, false);
-            $inline = curl_exec($curl_handle);
-            curl_close($curl_handle);
+            curl_setopt($curlhandle, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+            curl_setopt($curlhandle, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curlhandle, CURLOPT_SSL_VERIFYHOST, false);
+            $inline = curl_exec($curlhandle);
+            curl_close($curlhandle);
 
         } catch (Exception $e) {
             trigger_error($e->getMessage(), E_USER_WARNING);
-            curl_close($curl_handle);
+            curl_close($curlhandle);
             return false;
         }
 
@@ -55,18 +55,17 @@ class filter_edusharing_edurender {
 
     }
 
-    function filter_edusharing_display($html) {
+    public function filter_edusharing_display($html) {
         global $CFG;
         error_reporting(0);
-        $resId = $_GET['resId'];
+        $resid = $_GET['resId'];
 
         $html = str_replace(array("\n", "\r", "\n"), '', $html);
-        //$html = str_replace('\'', '\\\'', $html);
 
         /*
          * replaces {{{LMS_INLINE_HELPER_SCRIPT}}}
          */
-        $html = str_replace("{{{LMS_INLINE_HELPER_SCRIPT}}}", $CFG->wwwroot . "/filter/edusharing/inlineHelper.php?resId=" . $resId, $html);
+        $html = str_replace("{{{LMS_INLINE_HELPER_SCRIPT}}}", $CFG->wwwroot . "/filter/edusharing/inlineHelper.php?resId=" . $resid, $html);
 
         /*
          * replaces <es:title ...>...</es:title>
@@ -92,11 +91,11 @@ $parts = parse_url($url);
 parse_str($parts['query'], $query);
 require_login($query['course_id']);
 
-$appProperties = json_decode(get_config('edusharing', 'appProperties'));
+$appproperties = json_decode(get_config('edusharing', 'appProperties'));
 $ts = $timestamp = round(microtime(true) * 1000);
 $url .= '&ts=' . $ts;
-$url .= '&sig=' . urlencode(mod_edusharing_get_signature($appProperties->appid . $ts));
-$url .= '&signed=' . urlencode($appProperties->appid . $ts);
+$url .= '&sig=' . urlencode(mod_edusharing_get_signature($appproperties->appid . $ts));
+$url .= '&signed=' . urlencode($appproperties->appid . $ts);
 
 $e = new filter_edusharing_edurender();
 $html = $e->filter_edusharing_get_render_html($url);

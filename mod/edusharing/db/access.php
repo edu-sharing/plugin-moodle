@@ -27,7 +27,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
- 
     'mod/edusharing:addinstance'  => array(
         'riskbitmask'  => RISK_SPAM,
         'captype'  => 'write',

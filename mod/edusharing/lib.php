@@ -27,7 +27,7 @@
  * @subpackage edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * 
+ *
  */
 defined('MOODLE_INTERNAL') || die();
 
@@ -40,18 +40,17 @@ define('DISPLAY_MODE_DOWNLOAD', 'download');
 define('DISPLAY_MODE_INLINE', 'inline');
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) .'/lib');
-require_once dirname(__FILE__).'/lib/Edusharing/EdusharingWebservice.php';
-require_once dirname(__FILE__).'/lib/RenderParameter.php';
-require_once dirname(__FILE__).'/lib/cclib.php';
-require_once dirname(__FILE__).'/locallib.php';
+require_once(dirname(__FILE__).'/lib/Edusharing/EdusharingWebservice.php');
+require_once(dirname(__FILE__).'/lib/RenderParameter.php');
+require_once(dirname(__FILE__).'/lib/cclib.php');
+require_once(dirname(__FILE__).'/locallib.php');
 
 /**
  * If you for some reason need to use global variables instead of constants, do not forget to make them
  * global as this file can be included inside a function scope. However, using the global variables
  * at the module level is not a recommended.
  */
-//global $NEWMODULE_GLOBAL_VARIABLE;
-//$NEWMODULE_QUESTION_OF = array('Life', 'Universe', 'Everything');
+
 
 /**
  * Module feature detection.
@@ -114,31 +113,30 @@ function edusharing_add_instance(stdClass $edusharing) {
     $edusharing->timecreated = time();
     $edusharing->timemodified = time();
 
-    # You may have to add extra stuff in here #
+    // You may have to add extra stuff in here
     $edusharing = mod_edusharing_postprocess($edusharing);
 
-    $appProperties = json_decode(get_config('edusharing', 'appProperties'));
-    $repProperties = json_decode(get_config('edusharing', 'repProperties'));
+    $appproperties = json_decode(get_config('edusharing', 'appProperties'));
+    $repproperties = json_decode(get_config('edusharing', 'repProperties'));
 
     // put the data of the new cc-resource into an array and create a neat XML-file out of it
     $data4xml = array("ccrender");
-    
-    
+
     if (isset($edusharing->object_version)) {
         if ($edusharing->object_version == 1) {
-            $updateVersion = true;
+            $updateversion = true;
             $edusharing->object_version = '';
         } else {
             $edusharing->object_version = 0;
         }
     } else {
 
-        if (isset($edusharing->window_versionshow) && $edusharing->window_versionshow == 'current')
+        if (isset($edusharing->window_versionshow) && $edusharing->window_versionshow == 'current') {
             $edusharing->object_version = $edusharing->window_version;
-        else
+        } else {
             $edusharing->object_version = 0;
+        }
     }
-    
 
     $data4xml[1]["ccuser"]["id"] = mod_edusharing_get_auth_key();
     $data4xml[1]["ccuser"]["name"] = $_SESSION["USER"]->firstname." ".$_SESSION["USER"]->lastname;
@@ -150,39 +148,38 @@ function edusharing_add_instance(stdClass $edusharing) {
     // move popup settings to array
     if (!empty($edusharing->popup)) {
         $parray = explode(',', $edusharing->popup);
-        foreach ($parray as $key  => $fieldstring) {
+        foreach ($parray as $key => $fieldstring) {
             $field = explode('=', $fieldstring);
             $popupfield->$field[0] = $field[1];
         }
     }
 
     // loop trough the list of keys... get the value... put into XML
-    $keyList = array('resizable', 'scrollbars', 'directories', 'location', 'menubar', 'toolbar', 'status', 'width', 'height');
-    foreach ($keyList as $key) {
+    $keylist = array('resizable', 'scrollbars', 'directories', 'location', 'menubar', 'toolbar', 'status', 'width', 'height');
+    foreach ($keylist as $key) {
         $data4xml[1]["ccwindow"][$key] = isSet($popupfield->{$key}) ? $popupfield->{$key} : 0;
     }
-
 
     $data4xml[1]["ccwindow"]["forcepopup"] = isSet($edusharing->popup_window) ? 1 : 0;
     $data4xml[1]["ccdownload"]["download"] = isSet($edusharing->force_download) ? 1 : 0;
 
-    $myXML  = new mod_edusharing_render_parameter();
-    $xml = $myXML->mod_edusharing_get_xml($data4xml);
+    $myxml  = new mod_edusharing_render_parameter();
+    $xml = $myxml->mod_edusharing_get_xml($data4xml);
 
     $id = $DB->insert_record(EDUSHARING_TABLE, $edusharing);
 
-    $SoapClientParams = array();
+    $soapclientparams = array();
 
-    $client = new mod_edusharing_sig_soap_client($repProperties->usagewebservice_wsdl, $SoapClientParams); 
-    
+    $client = new mod_edusharing_sig_soap_client($repproperties->usagewebservice_wsdl, $soapclientparams);
+
     try {
-        
+
         session_write_close();
 
         $params = array(
             "eduRef"  => $edusharing->object_url,
             "user"  => mod_edusharing_get_auth_key(),
-            "lmsId"  => $appProperties->appid,
+            "lmsId"  => $appproperties->appid,
             "courseId"  => $edusharing->course,
             "userMail"  => $_SESSION["USER"]->email,
             "fromUsed"  => '2002-05-30T09:00:00',
@@ -192,21 +189,21 @@ function edusharing_add_instance(stdClass $edusharing) {
             "resourceId"  => $id,
             "xmlParams"  => $xml,
         );
-      
-        $setUsage = $client->setUsage($params);
-        
-        if (isset($updateVersion) && $updateVersion === true) {
-            $edusharing->object_version = $setUsage->setUsageReturn->usageVersion;
+
+        $setusage = $client->setUsage($params);
+
+        if (isset($updateversion) && $updateversion === true) {
+            $edusharing->object_version = $setusage->setUsageReturn->usageVersion;
             $edusharing->id = $id;
             $DB->update_record(EDUSHARING_TABLE, $edusharing);
         }
-        
+
     } catch (Exception $e) {
         $DB->delete_records(EDUSHARING_TABLE, array('id'  => $id));
         trigger_error($e->getMessage());
         return false;
     }
-    
+
     return $id;
 }
 
@@ -225,7 +222,6 @@ function edusharing_update_instance(stdClass $edusharing) {
     global $COURSE;
     global $DB;
 
-
     // FIX: when editing a moodle-course-module the $edusharing->id will be named $edusharing->instance
     if ( ! empty($edusharing->instance) ) {
         $edusharing->id = $edusharing->instance;
@@ -239,14 +235,14 @@ function edusharing_update_instance(stdClass $edusharing) {
         throw new Exception('Error loading edu-sharing memento.');
     }
 
-    # You may have to add extra stuff in here #
+    // You may have to add extra stuff in here
     $edusharing = mod_edusharing_postprocess($edusharing);
 
     // fetch current node data
-    
-    $appProperties = json_decode(get_config('edusharing', 'appProperties'));
-    $repProperties = json_decode(get_config('edusharing', 'repProperties'));
-    
+
+    $appproperties = json_decode(get_config('edusharing', 'appProperties'));
+    $repproperties = json_decode(get_config('edusharing', 'repProperties'));
+
     // put the data of the new cc-resource into an array and create a neat XML-file out of it
     $data4xml = array("ccrender");
 
@@ -261,14 +257,14 @@ function edusharing_update_instance(stdClass $edusharing) {
     // move popup settings to array
     if (!empty($edusharing->popup)) {
         $parray = explode(',', $edusharing->popup);
-        foreach ($parray as $key  => $fieldstring) {
+        foreach ($parray as $key => $fieldstring) {
             $field = explode('=', $fieldstring);
             $popupfield->$field[0] = $field[1];
         }
     }
     // loop trough the list of keys... get the value... put into XML
-    $keyList = array('resizable', 'scrollbars', 'directories', 'location', 'menubar', 'toolbar', 'status', 'width', 'height');
-    foreach ($keyList as $key) {
+    $keylist = array('resizable', 'scrollbars', 'directories', 'location', 'menubar', 'toolbar', 'status', 'width', 'height');
+    foreach ($keylist as $key) {
         $data4xml[1]["ccwindow"][$key] = isSet($popupfield->{$key}) ? $popupfield->{$key} : 0;
     }
 
@@ -276,24 +272,21 @@ function edusharing_update_instance(stdClass $edusharing) {
     $data4xml[1]["ccdownload"]["download"] = isSet($edusharing->force_download) ? 1 : 0;
     $data4xml[1]["cctracking"]["tracking"] = ($edusharing->tracking == 0) ? 0 : 1;
 
-    $myXML= new mod_edusharing_render_parameter();
-    $xml = $myXML->mod_edusharing_get_xml($data4xml);
+    $myxml = new mod_edusharing_render_parameter();
+    $xml = $myxml->mod_edusharing_get_xml($data4xml);
 
     try {
-        // stop session to avoid deadlock during edu-sharing call-backs
-        session_write_close();
-
-        $connectionUrl = $repProperties->usagewebservice_wsdl;
-        if ( ! $connectionUrl ) {
+        $connectionurl = $repproperties->usagewebservice_wsdl;
+        if (!$connectionurl) {
             trigger_error('Missing config-param "usagewebservice_wsdl".', E_USER_WARNING);
         }
 
-        $client = new mod_edusharing_sig_soap_client($connectionUrl, array());
+        $client = new mod_edusharing_sig_soap_client($connectionurl, array());
 
         $params = array(
             "eduRef"  => $edusharing->object_url,
             "user"  => mod_edusharing_get_auth_key(),
-            "lmsId"  => $appProperties->appid,
+            "lmsId"  => $appproperties->appid,
             "courseId"  => $edusharing->course,
             "userMail"  => $_SESSION["USER"]->email,
             "fromUsed"  => '2002-05-30T09:00:00',
@@ -303,14 +296,12 @@ function edusharing_update_instance(stdClass $edusharing) {
             "resourceId"  => $edusharing->id,
             "xmlParams"  => $xml,
         );
-       
-        
-        $setUsage = $client->setUsage($params);
+
+        $setusage = $client->setUsage($params);
         $edusharing->version = $memento->object_version;
         // throws exception on error, so no further checking required
         $DB->update_record(EDUSHARING_TABLE, $edusharing);
-    }
-    catch (SoapFault $exception) {
+    } catch (SoapFault $exception) {
         // roll back
         $DB->update_record(EDUSHARING_TABLE, $memento);
 
@@ -340,36 +331,31 @@ function edusharing_delete_instance($id) {
         throw new Exception('Error loading edusharing-object from database.');
     }
 
-    $appProperties = json_decode(get_config('edusharing', 'appProperties'));
-    $repProperties = json_decode(get_config('edusharing', 'repProperties'));
+    $appproperties = json_decode(get_config('edusharing', 'appProperties'));
+    $repproperties = json_decode(get_config('edusharing', 'repProperties'));
 
     try {
         // stop session to avoid deadlock during edu-sharing call-backs
         session_write_close();
 
-        $connectionUrl = $repProperties->usagewebservice_wsdl;
-        if ( ! $connectionUrl ) {
+        $connectionurl = $repproperties->usagewebservice_wsdl;
+        if ( ! $connectionurl ) {
             throw new Exception('No "usagewebservice_wsdl" configured.');
         }
 
-        $ccwsusage = new mod_edusharing_sig_soap_client($connectionUrl, array());        
+        $ccwsusage = new mod_edusharing_sig_soap_client($connectionurl, array());
 
         $params = array(
-            'eduRef'  => $edusharing->object_url,
-           //'repoId'  => $repository_id,
+           'eduRef'  => $edusharing->object_url,
            'user'  => mod_edusharing_get_auth_key(),
-           'lmsId'  => $appProperties->appid,
+           'lmsId'  => $appproperties->appid,
            'courseId'  => $edusharing->course,
-           //'parentNodeId'  => $object_id,
            'resourceId'  => $edusharing->id
         );
 
         $ccwsusage->deleteUsage($params);
-        
-        // restart stopped session
-        session_start();
-    }
-    catch (Exception $exception) {
+
+    } catch (Exception $exception) {
         trigger_error($exception->getmessage(), E_USER_WARNING);
     }
 
@@ -421,7 +407,7 @@ function edusharing_user_complete($course, $user, $mod, $edusharing) {
  * @todo Finish documenting this function
  */
 function edusharing_print_recent_activity($course, $isteacher, $timestart) {
-    return false;//True if anything was printed, otherwise false
+    return false; // True if anything was printed, otherwise false
 }
 
 /**
@@ -464,13 +450,6 @@ function edusharing_scale_used($edusharingid, $scaleid) {
     global $DB;
 
     $return = false;
-
-    //$rec = $DB->get_record(EDUSHARING_TABLE, array("id"  => "$edusharingid", "scale"  => "-$scaleid"));
-    //
-    //if (!empty($rec) && !empty($scaleid)) {
-    //  $return = true;
-    //}
-
     return $return;
 }
 
@@ -485,11 +464,7 @@ function edusharing_scale_used($edusharingid, $scaleid) {
 function edusharing_scale_used_anywhere($scaleid) {
     global $DB;
 
-//  if ($scaleid and $DB->record_exists(EDUSHARING_TABLE, 'grade', -$scaleid)) {
-//      return true;
-//  } else {
-        return false;
-//  }
+    return false;
 }
 
 /**
@@ -525,7 +500,6 @@ function edusharing_get_coursemodule_info($coursemodule) {
     global $CFG;
     global $DB;
 
-    //$info = new stdClass(); not for moodle 2.x
     $info = new cached_cm_info();
 
     $resource = $DB->get_record(EDUSHARING_TABLE, array('id'  => $coursemodule->instance));
@@ -586,58 +560,58 @@ function mod_edusharing_postprocess($edusharing) {
  * Get the object-id from object-url.
  * E.g. "abc-123-xyz-456789" for "ccrep://homeRepository/abc-123-xyz-456789"
  *
- * @param string $object_url
+ * @param string $objecturl
  * @throws Exception
  * @return string
  */
-function _edusharing_get_object_id_from_url($object_url) {
-    $object_id = parse_url($object_url, PHP_URL_PATH);
-    if ( ! $object_id ) {
+function _edusharing_get_object_id_from_url($objecturl) {
+    $objectid = parse_url($objecturl, PHP_URL_PATH);
+    if ( ! $objectid ) {
         trigger_error('Error reading object-id from object-url.', E_USER_WARNING);
         return false;
     }
 
-    $object_id = str_replace('/', '', $object_id);
+    $objectid = str_replace('/', '', $objectid);
 
-    return $object_id;
+    return $objectid;
 }
 
 /**
  * Get the repository-id from object-url.
  * E.g. "homeRepository" for "ccrep://homeRepository/abc-123-xyz-456789"
  *
- * @param string $object_url
+ * @param string $objecturl
  * @throws Exception
  * @return string
  */
-function mod_edusharing_get_repository_id_from_url($object_url) {
-    $rep_id = parse_url($object_url, PHP_URL_HOST);
-    if ( ! $rep_id ) {
+function mod_edusharing_get_repository_id_from_url($objecturl) {
+    $repid = parse_url($objecturl, PHP_URL_HOST);
+    if ( ! $repid ) {
         throw new Exception('Error reading repository-id from object-url.');
     }
 
-    return $rep_id;
+    return $repid;
 }
 
 
 
-function mod_edusharing_get_usage_metadata($courseId) {
+function mod_edusharing_get_usage_metadata($courseid) {
     global $DB;
-    
-    if (empty($courseId))
-           return '';
-    
-    $course = $DB->get_record('course', array('id'  => $courseId));
-    $category = $DB->get_record('course_categories', array('id'  => $course->category));
-    
-    $usageMetaData = array();
-    $usageMetaData['courseId'] = $courseId;
-    $usageMetaData['courseFullname'] = $course->fullname;
-    $usageMetaData['courseShortname'] = $course->shortname;
-    $usageMetaData['courseSummary'] = $course->summary;
-    $usageMetaData['categoryId'] = $course->category;
-    $usageMetaData['categoryName'] = $category->name;
 
-    return $usageMetaData;
+    if (empty($courseid))
+           return '';
+
+    $course = $DB->get_record('course', array('id'  => $courseid));
+    $category = $DB->get_record('course_categories', array('id'  => $course->category));
+
+    $usagemetadata = array();
+    $usagemetadata['courseId'] = $courseid;
+    $usagemetadata['courseFullname'] = $course->fullname;
+    $usagemetadata['courseShortname'] = $course->shortname;
+    $usagemetadata['courseSummary'] = $course->summary;
+    $usagemetadata['categoryId'] = $course->category;
+    $usagemetadata['categoryName'] = $category->name;
+
+    return $usagemetadata;
 
 }

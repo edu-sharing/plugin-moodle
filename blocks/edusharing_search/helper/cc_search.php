@@ -19,7 +19,7 @@
  - auth against alfresco repos. (ticket handshake / user sync)
  - opens external edu-sharingSearch in iFrame
  */
- 
+
 /**
  * @package    block
  * @subpackage edusharing_search
@@ -35,7 +35,7 @@ global $SESSION;
 require_once('../../../mod/edusharing/lib/cclib.php');
 require_once('../../../mod/edusharing/lib.php');
 
-$appProperties = json_decode(get_config('edusharing', 'appProperties'));
+$appproperties = json_decode(get_config('edusharing', 'appProperties'));
 
 $id = optional_param('id', 0, PARAM_INT);
 if ( ! $id ) {
@@ -43,7 +43,7 @@ if ( ! $id ) {
     exit();
 }
 
-$PAGE->set_url('/blocks/edusharing_search/helper/cc_search.php',array('id'  => $id,'search' => 'test'));
+$PAGE->set_url('/blocks/edusharing_search/helper/cc_search.php', array('id' => $id, 'search' => 'test'));
 
 $course = $DB->get_record('course', array('id'  => $id));
 if ( ! $course ) {
@@ -55,23 +55,23 @@ require_login($course->id);
 echo $OUTPUT->header();
 
 $ccauth = new mod_edusharing_web_service_factory();
-$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties->appid);
+$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appproperties->appid);
 if ( ! $ticket ) {
     exit();
 }
 
-if ( empty($appProperties->cc_gui_url) ) {
+if ( empty($appproperties->cc_gui_url) ) {
     trigger_error('No "cc_gui_url" configured.', E_USER_WARNING);
 }
 
-$link = $appProperties->cc_gui_url; // link to the external cc-search
+$link = $appproperties->cc_gui_url; // link to the external cc-search
 $link .= '?mode=0';
 $user = mod_edusharing_get_auth_key();
 $link .= '&user='.urlencode($user);
 $link .= '&ticket='.urlencode($ticket);
 
-$_my_lang = mod_edusharing_get_current_users_language_code();
-$link .= '&locale=' . urlencode($_my_lang);
+$mylang = mod_edusharing_get_current_users_language_code();
+$link .= '&locale=' . urlencode($mylang);
 
 $link .= '&p_startsearch=1';
 
@@ -80,9 +80,7 @@ if (!empty($search)) {
     $link .= '&p_searchtext='.urlencode($search);
 }
 
-// -------------------------------------------------------------------------
-//  open the external edu-sharingSearch page in iframe
-// -------------------------------------------------------------------------
+// Open the external edu-sharingSearch page in iframe
 
 ?>
 

@@ -16,7 +16,7 @@
 
 /**
  * Prints a particular instance of edusharing
- * 
+ *
  * @package    mod
  * @subpackage edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
@@ -35,56 +35,53 @@ if ($id) {
     $cm         = get_coursemodule_from_id('edusharing', $id, 0, false, MUST_EXIST);
     $course     = $DB->get_record('course', array('id'  => $cm->course), '*', MUST_EXIST);
     $edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id'  => $cm->instance), '*', MUST_EXIST);
-    $vId = $id;
-    $courseId = $course->id;
-} elseif ($n) {
+    $vid = $id;
+    $courseid = $course->id;
+} else if ($n) {
     $edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id'  => $n), '*', MUST_EXIST);
     $course     = $DB->get_record('course', array('id'  => $edusharing->course), '*', MUST_EXIST);
     $cm         = get_coursemodule_from_instance('edusharing', $edusharing->id, $course->id, false, MUST_EXIST);
-    $vId = $edusharing->id;
-    $courseId = $course->id;
+    $vid = $edusharing->id;
+    $courseid = $course->id;
 } else {
     trigger_error('You must specify a course_module ID or an instance ID', E_USER_WARNING);
 }
 
-$PAGE->set_url('/mod/edusharing/view.php?id='.$vId);
+$PAGE->set_url('/mod/edusharing/view.php?id='.$vid);
 
 
 require_login($course, true, $cm);
 
-$appProperties = json_decode(get_config('edusharing', 'appProperties'));
-$repProperties = json_decode(get_config('edusharing', 'repProperties'));
+$appproperties = json_decode(get_config('edusharing', 'appProperties'));
+$repproperties = json_decode(get_config('edusharing', 'repProperties'));
 
 // authenticate to assure requesting user exists in home-repository
 try {
 
-    $wsdl = $repProperties->authenticationwebservice_wsdl;
+    $wsdl = $repproperties->authenticationwebservice_wsdl;
     $alfservice = new mod_edusharing_sig_soap_client($wsdl, array());
-    $paramsTrusted = array("applicationId"  => $appProperties->appid, "ticket"  => session_id(), "ssoData"  => mod_edusharing_get_auth_data(),'repoId'  => $appProperties->homerepid);
-    $alfReturn = $alfservice->authenticateByTrustedApp($paramsTrusted);
-    $ticket = $alfReturn->authenticateByTrustedAppReturn->ticket;
+    $paramsrusted = array("applicationId"  => $appproperties->appid, "ticket"  => session_id(), "ssoData"  => mod_edusharing_get_auth_data(), 'repoId'  => $appproperties->homerepid);
+    $alfreturn = $alfservice->authenticateByTrustedApp($paramsrusted);
+    $ticket = $alfreturn->authenticateByTrustedAppReturn->ticket;
 
-}
-catch (Exception $exception) {
+} catch (Exception $exception) {
     trigger_error($exception->getMessage(), E_USER_WARNING);
     return false;
 }
 
-$redirect_url = mod_edusharing_get_redirect_url($edusharing, $appProperties, $repProperties);
-    
+$redirecturl = mod_edusharing_get_redirect_url($edusharing, $appproperties, $repproperties);
 $ts = $timestamp = round(microtime(true) * 1000);
-$redirect_url .= '&ts=' . $ts;
-$redirect_url .= '&sig=' . urlencode(mod_edusharing_get_signature($appProperties->appid . $ts));
-$redirect_url .= '&signed=' . urlencode($appProperties->appid . $ts);
+$redirecturl .= '&ts=' . $ts;
+$redirecturl .= '&sig=' . urlencode(mod_edusharing_get_signature($appproperties->appid . $ts));
+$redirecturl .= '&signed=' . urlencode($appproperties->appid . $ts);
 
 $backlink = '';
 if (empty($edusharing->popup_window))
-    $backlink = urlencode($CFG->wwwroot . '/course/view.php?id=' . $courseId);
-//if resource was opened with $edusharing->popup_window disregarded
+    $backlink = urlencode($CFG->wwwroot . '/course/view.php?id=' . $courseid);
 if (!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'modedit.php') !== false)
     $backlink = urlencode($_SERVER['HTTP_REFERER']);
 if (!empty($backlink))
-    $redirect_url .= '&backLink=' . $backlink;    
+    $redirecturl .= '&backLink=' . $backlink;
 
-redirect($redirect_url);
+redirect($redirecturl);
 

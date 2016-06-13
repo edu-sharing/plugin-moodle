@@ -61,8 +61,7 @@ try {
 
     header('Content-type: application/json', true, 200);
     echo json_encode($edusharing);
-}
-catch (Exception $exception) {
+} catch (Exception $exception) {
     trigger_error($exception->getMessage(), E_USER_WARNING);
     header('HTTP/1.1 500 Internal Server Error', true, 500);
 }

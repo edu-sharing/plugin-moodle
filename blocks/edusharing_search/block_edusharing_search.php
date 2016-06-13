@@ -40,14 +40,14 @@ class block_edusharing_search extends block_base
      * @see blocks/block_base::get_content()
      */
     public function get_content() {
-        if ($this->content !== NULL) {
+        if ($this->content !== null) {
             return $this->content;
         }
 
         global $CFG;
         global $COURSE;
 
-        $this->content         =  new stdClass;
+        $this->content         = new stdClass;
         $this->content->text   = '<form action="'.$CFG->wwwroot.'/blocks/edusharing_search/helper/cc_search.php" method="get"><input type="hidden" name="id" value="'.htmlentities($COURSE->id).'" /><input type="text" style="max-width: 90%;" name="search" value="'.htmlentities(get_string('search_field_hint', 'block_edusharing_search')).'" onclick="if (this.value==\''.htmlentities(get_string('search_field_hint', 'block_edusharing_search')).'\') this.value=\'\';" /><input type="submit" value="'.htmlentities(get_string('button_text', 'block_edusharing_search')).'" /></form>';
 
         return $this->content;

@@ -20,8 +20,8 @@
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once dirname(__FILE__).'/Edusharing/EdusharingWebservice.php';
-require_once dirname(__FILE__).'/../sigSoapClient.php';
+require_once(dirname(__FILE__).'/Edusharing/EdusharingWebservice.php');
+require_once(dirname(__FILE__).'/../sigSoapClient.php');
 
 
 class mod_edusharing_web_service_factory {
@@ -31,7 +31,7 @@ class mod_edusharing_web_service_factory {
      *
      * @var string
      */
-    private $authentication_service_wsdl = '';
+    private $authenticationservicewsdl = '';
 
     /**
      *
@@ -39,9 +39,9 @@ class mod_edusharing_web_service_factory {
      * @throws Exception
      */
     public function __construct() {
-        $repProperties = json_decode(get_config('edusharing', 'repProperties'));    
-        $this->authentication_service_wsdl = $repProperties->authenticationwebservice_wsdl;
-        if ( empty($this->authentication_service_wsdl) ) {
+        $repproperties = json_decode(get_config('edusharing', 'repProperties'));
+        $this->authenticationservicewsdl = $repproperties->authenticationwebservice_wsdl;
+        if ( empty($this->authenticationservicewsdl) ) {
             trigger_error('No "authenticationwebservice_wsdl" configured.', E_USER_WARNING);
         }
     }
@@ -49,58 +49,56 @@ class mod_edusharing_web_service_factory {
 
     /**
      *
-     * @param string $home_app_id
+     * @param string $homeappid
      */
 
-    public function mod_edusharing_authentication_get_ticket($home_app_id) {
+    public function mod_edusharing_authentication_get_ticket($homeappid) {
 
-        //ticket available
+        // ticket available
         if (isset($_SESSION["USER"]->ticket)) {
 
-            //ticket is younger than 10s, we must not check
-            if (isset($_SESSION["USER"]->ticketValidationTs) && time() - $_SESSION["USER"]->ticketValidationTs < 10)
+            // ticket is younger than 10s, we must not check
+            if (isset($_SESSION["USER"]->ticketvalidationts)
+                    && time() - $_SESSION["USER"]->ticketvalidationts < 10)
                 return $_SESSION["USER"]->ticket;
-                    
+
             try {
-                $eduService = new mod_edusharing_sig_soap_client($this->authentication_service_wsdl, array());
+                $eduservice = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl, array());
             } catch (Exception $e) {
-                trigger_error($this->authentication_service_wsdl  . ' not reachable. Cannot utilize edu-sharing network.', E_USER_WARNING);
+                trigger_error($this->authenticationservicewsdl  . ' not reachable. Cannot utilize edu-sharing network.', E_USER_WARNING);
             }
 
             try {
-                //ticket is older than 10s
+                // ticket is older than 10s
                 $params = array(
                     "username"  => mod_edusharing_get_auth_key(),
                     "ticket"  => $_SESSION["USER"]->ticket
                 );
-                
-                $alfReturn = $eduService->checkTicket($params);
-                
-                if ( $alfReturn->checkTicketReturn ) {
-                  $_SESSION["USER"]->ticketValidationTs = time();
-                  return $_SESSION["USER"]->ticket;
+
+                $alfreturn = $eduservice->checkTicket($params);
+
+                if ($alfreturn->checkTicketReturn) {
+                    $_SESSION["USER"]->ticketvalidationts = time();
+                    return $_SESSION["USER"]->ticket;
                 }
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                  trigger_error('Invalid ticket. Cannot utilize edu-sharing network.', E_USER_WARNING);
-                 error_log($e);
             }
 
         }
 
         // no or invalid ticket available
         // request new ticket
-        $paramsTrusted = array("applicationId"  => $home_app_id, "ticket"  => session_id(), "ssoData"  => mod_edusharing_get_auth_data());
+        $paramstrusted = array("applicationId"  => $homeappid, "ticket"  => session_id(), "ssoData"  => mod_edusharing_get_auth_data());
         try {
-            $client = new mod_edusharing_sig_soap_client($this->authentication_service_wsdl, array());
-            $return = $client->authenticateByTrustedApp($paramsTrusted);
+            $client = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl, array());
+            $return = $client->authenticateByTrustedApp($paramstrusted);
             $ticket = $return->authenticateByTrustedAppReturn->ticket;
             $_SESSION["USER"]->ticket = $ticket;
-            $_SESSION["USER"]->ticketValidationTs = time();
+            $_SESSION["USER"]->ticketvalidationts = time();
             return $ticket;
         } catch (Exception $e) {
             trigger_error('Cannot utilize edu-sharing network because authentication failed. Error message: ' . $e->getMessage(), E_USER_WARNING);
-            error_log($e);
         }
 
         return false;

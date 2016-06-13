@@ -34,14 +34,14 @@ class block_edusharing_workspace extends block_base {
      * @see blocks/block_base::get_content()
      */
     public function get_content() {
-        if ($this->content !== NULL) {
+        if ($this->content !== null) {
             return $this->content;
         }
 
         global $CFG;
         global $COURSE;
 
-        $this->content =  new stdClass;
+        $this->content = new stdClass;
         $this->content->text = '<form action="'.$CFG->wwwroot.'/blocks/edusharing_workspace/helper/cc_workspace.php" method="get"><input type="hidden" name="id" value="'.$COURSE->id.'" /><input type="submit" value="'.htmlentities(get_string('button_text', 'block_edusharing_workspace')).'" /></form>';
 
         return $this->content;

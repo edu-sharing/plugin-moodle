@@ -22,17 +22,17 @@
  */
 
 $capabilities = array(
- 
+
     'block/edusharing_upload:myaddinstance'  => array(
         'captype'  => 'write',
         'contextlevel'  => CONTEXT_SYSTEM,
         'archetypes'  => array(
             'user'  => CAP_ALLOW
         ),
- 
+
         'clonepermissionsfrom'  => 'moodle/my:manageblocks'
     ),
- 
+
     'block/edusharing_upload:addinstance'  => array(
         'riskbitmask'  => RISK_SPAM | RISK_XSS,
         'captype'  => 'write',
@@ -41,7 +41,6 @@ $capabilities = array(
             'editingteacher'  => CAP_ALLOW,
             'manager'  => CAP_ALLOW
         ),
- 
         'clonepermissionsfrom'  => 'moodle/site:manageblocks'
     ),
 );
