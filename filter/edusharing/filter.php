@@ -51,15 +51,7 @@ class filter_edusharing extends moodle_text_filter {
      *
      * @var bool
      */
-    private $reset_text_filter_cache = true;
-
-    /**
-     * The scripts needed for ajax rendering
-     *
-     * @var array
-     */
-    private $scripts = array();
-    
+    private $reset_text_filter_cache = true; 
     
     protected $appProperties = array();
     protected $repProperties = array();
@@ -114,33 +106,18 @@ class filter_edusharing extends moodle_text_filter {
             return $text;
         }
 
-        if (in_array($options['originalformat'], explode(',', $this -> get_global_config('formats')))) {
-            // $this->convert_urls_into_links($text);
-        }
-
         // store unfiltered text to return in case of error
         $memento = $text;
 
         try {
-
-            $text = '<?xml version="1.0" encoding="utf-8" ?><div>' . $text . '</div>';
-
-            $DOM = new DOMDocument('1.0');
-            $DOM -> formatOutput = true;
-            if (!$DOM -> loadHTML($text)) {
-                throw new Exception('Error loading (X)-HTML to be filtered.');
+            preg_match_all('#<img(.*)es:resource_id(.*)>#Umsi', $text, $matchesImg, PREG_PATTERN_ORDER);
+            preg_match_all('#<a(.*)es:resource_id(.*)>(.*)</a>#Umsi', $text, $matchesA, PREG_PATTERN_ORDER);
+            $matches = array_merge($matchesImg[0], $matchesA[0]);
+            
+            foreach($matches as $match) {
+                $text = str_replace($match, $this -> convertObject($match), $text, $count);
             }
 
-            $this -> filter_edusharing_traverse($DOM -> documentElement);
-
-            foreach ($this->scripts as $script) {
-                $script = new DOMElement('script', $script);
-                $DOM -> documentElement -> appendChild($script);
-            }
-
-            $this -> scripts = array();
-
-            $text = $DOM -> saveHTML($DOM -> documentElement);
         } catch(Exception $exception) {
             trigger_error($exception -> getMessage(), E_USER_WARNING);
             return $memento;
@@ -149,70 +126,72 @@ class filter_edusharing extends moodle_text_filter {
         return $text;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // internal implementation starts here
-    ////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Returns the global filter setting
-     *
-     * If the $name is provided, returns single value. Otherwise returns all
-     * global settings in object. Returns null if the named setting is not
-     * found.
-     *
-     * @param mixed $name optional config variable name, defaults to null for all
-     * @return string|object|null
-     */
-    protected function get_global_config($name = null) {
-        $this -> load_global_config();
-        if (is_null($name)) {
-            return self::$globalconfig;
-
-        } elseif (array_key_exists($name, self::$globalconfig)) {
-            return self::$globalconfig -> {$name};
-
-        } else {
-            return null;
+    private function convertObject($object) {
+        global $DB;
+        $doc = new DOMDocument();
+        $doc->loadHTML($object);
+        
+        $node = $doc->getElementsByTagName('a')[0];
+        if(empty($node))
+            $node = $doc->getElementsByTagName('img')[0];
+        if(empty($node)) {
+            trigger_error('Could not get node', E_USER_WARNING);
+            return false;
         }
+
+        $edusharing = $DB -> get_record(EDUSHARING_TABLE, array('id' => (int)$node->getAttribute('es:resource_id')));
+        if (!$edusharing) {
+            trigger_error('Error loading resource from db.', E_USER_WARNING);
+            return false;
+        }
+        $renderParams = array();
+        $renderParams['title'] = $node->getAttribute('title');
+        $renderParams['mimetype'] = $node->getAttribute('es:mimetype');
+
+        $converted = $this -> filter_edusharing_render_inline($edusharing, $renderParams);
+        $wrapperAttributes = array();
+        
+        $wrapperAttributes[] = 'id="' . (int)$node->getAttribute('es:resource_id') . '"';
+        $wrapperAttributes[] = 'class="edu_wrapper"';
+        if (strpos($renderParams['mimetype'], 'image') !== false)
+            $wrapperAttributes[] = 'data-id="' . (int)$node->getAttribute('es:resource_id') . '"';
+
+        $StyleAttr = '';
+        switch($edusharing->window_float) {
+            case 'left' :
+                $StyleAttr .= 'display: block; float: left; margin: 0 5px 5px 0;';
+                break;
+            case 'right' :
+                $StyleAttr .= 'display: block; float: right; margin: 0 0 5px 5px;';
+                break;
+            case 'inline' :
+                $StyleAttr .= 'display: inline-block; margin: 0 5px;';
+                break;
+            case 'none' :
+            default :
+                $StyleAttr .= 'display: block; float: none; margin: 5px 0;';
+                break;
+        }
+
+        if ($edusharing -> window_width) {
+            $StyleAttr .= ' width: ' . $edusharing->window_width . 'px;';
+            $tagAttributes = 'width="' . $edusharing->window_width . '"';
+        }
+
+        if ($edusharing -> window_height) {
+            $StyleAttr .= ' height: ' . $edusharing->window_height . 'px;';
+            $tagAttr[] = 'height="' . $edusharing->window_height . '"';
+        }
+
+        $wrapperAttributes[] = 'style="' . $StyleAttr . '"';
+        
+        return '<div ' . implode(' ', $wrapperAttributes) . ' '. $tagAttributes .'>' . $converted  . '</div>';
     }
 
-    /**
-     * Makes sure that the global config is loaded in $this->globalconfig
-     *
-     * @return void
-     */
-    protected function load_global_config() {
-        if (is_null(self::$globalconfig)) {
-            self::$globalconfig = get_config('filter_edusharing');
-        }
-    }
+
 
     /**
-     * Replaces tokens inserted by renderservice to be replaced on "client"-side
-     *
-     * @param DOMNode $RenderNode
-     * @param stdClass $edusharing
-     */
-    protected function filter_edusharing_replace_render_tokens(DOMNode $RenderNode, stdClass $edusharing) {
-        $Nodes = array($RenderNode);
-
-        while (!empty($Nodes)) {
-            $Node = array_shift($Nodes);
-            if ($Node -> hasChildNodes()) {
-                foreach ($Node->childNodes as $ChildNode) {
-                    $Nodes[] = $ChildNode;
-                }
-            }
-
-            if ($Node -> nodeType != XML_ELEMENT_NODE) {
-                continue;
-            }
-
-        }
-    }
-
-    /**
-     * Request inline-rendered snippet from repository's render-service.
+     * Build container
      *
      * @param stdClass $edusharing
      * @throws Exception
@@ -231,116 +210,7 @@ class filter_edusharing extends moodle_text_filter {
 
         $url = mod_edusharing_get_redirect_url($edusharing, $this -> appProperties, $this -> repProperties, DISPLAY_MODE_INLINE);
         $inline = '<div class="eduContainer" data-type="esObject" data-url="'.$CFG->wwwroot.'/filter/edusharing/proxy.php?URL='.urlencode($url).'&amp;resId='.$edusharing->id.'&amp;title='.urlencode($renderParams['title']).'&amp;mimetype='.$renderParams['mimetype'].'"><div class="inner"><div class="spinner1"></div></div><div class="inner"><div class="spinner2"></div></div><div class="inner"><div class="spinner3"></div></div>edu sharing object</div>';
-     
-
+        
         return $inline;
     }
-
-    /**
-     * Filter edu-sharing node.
-     *
-     * @param string $Node
-     */
-    protected function filter_edusharing_filter_node(DOMNode $Placeholder) {
-        global $CFG;
-        global $COURSE;
-        global $DB;
-
-        $resource_id = $Placeholder -> getAttribute('es:resource_id');
-        if (!$resource_id) {
-            trigger_error('Error reading resource-id.', E_USER_WARNING);
-            return false;
-        }
-
-        $edusharing = $DB -> get_record(EDUSHARING_TABLE, array('id' => $resource_id));
-        if (!$edusharing) {
-            trigger_error('Error loading resource from db.', E_USER_WARNING);
-            return false;
-        }
-
-        $renderParams['title'] = $Placeholder -> getAttribute('title');
-        $renderParams['mimetype'] = $Placeholder -> getAttribute('es:mimetype');
-        $rendered = $this -> filter_edusharing_render_inline($edusharing, $renderParams);
-
-        if ($rendered) {
-            // enforce single-root node for XML comliance
-            $rendered = '<div>' . $rendered . '</div>';
-
-            $DOM = new DOMDocument('1.0', 'utf-8');
-            if (!$DOM -> loadXML($rendered)) {
-                return false;
-            }
-
-            $this -> filter_edusharing_replace_render_tokens($DOM -> documentElement, $edusharing);
-
-            $RenderNode = $Placeholder -> ownerDocument -> importNode($DOM -> documentElement, true);
-            $RenderNode -> setAttribute('id', 'edu_wrapper_' . $edusharing -> id);
-
-            $RenderNode -> setAttribute('class', 'edu_wrapper');
-
-            if (strpos($renderParams['mimetype'], 'image') !== false)
-                $RenderNode -> setAttribute('data-id', $edusharing -> id);
-
-            $Placeholder -> parentNode -> insertBefore($RenderNode, $Placeholder);
-            $Placeholder -> parentNode -> removeChild($Placeholder);
-
-            $StyleAttr = '';
-
-            switch($edusharing->window_float) {
-                case 'left' :
-                    $StyleAttr .= 'display: block; float: left; margin: 0 5px 5px 0;';
-                    break;
-                case 'right' :
-                    $StyleAttr .= 'display: block; float: right; margin: 0 0 5px 5px;';
-                    break;
-                case 'inline' :
-                    $StyleAttr .= 'display: inline-block; margin: 0 5px;';
-                    break;
-                case 'none' :
-                default :
-                    $StyleAttr .= 'display: block; float: none; margin: 5px 0;';
-                    break;
-            }
-
-            if ($edusharing -> window_width) {
-                $StyleAttr .= ' width: ' . $edusharing -> window_width . 'px;';
-                $RenderNode -> setAttribute('width', $edusharing -> window_width);
-            }
-
-            if ($edusharing -> window_height) {
-                $StyleAttr .= ' height: ' . $edusharing -> window_height . 'px;';
-                $RenderNode -> setAttribute('height', $edusharing -> window_height);
-            }
-
-            $RenderNode -> setAttribute('style', $StyleAttr);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     *
-     * @param DOMNode $Node
-     */
-    protected function filter_edusharing_traverse(DOMNode $Node) {
-        global $CFG;
-        global $COURSE;
-        global $DB;
-
-        if ($Node -> nodeType == XML_ELEMENT_NODE) {
-            // do not use foreach to iterate over DomNodes
-            for ($i = 0; $i < $Node -> childNodes -> length; ++$i) {
-                $this -> filter_edusharing_traverse($Node -> childNodes -> item($i));
-            }
-
-            if ($Node -> hasAttribute('es:resource_id')) {
-                if (!$this -> filter_edusharing_filter_node($Node)) {
-                    $Node -> parentNode -> removeChild($Node);
-                }
-            }
-        }
-    }
-
 }
