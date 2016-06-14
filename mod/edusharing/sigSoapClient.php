@@ -36,7 +36,7 @@ class mod_edusharing_sig_soap_client extends SoapClient {
         try {
             $timestamp = round(microtime(true) * 1000);
             $signdata = $this->mod_edusharing_get_app_properties()->appid . $timestamp;
-            $privkey = $this->mod_edusharing_get_app_properties()->privatekey;
+            $privkey = $this->mod_edusharing_get_app_properties()->private_key;
             $pkeyid = openssl_get_privatekey($privkey);
             openssl_sign($signdata, $signature, $pkeyid);
             $signature = base64_encode($signature);
@@ -53,14 +53,14 @@ class mod_edusharing_sig_soap_client extends SoapClient {
     }
 
     public function mod_edusharing_set_app_properties() {
-        $this->appProperties = json_decode(get_config('edusharing', 'appProperties'));
+        $this->appproperties = json_decode(get_config('edusharing', 'appProperties'));
     }
 
     public function mod_edusharing_get_app_properties() {
-        if (empty($this->appProperties)) {
+        if (empty($this->appproperties)) {
             throw new Exception('No appProperties found');
         }
-        return $this->appProperties;
+        return $this->appproperties;
     }
 
 }

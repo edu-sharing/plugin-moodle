@@ -15,12 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    mod
+ *
+ * @package mod
  * @subpackage edusharing
- * @copyright  metaVentis GmbH — http://metaventis.com
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright metaVentis GmbH — http://metaventis.com
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 require_once(dirname(__FILE__) . '/../../config.php');
 error_reporting(E_ERROR);
 
@@ -33,28 +33,28 @@ if ($_GET['wsScheme'] == 'http' || $_GET['wsScheme'] == 'https') {
 if (isset($_GET['wsForceIpAddress'])) {
     $parsedwwwroot['host'] = $appproperties->host;
 }
-$wsbaseurl = $parsedwwwroot['scheme'] . '://' . $parsedwwwroot['host'];
+$parsedwwwroot = $parsedwwwroot['scheme'] . '://' . $parsedwwwroot['host'];
 if (!empty($appproperties->port)) {
-    $wsbaseurl .= ':' . $hc->prop_array['port'];
+    $parsedwwwroot .= ':' . $hc->prop_array['port'];
 }
-$wsbaseurl .= $parsedwwwroot['path'];
+$parsedwwwroot .= $parsedwwwroot['path'];
 
-if (empty($appproperties->signatureredirector)) {
-    require_once(dirname(__FILE__) . '/mod_edusharing_app_property_helper.php');
-    $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper($hc);
+if (empty($appproperties->signatureRedirector)) {
+    require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
+    $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper();
     $modedusharingapppropertyhelper->mod_edusharing_add_signature_redirector();
     $appproperties = json_decode(get_config('edusharing', 'appProperties'));
 }
 
 if (empty($appproperties->public_key)) {
-    require_once(dirname(__FILE__) . '/mod_edusharing_app_property_helper.php');
-    $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper($hc);
+    require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
+    $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper();
     $modedusharingapppropertyhelper->mod_edusharing_add_ssl_keypair_to_home_config();
     $appproperties = json_decode(get_config('edusharing', 'appProperties'));
 }
 
-
-$xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8" ?><!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"><properties></properties>');
+$xml = new SimpleXMLElement(
+        '<?xml version="1.0" encoding="utf-8" ?><!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"><properties></properties>');
 
 $entry = $xml->addChild('entry', $appproperties->appid);
 $entry->addAttribute('key', 'appid');
@@ -72,8 +72,8 @@ $entry = $xml->addChild('entry', 'moodle:course/update');
 $entry->addAttribute('key', 'hasTeachingPermission');
 $entry = $xml->addChild('entry', $appproperties->public_key);
 $entry->addAttribute('key', 'public_key');
-$entry = $xml->addChild('entry', $appproperties->signatureredirector);
-$entry->addAttribute('key', 'signatureredirector');
+$entry = $xml->addChild('entry', $appproperties->signatureRedirector);
+$entry->addAttribute('key', 'signatureRedirector');
 
 header('Content-type: text/xml');
 print($xml->asXML());

@@ -52,8 +52,8 @@ class filter_edusharing extends moodle_text_filter {
     public function __construct($context, array $localconfig) {
         parent::__construct($context, $localconfig);
 
-        $this->appproperties = json_decode(get_config('edusharing', 'appproperties'));
-        $this->repproperties = json_decode(get_config('edusharing', 'repproperties'));
+        $this->appproperties = json_decode(get_config('edusharing', 'appProperties'));
+        $this->repproperties = json_decode(get_config('edusharing', 'repProperties'));
 
         // to force the re-generation of filtered texts we just ...
         reset_text_filters_cache();
@@ -138,7 +138,6 @@ class filter_edusharing extends moodle_text_filter {
         $renderparams = array();
         $renderparams['title'] = $node->getAttribute('title');
         $renderparams['mimetype'] = $node->getAttribute('es:mimetype');
-
         $converted = $this->filter_edusharing_render_inline($edusharing, $renderparams);
         $wrapperattributes = array();
 
@@ -191,9 +190,9 @@ class filter_edusharing extends moodle_text_filter {
     protected function filter_edusharing_render_inline(stdClass $edusharing, $renderparams) {
         global $CFG;
 
-        $objecturl = $edusharing->objecturl;
+        $objecturl = $edusharing->object_url;
         if (!$objecturl) {
-            throw new Exception('Empty object-url.');
+            throw new Exception('Empty object url.');
         }
 
         $repositoryid = $this->appproperties->homerepid;

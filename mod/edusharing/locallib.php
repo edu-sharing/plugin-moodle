@@ -182,7 +182,7 @@ function mod_edusharing_get_redirect_url(
 function mod_edusharing_get_signature($data) {
 
     $appproperties = json_decode(get_config('edusharing', 'appProperties'));
-    $privkey = $appproperties->privatekey;
+    $privkey = $appproperties->private_key;
     $pkeyid = openssl_get_privatekey($privkey);
     openssl_sign($data, $signature, $pkeyid);
     $signature = base64_encode($signature);

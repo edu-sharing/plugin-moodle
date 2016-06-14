@@ -310,12 +310,12 @@ function get_preview_text() {
             mimeSwitchHelper = 'textlike';
 
         switch(mimeSwitchHelper) {
-            case 'image' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/>
-                <?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
-            case 'youtube' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/>
-                <?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
-            case 'video' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/>
-                <?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'image' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/>' +
+                '<?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'youtube' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/>' +
+                '<?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'video' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/>' +
+                '<?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
             case 'audio' : content = '<img src="../images/audio.png" width=100/><br/>Titel/Autor/Lizenz<br/>'; break;
             default: content = '' ;
         }
