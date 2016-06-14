@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,11 +8,11 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Providing a block to link directly to an user's workspace on repository.
@@ -42,7 +42,9 @@ class block_edusharing_workspace extends block_base {
         global $COURSE;
 
         $this->content = new stdClass;
-        $this->content->text = '<form action="'.$CFG->wwwroot.'/blocks/edusharing_workspace/helper/cc_workspace.php" method="get"><input type="hidden" name="id" value="'.$COURSE->id.'" /><input type="submit" value="'.htmlentities(get_string('button_text', 'block_edusharing_workspace')).'" /></form>';
+        $this->content->text = '<form action="'.$CFG->wwwroot.'/blocks/edusharing_workspace/helper/cc_workspace.php" method="get">
+                                <input type="hidden" name="id" value="'.$COURSE->id.'" /><input type="submit" value="'.
+                                htmlentities(get_string('button_text', 'block_edusharing_workspace')).'" /></form>';
 
         return $this->content;
     }

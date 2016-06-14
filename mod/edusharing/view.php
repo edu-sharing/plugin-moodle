@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,11 +8,11 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Prints a particular instance of edusharing
@@ -60,7 +60,9 @@ try {
 
     $wsdl = $repproperties->authenticationwebservice_wsdl;
     $alfservice = new mod_edusharing_sig_soap_client($wsdl, array());
-    $paramsrusted = array("applicationId"  => $appproperties->appid, "ticket"  => session_id(), "ssoData"  => mod_edusharing_get_auth_data(), 'repoId'  => $appproperties->homerepid);
+    $paramsrusted = array("applicationId"  => $appproperties->appid, "ticket"  => session_id(),
+                    "ssoData"  => mod_edusharing_get_auth_data(),
+                    'repoId'  => $appproperties->homerepid);
     $alfreturn = $alfservice->authenticateByTrustedApp($paramsrusted);
     $ticket = $alfreturn->authenticateByTrustedAppReturn->ticket;
 
@@ -76,12 +78,15 @@ $redirecturl .= '&sig=' . urlencode(mod_edusharing_get_signature($appproperties-
 $redirecturl .= '&signed=' . urlencode($appproperties->appid . $ts);
 
 $backlink = '';
-if (empty($edusharing->popup_window))
+if (empty($edusharing->popup_window)) {
     $backlink = urlencode($CFG->wwwroot . '/course/view.php?id=' . $courseid);
-if (!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'modedit.php') !== false)
+}
+if (!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'modedit.php') !== false) {
     $backlink = urlencode($_SERVER['HTTP_REFERER']);
-if (!empty($backlink))
+}
+if (!empty($backlink)) {
     $redirecturl .= '&backLink=' . $backlink;
+}
 
 redirect($redirecturl);
 

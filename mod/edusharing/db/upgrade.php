@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,11 +8,11 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * This file keeps track of upgrades to the edusharing module
@@ -80,7 +80,8 @@ function xmldb_edusharing_upgrade($oldversion=0) {
             set_config('appProperties', json_encode($homeappproperties), 'edusharing');
         }
 
-        $repoconf = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'esmain'.DIRECTORY_SEPARATOR.'app-'. $homeappproperties['homerepid'] .'.properties.xml';
+        $repoconf = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'esmain'.
+                    DIRECTORY_SEPARATOR.'app-'. $homeappproperties['homerepid'] .'.properties.xml';
         if (file_exists($repoconf)) {
             $app = new DOMDocument();
             $app->load($repoconf);
@@ -92,10 +93,12 @@ function xmldb_edusharing_upgrade($oldversion=0) {
 
             $repoproperties['authenticationwebservice'] = str_replace('authentication', 'authbyapp', $repoproperties['authenticationwebservice']);
             $repoproperties['authenticationwebservice_wsdl'] = str_replace('authentication', 'authbyapp', $repoproperties['authenticationwebservice_wsdl']);
-            if (mb_substr($repoproperties['usagewebservice'], -1) != '2')
+            if (mb_substr($repoproperties['usagewebservice'], -1) != '2') {
                 $repoproperties['usagewebservice'] = $repoproperties['usagewebservice'] . '2';
+            }
             $repoproperties['usagewebservice_wsdl'] = str_replace('usage?wsdl', 'usage2?wsdl', $repoproperties['usagewebservice_wsdl']);
-            $repoproperties['contenturl'] = $repoproperties['clientprotocol'] . '://' . $repoproperties['domain'] . ':' . $repoproperties['clientport'] . '/edu-sharing/renderingproxy';
+            $repoproperties['contenturl'] = $repoproperties['clientprotocol'] . '://' . $repoproperties['domain'] . ':' .
+                                            $repoproperties['clientport'] . '/edu-sharing/renderingproxy';
 
             set_config('repProperties', json_encode($repoproperties), 'edusharing');
         }

@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,11 +8,11 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Implements a block which allows you to search in the connected
@@ -48,7 +48,11 @@ class block_edusharing_search extends block_base
         global $COURSE;
 
         $this->content         = new stdClass;
-        $this->content->text   = '<form action="'.$CFG->wwwroot.'/blocks/edusharing_search/helper/cc_search.php" method="get"><input type="hidden" name="id" value="'.htmlentities($COURSE->id).'" /><input type="text" style="max-width: 90%;" name="search" value="'.htmlentities(get_string('search_field_hint', 'block_edusharing_search')).'" onclick="if (this.value==\''.htmlentities(get_string('search_field_hint', 'block_edusharing_search')).'\') this.value=\'\';" /><input type="submit" value="'.htmlentities(get_string('button_text', 'block_edusharing_search')).'" /></form>';
+        $this->content->text   = '<form action="'.$CFG->wwwroot.'/blocks/edusharing_search/helper/cc_search.php" method="get">
+                                 <input type="hidden" name="id" value="'.htmlentities($COURSE->id).'" /><input type="text" style="max-width: 90%;" name="search"
+                                 value="'.htmlentities(get_string('search_field_hint', 'block_edusharing_search')).'"
+                                 onclick="if (this.value==\''.htmlentities(get_string('search_field_hint', 'block_edusharing_search')).'\') this.value=\'\';" />
+                                 <input type="submit" value="'.htmlentities(get_string('button_text', 'block_edusharing_search')).'" /></form>';
 
         return $this->content;
     }

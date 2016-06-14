@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,11 +8,11 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /*
  * Copyright (C) 2005 Alfresco, Inc.
@@ -70,11 +70,10 @@ class mod_edusharing_web_service extends SoapClient {
         return $this->__soapCall($functionname, $arguments);
     }
 
-    public function __soapCall($functionname, $arguments, $options = array(), $inputheaders = array(),
-            &$outputheaders = array()) {
+    public function __soapCall($functionname, $arguments, $options = array(), $inputheaders = array(), &$outputheaders = array()) {
         if (isset($this->ticket)) {
             // Automatically add a security header
-            $inputheaders[] = new SoapHeader($this->securityExtNS, "Security", null, 1);
+            $inputheaders[] = new SoapHeader($this->securityextns, "Security", null, 1);
         }
 
         return parent::__soapCall($functionname, $arguments, $options, $inputheaders,
@@ -99,20 +98,20 @@ class mod_edusharing_web_service extends SoapClient {
             $securityheader = $securityheader->item(0);
 
             // Construct Timestamp Header
-            $timestamp = $dom->createElementNS($this->wsUtilityNS, "Timestamp");
+            $timestamp = $dom->createElementNS($this->wsutilityns, "Timestamp");
             $createddate = date("Y-m-d\TH:i:s\Z",
                     mktime(date("H") + 24, date("i"), date("s"), date("m"), date("d"), date("Y")));
             $expiresdate = date("Y-m-d\TH:i:s\Z",
                     mktime(date("H") + 25, date("i"), date("s"), date("m"), date("d"), date("Y")));
-            $created = new DOMElement("Created", $createddate, $this->wsUtilityNS);
-            $expires = new DOMElement("Expires", $expiresdate, $this->wsUtilityNS);
+            $created = new DOMElement("Created", $createddate, $this->wsutilityns);
+            $expires = new DOMElement("Expires", $expiresdate, $this->wsutilityns);
             $timestamp->appendChild($created);
             $timestamp->appendChild($expires);
 
             // Construct UsernameToken Header
-            $usernametoken = $dom->createElementNS($this->securityExtNS, "UsernameToken");
-            $username = new DOMElement("Username", "username", $this->securityExtNS);
-            $password = $dom->createElementNS($this->securityExtNS, "Password");
+            $usernametoken = $dom->createElementNS($this->securityextns, "UsernameToken");
+            $username = new DOMElement("Username", "username", $this->securityextns);
+            $password = $dom->createElementNS($this->securityextns, "Password");
             $typeattr = new DOMAttr("Type", $this->passwordType);
             $password->appendChild($typeattr);
             $password->appendChild($dom->createTextNode($this->ticket));

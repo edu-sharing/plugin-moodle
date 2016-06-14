@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,11 +8,11 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Library of interface functions and constants for module edusharing
@@ -598,8 +598,9 @@ function mod_edusharing_get_repository_id_from_url($objecturl) {
 function mod_edusharing_get_usage_metadata($courseid) {
     global $DB;
 
-    if (empty($courseid))
+    if (empty($courseid)) {
            return '';
+    }
 
     $course = $DB->get_record('course', array('id'  => $courseid));
     $category = $DB->get_record('course_categories', array('id'  => $course->category));

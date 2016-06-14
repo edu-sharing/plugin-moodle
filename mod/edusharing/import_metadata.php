@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,11 +8,11 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  *
@@ -27,31 +27,32 @@
 <title>edu-sharing metadata import</title>
 <style type="text/css" id="vbulletin_css">
 body {
-	background: #e4f3f9;
-	color: #000000;
-	font: 11pt verdana, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif;
-	margin: 5px 10px 10px 10px;
-	padding: 0px;
+    background: #e4f3f9;
+    color: #000000;
+    font: 11pt verdana, geneva, lucida, 'lucida grande', arial, helvetica,
+    sans-serif;
+    margin: 5px 10px 10px 10px;
+    padding: 0px;
 }
 
 table {
-	background: #e4f3f9;
-	color: #000000;
-	font: 10pt verdana, geneva, lucida, 'lucida grande', arial, helvetica,
-		sans-serif;
-	margin: 5px 10px 10px 10px;
-	padding: 0px;
+    background: #e4f3f9;
+    color: #000000;
+    font: 10pt verdana, geneva, lucida, 'lucida grande', arial, helvetica,
+    sans-serif;
+    margin: 5px 10px 10px 10px;
+    padding: 0px;
 }
 
 p {
-	margin: 10px;
-	padding: 20px;
-	background: #AEF2AC;
+    margin: 10px;
+    padding: 20px;
+    background: #AEF2AC;
 }
 
 fieldset {
-	margin: 10px;
-	border: 1px solid #ddd;
+    margin: 10px;
+    border: 1px solid #ddd;
 }
 </style>
 </head>
@@ -71,8 +72,9 @@ if (!is_siteadmin()) {
 define('CC_CONF_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 define('CC_CONF_APPFILE', 'ccapp-registry.properties.xml');
 
-if (!IMPORT_METADATA)
+if (!IMPORT_METADATA) {
     die('metadata import disabled');
+}
 
 function get_form($url) {
     $form = '
@@ -87,7 +89,9 @@ function get_form($url) {
                         <br>
                         <table>
                             <tr>
-                                <td>Repository: </td><td><a href="javascript:void();" onclick="document.forms[0].mdataurl.value=\'http://your-server-name/edu-sharing/metadata?format=lms\'">http://edu-sharing-server/edu-sharing/metadata?format=lms</a>
+                                <td>Repository: </td><td><a href="javascript:void();"
+                                    onclick="document.forms[0].mdataurl.value=\'http://your-server-name/edu-sharing/metadata?format=lms\'">
+                                    http://edu-sharing-server/edu-sharing/metadata?format=lms</a>
                                 <br>
                                 </td>
                             </tr>
@@ -119,7 +123,8 @@ if (!empty($_POST['mdataurl'])) {
         libxml_use_internal_errors(true);
 
         if ($xml->load($_POST['mdataurl']) == false) {
-            echo ('<p style="background: #FF8170">could not load ' . $_POST['mdataurl'] . ' please check url') . "<br></p>";
+            echo ('<p style="background: #FF8170">could not load ' . $_POST['mdataurl'] .
+                     ' please check url') . "<br></p>";
             echo get_form($_POST['mdataurl']);
             exit();
         }
@@ -145,10 +150,10 @@ if (!empty($_POST['mdataurl'])) {
         $homeappproperties->type = 'LMS';
         $homeappproperties->homerepid = $repproperties->appid;
         $homeappproperties->cc_gui_url = $repproperties->clientprotocol . '://' .
-        $repproperties->domain . ':' . $repproperties->clientport . '/edu-sharing/';
+                                         $repproperties->domain . ':' . $repproperties->clientport . '/edu-sharing/';
         $homeappproperties->private_key = $sslkeypair['privateKey'];
         $homeappproperties->public_key = $sslkeypair['publicKey'];
-        $homeappproperties->signatureRedirector = $modedusharingapppropertyhelper->mod_edusharing_get_signatureRedirector();
+        $homeappproperties->signatureRedirector = $modedusharingapppropertyhelper->mod_edusharing_get_signature_redirector();
         $homeappproperties->blowfishkey = 'thetestkey';
         $homeappproperties->blowfishiv = 'initvect';
 
@@ -172,7 +177,6 @@ if (!empty($_POST['mdataurl'])) {
         exit();
     }
 }
-;
 
 echo get_form('');
 exit();

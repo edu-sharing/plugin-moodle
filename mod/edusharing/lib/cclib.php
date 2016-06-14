@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,11 +8,11 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * @package    mod
@@ -59,9 +59,9 @@ class mod_edusharing_web_service_factory {
 
             // ticket is younger than 10s, we must not check
             if (isset($_SESSION["USER"]->ticketvalidationts)
-                    && time() - $_SESSION["USER"]->ticketvalidationts < 10)
+                    && time() - $_SESSION["USER"]->ticketvalidationts < 10) {
                 return $_SESSION["USER"]->ticket;
-
+            }
             try {
                 $eduservice = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl, array());
             } catch (Exception $e) {

@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,11 +8,11 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /*
     - called from ALFRESCO after selecting a node/resource in the opened popup window
@@ -41,8 +41,9 @@ $eduobjresourceversion = addslashes_js(optional_param('resourceVersion', '', PAR
 $eduobjheight = addslashes_js(optional_param('h', '', PARAM_RAW));
 $eduobjwidth = addslashes_js(optional_param('w', '600', PARAM_RAW));
 $eduobjratio = '';
-if (!empty($eduobjheight) && !empty($eduobjwidth))
+if (!empty($eduobjheight) && !empty($eduobjwidth)) {
     $eduobjratio = (int)$eduobjheight / (int)$eduobjwidth;
+}
 $eduobjversion = addslashes_js(optional_param('v', '1.0', PARAM_RAW));
 $eduobjrepotype = addslashes_js(optional_param('repoType', '', PARAM_RAW));
 
@@ -70,7 +71,7 @@ $eduobjrepotype = addslashes_js(optional_param('repoType', '', PARAM_RAW));
     } catch (err) {
         alert('Error populating form-fields.' + err);
     }
-    
+
     try {
         parent.editor_edusharing_shrink_dialog();
         parent.document.getElementById('eduframe').style.display="none";
@@ -79,8 +80,8 @@ $eduobjrepotype = addslashes_js(optional_param('repoType', '', PARAM_RAW));
     } catch (err) {
         alert('Error updating dialog.' + err);
     }
-    
-    
+
+
 
 </script>
 </body>

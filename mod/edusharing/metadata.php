@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,11 +8,11 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * @package    mod
@@ -27,13 +27,16 @@ error_reporting(E_ERROR);
 $appproperties = json_decode(get_config('edusharing', 'appProperties'));
 
 $parsedwwwroot = parse_url($CFG->wwwroot);
-if ($_GET['wsScheme'] == 'http' || $_GET['wsScheme'] == 'https')
+if ($_GET['wsScheme'] == 'http' || $_GET['wsScheme'] == 'https') {
     $parsedwwwroot['scheme'] = $_GET['wsScheme'];
-if (isset($_GET['wsForceIpAddress']))
+}
+if (isset($_GET['wsForceIpAddress'])) {
     $parsedwwwroot['host'] = $appproperties->host;
+}
 $wsbaseurl = $parsedwwwroot['scheme'] . '://' . $parsedwwwroot['host'];
-if (!empty($appproperties->port))
+if (!empty($appproperties->port)) {
     $wsbaseurl .= ':' . $hc->prop_array['port'];
+}
 $wsbaseurl .= $parsedwwwroot['path'];
 
 if (empty($appproperties->signatureredirector)) {

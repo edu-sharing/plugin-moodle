@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,11 +8,11 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * @package    editor
@@ -50,10 +50,13 @@ if ( empty($CFG->yui3version) ) {
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
     <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/yui/'.$CFG->yui3version.'/build/yui/yui.js', ENT_COMPAT, 'utf-8') ?>"></script>
-    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/tinymce/tiny_mce/'.$tinymce->version.'/tiny_mce_popup.js', ENT_COMPAT, 'utf-8') ?>"></script>
+    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/tinymce/tiny_mce/'.$tinymce->version.'/tiny_mce_popup.js', ENT_COMPAT, 'utf-8') ?>">
+    </script>
 
-    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/edusharing.js?' . filemtime($CFG->libdir.'/editor/edusharing/js/edusharing.js'), ENT_COMPAT, 'utf-8') ?>"></script>
-    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/dialog.js?' . filemtime($CFG->libdir.'/editor/edusharing/js/dialog.js'), ENT_COMPAT, 'utf-8') ?>"></script>
+    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/edusharing.js?' .
+            filemtime($CFG->libdir.'/editor/edusharing/js/edusharing.js'), ENT_COMPAT, 'utf-8') ?>"></script>
+    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/js/dialog.js?' .
+            filemtime($CFG->libdir.'/editor/edusharing/js/dialog.js'), ENT_COMPAT, 'utf-8') ?>"></script>
 
     <link rel="stylesheet" media="all" href="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/dialog/css/edu.css', ENT_COMPAT, 'utf-8') ?>">
 
@@ -127,7 +130,9 @@ $link .= '&reurl='.urlencode($CFG->wwwroot."/lib/editor/edusharing/dialog/popula
 $previewurl = $appproperties->cc_gui_url . 'preview';
 
 function get_preview_text() {
-    return 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
+    return 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+            sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+            ipsum dolor sit amet.';
 }
 
 ?>
@@ -156,38 +161,52 @@ function get_preview_text() {
     <table>
         <tr>
             <td><span id="titleLabel"><?php echo htmlentities(get_string('caption', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></span></td>
-            <td><input type="text" maxlength="50" style="width: 160px" name="title" id="title" value="<?php echo htmlspecialchars($edusharing->title, ENT_COMPAT, 'utf-8') ?>"></input>
-                <button type="button" name="search" value="2" onclick="editor_edusharing_show_repository_search(); return false;"><?php echo htmlentities(get_string('search', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></button>
+            <td><input type="text" maxlength="50" style="width: 160px" name="title" id="title" value="<?php echo htmlspecialchars($edusharing->title, ENT_COMPAT, 'utf-8') ?>">
+            </input>
+                <button type="button" name="search" value="2" onclick="editor_edusharing_show_repository_search(); return false;">
+                <?php echo htmlentities(get_string('search', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></button>
             </td>
         </tr>
         <tr class="versionShowTr">
             <td><?php echo  htmlentities(get_string('version', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
             <td>
-                <input type="radio" value="latest" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'latest') ? 'checked="checked"' : ''?> /><?php echo  htmlentities(get_string('versionLatest', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                <input type="radio" value="current" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'current') ? 'checked="checked"' : ''?> /><?php echo  htmlentities(get_string('versionCurrent', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="latest" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'latest') ? 'checked="checked"' : ''?> />
+                <?php echo  htmlentities(get_string('versionLatest', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="current" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'current') ? 'checked="checked"' : ''?> />
+                <?php echo  htmlentities(get_string('versionCurrent', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
             </td>
         </tr>
 
         <tr id="floatTr">
             <td><?php echo  htmlentities(get_string('float', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
             <td>
-                <input type="radio" value="left" name="window_float" <?php echo ($edusharing->window_float == 'left') ? 'checked="checked"' : ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatLeft', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                <input type="radio" value="none" name="window_float" <?php echo ($edusharing->window_float == 'none') ? 'checked="checked"' : ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatNone', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                <input type="radio" value="right" name="window_float" <?php echo ($edusharing->window_float == 'right') ? 'checked="checked"' : ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatRight', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                <input type="radio" value="inline" name="window_float" <?php echo ($edusharing->window_float == 'inline') ? 'checked="checked"' : ''?> onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatInline', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="left" name="window_float" <?php echo ($edusharing->window_float == 'left') ? 'checked="checked"' : ''?>
+                onClick="editor_edusharing_handle_click(this)" /><?php echo  htmlentities(get_string('floatLeft', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="none" name="window_float" <?php echo ($edusharing->window_float == 'none') ? 'checked="checked"' : ''?>
+                onClick="editor_edusharing_handle_click(this)" />
+                <?php echo  htmlentities(get_string('floatNone', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="right" name="window_float" <?php echo ($edusharing->window_float == 'right') ? 'checked="checked"' : ''?>
+                onClick="editor_edusharing_handle_click(this)" />
+                <?php echo  htmlentities(get_string('floatRight', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
+                <input type="radio" value="inline" name="window_float" <?php echo ($edusharing->window_float == 'inline') ? 'checked="checked"' : ''?>
+                onClick="editor_edusharing_handle_click(this)" />
+                <?php echo  htmlentities(get_string('floatInline', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
             </td>
         </tr>
            <tr class="dimension">
             <td><?php echo htmlentities(get_string('window_width', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
-            <td><input type="text" maxlength="4" size="5" name="window_width" id="window_width"  value="<?php echo htmlspecialchars($edusharing->window_width, ENT_COMPAT, 'utf-8') ?>" onKeyUp="editor_edusharing_set_height()" />&nbsp;px</td>
+            <td><input type="text" maxlength="4" size="5" name="window_width" id="window_width"
+            value="<?php echo htmlspecialchars($edusharing->window_width, ENT_COMPAT, 'utf-8') ?>" onKeyUp="editor_edusharing_set_height()" />&nbsp;px</td>
         </tr>
          <tr class="dimension heightProp">
             <td><?php echo htmlentities(get_string('window_height', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
-            <td><input type="text" maxlength="4" size="5" name="window_height" id="window_height" value="<?php echo htmlspecialchars($edusharing->window_height, ENT_COMPAT, 'utf-8') ?>" onKeyUp="editor_edusharing_set_width()" />&nbsp;px</td>
+            <td><input type="text" maxlength="4" size="5" name="window_height" id="window_height"
+            value="<?php echo htmlspecialchars($edusharing->window_height, ENT_COMPAT, 'utf-8') ?>" onKeyUp="editor_edusharing_set_width()" />&nbsp;px</td>
         </tr>
         <tr class="dimension heightProp">
             <td></td>
-            <td><input type="checkbox" name="constrainProps" id="constrainProps" value="1" checked="checked"/><?php echo htmlspecialchars(get_string('constrainProportions', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
+            <td><input type="checkbox" name="constrainProps" id="constrainProps" value="1" checked="checked"/>
+            <?php echo htmlspecialchars(get_string('constrainProportions', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
         </tr>
 
     </table>
@@ -200,8 +219,10 @@ function get_preview_text() {
 
     </div>
     <div style="clear:both" class="mceActionPanel">
-        <input type="button" id="insert" name="insert" class="button" value="<?php echo htmlspecialchars(get_string('insert', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>" onclick="edusharingDialog.on_click_insert(this.form);" />
-        <input type="button" id="cancel" name="cancel" class="button" value="<?php echo htmlspecialchars(get_string('cancel', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>" onclick="edusharingDialog.on_click_cancel();" />
+        <input type="button" id="insert" name="insert" class="button" value="<?php echo htmlspecialchars(get_string('insert', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>"
+        onclick="edusharingDialog.on_click_insert(this.form);" />
+        <input type="button" id="cancel" name="cancel" class="button" value="<?php echo htmlspecialchars(get_string('cancel', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>"
+        onclick="edusharingDialog.on_click_cancel();" />
     </div>
 
 </form>
@@ -289,9 +310,12 @@ function get_preview_text() {
             mimeSwitchHelper = 'textlike';
 
         switch(mimeSwitchHelper) {
-            case 'image' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
-            case 'youtube' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
-            case 'video' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/><?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'image' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/>
+                <?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'youtube' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/>
+                <?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
+            case 'video' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/>
+                <?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
             case 'audio' : content = '<img src="../images/audio.png" width=100/><br/>Titel/Autor/Lizenz<br/>'; break;
             default: content = '' ;
         }
@@ -376,8 +400,10 @@ function get_preview_text() {
     function editor_edusharing_enlarge_dialog() {
         parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].style.width = parent.parent.document.documentElement.clientWidth * 0.8 + 'px';
         parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].style.height = parent.parent.document.documentElement.clientHeight * 0.8 + 'px';
-        parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].getElementsByTagName('iframe')[0].style.width = parent.parent.document.documentElement.clientWidth * 0.8 + 'px';
-        parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].getElementsByTagName('iframe')[0].style.height = parent.parent.document.documentElement.clientHeight * 0.8 + 'px';
+        parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].getElementsByTagName('iframe')[0].style.width =
+            parent.parent.document.documentElement.clientWidth * 0.8 + 'px';
+        parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].getElementsByTagName('iframe')[0].style.height =
+            parent.parent.document.documentElement.clientHeight * 0.8 + 'px';
     }
 
     onload = function () {
