@@ -52,7 +52,7 @@ class mod_edusharing_app_property_helper {
         set_config('appProperties', json_encode($appproperties), 'edusharing');
     }
 
-    public function mod_edusharing_get_signatureredirector() {
+    public function mod_edusharing_get_signature_redirector() {
         global $CFG;
         return $CFG->wwwroot . '/filter/edusharing/signatureRedirector.php';
     }

@@ -68,31 +68,35 @@ if ($ADMIN->fulltree) {
              '/mod/edusharing/import_metadata.php?sesskey=' . $USER->sesskey . '" target="_blank">' .
              $strtxt . '</a></h4>';
 
-    ksort($appproperties);
     $strapp = '';
-    foreach ($appproperties as $key => $value) {
-        if (strpos($key, '_key') !== false) {
-            $strapp .= '<label for="app_' . $key . '">mod_edusharing/' . $key . '</label>' .
-                     '<textarea style="width: 700px" id="app_' . $key . '" name="app_' . $key . '">' .
-                     $value . '</textarea><br/>';
-        } else {
-            $strapp .= '<label for="app_' . $key . '">mod_edusharing/' . $key . '</label>' .
-                     '<input style="width: 700px; height: auto;" id="app_' . $key . '" name="app_' .
-                     $key . '" type="text" value="' . $value . '"><br/>';
+    if (!empty($appproperties)) {
+        ksort($appproperties);
+        foreach ($appproperties as $key => $value) {
+            if (strpos($key, '_key') !== false) {
+                $strapp .= '<label for="app_' . $key . '">mod_edusharing/' . $key . '</label>' .
+                         '<textarea style="width: 700px" id="app_' . $key . '" name="app_' . $key . '">' .
+                         $value . '</textarea><br/>';
+            } else {
+                $strapp .= '<label for="app_' . $key . '">mod_edusharing/' . $key . '</label>' .
+                         '<input style="width: 700px; height: auto;" id="app_' . $key . '" name="app_' .
+                         $key . '" type="text" value="' . $value . '"><br/>';
+            }
         }
     }
 
-    ksort($repproperties);
     $strrep = '';
-    foreach ($repproperties as $key => $value) {
-        if (strpos($key, '_key') !== false) {
-            $strrep .= '<label for="rep_' . $key . '">mod_edusharing/' . $key . '</label>' .
-                     '<textarea style="width: 700px" id="rep_' . $key . '" name="rep_' . $key . '">' .
-                     $value . '</textarea><br/>';
-        } else {
-            $strrep .= '<label for="rep_' . $key . '">mod_edusharing/' . $key . '</label>' .
-                     '<input style="width: 700px; height: auto;" id="rep_' . $key . '" name="rep_' .
-                     $key . '" type="text" value="' . $value . '"><br/>';
+    if (!empty($repproperties)) {
+        ksort($repproperties);
+        foreach ($repproperties as $key => $value) {
+            if (strpos($key, '_key') !== false) {
+                $strrep .= '<label for="rep_' . $key . '">mod_edusharing/' . $key . '</label>' .
+                         '<textarea style="width: 700px" id="rep_' . $key . '" name="rep_' . $key . '">' .
+                         $value . '</textarea><br/>';
+            } else {
+                $strrep .= '<label for="rep_' . $key . '">mod_edusharing/' . $key . '</label>' .
+                         '<input style="width: 700px; height: auto;" id="rep_' . $key . '" name="rep_' .
+                         $key . '" type="text" value="' . $value . '"><br/>';
+            }
         }
     }
 
