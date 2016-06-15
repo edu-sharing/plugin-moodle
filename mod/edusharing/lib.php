@@ -40,7 +40,6 @@ define('DISPLAY_MODE_DOWNLOAD', 'download');
 define('DISPLAY_MODE_INLINE', 'inline');
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) .'/lib');
-require_once(dirname(__FILE__).'/lib/Edusharing/EdusharingWebservice.php');
 require_once(dirname(__FILE__).'/lib/RenderParameter.php');
 require_once(dirname(__FILE__).'/lib/cclib.php');
 require_once(dirname(__FILE__).'/locallib.php');
