@@ -23,12 +23,12 @@
  * logic, should go to locallib.php. This will help to save some memory when
  * Moodle is performing actions across all modules.
  *
- * @package    mod
- * @subpackage edusharing
+ * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  */
+
 defined('MOODLE_INTERNAL') || die();
 
 define('EDUSHARING_MODULE_NAME', 'edusharing');
@@ -101,7 +101,6 @@ function edusharing_supports($feature) {
  * @param stdClass $edusharing An object from the form in mod_form.php
  * @return int The id of the newly inserted edusharing record
  */
-
 function edusharing_add_instance(stdClass $edusharing) {
 
     global $COURSE;
@@ -214,7 +213,6 @@ function edusharing_add_instance(stdClass $edusharing) {
  * @param stdClass $edusharing An object from the form in mod_form.php
  * @return boolean Success/Fail
  */
-
 function edusharing_update_instance(stdClass $edusharing) {
 
     global $CFG;
@@ -370,11 +368,12 @@ function edusharing_delete_instance($id) {
  * user has done with a given particular instance of this module
  * Used for user activity reports.
  *
- * $return->time = the time they did it
- * $return->info = a short text description
+ * @param object $course
+ * @param object $user
+ * @param object $mod
+ * @param object $edusharing
  *
- * @return null
- * @todo Finish documenting this function
+ * @return stdClass
  */
 function edusharing_user_outline($course, $user, $mod, $edusharing) {
 
@@ -390,8 +389,12 @@ function edusharing_user_outline($course, $user, $mod, $edusharing) {
  * Print a detailed representation of what a user has done with
  * a given particular instance of this module, for user activity reports.
  *
+ * @param object $course
+ * @param object $user
+ * @param object $mod
+ * @param object $edusharing
+ *
  * @return boolean
- * @todo Finish documenting this function
  */
 function edusharing_user_complete($course, $user, $mod, $edusharing) {
     return true;
@@ -402,8 +405,11 @@ function edusharing_user_complete($course, $user, $mod, $edusharing) {
  * that has occurred in edusharing activities and print it out.
  * Return true if there was output, or false is there was none.
  *
+ * @param object $course
+ * @param object $isteacher
+ * @param object $timestart
+ *
  * @return boolean
- * @todo Finish documenting this function
  */
 function edusharing_print_recent_activity($course, $isteacher, $timestart) {
     return false; // True if anything was printed, otherwise false
@@ -415,7 +421,6 @@ function edusharing_print_recent_activity($course, $isteacher, $timestart) {
  * as sending out mail, toggling flags etc ...
  *
  * @return boolean
- * @todo Finish documenting this function
  **/
 function edusharing_cron() {
     return true;
@@ -442,8 +447,8 @@ function edusharing_get_participants($edusharingid) {
  * as reference.
  *
  * @param int $edusharingid ID of an instance of this module
+ * @param int $scaleid
  * @return mixed
- * @todo Finish documenting this function
  */
 function edusharing_scale_used($edusharingid, $scaleid) {
     global $DB;
@@ -457,7 +462,7 @@ function edusharing_scale_used($edusharingid, $scaleid) {
  * This function was added in 1.9
  *
  * This is used to find out if scale used anywhere
- * @param $scaleid int
+ * @param int $scaleid
  * @return boolean True if the scale is used by any edusharing
  */
 function edusharing_scale_used_anywhere($scaleid) {
@@ -593,7 +598,11 @@ function mod_edusharing_get_repository_id_from_url($objecturl) {
 }
 
 
-
+/**
+ * Get some additional metadata for usage
+ * @param string $courseid
+ * @return array
+ */
 function mod_edusharing_get_usage_metadata($courseid) {
     global $DB;
 

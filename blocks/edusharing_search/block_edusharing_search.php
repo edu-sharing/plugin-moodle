@@ -15,11 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Implements a block which allows you to search in the connected
- * edu-sharing-repository.
+ * Block which allows you to search in the connected edu-sharing-repository.
  *
- * @package    block
- * @subpackage edusharing_search
+ * @package    block_edusharing_search
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/**
+ * Block which allows you to search in the connected edu-sharing-repository.
+ *
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

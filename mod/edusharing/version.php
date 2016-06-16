@@ -15,19 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the version of edusharing
+ * Defines the version of the edu-sharing plugin
  *
- * This code fragment is called by moodle_needs_upgrading() and
- * /admin/index.php
- *
- * @package    mod
- * @subpackage edusharing
+ * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'mod_edusharing';
-$plugin->version  = 2016061501;        // The current module version (Date: YYYYMMDDXX). If version == 0 then module will not be installed
+$plugin->version  = 2016061502;        // The current module version (Date: YYYYMMDDXX). If version == 0 then module will not be installed
 $plugin->requires = 2015051100;        // Requires moodle 2.9
 $plugin->cron     = 0;                // Period for cron to check this module (secs)

@@ -14,15 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
- - called from the /blocks/cc_search block
- - auth against alfresco repos. (ticket handshake / user sync)
- - opens external edu-sharingSearch in iFrame
- */
-
 /**
- * @package    block
- * @subpackage edusharing_search
+ * Provide edu-sharing search
+ *
+ * @package    block_edusharing_search
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

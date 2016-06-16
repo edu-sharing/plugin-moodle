@@ -15,8 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    editor
- * @subpackage edusharing
+ * Provide some basic functions for the edu-sharing editor plugin
+ *
+ * @package    editor_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -24,10 +25,15 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../tinymce/lib.php');
-
 require_once($CFG->dirroot.'/mod/edusharing/lib/cclib.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
+/**
+ * Provide some basic functions for the edu-sharing editor plugin
+ *
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class edusharing_texteditor extends tinymce_texteditor {
 
     /**
@@ -45,6 +51,7 @@ class edusharing_texteditor extends tinymce_texteditor {
     const ATTRIBUTE_NAMESPACE_PREFIX = 'es';
 
     /**
+     * Get edu-sharing ticket
      *
      * @return string
      */
@@ -86,7 +93,7 @@ class edusharing_texteditor extends tinymce_texteditor {
      * profile) we have to detect the current editor-context and decide if
      * edu-sharing is applicable to this context.
      *
-     * @param $options the editor-options from tinymce_texteditor::use_editor()
+     * @param array $options the editor-options from tinymce_texteditor::use_editor()
      *
      * @return bool
      */
@@ -113,7 +120,12 @@ class edusharing_texteditor extends tinymce_texteditor {
     }
 
     /**
-     * (non-PHPdoc)
+     * Het parameters for tinymce
+     * @param int $elementid
+     * @param array $options
+     *
+     * @return array
+     *
      * @see tinymce_texteditor::get_init_params()
      */
     protected function get_init_params($elementid, array $options=null) {
@@ -176,9 +188,9 @@ class edusharing_texteditor extends tinymce_texteditor {
     /**
      * Prepare tinymce to use edu-sharing plugin
      *
-     * @param string $elementid identifies the id-attribute of editor-node in HTML
+     * @param int $elementid
      * @param array $options
-     * @param array $fpoptions
+     * @param array $filepickeroptions
      *
      * (non-PHPdoc)
      * @see tinymce_texteditor::use_editor()

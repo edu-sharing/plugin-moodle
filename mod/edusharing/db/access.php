@@ -18,8 +18,7 @@
  *
  * The variable name for the capability definitions array is $capabilities
  *
- * @package    mod
- * @subpackage edusharing
+ * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

@@ -15,8 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    editor
- * @subpackage edusharing
+ * edu-sharing edit dialog
+ *
+ * @package    editor_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -87,6 +88,10 @@ $edusharing->prev_src = $_GET['prev_src'];
 $edusharing->window_version = $_GET['window_version'];
 $edusharing->repotype = $_GET['repotype'];
 
+/**
+ * Return some dummy text
+ * @return string
+ */
 function get_preview_text() {
     return 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';

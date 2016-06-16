@@ -14,24 +14,45 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
 /**
- * @package    mod
- * @subpackage edusharing
+ * Extend PHP SoapClient with some header information
+ *
+ * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+/**
+ * Extend PHP SoapClient with some header information
+ *
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ */
 class mod_edusharing_sig_soap_client extends SoapClient {
 
+    /**
+     * @var array $appproperties
+     */
     private $appproperties;
 
+    /**
+     * Set app properties and soap headers
+     *
+     * @param string $wsdl
+     * @param array $options
+     */
     public function __construct($wsdl, $options = array()) {
         $this->mod_edusharing_set_app_properties();
         parent::__construct($wsdl, $options);
         $this->mod_edusharing_set_soap_headers();
     }
 
+    /**
+     * Set soap headers
+     *
+     * @throws Exception
+     */
     private function mod_edusharing_set_soap_headers() {
         try {
             $timestamp = round(microtime(true) * 1000);
@@ -52,10 +73,17 @@ class mod_edusharing_sig_soap_client extends SoapClient {
         }
     }
 
+    /**
+     * Set app properties
+     */
     public function mod_edusharing_set_app_properties() {
         $this->appproperties = json_decode(get_config('edusharing', 'appProperties'));
     }
 
+    /**
+     * Get app properties
+     * @throws Exception
+     */
     public function mod_edusharing_get_app_properties() {
         if (empty($this->appproperties)) {
             throw new Exception('No appProperties found');

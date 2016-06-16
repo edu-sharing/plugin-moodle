@@ -17,8 +17,7 @@
 /**
  * Filter converting edu-sharing URIs in the text to edu-sharing rendering links
  *
- * @package filter
- * @subpackage edusharing
+ * @package filter_edusharing
  * @copyright metaVentis GmbH — http://metaventis.com
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,6 +28,13 @@ require_once($CFG->dirroot . '/mod/edusharing/lib.php');
 require_once($CFG->dirroot . '/mod/edusharing/locallib.php');
 
 
+/**
+ * Parse content for edu-sharing objects to render them
+ *
+ * @copyright metaVentis GmbH — http://metaventis.com
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ */
 class filter_edusharing extends moodle_text_filter {
 
     /**
@@ -38,8 +44,16 @@ class filter_edusharing extends moodle_text_filter {
      */
     private $resettextfiltercache = true;
 
+    /**
+     *
+     * @var array
+     */
     protected $appproperties = array();
 
+    /**
+     *
+     * @var array
+     */
     protected $repproperties = array();
 
     /**
@@ -71,6 +85,7 @@ class filter_edusharing extends moodle_text_filter {
      * @see filter_manager::apply_filter_chain()
      * @param string $text to be processed by the text
      * @param array $options filter options
+     * @todo ensure not to include jQuery twice
      *
      * @return string text after processing
      */
@@ -82,15 +97,11 @@ class filter_edusharing extends moodle_text_filter {
         // disable page-caching to "renew" render-session-data
         $PAGE->set_cacheable(false);
 
-        // @todo ensure not to include jQuery twice
         $PAGE->requires->js('/mod/edusharing/js/jquery.min.js');
         $PAGE->requires->js('/mod/edusharing/js/jquery-near-viewport.min.js');
         $PAGE->requires->js('/filter/edusharing/edu.js');
 
         if (!isset($options['originalformat'])) {
-            // if the format is not specified, we are probably called by {@see format_string()}
-            // in that case, it would be dangerous to replace URL with the link because it could
-            // be stripped. therefore, we do nothing
             return $text;
         }
 
@@ -115,6 +126,12 @@ class filter_edusharing extends moodle_text_filter {
         return $text;
     }
 
+    /**
+     * Prepare object for rendering, wrap rendered object
+     *
+     * @param string $object
+     * @return boolean|string
+     */
     private function convertobject($object) {
         global $DB;
         $doc = new DOMDocument();
@@ -135,6 +152,7 @@ class filter_edusharing extends moodle_text_filter {
             trigger_error('Error loading resource from db.', E_USER_WARNING);
             return false;
         }
+
         $renderparams = array();
         $renderparams['title'] = $node->getAttribute('title');
         $renderparams['mimetype'] = $node->getAttribute('es:mimetype');
@@ -183,6 +201,7 @@ class filter_edusharing extends moodle_text_filter {
      * Build container
      *
      * @param stdClass $edusharing
+     * @param array $renderparams
      * @throws Exception
      *
      * @return string

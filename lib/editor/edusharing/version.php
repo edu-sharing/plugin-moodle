@@ -15,10 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * TinyMCE text editor integration version file.
+ * Defines the version of the edu-sharing plugin
  *
- * @package    editor
- * @subpackage edusharing
+ * @package    editor_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

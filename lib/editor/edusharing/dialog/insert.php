@@ -15,8 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    editor
- * @subpackage edusharing
+ * edu-sharing insert dialog
+ *
+ * @package    editor_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -129,6 +130,10 @@ if ( $language ) {
 $link .= '&reurl='.urlencode($CFG->wwwroot."/lib/editor/edusharing/dialog/populate.php?");
 $previewurl = $appproperties->cc_gui_url . 'preview';
 
+/**
+ * Return some dummy text
+ * @return string
+ */
 function get_preview_text() {
     return 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
             sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem

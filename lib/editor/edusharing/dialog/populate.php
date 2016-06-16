@@ -14,24 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
-    - called from ALFRESCO after selecting a node/resource in the opened popup window
-    - transfers the node-id into the Location field of the opener (edit resource window)
-    - closes popup
-*/
-
 /**
- * @package    editor
- * @subpackage edusharing
+ * Callback for edu-sharing repository pushes object data to opener
+ *
+ * @package    editor_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @todo get original height and width + version
  */
 
 require_once(dirname(__FILE__) . '/../../../../config.php');
-
-
-// @todo get original height and width + version
-
 
 $eduobjres = addslashes_js(optional_param('nodeId', '', PARAM_RAW));
 $eduobjtitle = addslashes_js(optional_param('title', '', PARAM_RAW));
@@ -80,8 +73,6 @@ $eduobjrepotype = addslashes_js(optional_param('repoType', '', PARAM_RAW));
     } catch (err) {
         alert('Error updating dialog.' + err);
     }
-
-
 
 </script>
 </body>

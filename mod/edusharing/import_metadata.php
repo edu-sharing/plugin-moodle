@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Get repository properties and generate app properties - put them to configuration
  *
- * @package mod
- * @subpackage edusharing
+ * @package mod_edusharing
  * @copyright metaVentis GmbH — http://metaventis.com
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -76,6 +76,12 @@ if (!IMPORT_METADATA) {
     die('metadata import disabled');
 }
 
+/**
+ * Form for importing repository properties
+ * @param string $url The url to retrieve repository metadata
+ * @return string
+ *
+ */
 function get_form($url) {
     $form = '
         <form action="import_metadata.php" method="post" name="mdform">
@@ -100,8 +106,7 @@ function get_form($url) {
                     <tr>
                         <td><label for="metadata">Metadata endpoint:</label></td>
                         <td>
-                        <input type="text" size="80" id="metadata" name="mdataurl" value="' .
-             $url . '">
+                        <input type="text" size="80" id="metadata" name="mdataurl" value="' . $url . '">
                         <input type="submit" value="import">
                         </td>
                     </tr>

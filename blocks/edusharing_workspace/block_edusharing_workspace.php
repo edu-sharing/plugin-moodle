@@ -15,22 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Providing a block to link directly to an user's workspace on repository.
+ * Provide a block to link directly to an user's workspace on repository.
  *
- * @package    block
- * @subpackage edusharing_workspace
+ * @package    block_edusharing_workspace
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/**
+ * Provide a block to link directly to an user's workspace on repository.
+ *
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_edusharing_workspace extends block_base {
 
+    /**
+     * Initialize this block
+     */
     public function init() {
         $this->title   = get_string('block_title', 'block_edusharing_workspace');
         $this->version = 2015060901;
     }
 
     /**
-     * (non-PHPdoc)
+     * get block content
+     *
      * @see blocks/block_base::get_content()
      */
     public function get_content() {

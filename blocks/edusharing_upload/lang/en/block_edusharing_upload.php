@@ -16,8 +16,9 @@
 
 
 /**
- * @package    block
- * @subpackage edusharing_upload
+ * en language file
+ *
+ * @package    block_edusharing_upload
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

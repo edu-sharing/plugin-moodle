@@ -25,8 +25,7 @@
  * here will all be database-neutral, using the functions defined in
  * lib/ddllib.php
  *
- * @package    mod
- * @subpackage edusharing
+ * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

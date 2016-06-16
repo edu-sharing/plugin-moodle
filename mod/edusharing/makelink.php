@@ -14,15 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
-    - called from ALFRESCO after selecting a node/resource in the opened popup window
-    - transfers the node-id into the Location field of the opener (edit resource window)
-    - closes popup
-*/
-
 /**
- * @package    mod
- * @subpackage edusharing
+ * Callback script for repo
+ *
+ * Called from repository after selecting a node/resource in the opened popup window
+ * Transfers the node-id into the Location field of the opener (edit resource window)
+ *
+ * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

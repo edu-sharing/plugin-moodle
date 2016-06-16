@@ -15,21 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    block
- * @subpackage edusharing_upload
+ * Block which allows you to upload content to repository
+ *
+ * @package    block_edusharing_upload
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/**
+ * Block which allows you to upload content to repository
+ *
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class block_edusharing_upload extends block_base {
 
+    /**
+     * Initialize this block.
+     *
+     */
     public function init() {
         $this->title   = get_string('block_title', 'block_edusharing_upload');
         $this->version = 2015060901;
     }
 
     /**
-     * (non-PHPdoc)
+     * get block content
+     *
      * @see blocks/block_base::get_content()
      */
     public function get_content() {

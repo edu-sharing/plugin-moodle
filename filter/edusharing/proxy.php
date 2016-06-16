@@ -15,19 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    filter
- * @subpackage edusharing
- * @copyright  metaVentis GmbH — http://metaventis.com
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Proxy script for ajax based rendering
+ *
+ * @package filter_edusharing
+ * @copyright metaVentis GmbH — http://metaventis.com
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../mod/edusharing/lib.php');
 
+
+/**
+ * Class for ajax based rendering
+ *
+ * @copyright metaVentis GmbH — http://metaventis.com
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class filter_edusharing_edurender {
 
+    /**
+     * Get rendered object via curl
+     *
+     * @param string $url
+     * @return string
+     * @throws Exception
+     */
     public function filter_edusharing_get_render_html($url) {
-
         $inline = "";
         try {
             $curlhandle = curl_init($url);
@@ -44,7 +57,6 @@ class filter_edusharing_edurender {
             curl_setopt($curlhandle, CURLOPT_SSL_VERIFYHOST, false);
             $inline = curl_exec($curlhandle);
             curl_close($curlhandle);
-
         } catch (Exception $e) {
             trigger_error($e->getMessage(), E_USER_WARNING);
             curl_close($curlhandle);
@@ -52,20 +64,26 @@ class filter_edusharing_edurender {
         }
 
         return $inline;
-
     }
 
+    /**
+     * Prepare rendered object for display
+     *
+     * @param string $html
+     */
     public function filter_edusharing_display($html) {
         global $CFG;
         error_reporting(0);
         $resid = $_GET['resId'];
 
-        $html = str_replace(array("\n", "\r", "\n"), '', $html);
+        $html = str_replace(array("\n", "\r", "\n"
+        ), '', $html);
 
         /*
          * replaces {{{LMS_INLINE_HELPER_SCRIPT}}}
          */
-        $html = str_replace("{{{LMS_INLINE_HELPER_SCRIPT}}}", $CFG->wwwroot . "/filter/edusharing/inlineHelper.php?resId=" . $resid, $html);
+        $html = str_replace("{{{LMS_INLINE_HELPER_SCRIPT}}}",
+                $CFG->wwwroot . "/filter/edusharing/inlineHelper.php?resId=" . $resid, $html);
 
         /*
          * replaces <es:title ...>...</es:title>
@@ -74,7 +92,8 @@ class filter_edusharing_edurender {
         /*
          * For images, audio and video show a capture underneath object
          */
-        $mimetypes = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'video', 'audio');
+        $mimetypes = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'video', 'audio'
+        );
         foreach ($mimetypes as $mimetype) {
             if (strpos($_GET['mimetype'], $mimetype) !== false) {
                 $html .= '<p class="caption">' . $_GET['title'] . '</p>';
@@ -83,7 +102,6 @@ class filter_edusharing_edurender {
         echo $html;
         exit();
     }
-
 }
 
 $url = $_GET['URL'];

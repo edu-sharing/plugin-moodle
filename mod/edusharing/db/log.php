@@ -25,7 +25,7 @@
  *     - Logging API: {@link http://docs.moodle.org/dev/Logging_API}
  *     - Upgrade API: {@link http://docs.moodle.org/dev/Upgrade_API}
  *
- * @package   core
+ * @package   mod_edusharing
  * @category  log
  * @copyright 2010 Petr Skoda (http://skodak.org), metaVentis GmbH
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

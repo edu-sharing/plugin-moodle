@@ -20,8 +20,7 @@
  * It uses the standard core Moodle formslib. For more info about them, please
  * visit: http://docs.moodle.org/en/Development:lib/formslib.php
  *
- * @package    mod
- * @subpackage edusharing
+ * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -32,6 +31,12 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib/cclib.php');
 require_once($CFG->dirroot.'/mod/edusharing/locallib.php');
 
+/**
+ * The main edusharing configuration form
+ *
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_edusharing_mod_form extends moodleform_mod
 {
 

@@ -15,17 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Provide some methods for setting ang getting app properties
  *
- * @package mod
- * @subpackage edusharing
- * @copyright metaVentis GmbH — http://metaventis.com
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_edusharing
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/**
+ * mod edusharing property helper
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_edusharing_app_property_helper {
 
-    public function __construct() {
-    }
-
+    /**
+     * Add ssl private and public key to app configuration
+     */
     public function mod_edusharing_add_ssl_keypair_to_home_config() {
         $sslkeypair = $this->mod_edusharing_get_ssl_keypair();
         $appproperties = json_decode(get_config('edusharing', 'appProperties'));
@@ -34,6 +40,10 @@ class mod_edusharing_app_property_helper {
         set_config('appProperties', json_encode($appproperties), 'edusharing');
     }
 
+    /**
+     * Get ssl private and public key from app configuration
+     * @return array $sslkeypair
+     */
     public function mod_edusharing_get_ssl_keypair() {
         $sslkeypair = array();
         $res = openssl_pkey_new();
@@ -45,6 +55,9 @@ class mod_edusharing_app_property_helper {
         return $sslkeypair;
     }
 
+    /**
+     * Add signature redirector url to app configuration
+     */
     public function mod_edusharing_add_signature_redirector() {
         $sslkeypair = $this->mod_edusharing_get_ssl_keypair();
         $appproperties = json_decode(get_config('edusharing', 'appProperties'));
@@ -52,6 +65,11 @@ class mod_edusharing_app_property_helper {
         set_config('appProperties', json_encode($appproperties), 'edusharing');
     }
 
+    /**
+     *
+     * Get signature redirector url from app configuration
+     * @return string
+     */
     public function mod_edusharing_get_signature_redirector() {
         global $CFG;
         return $CFG->wwwroot . '/filter/edusharing/signatureRedirector.php';

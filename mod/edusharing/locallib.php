@@ -20,8 +20,7 @@
  * All the edusharing specific functions, needed to implement the module
  * logic, should go here. Never include this file from your lib.php!
  *
- * @package    mod
- * @subpackage edusharing
+ * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,7 +29,10 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
-
+/**
+ * Get the parameter for authentication
+ * @return string
+ */
 function mod_edusharing_get_auth_key() {
 
     global $USER;
@@ -68,7 +70,10 @@ function mod_edusharing_get_auth_key() {
 }
 
 
-/* returns data for authByTrustedApp
+/**
+ * Return data for authByTrustedApp
+ *
+ * @return array
  */
 function mod_edusharing_get_auth_data() {
 
@@ -107,16 +112,18 @@ function mod_edusharing_get_auth_data() {
     return $authparams;
 }
 
-/*
- * get cohorts the user belongs to
- * */
+/**
+ * Get cohorts the user belongs to
+ *
+ * @return array
+ */
 function mod_edusharing_get_user_cohorts() {
     global $DB, $USER;
     $cohortmemberships = $DB->get_records('cohort_members', array('userid'  => $USER->id));
     if ($cohortmemberships) {
         foreach ($cohortmemberships as $cohortmembership) {
             $cohort = $DB->get_record('cohort', array('id'  => $cohortmembership->cohortid));
-            $ret[] = array(
+            $ret = array(
                     'id'  => $cohortmembership->cohortid,
                     'contextid'  => $cohort->contextid,
                     'name'  => $cohort->name,
@@ -130,7 +137,11 @@ function mod_edusharing_get_user_cohorts() {
 /**
  * Generate redirection-url
  *
- * @param stdCLass $edusharing
+ * @param stdClass $edusharing
+ * @param stdClass $appproperties
+ * @param stdClass $repproperties
+ * @param string $displaymode
+ *
  * @return string
  */
 function mod_edusharing_get_redirect_url(
@@ -179,6 +190,12 @@ function mod_edusharing_get_redirect_url(
     return $url;
 }
 
+/**
+ * Generate ssl signature
+ *
+ * @param string $data
+ * @return string
+ */
 function mod_edusharing_get_signature($data) {
 
     $appproperties = json_decode(get_config('edusharing', 'appProperties'));

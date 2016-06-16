@@ -15,14 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    mod
- * @subpackage edusharing
+ * Handle some webservice functions
+ *
+ * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(dirname(__FILE__).'/../sigSoapClient.php');
 
-
+/**
+ * Handle some webservice functions
+ *
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_edusharing_web_service_factory {
 
     /**
@@ -33,8 +39,8 @@ class mod_edusharing_web_service_factory {
     private $authenticationservicewsdl = '';
 
     /**
+     * Get repository properties and set auth service url
      *
-     * @param string $remote_app_id
      * @throws Exception
      */
     public function __construct() {
@@ -47,10 +53,11 @@ class mod_edusharing_web_service_factory {
 
 
     /**
-     *
+     * Get repository ticket
+     * Check existing ticket vor validity
+     * Request a new one if existing ticket is invalid
      * @param string $homeappid
      */
-
     public function mod_edusharing_authentication_get_ticket($homeappid) {
 
         // ticket available

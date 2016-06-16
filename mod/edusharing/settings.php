@@ -17,8 +17,7 @@
 /**
  * This file defines the edu-sharing settings
  *
- * @package mod
- * @subpackage edusharing
+ * @package mod_edusharing
  * @copyright metaVentis GmbH — http://metaventis.com
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -74,12 +73,12 @@ if ($ADMIN->fulltree) {
         foreach ($appproperties as $key => $value) {
             if (strpos($key, '_key') !== false) {
                 $strapp .= '<label for="app_' . $key . '">mod_edusharing/' . $key . '</label>' .
-                         '<textarea style="width: 700px" id="app_' . $key . '" name="app_' . $key . '">' .
-                         $value . '</textarea><br/>';
+                         '<textarea style="width: 700px" id="app_' . $key . '" name="app_' . $key .
+                         '">' . $value . '</textarea><br/>';
             } else {
                 $strapp .= '<label for="app_' . $key . '">mod_edusharing/' . $key . '</label>' .
-                         '<input style="width: 700px; height: auto;" id="app_' . $key . '" name="app_' .
-                         $key . '" type="text" value="' . $value . '"><br/>';
+                         '<input style="width: 700px; height: auto;" id="app_' . $key .
+                         '" name="app_' . $key . '" type="text" value="' . $value . '"><br/>';
             }
         }
     }
@@ -90,12 +89,12 @@ if ($ADMIN->fulltree) {
         foreach ($repproperties as $key => $value) {
             if (strpos($key, '_key') !== false) {
                 $strrep .= '<label for="rep_' . $key . '">mod_edusharing/' . $key . '</label>' .
-                         '<textarea style="width: 700px" id="rep_' . $key . '" name="rep_' . $key . '">' .
-                         $value . '</textarea><br/>';
+                         '<textarea style="width: 700px" id="rep_' . $key . '" name="rep_' . $key .
+                         '">' . $value . '</textarea><br/>';
             } else {
                 $strrep .= '<label for="rep_' . $key . '">mod_edusharing/' . $key . '</label>' .
-                         '<input style="width: 700px; height: auto;" id="rep_' . $key . '" name="rep_' .
-                         $key . '" type="text" value="' . $value . '"><br/>';
+                         '<input style="width: 700px; height: auto;" id="rep_' . $key .
+                         '" name="rep_' . $key . '" type="text" value="' . $value . '"><br/>';
             }
         }
     }
@@ -109,23 +108,23 @@ if ($ADMIN->fulltree) {
 
     $strauth .= '<label for="EDU_AUTH_KEY">EDU_AUTH_KEY</label><input style="width: 700px; height: auto;" id="EDU_AUTH_KEY" name="EDU_AUTH_KEY" type="text" value="' .
              get_config('edusharing', 'EDU_AUTH_KEY') . '"><br/>';
-    $strauth .= '<label for="EDU_AUTH_PARAM_NAME_USERID">EDU_AUTH_PARAM_NAME_USERID</label><input style="width: 700px; height: auto;" '.
-            'id="EDU_AUTH_PARAM_NAME_USERID" name="EDU_AUTH_PARAM_NAME_USERID" type="text" value="' .
+    $strauth .= '<label for="EDU_AUTH_PARAM_NAME_USERID">EDU_AUTH_PARAM_NAME_USERID</label><input style="width: 700px; height: auto;" ' .
+             'id="EDU_AUTH_PARAM_NAME_USERID" name="EDU_AUTH_PARAM_NAME_USERID" type="text" value="' .
              get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID') . '"><br/>';
-    $strauth .= '<label for="EDU_AUTH_PARAM_NAME_USERID">EDU_AUTH_PARAM_NAME_LASTNAME</label><input style="width: 700px; height: auto;" '.
-            'id="EDU_AUTH_PARAM_NAME_LASTNAME" name="EDU_AUTH_PARAM_NAME_LASTNAME" type="text" value="' .
+    $strauth .= '<label for="EDU_AUTH_PARAM_NAME_USERID">EDU_AUTH_PARAM_NAME_LASTNAME</label><input style="width: 700px; height: auto;" ' .
+             'id="EDU_AUTH_PARAM_NAME_LASTNAME" name="EDU_AUTH_PARAM_NAME_LASTNAME" type="text" value="' .
              get_config('edusharing', 'EDU_AUTH_PARAM_NAME_LASTNAME') . '"><br/>';
-    $strauth .= '<label for="EDU_AUTH_PARAM_NAME_FIRSTNAME">EDU_AUTH_PARAM_NAME_FIRSTNAME</label><input style="width: 700px; height: auto;" '.
-            'id="EDU_AUTH_PARAM_NAME_FIRSTNAME" name="EDU_AUTH_PARAM_NAME_FIRSTNAME" type="text" value="' .
+    $strauth .= '<label for="EDU_AUTH_PARAM_NAME_FIRSTNAME">EDU_AUTH_PARAM_NAME_FIRSTNAME</label><input style="width: 700px; height: auto;" ' .
+             'id="EDU_AUTH_PARAM_NAME_FIRSTNAME" name="EDU_AUTH_PARAM_NAME_FIRSTNAME" type="text" value="' .
              get_config('edusharing', 'EDU_AUTH_PARAM_NAME_FIRSTNAME') . '"><br/>';
-    $strauth .= '<label for="EDU_AUTH_PARAM_NAME_EMAIL">EDU_AUTH_PARAM_NAME_EMAIL</label><input style="width: 700px; height: auto;" '.
-            'id="EDU_AUTH_PARAM_NAME_EMAIL" name="EDU_AUTH_PARAM_NAME_EMAIL" type="text" value="' .
+    $strauth .= '<label for="EDU_AUTH_PARAM_NAME_EMAIL">EDU_AUTH_PARAM_NAME_EMAIL</label><input style="width: 700px; height: auto;" ' .
+             'id="EDU_AUTH_PARAM_NAME_EMAIL" name="EDU_AUTH_PARAM_NAME_EMAIL" type="text" value="' .
              get_config('edusharing', 'EDU_AUTH_PARAM_NAME_EMAIL') . '"><br/>';
 
     $strauth .= '<br/>';
 
-    $strauth .= '<label for="EDU_AUTH_AFFILIATION">EDU_AUTH_AFFILIATION</label><input style="width: 700px; height: auto;" id="EDU_AUTH_AFFILIATION" '.
-            'name="EDU_AUTH_AFFILIATION" type="text" value="' .
+    $strauth .= '<label for="EDU_AUTH_AFFILIATION">EDU_AUTH_AFFILIATION</label><input style="width: 700px; height: auto;" id="EDU_AUTH_AFFILIATION" ' .
+             'name="EDU_AUTH_AFFILIATION" type="text" value="' .
              get_config('edusharing', 'EDU_AUTH_AFFILIATION') . '"><br/>';
 
     $conveycohorts = get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS');
