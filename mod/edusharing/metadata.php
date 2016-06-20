@@ -73,5 +73,5 @@ $entry = $xml -> addChild('entry', $appProperties -> signatureRedirector);
 $entry -> addAttribute('key', 'signatureRedirector');
 
 header('Content-type: text/xml');
-print($xml->asXML());
+print(html_entity_decode($xml->asXML()));
 exit();
