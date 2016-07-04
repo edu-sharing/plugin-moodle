@@ -51,8 +51,8 @@ class filter_edusharing extends moodle_text_filter {
      *
      * @var bool
      */
-    private $reset_text_filter_cache = true; 
-    
+    private $reset_text_filter_cache = true;
+
     protected $appProperties = array();
     protected $repProperties = array();
 
@@ -64,13 +64,13 @@ class filter_edusharing extends moodle_text_filter {
      */
     public function __construct($context, array $localconfig) {
         parent::__construct($context, $localconfig);
-        
+
         $this -> appProperties = json_decode(get_config('edusharing', 'appProperties'));
         $this -> repProperties = json_decode(get_config('edusharing', 'repProperties'));
 
         // to force the re-generation of filtered texts we just ...
         reset_text_filters_cache();
-        
+
         //ensure that user exists in repository
         if (isloggedin()){
             $ccauth = new mod_edusharing_web_service_factory();
@@ -113,7 +113,7 @@ class filter_edusharing extends moodle_text_filter {
             preg_match_all('#<img(.*)es:resource_id(.*)>#Umsi', $text, $matchesImg, PREG_PATTERN_ORDER);
             preg_match_all('#<a(.*)es:resource_id(.*)>(.*)</a>#Umsi', $text, $matchesA, PREG_PATTERN_ORDER);
             $matches = array_merge($matchesImg[0], $matchesA[0]);
-            
+
             foreach($matches as $match) {
                 $text = str_replace($match, $this -> convertObject($match), $text, $count);
             }
@@ -130,10 +130,10 @@ class filter_edusharing extends moodle_text_filter {
         global $DB;
         $doc = new DOMDocument();
         $doc->loadHTML($object);
-        
-        $node = $doc->getElementsByTagName('a')[0];
+
+        $node = $doc->getElementsByTagName('a')->item(0);
         if(empty($node))
-            $node = $doc->getElementsByTagName('img')[0];
+            $node = $doc->getElementsByTagName('img')->item(0);
         if(empty($node)) {
             trigger_error('Could not get node', E_USER_WARNING);
             return false;
@@ -150,7 +150,7 @@ class filter_edusharing extends moodle_text_filter {
 
         $converted = $this -> filter_edusharing_render_inline($edusharing, $renderParams);
         $wrapperAttributes = array();
-        
+
         $wrapperAttributes[] = 'id="' . (int)$node->getAttribute('es:resource_id') . '"';
         $wrapperAttributes[] = 'class="edu_wrapper"';
         if (strpos($renderParams['mimetype'], 'image') !== false)
@@ -184,7 +184,7 @@ class filter_edusharing extends moodle_text_filter {
         }
 
         $wrapperAttributes[] = 'style="' . $StyleAttr . '"';
-        
+
         return '<div ' . implode(' ', $wrapperAttributes) . ' '. $tagAttributes .'>' . $converted  . '</div>';
     }
 
@@ -210,7 +210,7 @@ class filter_edusharing extends moodle_text_filter {
 
         $url = mod_edusharing_get_redirect_url($edusharing, $this -> appProperties, $this -> repProperties, DISPLAY_MODE_INLINE);
         $inline = '<div class="eduContainer" data-type="esObject" data-url="'.$CFG->wwwroot.'/filter/edusharing/proxy.php?URL='.urlencode($url).'&amp;resId='.$edusharing->id.'&amp;title='.urlencode($renderParams['title']).'&amp;mimetype='.$renderParams['mimetype'].'"><div class="inner"><div class="spinner1"></div></div><div class="inner"><div class="spinner2"></div></div><div class="inner"><div class="spinner3"></div></div>edu sharing object</div>';
-        
+
         return $inline;
     }
 }
