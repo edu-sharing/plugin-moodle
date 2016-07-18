@@ -43,6 +43,10 @@ function getJQueryCodeSoThatMoodleLikesIt($) {
 				renderEsObject($(this));
 			})
 		});
+		
+		$(".edu_wrapper").on( "click", ".edusharing_metadata_toggle_button", function() {
+			$(this).parent().find(".edusharing_metadata").toggle();
+		});
 }
 
 if(typeof require == 'undefined') {

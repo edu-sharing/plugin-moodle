@@ -10,6 +10,30 @@
 	color: rgba(0, 0, 0, 0.0); /*do not change*/
 }
 
+.edusharing_metadata_toggle_button {
+	cursor: pointer;
+}
+
+.edusharing_metadata {
+    position: absolute;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    z-index: 50;
+}
+
+.edusharing_metadata_title {
+	font-weight: 800;
+}
+
+.edusharing_metadata_label {
+	font-size: 10px;
+	color: #999;
+	margin-top: 6px;
+	margin-bottom: 0;
+	cursor: default;
+}
+
 .inner {
 	width: 30px;
 	height: 50px;
