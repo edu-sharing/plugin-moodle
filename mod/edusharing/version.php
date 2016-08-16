@@ -24,12 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'mod_edusharing';
-<<<<<<< HEAD
-$plugin->version  = 2016062001;		// The current module version (Date: YYYYMMDDXX). If version == 0 then module will not be installed
-$plugin->requires = 2015051100;		// Requires moodle 2.9
-$plugin->cron     = 0;				// Period for cron to check this module (secs)
-=======
-$plugin->version  = 2016061502;        // The current module version (Date: YYYYMMDDXX). If version == 0 then module will not be installed
-$plugin->requires = 2015051100;        // Requires moodle 2.9
-$plugin->cron     = 0;                // Period for cron to check this module (secs)
->>>>>>> feature/moodle_syntax
+$plugin->version = 2016062001;
+$plugin->requires = 2015051100;
+$plugin->cron = 0;

@@ -50,16 +50,11 @@ class filter_edusharing extends moodle_text_filter {
      */
     protected $appproperties = array();
 
-<<<<<<< HEAD
-    protected $appProperties = array();
-    protected $repProperties = array();
-=======
     /**
      *
      * @var array
      */
     protected $repproperties = array();
->>>>>>> feature/moodle_syntax
 
     /**
      *
@@ -71,24 +66,14 @@ class filter_edusharing extends moodle_text_filter {
     public function __construct($context, array $localconfig) {
         parent::__construct($context, $localconfig);
 
-<<<<<<< HEAD
-        $this -> appProperties = json_decode(get_config('edusharing', 'appProperties'));
-        $this -> repProperties = json_decode(get_config('edusharing', 'repProperties'));
-=======
         $this->appproperties = json_decode(get_config('edusharing', 'appProperties'));
         $this->repproperties = json_decode(get_config('edusharing', 'repProperties'));
->>>>>>> feature/moodle_syntax
 
         // to force the re-generation of filtered texts we just ...
         reset_text_filters_cache();
 
-<<<<<<< HEAD
-        //ensure that user exists in repository
-        if (isloggedin()){
-=======
         // ensure that user exists in repository
         if (isloggedin()) {
->>>>>>> feature/moodle_syntax
             $ccauth = new mod_edusharing_web_service_factory();
             $ccauth->mod_edusharing_authentication_get_ticket($this->appproperties->appid);
         }
@@ -124,18 +109,6 @@ class filter_edusharing extends moodle_text_filter {
         $memento = $text;
 
         try {
-<<<<<<< HEAD
-            preg_match_all('#<img(.*)es:resource_id(.*)>#Umsi', $text, $matchesImg, PREG_PATTERN_ORDER);
-            preg_match_all('#<a(.*)es:resource_id(.*)>(.*)</a>#Umsi', $text, $matchesA, PREG_PATTERN_ORDER);
-            $matches = array_merge($matchesImg[0], $matchesA[0]);
-
-            foreach($matches as $match) {
-                $text = str_replace($match, $this -> convertObject($match), $text, $count);
-            }
-
-        } catch(Exception $exception) {
-            trigger_error($exception -> getMessage(), E_USER_WARNING);
-=======
             preg_match_all('#<img(.*)es:resource_id(.*)>#Umsi', $text, $matchesimg,
                     PREG_PATTERN_ORDER);
             preg_match_all('#<a(.*)es:resource_id(.*)>(.*)</a>#Umsi', $text, $matchesa,
@@ -147,16 +120,12 @@ class filter_edusharing extends moodle_text_filter {
             }
         } catch (Exception $exception) {
             trigger_error($exception->getMessage(), E_USER_WARNING);
->>>>>>> feature/moodle_syntax
             return $memento;
         }
 
         return $text;
     }
 
-<<<<<<< HEAD
-    private function convertObject($object) {
-=======
     /**
      * Prepare object for rendering, wrap rendered object
      *
@@ -164,71 +133,13 @@ class filter_edusharing extends moodle_text_filter {
      * @return boolean|string
      */
     private function convertobject($object) {
->>>>>>> feature/moodle_syntax
         global $DB;
         $doc = new DOMDocument();
         $doc->loadHTML($object);
 
-<<<<<<< HEAD
         $node = $doc->getElementsByTagName('a')->item(0);
-        if(empty($node))
-            $node = $doc->getElementsByTagName('img')->item(0);
-        if(empty($node)) {
-            trigger_error('Could not get node', E_USER_WARNING);
-            return false;
-        }
-
-        $edusharing = $DB -> get_record(EDUSHARING_TABLE, array('id' => (int)$node->getAttribute('es:resource_id')));
-        if (!$edusharing) {
-            trigger_error('Error loading resource from db.', E_USER_WARNING);
-            return false;
-        }
-        $renderParams = array();
-        $renderParams['title'] = $node->getAttribute('title');
-        $renderParams['mimetype'] = $node->getAttribute('es:mimetype');
-
-        $converted = $this -> filter_edusharing_render_inline($edusharing, $renderParams);
-        $wrapperAttributes = array();
-
-        $wrapperAttributes[] = 'id="' . (int)$node->getAttribute('es:resource_id') . '"';
-        $wrapperAttributes[] = 'class="edu_wrapper"';
-        if (strpos($renderParams['mimetype'], 'image') !== false)
-            $wrapperAttributes[] = 'data-id="' . (int)$node->getAttribute('es:resource_id') . '"';
-
-        $StyleAttr = '';
-        switch($edusharing->window_float) {
-            case 'left' :
-                $StyleAttr .= 'display: block; float: left; margin: 0 5px 5px 0;';
-                break;
-            case 'right' :
-                $StyleAttr .= 'display: block; float: right; margin: 0 0 5px 5px;';
-                break;
-            case 'inline' :
-                $StyleAttr .= 'display: inline-block; margin: 0 5px;';
-                break;
-            case 'none' :
-            default :
-                $StyleAttr .= 'display: block; float: none; margin: 5px 0;';
-                break;
-        }
-
-        if ($edusharing -> window_width) {
-            $StyleAttr .= ' width: ' . $edusharing->window_width . 'px;';
-            $tagAttributes = 'width="' . $edusharing->window_width . '"';
-        }
-
-        if ($edusharing -> window_height) {
-            $StyleAttr .= ' height: ' . $edusharing->window_height . 'px;';
-            $tagAttr[] = 'height="' . $edusharing->window_height . '"';
-        }
-
-        $wrapperAttributes[] = 'style="' . $StyleAttr . '"';
-
-        return '<div ' . implode(' ', $wrapperAttributes) . ' '. $tagAttributes .'>' . $converted  . '</div>';
-=======
-        $node = $doc->getElementsByTagName('a')[0];
         if (empty($node)) {
-            $node = $doc->getElementsByTagName('img')[0];
+            $node = $doc->getElementsByTagName('img')->item(0);
         }
         if (empty($node)) {
             trigger_error('Could not get node', E_USER_WARNING);
@@ -284,7 +195,6 @@ class filter_edusharing extends moodle_text_filter {
         $wrapperattributes[] = 'style="' . $styleattr . '"';
 
         return '<div ' . implode(' ', $wrapperattributes) . ' ' . $tagattributes . '>' . $converted . '</div>';
->>>>>>> feature/moodle_syntax
     }
 
 
@@ -307,11 +217,6 @@ class filter_edusharing extends moodle_text_filter {
         }
 
         $repositoryid = $this->appproperties->homerepid;
-
-<<<<<<< HEAD
-        $url = mod_edusharing_get_redirect_url($edusharing, $this -> appProperties, $this -> repProperties, DISPLAY_MODE_INLINE);
-        $inline = '<div class="eduContainer" data-type="esObject" data-url="'.$CFG->wwwroot.'/filter/edusharing/proxy.php?URL='.urlencode($url).'&amp;resId='.$edusharing->id.'&amp;title='.urlencode($renderParams['title']).'&amp;mimetype='.$renderParams['mimetype'].'"><div class="inner"><div class="spinner1"></div></div><div class="inner"><div class="spinner2"></div></div><div class="inner"><div class="spinner3"></div></div>edu sharing object</div>';
-=======
         $url = mod_edusharing_get_redirect_url($edusharing, $this->appproperties,
                 $this->repproperties, DISPLAY_MODE_INLINE);
         $inline = '<div class="eduContainer" data-type="esObject" data-url="' . $CFG->wwwroot .
@@ -320,8 +225,6 @@ class filter_edusharing extends moodle_text_filter {
                  '&amp;mimetype=' . $renderparams['mimetype'] .
                  '"><div class="inner"><div class="spinner1"></div></div>' .
                  '<div class="inner"><div class="spinner2"></div></div><div class="inner"><div class="spinner3"></div></div>edu sharing object</div>';
->>>>>>> feature/moodle_syntax
-
         return $inline;
     }
 }
