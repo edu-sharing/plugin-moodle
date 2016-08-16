@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,21 +8,19 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
-
-/*
-	- called from ALFRESCO after selecting a node/resource in the opened popup window
-	- transfers the node-id into the Location field of the opener (edit resource window)
-	- closes popup
-*/
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    mod
- * @subpackage edusharing
+ * Callback script for repo
+ *
+ * Called from repository after selecting a node/resource in the opened popup window
+ * Transfers the node-id into the Location field of the opener (edit resource window)
+ *
+ * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -35,18 +33,17 @@ $PAGE->set_context(context_system::instance() );
 echo $OUTPUT->header();
 
 
-$eduResource = addslashes_js(optional_param('nodeId', '', PARAM_RAW));
+$eduresource = addslashes_js(optional_param('nodeId', '', PARAM_RAW));
 
 echo <<<content
 This page should have populated the add resource form with the url to the Repository item.<br /><br />
 <a href="#" onclick="window.close();">If this window does not close on its own, please click here.</a>
 <script type="text/javascript">
-	try{
-		opener.document.getElementById('id_object_url').value = '$eduResource';
-		opener.focus();
-	} catch(err)
-	{}
-	window.close();
+    try{
+        opener.document.getElementById('id_object_url').value = '$eduresource';
+        opener.focus();
+    } catch (err) {}
+    window.close();
 </script>
 content;
 

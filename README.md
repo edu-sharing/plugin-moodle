@@ -29,7 +29,7 @@ After installing the Plugins in short the following steps are necessary:
 - connect the activity module to an edu-sharing repository (plugin settings / repository settings)
 - activate the edu-sharing editor plugin for tinymce and push it to the first position in the editor plugin overview list
 - activate the edu-sharing filter, set it up for moodle and html texts and push it to the first position in the filter overview list
-		
+        
 
 Documentation
 -------------

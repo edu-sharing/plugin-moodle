@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,11 +8,11 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Internal library of functions for module edusharing
@@ -20,8 +20,7 @@
  * All the edusharing specific functions, needed to implement the module
  * logic, should go here. Never include this file from your lib.php!
  *
- * @package    mod
- * @subpackage edusharing
+ * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,166 +29,181 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
-
+/**
+ * Get the parameter for authentication
+ * @return string
+ */
 function mod_edusharing_get_auth_key() {
-    
+
     global $USER;
-    
-    if(array_key_exists('sso', $_SESSION) && !empty($_SESSION['sso'])) {
-        $EDU_AUTH_PARAM_NAME_USERID = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
-        return $_SESSION['sso'][$EDU_AUTH_PARAM_NAME_USERID];
+
+    if (array_key_exists('sso', $_SESSION) && !empty($_SESSION['sso'])) {
+        $eduauthparamnameuserid = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
+        return $_SESSION['sso'][$eduauthparamnameuserid];
     }
-  
+
     if (empty($USER)) {
-        $user_data = $_SESSION["USER"];     
+        $userdata = $_SESSION["USER"];
     } else {
-        $user_data = $USER;     
+        $userdata = $USER;
     }
-    
-    $EDU_AUTH_KEY = get_config('edusharing', 'EDU_AUTH_KEY');
-    
-    switch($EDU_AUTH_KEY) {
+
+    $eduauthkey = get_config('edusharing', 'EDU_AUTH_KEY');
+
+    switch($eduauthkey) {
         case 'id':
-            return $user_data -> id;
+            return $userdata->id;
         break;
-        
+
         case 'idnumber':
-            return $user_data -> idnumber;
+            return $userdata->idnumber;
         break;
-        
+
         case 'email':
-            return $user_data -> email;
+            return $userdata->email;
         break;
-        
+
         case 'username':
         default:
-            return $user_data -> username;
+            return $userdata->username;
     }
 }
 
 
-/* returns data for authByTrustedApp
+/**
+ * Return data for authByTrustedApp
+ *
+ * @return array
  */
 function mod_edusharing_get_auth_data() {
-    
+
     global $USER, $CFG;
 
     if (empty($USER)) {
-        $user_data = $_SESSION["USER"];     
+        $userdata = $_SESSION["USER"];
     } else {
-        $user_data = $USER;     
+        $userdata = $USER;
     }
-    
-    if(array_key_exists('sso', $_SESSION) && !empty($_SESSION['sso'])) {
-        $authParams = array();
-        foreach($_SESSION['sso'] as $key => $value) {
-            $authParams[] = array('key' => $key, 'value' => $value);
+
+    if (array_key_exists('sso', $_SESSION) && !empty($_SESSION['sso'])) {
+        $authparams = array();
+        foreach ($_SESSION['sso'] as $key => $value) {
+            $authparams[] = array('key'  => $key, 'value'  => $value);
         }
     } else {
-        $EDU_AUTH_PARAM_NAME_USERID = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
-        $EDU_AUTH_PARAM_NAME_LASTNAME = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_LASTNAME');
-        $EDU_AUTH_PARAM_NAME_FIRSTNAME = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_FIRSTNAME');
-        $EDU_AUTH_PARAM_NAME_EMAIL = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_EMAIL');
-        $EDU_AUTH_AFFILIATION = get_config('edusharing', 'EDU_AUTH_AFFILIATION');
+        $eduauthparamnameuserid = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
+        $eduauthparamnamelastname = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_LASTNAME');
+        $eduauthparamnamefirstname = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_FIRSTNAME');
+        $eduauthparamnameemail = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_EMAIL');
+        $eduauthaffiliation = get_config('edusharing', 'EDU_AUTH_AFFILIATION');
 
-        $authParams = array(
-	        		array('key' => $EDU_AUTH_PARAM_NAME_USERID, 'value' => mod_edusharing_get_auth_key()),
-	                array('key' => $EDU_AUTH_PARAM_NAME_LASTNAME, 'value' => $user_data -> lastname),
-	                array('key' => $EDU_AUTH_PARAM_NAME_FIRSTNAME, 'value' => $user_data -> firstname),
-	                array('key' => $EDU_AUTH_PARAM_NAME_EMAIL, 'value' => $user_data -> email),
-	                array('key' => 'affiliation', 'value' => $EDU_AUTH_AFFILIATION),
-               	);
+        $authparams = array(
+                    array('key'  => $eduauthparamnameuserid, 'value'  => mod_edusharing_get_auth_key()),
+                    array('key'  => $eduauthparamnamelastname, 'value'  => $userdata->lastname),
+                    array('key'  => $eduauthparamnamefirstname, 'value'  => $userdata->firstname),
+                    array('key'  => $eduauthparamnameemail, 'value'  => $userdata->email),
+                    array('key'  => 'affiliation', 'value'  => $eduauthaffiliation),
+                   );
     }
-    
-    if(get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS') == 'yes') {
-    	$authParams[] = array('key' => 'globalgroups', 'value' => mod_edusharing_get_user_cohorts());
-    }    
-    return $authParams;
+
+    if (get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS') == 'yes') {
+        $authparams[] = array('key'  => 'globalgroups', 'value'  => mod_edusharing_get_user_cohorts());
+    }
+    return $authparams;
 }
 
-/*
- * get cohorts the user belongs to
- * */
+/**
+ * Get cohorts the user belongs to
+ *
+ * @return array
+ */
 function mod_edusharing_get_user_cohorts() {
-	global $DB, $USER;
-	$cohortMemberships = $DB -> get_records('cohort_members',array('userid' => $USER -> id));
-	if($cohortMemberships) {
-		foreach($cohortMemberships as $cohortMembership) {
-			$cohort = $DB -> get_record('cohort', array('id' => $cohortMembership -> cohortid));	
-			$ret[] = array(
-					'id' => $cohortMembership -> cohortid,
-					'contextid' => $cohort -> contextid,
-					'name' => $cohort -> name,
-					'idnumber' => $cohort -> idnumber
-			);
-		}
-		return $ret;
-	}
+    global $DB, $USER;
+    $cohortmemberships = $DB->get_records('cohort_members', array('userid'  => $USER->id));
+    if ($cohortmemberships) {
+        foreach ($cohortmemberships as $cohortmembership) {
+            $cohort = $DB->get_record('cohort', array('id'  => $cohortmembership->cohortid));
+            $ret = array(
+                    'id'  => $cohortmembership->cohortid,
+                    'contextid'  => $cohort->contextid,
+                    'name'  => $cohort->name,
+                    'idnumber'  => $cohort->idnumber
+            );
+        }
+        return $ret;
+    }
 }
 
 /**
  * Generate redirection-url
  *
- * @param stdCLass $edusharing
+ * @param stdClass $edusharing
+ * @param stdClass $appproperties
+ * @param stdClass $repproperties
+ * @param string $displaymode
+ *
  * @return string
  */
 function mod_edusharing_get_redirect_url(
     stdClass $edusharing,
-    stdClass $appProperties,
-    stdClass $repProperties,
-    $display_mode = DISPLAY_MODE_DISPLAY)
-{
+    stdClass $appproperties,
+    stdClass $repproperties,
+    $displaymode = DISPLAY_MODE_DISPLAY) {
     global $USER;
-    
-    $url = $appProperties -> cc_gui_url . '/renderingproxy';
 
-    $url .= '?app_id='.urlencode($appProperties -> appid);
+    $url = $appproperties->cc_gui_url . '/renderingproxy';
 
-    $sessionId = session_id();
-    $url .= '&session='.urlencode($sessionId);
+    $url .= '?app_id='.urlencode($appproperties->appid);
 
+    $sessionid = session_id();
+    $url .= '&session='.urlencode($sessionid);
 
-    $rep_id = mod_edusharing_get_repository_id_from_url($edusharing -> object_url);
-    $url .= '&rep_id='.urlencode($rep_id);
+    $repid = mod_edusharing_get_repository_id_from_url($edusharing->object_url);
+    $url .= '&rep_id='.urlencode($repid);
 
-    $resourceRefenerence = str_replace('/', '', parse_url($edusharing->object_url, PHP_URL_PATH));
-    if ( empty($resourceRefenerence) )
-    {
+    $resourcerefenerence = str_replace('/', '', parse_url($edusharing->object_url, PHP_URL_PATH));
+    if ( empty($resourcerefenerence) ) {
         trigger_error('Error replacing resource-url "'.$edusharing->object_url.'".', E_USER_WARNING);
     }
 
-    $url .= '&obj_id='.urlencode($resourceRefenerence);
+    $url .= '&obj_id='.urlencode($resourcerefenerence);
 
     $url .= '&resource_id='.urlencode($edusharing->id);
     $url .= '&course_id='.urlencode($edusharing->course);
 
-    $url .= '&display='.urlencode($display_mode);
+    $url .= '&display='.urlencode($displaymode);
 
     $url .= '&width=' . urlencode($edusharing->window_width);
     $url .= '&height=' . urlencode($edusharing->window_height);
     $url .= '&version=' . urlencode($edusharing->object_version);
     $url .= '&language=' . urlencode($USER->lang);
 
-    $ES_KEY = $appProperties -> blowfishkey;
-    $ES_IV = $appProperties -> blowfishiv;
+    $eskey = $appproperties->blowfishkey;
+    $esiv = $appproperties->blowfishiv;
 
     $res = mcrypt_module_open(MCRYPT_BLOWFISH, '', MCRYPT_MODE_CBC, '');
-    mcrypt_generic_init($res, $ES_KEY, $ES_IV);
+    mcrypt_generic_init($res, $eskey, $esiv);
     $u = base64_encode(mcrypt_generic($res, mod_edusharing_get_auth_key()));
     mcrypt_generic_deinit($res);
     $url .= '&u='. rawurlencode($u);
-    
+
     return $url;
 }
 
+/**
+ * Generate ssl signature
+ *
+ * @param string $data
+ * @return string
+ */
 function mod_edusharing_get_signature($data) {
 
-    $appProperties = json_decode(get_config('edusharing', 'appProperties'));
-    $priv_key = $appProperties -> private_key;
-    $pkeyid = openssl_get_privatekey($priv_key);      
+    $appproperties = json_decode(get_config('edusharing', 'appProperties'));
+    $privkey = $appproperties->private_key;
+    $pkeyid = openssl_get_privatekey($privkey);
     openssl_sign($data, $signature, $pkeyid);
     $signature = base64_encode($signature);
-    openssl_free_key($pkeyid);    
+    openssl_free_key($pkeyid);
     return $signature;
 }
 
@@ -202,17 +216,17 @@ function mod_edusharing_get_signature($data) {
 function mod_edusharing_get_current_users_language_code() {
     global $USER;
 
-    $_my_lang = 'en_EN';
+    $mylang = 'en_EN';
 
-    if(isset($USER->lang)) {
+    if (isset($USER->lang)) {
         switch(strtolower(substr($USER->lang, 0, 2))) {
             case 'en':
-                $_my_lang = 'en_EN';
+                $mylang = 'en_EN';
             break;
             default:
-                $_my_lang = 'de_DE';
+                $mylang = 'de_DE';
         }
     }
-    return $_my_lang;
+    return $mylang;
 }
 

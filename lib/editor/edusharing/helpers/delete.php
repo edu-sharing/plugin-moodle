@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,15 +8,16 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    editor
- * @subpackage edusharing
+ * Called on object deletion
+ *
+ * @package    editor_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,33 +30,29 @@ require_login();
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
 $input = file_get_contents('php://input');
-if ( ! $input )
-{
-	throw new Exception('Error reading json-data from request-body.');
+if ( ! $input ) {
+    throw new Exception('Error reading json-data from request-body.');
 }
 
 $delete = json_decode($input);
-if ( ! $delete )
-{
-	throw new Exception('Error decoding json-data for edusharing-object.');
+if ( ! $delete ) {
+    throw new Exception('Error decoding json-data for edusharing-object.');
 }
 
 $where = array(
-		'id' => $delete->id,
-		'course' => $delete->course,
+        'id'  => $delete->id,
+        'course'  => $delete->course,
 );
 $edusharing = $DB->get_record(EDUSHARING_TABLE, $where);
-if ( ! $edusharing )
-{
-	trigger_error('Resource "'.$delete->id.'" not found for course "'.$delete->course.'".', E_USER_WARNING);
+if ( ! $edusharing ) {
+    trigger_error('Resource "'.$delete->id.'" not found for course "'.$delete->course.'".', E_USER_WARNING);
 
-	header('HTTP/1.1 404 Not found', true, 404);
-	exit();
+    header('HTTP/1.1 404 Not found', true, 404);
+    exit();
 }
 
-if ( ! edusharing_delete_instance($edusharing->id) )
-{
-	trigger_error('Error deleting edu-sharing-instance "'.$edusharing->id.'"', E_USER_WARNING);
+if ( ! edusharing_delete_instance($edusharing->id) ) {
+    trigger_error('Error deleting edu-sharing-instance "'.$edusharing->id.'"', E_USER_WARNING);
 
-	header('', true, 500);
+    header('', true, 500);
 }

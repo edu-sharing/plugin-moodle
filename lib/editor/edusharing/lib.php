@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,15 +8,16 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    editor
- * @subpackage edusharing
+ * Provide some basic functions for the edu-sharing editor plugin
+ *
+ * @package    editor_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -24,10 +25,15 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../tinymce/lib.php');
-
 require_once($CFG->dirroot.'/mod/edusharing/lib/cclib.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
+/**
+ * Provide some basic functions for the edu-sharing editor plugin
+ *
+ * @copyright  metaVentis GmbH — http://metaventis.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class edusharing_texteditor extends tinymce_texteditor {
 
     /**
@@ -45,11 +51,11 @@ class edusharing_texteditor extends tinymce_texteditor {
     const ATTRIBUTE_NAMESPACE_PREFIX = 'es';
 
     /**
+     * Get edu-sharing ticket
      *
      * @return string
      */
-    protected function mod_edusharing_init_edusharing_ticket()
-    {
+    protected function mod_edusharing_init_edusharing_ticket() {
         /*
          * use previously generated ticket if available. Generates conflict if
         * repository-session closes too early.
@@ -66,20 +72,20 @@ class edusharing_texteditor extends tinymce_texteditor {
             $_SESSION['edusharing']['editor'] = array();
         }
 
-        $appProperties = json_decode(get_config('edusharing', 'appProperties'));
-        $repository_id = $appProperties -> homerepid;
+        $appproperties = json_decode(get_config('edusharing', 'appProperties'));
+        $repositoryid = $appproperties->homerepid;
 
         $ccauth = new mod_edusharing_web_service_factory();
-        $edusharing_ticket = $ccauth->mod_edusharing_authentication_get_ticket($appProperties -> appid);
-        if ( ! $edusharing_ticket ) {
+        $edusharingticket = $ccauth->mod_edusharing_authentication_get_ticket($appproperties->appid);
+        if ( ! $edusharingticket ) {
             unset($_SESSION['edusharing']['editor']['ticket']);
             return false;
         }
 
         // store ticket in session
-        $_SESSION['edusharing']['editor']['ticket'] = $edusharing_ticket;
+        $_SESSION['edusharing']['editor']['ticket'] = $edusharingticket;
 
-        return $edusharing_ticket;
+        return $edusharingticket;
     }
 
     /**
@@ -87,22 +93,19 @@ class edusharing_texteditor extends tinymce_texteditor {
      * profile) we have to detect the current editor-context and decide if
      * edu-sharing is applicable to this context.
      *
-     * @param $options the editor-options from tinymce_texteditor::use_editor()
+     * @param array $options the editor-options from tinymce_texteditor::use_editor()
      *
      * @return bool
      */
-    protected function is_edusharing_context(array $options)
-    {
+    protected function is_edusharing_context(array $options) {
         global $COURSE;
 
-        if ( empty($options['context']) )
-        {
+        if ( empty($options['context']) ) {
             return false;
         }
 
         $result = false;
-        switch( $options['context']->contextlevel )
-        {
+        switch( $options['context']->contextlevel ) {
             case CONTEXT_COURSE:
             case CONTEXT_MODULE:
             case CONTEXT_BLOCK:
@@ -117,11 +120,15 @@ class edusharing_texteditor extends tinymce_texteditor {
     }
 
     /**
-     * (non-PHPdoc)
+     * Het parameters for tinymce
+     * @param int $elementid
+     * @param array $options
+     *
+     * @return array
+     *
      * @see tinymce_texteditor::get_init_params()
      */
-    protected function get_init_params($elementid, array $options=null)
-    {
+    protected function get_init_params($elementid, array $options=null) {
         global $CFG;
         global $COURSE;
         global $PAGE;
@@ -131,27 +138,40 @@ class edusharing_texteditor extends tinymce_texteditor {
         $params = parent::get_init_params($elementid, $options);
 
         // add edu-sharing functionaliy to tinymce ONLY when course-id available
-        if ( $this->is_edusharing_context($options) )
-        {
-            $edusharing_ticket = $this->mod_edusharing_init_edusharing_ticket();
+        if ( $this->is_edusharing_context($options) ) {
+            $edusharingticket = $this->mod_edusharing_init_edusharing_ticket();
 
             // register tinymce-plugin but DO NOT try to load it as this already happened
             $params['plugins'] .= ',-edusharing';
 
             // add tool-button
-		    if (empty($params['theme_advanced_buttons3_add'])) $params['theme_advanced_buttons3_add']='';
+            if (empty($params['theme_advanced_buttons3_add'])) {
+                $params['theme_advanced_buttons3_add'] = '';
+            }
             $params['theme_advanced_buttons3_add'] .= ',|,edusharing';
 
             // additional params required by edu-sharing.net
             empty($params['extended_valid_elements']) ? $params['extended_valid_elements'] = '' : $params['extended_valid_elements'] .= ',';
-            
-            $params['extended_valid_elements'] .= 'a[href|data|type|width|height|alt|title|xmlns::'.self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
-            $params['extended_valid_elements'] .= ',object[data|type|width|height|alt|title|xmlns::'.self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
-            $params['extended_valid_elements'] .= ',img[style|longdesc|usemap|src|border|alt=|title|hspace|vspace|width|height|align|xmlns::'.self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
-            
+
+            $params['extended_valid_elements'] .= 'a[href|data|type|width|height|alt|title|xmlns::'.self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.
+                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.
+                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.
+                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.
+                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
+            $params['extended_valid_elements'] .= ',object[data|type|width|height|alt|title|xmlns::'.self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.
+                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.
+                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.
+                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.
+                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
+            $params['extended_valid_elements'] .= ',img[style|longdesc|usemap|src|border|alt=|title|hspace|vspace|width|height|align|xmlns::'.
+                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.
+                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.
+                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.
+                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
+
             $params['moodle_wwwroot'] = $CFG->wwwroot;
             $params['edusharing_course_id'] = $COURSE->id;
-            $params['edusharing_ticket'] = $edusharing_ticket;
+            $params['edusharing_ticket'] = $edusharingticket;
 
             $params['edusharing_namespace_uri'] = self::ATTRIBUTE_NAMESPACE_URI;
             $params['edusharing_namespace_prefix'] = self::ATTRIBUTE_NAMESPACE_PREFIX;
@@ -168,15 +188,14 @@ class edusharing_texteditor extends tinymce_texteditor {
     /**
      * Prepare tinymce to use edu-sharing plugin
      *
-     * @param string $elementid identifies the id-attribute of editor-node in HTML
+     * @param int $elementid
      * @param array $options
-     * @param array $fpoptions
+     * @param array $filepickeroptions
      *
      * (non-PHPdoc)
      * @see tinymce_texteditor::use_editor()
      */
-    public function use_editor($elementid, array $options=null, $filepicker_options=null)
-    {
+    public function use_editor($elementid, array $options=null, $filepickeroptions=null) {
         global $CFG;
         global $COURSE;
         global $PAGE;
@@ -189,9 +208,10 @@ class edusharing_texteditor extends tinymce_texteditor {
         $OUTPUT->htmlattributes('xmlns:'.self::ATTRIBUTE_NAMESPACE_PREFIX.'="'.self::ATTRIBUTE_NAMESPACE_URI.'"');
 
         // tell tinymce to load plugin from non-standard plugin location
-        $PAGE->requires->js_init_code('tinymce.PluginManager.load("edusharing", "' . $CFG->wwwroot . '/lib/editor/edusharing/js/tinymce/plugin/editor_plugin.js?'.filemtime($CFG->libdir . '/editor/edusharing/js/tinymce/plugin/editor_plugin.js').'");');
+        $PAGE->requires->js_init_code('tinymce.PluginManager.load("edusharing", "' . $CFG->wwwroot . '/lib/editor/edusharing/js/tinymce/plugin/editor_plugin.js?'.
+                filemtime($CFG->libdir . '/editor/edusharing/js/tinymce/plugin/editor_plugin.js').'");');
 
-        return parent::use_editor($elementid, $options, $filepicker_options);
+        return parent::use_editor($elementid, $options, $filepickeroptions);
     }
 
 }
