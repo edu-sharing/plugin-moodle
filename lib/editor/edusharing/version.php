@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,10 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * TinyMCE text editor integration version file.
+ * Defines the version of the edu-sharing plugin
  *
- * @package    editor
- * @subpackage edusharing
+ * @package    editor_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,8 +25,8 @@
 defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'editor_edusharing';
 $plugin->dependencies = array(
-    'mod_edusharing' => 2016011401,
+    'mod_edusharing'  => 2016011401,
 );
-$plugin->version  = 2016060801;
+$plugin->version  = 2016061501;
 $plugin->requires = 2015051100;     // Requires moodle 2.9
 

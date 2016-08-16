@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,81 +8,99 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Filter converting edu-sharing URIs in the text to edu-sharing rendering links
  *
- * @package    filter
- * @subpackage edusharing
- * @copyright  metaVentis GmbH — http://metaventis.com
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package filter_edusharing
+ * @copyright metaVentis GmbH — http://metaventis.com
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
 
-require_once ($CFG -> dirroot . '/mod/edusharing/lib/cclib.php');
-require_once ($CFG -> dirroot . '/mod/edusharing/lib.php');
-require_once ($CFG -> dirroot . '/mod/edusharing/locallib.php');
+require_once($CFG->dirroot . '/mod/edusharing/lib/cclib.php');
+require_once($CFG->dirroot . '/mod/edusharing/lib.php');
+require_once($CFG->dirroot . '/mod/edusharing/locallib.php');
 
+
+/**
+ * Parse content for edu-sharing objects to render them
+ *
+ * @copyright metaVentis GmbH — http://metaventis.com
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ */
 class filter_edusharing extends moodle_text_filter {
-
-    /**
-     * @var array global configuration for this filter
-     *
-     * This might be eventually moved into parent class if we found it
-     * useful for other filters, too.
-     */
-    protected static $globalconfig;
-
-    /**
-     * Hold repository-tickets as $repository_id => $ticket.
-     *
-     * @var array
-     */
-    private $ticketCache = array();
 
     /**
      * Whether to reset the cache AGAIN or not.
      *
      * @var bool
      */
-    private $reset_text_filter_cache = true;
+    private $resettextfiltercache = true;
 
+    /**
+     *
+     * @var array
+     */
+    protected $appproperties = array();
+
+<<<<<<< HEAD
     protected $appProperties = array();
     protected $repProperties = array();
+=======
+    /**
+     *
+     * @var array
+     */
+    protected $repproperties = array();
+>>>>>>> feature/moodle_syntax
 
     /**
      *
      * Enter description here ...
+     *
      * @param object $context
      * @param array $localconfig
      */
     public function __construct($context, array $localconfig) {
         parent::__construct($context, $localconfig);
 
+<<<<<<< HEAD
         $this -> appProperties = json_decode(get_config('edusharing', 'appProperties'));
         $this -> repProperties = json_decode(get_config('edusharing', 'repProperties'));
+=======
+        $this->appproperties = json_decode(get_config('edusharing', 'appProperties'));
+        $this->repproperties = json_decode(get_config('edusharing', 'repProperties'));
+>>>>>>> feature/moodle_syntax
 
         // to force the re-generation of filtered texts we just ...
         reset_text_filters_cache();
 
+<<<<<<< HEAD
         //ensure that user exists in repository
         if (isloggedin()){
+=======
+        // ensure that user exists in repository
+        if (isloggedin()) {
+>>>>>>> feature/moodle_syntax
             $ccauth = new mod_edusharing_web_service_factory();
-            $ccauth -> mod_edusharing_authentication_get_ticket($this -> appProperties -> appid);
+            $ccauth->mod_edusharing_authentication_get_ticket($this->appproperties->appid);
         }
-	}
+    }
+
     /**
      * Apply the filter to the text
      *
      * @see filter_manager::apply_filter_chain()
      * @param string $text to be processed by the text
      * @param array $options filter options
+     * @todo ensure not to include jQuery twice
      *
      * @return string text after processing
      */
@@ -92,17 +110,13 @@ class filter_edusharing extends moodle_text_filter {
         global $PAGE;
 
         // disable page-caching to "renew" render-session-data
-        $PAGE -> set_cacheable(false);
+        $PAGE->set_cacheable(false);
 
-        //@todo ensure not to include jQuery twice
-        $PAGE -> requires -> js('/mod/edusharing/js/jquery.min.js');
-        $PAGE -> requires -> js('/mod/edusharing/js/jquery-near-viewport.min.js');
-        $PAGE -> requires -> js('/filter/edusharing/edu.js');
+        $PAGE->requires->js('/mod/edusharing/js/jquery.min.js');
+        $PAGE->requires->js('/mod/edusharing/js/jquery-near-viewport.min.js');
+        $PAGE->requires->js('/filter/edusharing/edu.js');
 
         if (!isset($options['originalformat'])) {
-            // if the format is not specified, we are probably called by {@see format_string()}
-            // in that case, it would be dangerous to replace URL with the link because it could
-            // be stripped. therefore, we do nothing
             return $text;
         }
 
@@ -110,6 +124,7 @@ class filter_edusharing extends moodle_text_filter {
         $memento = $text;
 
         try {
+<<<<<<< HEAD
             preg_match_all('#<img(.*)es:resource_id(.*)>#Umsi', $text, $matchesImg, PREG_PATTERN_ORDER);
             preg_match_all('#<a(.*)es:resource_id(.*)>(.*)</a>#Umsi', $text, $matchesA, PREG_PATTERN_ORDER);
             $matches = array_merge($matchesImg[0], $matchesA[0]);
@@ -120,17 +135,41 @@ class filter_edusharing extends moodle_text_filter {
 
         } catch(Exception $exception) {
             trigger_error($exception -> getMessage(), E_USER_WARNING);
+=======
+            preg_match_all('#<img(.*)es:resource_id(.*)>#Umsi', $text, $matchesimg,
+                    PREG_PATTERN_ORDER);
+            preg_match_all('#<a(.*)es:resource_id(.*)>(.*)</a>#Umsi', $text, $matchesa,
+                    PREG_PATTERN_ORDER);
+            $matches = array_merge($matchesimg[0], $matchesa[0]);
+
+            foreach ($matches as $match) {
+                $text = str_replace($match, $this->convertobject($match), $text, $count);
+            }
+        } catch (Exception $exception) {
+            trigger_error($exception->getMessage(), E_USER_WARNING);
+>>>>>>> feature/moodle_syntax
             return $memento;
         }
 
         return $text;
     }
 
+<<<<<<< HEAD
     private function convertObject($object) {
+=======
+    /**
+     * Prepare object for rendering, wrap rendered object
+     *
+     * @param string $object
+     * @return boolean|string
+     */
+    private function convertobject($object) {
+>>>>>>> feature/moodle_syntax
         global $DB;
         $doc = new DOMDocument();
         $doc->loadHTML($object);
 
+<<<<<<< HEAD
         $node = $doc->getElementsByTagName('a')->item(0);
         if(empty($node))
             $node = $doc->getElementsByTagName('img')->item(0);
@@ -186,6 +225,66 @@ class filter_edusharing extends moodle_text_filter {
         $wrapperAttributes[] = 'style="' . $StyleAttr . '"';
 
         return '<div ' . implode(' ', $wrapperAttributes) . ' '. $tagAttributes .'>' . $converted  . '</div>';
+=======
+        $node = $doc->getElementsByTagName('a')[0];
+        if (empty($node)) {
+            $node = $doc->getElementsByTagName('img')[0];
+        }
+        if (empty($node)) {
+            trigger_error('Could not get node', E_USER_WARNING);
+            return false;
+        }
+
+        $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id' => (int) $node->getAttribute('es:resource_id')));
+
+        if (!$edusharing) {
+            trigger_error('Error loading resource from db.', E_USER_WARNING);
+            return false;
+        }
+
+        $renderparams = array();
+        $renderparams['title'] = $node->getAttribute('title');
+        $renderparams['mimetype'] = $node->getAttribute('es:mimetype');
+        $converted = $this->filter_edusharing_render_inline($edusharing, $renderparams);
+        $wrapperattributes = array();
+
+        $wrapperattributes[] = 'id="' . (int) $node->getAttribute('es:resource_id') . '"';
+        $wrapperattributes[] = 'class="edu_wrapper"';
+        if (strpos($renderparams['mimetype'], 'image') !== false) {
+            $wrapperattributes[] = 'data-id="' . (int) $node->getAttribute('es:resource_id') . '"';
+        }
+
+        $styleattr = '';
+        switch ($edusharing->window_float) {
+            case 'left':
+                $styleattr .= 'display: block; float: left; margin: 0 5px 5px 0;';
+                break;
+            case 'right':
+                $styleattr .= 'display: block; float: right; margin: 0 0 5px 5px;';
+                break;
+            case 'inline':
+                $styleattr .= 'display: inline-block; margin: 0 5px;';
+                break;
+            case 'none':
+            default:
+                $styleattr .= 'display: block; float: none; margin: 5px 0;';
+                break;
+        }
+
+        if ($edusharing->window_width) {
+            $styleattr .= ' width: ' . $edusharing->window_width . 'px;';
+            $tagattributes = 'width="' . $edusharing->window_width . '"';
+        }
+
+        if ($edusharing->window_height) {
+            $styleattr .= ' height: ' . $edusharing->window_height . 'px;';
+            $tagattributes = 'height="' . $edusharing->window_height . '"';
+        }
+
+        $wrapperattributes[] = 'style="' . $styleattr . '"';
+
+        return '<div ' . implode(' ', $wrapperattributes) . ' ' . $tagattributes . '>' . $converted . '</div>';
+>>>>>>> feature/moodle_syntax
     }
 
 
@@ -194,22 +293,34 @@ class filter_edusharing extends moodle_text_filter {
      * Build container
      *
      * @param stdClass $edusharing
+     * @param array $renderparams
      * @throws Exception
      *
      * @return string
      */
-    protected function filter_edusharing_render_inline(stdClass $edusharing, $renderParams) {
+    protected function filter_edusharing_render_inline(stdClass $edusharing, $renderparams) {
         global $CFG;
 
-        $object_url = $edusharing -> object_url;
-        if (!$object_url) {
-            throw new Exception('Empty object-url.');
+        $objecturl = $edusharing->object_url;
+        if (!$objecturl) {
+            throw new Exception('Empty object url.');
         }
 
-        $repository_id = $this -> appProperties -> homerepid;
+        $repositoryid = $this->appproperties->homerepid;
 
+<<<<<<< HEAD
         $url = mod_edusharing_get_redirect_url($edusharing, $this -> appProperties, $this -> repProperties, DISPLAY_MODE_INLINE);
         $inline = '<div class="eduContainer" data-type="esObject" data-url="'.$CFG->wwwroot.'/filter/edusharing/proxy.php?URL='.urlencode($url).'&amp;resId='.$edusharing->id.'&amp;title='.urlencode($renderParams['title']).'&amp;mimetype='.$renderParams['mimetype'].'"><div class="inner"><div class="spinner1"></div></div><div class="inner"><div class="spinner2"></div></div><div class="inner"><div class="spinner3"></div></div>edu sharing object</div>';
+=======
+        $url = mod_edusharing_get_redirect_url($edusharing, $this->appproperties,
+                $this->repproperties, DISPLAY_MODE_INLINE);
+        $inline = '<div class="eduContainer" data-type="esObject" data-url="' . $CFG->wwwroot .
+                 '/filter/edusharing/proxy.php?URL=' . urlencode($url) . '&amp;resId=' .
+                 $edusharing->id . '&amp;title=' . urlencode($renderparams['title']) .
+                 '&amp;mimetype=' . $renderparams['mimetype'] .
+                 '"><div class="inner"><div class="spinner1"></div></div>' .
+                 '<div class="inner"><div class="spinner2"></div></div><div class="inner"><div class="spinner3"></div></div>edu sharing object</div>';
+>>>>>>> feature/moodle_syntax
 
         return $inline;
     }

@@ -1,5 +1,5 @@
 <?php
-// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
+// This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -8,15 +8,16 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    mod
- * @subpackage edusharing
+ * Index for edu-sahring plugin
+ *
+ * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,7 +28,7 @@ require_once(dirname(__FILE__).'/lib.php');
 
 $id = required_param('id', PARAM_INT);   // course
 
-if (! $course = $DB->get_record('course', array('id' => $id))) {
+if (! $course = $DB->get_record('course', array('id'  => $id))) {
     trigger_error('Course ID is incorrect', E_USER_WARNING);
 }
 
@@ -35,9 +36,7 @@ require_course_login($course);
 
 add_to_log($course->id, 'edusharing', 'view all', "index.php?id=$course->id", '');
 
-/// Print the header
-
-$PAGE->set_url('mod/edusharing/view.php', array('id' => $id));
+$PAGE->set_url('mod/edusharing/view.php', array('id'  => $id));
 $PAGE->set_title($course->fullname);
 $PAGE->set_heading($course->shortname);
 
@@ -70,10 +69,10 @@ if ($course->format == 'weeks') {
 
 foreach ($edusharings as $edusharing) {
     if (!$edusharing->visible) {
-        //Show dimmed if the mod is hidden
+        // Show dimmed if the mod is hidden
         $link = '<a class="dimmed" href="view.php?id='.$edusharing->coursemodule.'">'.format_string($edusharing->name).'</a>';
     } else {
-        //Show normal if the mod is visible
+        // Show normal if the mod is visible
         $link = '<a href="view.php?id='.$edusharing->coursemodule.'">'.format_string($edusharing->name).'</a>';
     }
 
@@ -86,7 +85,5 @@ foreach ($edusharings as $edusharing) {
 
 echo $OUTPUT->heading(get_string('modulenameplural', 'mod_edusharing'), 2);
 print_table($table);
-
-/// Finish the page
 
 echo $OUTPUT->footer();

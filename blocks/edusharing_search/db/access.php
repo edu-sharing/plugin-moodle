@@ -8,40 +8,40 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    block
- * @subpackage edusharing_search
+ * Define capabilities
+ *
+ * @package    block_edusharing_search
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $capabilities = array(
- 
-    'block/edusharing_search:myaddinstance' => array(
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => array(
-            'user' => CAP_ALLOW
+
+    'block/edusharing_search:myaddinstance'  => array(
+        'captype'  => 'write',
+        'contextlevel'  => CONTEXT_SYSTEM,
+        'archetypes'  => array(
+            'user'  => CAP_ALLOW
         ),
- 
-        'clonepermissionsfrom' => 'moodle/my:manageblocks'
+
+        'clonepermissionsfrom'  => 'moodle/my:manageblocks'
     ),
- 
-    'block/edusharing_search:addinstance' => array(
-        'riskbitmask' => RISK_SPAM | RISK_XSS,
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
+
+    'block/edusharing_search:addinstance'  => array(
+        'riskbitmask'  => RISK_SPAM | RISK_XSS,
+        'captype'  => 'write',
+        'contextlevel'  => CONTEXT_BLOCK,
+        'archetypes'  => array(
+            'editingteacher'  => CAP_ALLOW,
+            'manager'  => CAP_ALLOW
         ),
- 
-        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+        'clonepermissionsfrom'  => 'moodle/site:manageblocks'
     ),
 );
