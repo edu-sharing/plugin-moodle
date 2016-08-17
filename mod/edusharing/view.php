@@ -60,7 +60,7 @@ try {
     $wsdl = $repproperties->authenticationwebservice_wsdl;
     $alfservice = new mod_edusharing_sig_soap_client($wsdl, array());
     $paramsrusted = array("applicationId"  => $appproperties->appid, "ticket"  => session_id(),
-                    "ssoData"  => mod_edusharing_get_auth_data(),
+                    "ssoData"  => edusharing_get_auth_data(),
                     'repoId'  => $appproperties->homerepid);
     $alfreturn = $alfservice->authenticateByTrustedApp($paramsrusted);
     $ticket = $alfreturn->authenticateByTrustedAppReturn->ticket;
@@ -70,10 +70,10 @@ try {
     return false;
 }
 
-$redirecturl = mod_edusharing_get_redirect_url($edusharing, $appproperties, $repproperties);
+$redirecturl = edusharing_get_redirect_url($edusharing, $appproperties, $repproperties);
 $ts = $timestamp = round(microtime(true) * 1000);
 $redirecturl .= '&ts=' . $ts;
-$redirecturl .= '&sig=' . urlencode(mod_edusharing_get_signature($appproperties->appid . $ts));
+$redirecturl .= '&sig=' . urlencode(edusharing_get_signature($appproperties->appid . $ts));
 $redirecturl .= '&signed=' . urlencode($appproperties->appid . $ts);
 
 $backlink = '';

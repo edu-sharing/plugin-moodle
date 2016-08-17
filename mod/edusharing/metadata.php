@@ -22,7 +22,6 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(dirname(__FILE__) . '/../../config.php');
-error_reporting(E_ERROR);
 
 $appproperties = json_decode(get_config('edusharing', 'appProperties'));
 
@@ -42,14 +41,14 @@ $parsedwwwroot .= $parsedwwwroot['path'];
 if (empty($appproperties->signatureRedirector)) {
     require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
     $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper();
-    $modedusharingapppropertyhelper->mod_edusharing_add_signature_redirector();
+    $modedusharingapppropertyhelper->edusharing_add_signature_redirector();
     $appproperties = json_decode(get_config('edusharing', 'appProperties'));
 }
 
 if (empty($appproperties->public_key)) {
     require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
     $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper();
-    $modedusharingapppropertyhelper->mod_edusharing_add_ssl_keypair_to_home_config();
+    $modedusharingapppropertyhelper->edusharing_add_ssl_keypair_to_home_config();
     $appproperties = json_decode(get_config('edusharing', 'appProperties'));
 }
 

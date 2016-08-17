@@ -112,7 +112,7 @@ function edusharing_add_instance(stdClass $edusharing) {
     $edusharing->timemodified = time();
 
     // You may have to add extra stuff in here
-    $edusharing = mod_edusharing_postprocess($edusharing);
+    $edusharing = edusharing_postprocess($edusharing);
 
     $appproperties = json_decode(get_config('edusharing', 'appProperties'));
     $repproperties = json_decode(get_config('edusharing', 'repProperties'));
@@ -136,12 +136,12 @@ function edusharing_add_instance(stdClass $edusharing) {
         }
     }
 
-    $data4xml[1]["ccuser"]["id"] = mod_edusharing_get_auth_key();
+    $data4xml[1]["ccuser"]["id"] = edusharing_get_auth_key();
     $data4xml[1]["ccuser"]["name"] = $_SESSION["USER"]->firstname." ".$_SESSION["USER"]->lastname;
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
-    $data4xml[1]["metadata"] = mod_edusharing_get_usage_metadata($edusharing->course);
+    $data4xml[1]["metadata"] = edusharing_get_usage_metadata($edusharing->course);
 
     // move popup settings to array
     if (!empty($edusharing->popup)) {
@@ -162,7 +162,7 @@ function edusharing_add_instance(stdClass $edusharing) {
     $data4xml[1]["ccdownload"]["download"] = isSet($edusharing->force_download) ? 1 : 0;
 
     $myxml  = new mod_edusharing_render_parameter();
-    $xml = $myxml->mod_edusharing_get_xml($data4xml);
+    $xml = $myxml->edusharing_get_xml($data4xml);
 
     $id = $DB->insert_record(EDUSHARING_TABLE, $edusharing);
 
@@ -176,7 +176,7 @@ function edusharing_add_instance(stdClass $edusharing) {
 
         $params = array(
             "eduRef"  => $edusharing->object_url,
-            "user"  => mod_edusharing_get_auth_key(),
+            "user"  => edusharing_get_auth_key(),
             "lmsId"  => $appproperties->appid,
             "courseId"  => $edusharing->course,
             "userMail"  => $_SESSION["USER"]->email,
@@ -233,7 +233,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     }
 
     // You may have to add extra stuff in here
-    $edusharing = mod_edusharing_postprocess($edusharing);
+    $edusharing = edusharing_postprocess($edusharing);
 
     // fetch current node data
 
@@ -243,13 +243,13 @@ function edusharing_update_instance(stdClass $edusharing) {
     // put the data of the new cc-resource into an array and create a neat XML-file out of it
     $data4xml = array("ccrender");
 
-    $data4xml[1]["ccuser"]["id"] = mod_edusharing_get_auth_key();
+    $data4xml[1]["ccuser"]["id"] = edusharing_get_auth_key();
     $data4xml[1]["ccuser"]["name"] = $_SESSION["USER"]->firstname." ".$_SESSION["USER"]->lastname;
 
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
-    $data4xml[1]["metadata"] = mod_edusharing_get_usage_metadata($edusharing->course);
+    $data4xml[1]["metadata"] = edusharing_get_usage_metadata($edusharing->course);
 
     // move popup settings to array
     if (!empty($edusharing->popup)) {
@@ -270,7 +270,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     $data4xml[1]["cctracking"]["tracking"] = ($edusharing->tracking == 0) ? 0 : 1;
 
     $myxml = new mod_edusharing_render_parameter();
-    $xml = $myxml->mod_edusharing_get_xml($data4xml);
+    $xml = $myxml->edusharing_get_xml($data4xml);
 
     try {
         $connectionurl = $repproperties->usagewebservice_wsdl;
@@ -282,7 +282,7 @@ function edusharing_update_instance(stdClass $edusharing) {
 
         $params = array(
             "eduRef"  => $edusharing->object_url,
-            "user"  => mod_edusharing_get_auth_key(),
+            "user"  => edusharing_get_auth_key(),
             "lmsId"  => $appproperties->appid,
             "courseId"  => $edusharing->course,
             "userMail"  => $_SESSION["USER"]->email,
@@ -344,7 +344,7 @@ function edusharing_delete_instance($id) {
 
         $params = array(
            'eduRef'  => $edusharing->object_url,
-           'user'  => mod_edusharing_get_auth_key(),
+           'user'  => edusharing_get_auth_key(),
            'lmsId'  => $appproperties->appid,
            'courseId'  => $edusharing->course,
            'resourceId'  => $edusharing->id
@@ -526,7 +526,7 @@ function edusharing_get_coursemodule_info($coursemodule) {
  * @return stdClass
  *
  */
-function mod_edusharing_postprocess($edusharing) {
+function edusharing_postprocess($edusharing) {
     global $CFG;
     global $COURSE;
     global $SESSION;
@@ -568,7 +568,7 @@ function mod_edusharing_postprocess($edusharing) {
  * @throws Exception
  * @return string
  */
-function _edusharing_get_object_id_from_url($objecturl) {
+function edusharing_get_object_id_from_url($objecturl) {
     $objectid = parse_url($objecturl, PHP_URL_PATH);
     if ( ! $objectid ) {
         trigger_error('Error reading object-id from object-url.', E_USER_WARNING);
@@ -588,7 +588,7 @@ function _edusharing_get_object_id_from_url($objecturl) {
  * @throws Exception
  * @return string
  */
-function mod_edusharing_get_repository_id_from_url($objecturl) {
+function edusharing_get_repository_id_from_url($objecturl) {
     $repid = parse_url($objecturl, PHP_URL_HOST);
     if ( ! $repid ) {
         throw new Exception('Error reading repository-id from object-url.');
@@ -603,7 +603,7 @@ function mod_edusharing_get_repository_id_from_url($objecturl) {
  * @param string $courseid
  * @return array
  */
-function mod_edusharing_get_usage_metadata($courseid) {
+function edusharing_get_usage_metadata($courseid) {
     global $DB;
 
     if (empty($courseid)) {

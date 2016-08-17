@@ -53,7 +53,7 @@ class mod_edusharing_mod_form extends moodleform_mod
         try {
             // @TODO make dynamic
             $ccauth = new mod_edusharing_web_service_factory();
-            $ticket = $ccauth->mod_edusharing_authentication_get_ticket($appproperties->appid);
+            $ticket = $ccauth->edusharing_authentication_get_ticket($appproperties->appid);
         } catch (Exception $e) {
             trigger_error($e->getMessage(), E_USER_WARNING);
             return false;
@@ -91,11 +91,11 @@ class mod_edusharing_mod_form extends moodleform_mod
         $mform->addRule('object_url', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('object_url', 'object_url', EDUSHARING_MODULE_NAME);
 
-        $mylang = mod_edusharing_get_current_users_language_code();
+        $mylang = edusharing_get_current_users_language_code();
 
         $ccresourcesearch  = $appproperties->cc_gui_url;
         $ccresourcesearch .= "?mode=0";
-        $ccresourcesearch .= "&user=".urlencode(mod_edusharing_get_auth_key());
+        $ccresourcesearch .= "&user=".urlencode(edusharing_get_auth_key());
         $ccresourcesearch .= "&locale=".$mylang;
         $ccresourcesearch .= "&ticket=".$ticket;
         $ccresourcesearch .= "&reurl=".urlencode($CFG->wwwroot."/mod/edusharing/makelink.php");
@@ -108,7 +108,7 @@ class mod_edusharing_mod_form extends moodleform_mod
 
         $ccresourceupload  = $appproperties->cc_gui_url;
         $ccresourceupload .= "?mode=2";
-        $ccresourcesearch .= "&user=".urlencode(mod_edusharing_get_auth_key());
+        $ccresourcesearch .= "&user=".urlencode(edusharing_get_auth_key());
         $ccresourceupload .= "&locale=".$mylang;
         $ccresourceupload .= "&ticket=".$ticket;
         $ccresourceupload .= "&reurl=".urlencode($CFG->wwwroot."/mod/edusharing/makelink.php");

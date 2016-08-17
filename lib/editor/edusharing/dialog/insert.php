@@ -100,7 +100,7 @@ if ( ! empty($_GET['resource_id']) ) {
         throw new Exception('Error loading edusharing-resource.');
     }
 
-    $repositoryid = mod_edusharing_get_repository_id_from_url($edusharing->object_url);
+    $repositoryid = edusharing_get_repository_id_from_url($edusharing->object_url);
     if ( ! $repositoryid ) {
         header('HTTP/1.1 500 Internal Server Error');
         throw new Exception('Error reading repository-id from object-url.');
@@ -110,19 +110,19 @@ if ( ! empty($_GET['resource_id']) ) {
 
 $ccauth = new mod_edusharing_web_service_factory();
 
-$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appproperties->appid);
+$ticket = $ccauth->edusharing_authentication_get_ticket($appproperties->appid);
 
 $link = $appproperties->cc_gui_url; // link to the external cc-search
 
 $link .= '/search';
 
-$user = mod_edusharing_get_auth_key();
+$user = edusharing_get_auth_key();
 
 $link .= '?user='.urlencode($user);
 
 $link .= '&ticket='.urlencode($ticket);
 
-$language = mod_edusharing_get_current_users_language_code();
+$language = edusharing_get_current_users_language_code();
 if ( $language ) {
     $link .= '&locale=' . urlencode($language);
 }

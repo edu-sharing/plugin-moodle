@@ -75,7 +75,7 @@ class filter_edusharing extends moodle_text_filter {
         // ensure that user exists in repository
         if (isloggedin()) {
             $ccauth = new mod_edusharing_web_service_factory();
-            $ccauth->mod_edusharing_authentication_get_ticket($this->appproperties->appid);
+            $ccauth->edusharing_authentication_get_ticket($this->appproperties->appid);
         }
     }
 
@@ -217,7 +217,7 @@ class filter_edusharing extends moodle_text_filter {
         }
 
         $repositoryid = $this->appproperties->homerepid;
-        $url = mod_edusharing_get_redirect_url($edusharing, $this->appproperties,
+        $url = edusharing_get_redirect_url($edusharing, $this->appproperties,
                 $this->repproperties, DISPLAY_MODE_INLINE);
         $inline = '<div class="eduContainer" data-type="esObject" data-url="' . $CFG->wwwroot .
                  '/filter/edusharing/proxy.php?URL=' . urlencode($url) . '&amp;resId=' .

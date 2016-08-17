@@ -50,7 +50,7 @@ require_login($course->id);
 echo $OUTPUT->header();
 
 $ccauth = new mod_edusharing_web_service_factory();
-$ticket = $ccauth->mod_edusharing_authentication_get_ticket($appproperties->appid);
+$ticket = $ccauth->edusharing_authentication_get_ticket($appproperties->appid);
 if ( ! $ticket ) {
     exit();
 }
@@ -61,11 +61,11 @@ if ( empty($appproperties->cc_gui_url) ) {
 
 $link = $appproperties->cc_gui_url; // link to the external cc-search
 $link .= '?mode=0';
-$user = mod_edusharing_get_auth_key();
+$user = edusharing_get_auth_key();
 $link .= '&user='.urlencode($user);
 $link .= '&ticket='.urlencode($ticket);
 
-$mylang = mod_edusharing_get_current_users_language_code();
+$mylang = edusharing_get_current_users_language_code();
 $link .= '&locale=' . urlencode($mylang);
 
 $link .= '&p_startsearch=1';

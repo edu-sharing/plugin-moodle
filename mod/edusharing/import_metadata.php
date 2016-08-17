@@ -148,7 +148,7 @@ if (!empty($_POST['mdataurl'])) {
         $homeappproperties = new stdClass();
         require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
         $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper();
-        $sslkeypair = $modedusharingapppropertyhelper->mod_edusharing_get_ssl_keypair();
+        $sslkeypair = $modedusharingapppropertyhelper->edusharing_get_ssl_keypair();
 
         $homeappproperties->host = $_SERVER['SERVER_ADDR'];
         $homeappproperties->appid = uniqid('moodle_');
@@ -158,7 +158,7 @@ if (!empty($_POST['mdataurl'])) {
                                          $repproperties->domain . ':' . $repproperties->clientport . '/edu-sharing/';
         $homeappproperties->private_key = $sslkeypair['privateKey'];
         $homeappproperties->public_key = $sslkeypair['publicKey'];
-        $homeappproperties->signatureRedirector = $modedusharingapppropertyhelper->mod_edusharing_get_signature_redirector();
+        $homeappproperties->signatureRedirector = $modedusharingapppropertyhelper->edusharing_get_signature_redirector();
         $homeappproperties->blowfishkey = 'thetestkey';
         $homeappproperties->blowfishiv = 'initvect';
 

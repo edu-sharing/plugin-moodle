@@ -59,7 +59,7 @@ $url .= '&nodeId=' . $nodeid;
 $url .= '&resourceId=' . $resourceid;
 $url .= '&version=' . $edusharing->object_version;
 
-$sig = urlencode(mod_edusharing_get_signature($appproperties->appid . $time));
+$sig = urlencode(edusharing_get_signature($appproperties->appid . $time));
 
 $url .= '&sig=' . $sig;
 $url .= '&ts=' . $time;

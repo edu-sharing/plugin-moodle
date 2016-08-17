@@ -58,7 +58,7 @@ class mod_edusharing_web_service_factory {
      * Request a new one if existing ticket is invalid
      * @param string $homeappid
      */
-    public function mod_edusharing_authentication_get_ticket($homeappid) {
+    public function edusharing_authentication_get_ticket($homeappid) {
 
         // ticket available
         if (isset($_SESSION["USER"]->ticket)) {
@@ -77,7 +77,7 @@ class mod_edusharing_web_service_factory {
             try {
                 // ticket is older than 10s
                 $params = array(
-                    "username"  => mod_edusharing_get_auth_key(),
+                    "username"  => edusharing_get_auth_key(),
                     "ticket"  => $_SESSION["USER"]->ticket
                 );
 
@@ -95,7 +95,7 @@ class mod_edusharing_web_service_factory {
 
         // no or invalid ticket available
         // request new ticket
-        $paramstrusted = array("applicationId"  => $homeappid, "ticket"  => session_id(), "ssoData"  => mod_edusharing_get_auth_data());
+        $paramstrusted = array("applicationId"  => $homeappid, "ticket"  => session_id(), "ssoData"  => edusharing_get_auth_data());
         try {
             $client = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl, array());
             $return = $client->authenticateByTrustedApp($paramstrusted);
@@ -108,7 +108,7 @@ class mod_edusharing_web_service_factory {
         }
 
         return false;
-    } // eof mod_edusharing_authentication_get_ticket
+    } // eof edusharing_authentication_get_ticket
 
 }//eof class mod_edusharing_web_service_factory
 

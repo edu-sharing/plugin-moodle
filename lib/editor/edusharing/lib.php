@@ -76,7 +76,7 @@ class edusharing_texteditor extends tinymce_texteditor {
         $repositoryid = $appproperties->homerepid;
 
         $ccauth = new mod_edusharing_web_service_factory();
-        $edusharingticket = $ccauth->mod_edusharing_authentication_get_ticket($appproperties->appid);
+        $edusharingticket = $ccauth->edusharing_authentication_get_ticket($appproperties->appid);
         if ( ! $edusharingticket ) {
             unset($_SESSION['edusharing']['editor']['ticket']);
             return false;

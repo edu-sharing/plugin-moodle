@@ -113,7 +113,7 @@ require_login($query['course_id']);
 $appproperties = json_decode(get_config('edusharing', 'appProperties'));
 $ts = $timestamp = round(microtime(true) * 1000);
 $url .= '&ts=' . $ts;
-$url .= '&sig=' . urlencode(mod_edusharing_get_signature($appproperties->appid . $ts));
+$url .= '&sig=' . urlencode(edusharing_get_signature($appproperties->appid . $ts));
 $url .= '&signed=' . urlencode($appproperties->appid . $ts);
 
 $e = new filter_edusharing_edurender();
