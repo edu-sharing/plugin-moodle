@@ -27,6 +27,7 @@ $string['pluginname'] = 'edu-sharing - Search';
 $string['block_title'] = 'edu-sharing search';
 $string['search_field_hint'] = 'Search for  ...';
 $string['button_text'] = 'Search';
+$string['back_to'] = 'Back to';
 
 $string['edusharing_search:myaddinstance'] = 'Add a new edu-sharing search block to Dashboard';
 $string['edusharing_search:addinstance'] = 'Add a new edu-sharing search block';

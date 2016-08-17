@@ -26,6 +26,7 @@ $string['pluginname'] = 'edu-sharing - Workspace';
 
 $string['block_title'] = 'edu-sharing Arbeitsplatz';
 $string['button_text'] = 'Zu Ihrem Arbeitsplatz';
+$string['back_to'] = 'Zurück zu';
 
 $string['edusharing_workspace:myaddinstance'] = 'Block edu-sharing Workspace zum Dashboard hinzufügen';
 $string['edusharing_workspace:addinstance'] = 'Block edu-sharing Workspace hinzufügen';

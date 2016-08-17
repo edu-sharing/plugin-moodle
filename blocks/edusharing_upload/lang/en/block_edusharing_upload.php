@@ -27,7 +27,7 @@ $string['pluginname'] = 'edu-sharing - Upload';
 
 $string['block_title'] = 'edu-sharing upload';
 $string['button_text'] = 'Upload material';
-
+$string['back_to'] = 'Back to';
 
 $string['edusharing_upload:myaddinstance'] = 'Add a new edu-sharing upload block to Dashboard';
 $string['edusharing_upload:addinstance'] = 'Add a new edu-sharing upload block';
