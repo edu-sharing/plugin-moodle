@@ -117,3 +117,4 @@ $string['convey_global_groups_no'] = 'Not convey cohorts';
 
 
 $string['mcryptrequired'] = 'The PHP extension mcrypt must be activated.';
+$string['soaprequired'] = 'The PHP extension soap must be activated.';

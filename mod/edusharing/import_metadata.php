@@ -69,7 +69,7 @@ if (!is_siteadmin()) {
     exit();
 }
 
-define('CC_CONF_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+define('CC_CONF_PATH', dirname(__FILE__) . '/');
 define('CC_CONF_APPFILE', 'ccapp-registry.properties.xml');
 
 if (!IMPORT_METADATA) {
