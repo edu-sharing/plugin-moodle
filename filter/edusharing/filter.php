@@ -116,7 +116,7 @@ class filter_edusharing extends moodle_text_filter {
             $matches = array_merge($matchesimg[0], $matchesa[0]);
 
             foreach ($matches as $match) {
-                $text = str_replace($match, $this->convertobject($match), $text, $count);
+                $text = str_replace($match, $this->filter_edusharing_convert_object($match), $text, $count);
             }
         } catch (Exception $exception) {
             trigger_error($exception->getMessage(), E_USER_WARNING);
@@ -132,7 +132,7 @@ class filter_edusharing extends moodle_text_filter {
      * @param string $object
      * @return boolean|string
      */
-    private function convertobject($object) {
+    private function filter_edusharing_convert_object($object) {
         global $DB;
         $doc = new DOMDocument();
         $doc->loadHTML($object);
