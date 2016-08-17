@@ -33,11 +33,9 @@ defined('MOODLE_INTERNAL') || die();
 
 define('EDUSHARING_MODULE_NAME', 'edusharing');
 define('EDUSHARING_TABLE', 'edusharing');
-define('EDUSHARING_BASENAME', 'esmain');
 
-define('DISPLAY_MODE_DISPLAY', 'window');
-define('DISPLAY_MODE_DOWNLOAD', 'download');
-define('DISPLAY_MODE_INLINE', 'inline');
+define('EDUSHARING_DISPLAY_MODE_DISPLAY', 'window');
+define('EDUSHARING_DISPLAY_MODE_INLINE', 'inline');
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) .'/lib');
 require_once(dirname(__FILE__).'/lib/RenderParameter.php');

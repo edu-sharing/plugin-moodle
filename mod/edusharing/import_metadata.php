@@ -59,21 +59,11 @@ fieldset {
 <body>
 <?php
 
-// customize
-define('IMPORT_METADATA', true);
-
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 
 if (!is_siteadmin()) {
     echo 'Access denied!';
     exit();
-}
-
-define('CC_CONF_PATH', dirname(__FILE__) . '/');
-define('CC_CONF_APPFILE', 'ccapp-registry.properties.xml');
-
-if (!IMPORT_METADATA) {
-    die('metadata import disabled');
 }
 
 /**

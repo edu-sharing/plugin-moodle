@@ -148,7 +148,7 @@ function edusharing_get_redirect_url(
     stdClass $edusharing,
     stdClass $appproperties,
     stdClass $repproperties,
-    $displaymode = DISPLAY_MODE_DISPLAY) {
+    $displaymode = EDUSHARING_DISPLAY_MODE_DISPLAY) {
     global $USER;
 
     $url = $appproperties->cc_gui_url . '/renderingproxy';

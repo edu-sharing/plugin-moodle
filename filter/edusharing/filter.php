@@ -218,7 +218,7 @@ class filter_edusharing extends moodle_text_filter {
 
         $repositoryid = $this->appproperties->homerepid;
         $url = edusharing_get_redirect_url($edusharing, $this->appproperties,
-                $this->repproperties, DISPLAY_MODE_INLINE);
+                $this->repproperties, EDUSHARING_DISPLAY_MODE_INLINE);
         $inline = '<div class="eduContainer" data-type="esObject" data-url="' . $CFG->wwwroot .
                  '/filter/edusharing/proxy.php?URL=' . urlencode($url) . '&amp;resId=' .
                  $edusharing->id . '&amp;title=' . urlencode($renderparams['title']) .

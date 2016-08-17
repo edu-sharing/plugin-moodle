@@ -55,7 +55,7 @@ class edusharing_texteditor extends tinymce_texteditor {
      *
      * @return string
      */
-    protected function mod_edusharing_init_edusharing_ticket() {
+    protected function editor_edusharing_init_edusharing_ticket() {
         /*
          * use previously generated ticket if available. Generates conflict if
         * repository-session closes too early.
@@ -97,7 +97,7 @@ class edusharing_texteditor extends tinymce_texteditor {
      *
      * @return bool
      */
-    protected function is_edusharing_context(array $options) {
+    protected function editor_edusharing_is_edusharing_context(array $options) {
         global $COURSE;
 
         if ( empty($options['context']) ) {
@@ -120,7 +120,7 @@ class edusharing_texteditor extends tinymce_texteditor {
     }
 
     /**
-     * Het parameters for tinymce
+     * Set parameters for tinymce
      * @param int $elementid
      * @param array $options
      *
@@ -138,8 +138,8 @@ class edusharing_texteditor extends tinymce_texteditor {
         $params = parent::get_init_params($elementid, $options);
 
         // add edu-sharing functionaliy to tinymce ONLY when course-id available
-        if ( $this->is_edusharing_context($options) ) {
-            $edusharingticket = $this->mod_edusharing_init_edusharing_ticket();
+        if ( $this->editor_edusharing_is_edusharing_context($options) ) {
+            $edusharingticket = $this->editor_edusharing_init_edusharing_ticket();
 
             // register tinymce-plugin but DO NOT try to load it as this already happened
             $params['plugins'] .= ',-edusharing';
