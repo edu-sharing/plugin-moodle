@@ -30,3 +30,7 @@ $string['back_to'] = 'Back to';
 
 $string['edusharing_workspace:myaddinstance'] = 'Add a new edu-sharing workspace block to Dashboard';
 $string['edusharing_workspace:addinstance'] = 'Add a new edu-sharing workspace block';
+
+$string['error_invalid_course_id'] = 'Invalid course id';
+$string['error_course_not_found'] = 'Cannot load course from database.';
+$string['error_no_gui_url_defined'] = 'No "cc_gui_url" configured.';

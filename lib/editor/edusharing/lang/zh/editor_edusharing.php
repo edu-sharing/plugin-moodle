@@ -61,3 +61,11 @@ $string['update'] = '保存';
 $string['cancel'] = '取消';
 
 $string['search'] = 'Search';
+
+$string['error_resource_not_found'] = 'Resource not found.';
+$string['error_deleting_instance'] = 'Error deleting edu-sharing instance.';
+$string['error_postprocessing'] = 'Error post-processing resource.';
+$string['error_json'] = 'Error fetching json-data.';
+$string['error_adding_instance'] = 'Error adding edu-sharing instance.';
+$string['error_updating_instance'] = 'Error updating edu-sharing instance.';
+$string['error_loading_instance'] = 'Cannot load edu-sharing object from database.';

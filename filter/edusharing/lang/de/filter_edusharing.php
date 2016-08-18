@@ -27,3 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 $string['filtername'] = 'edu-sharing Filter';
 $string['settingformats'] = 'Aktiv für folgende Textformate';
 $string['settingformats_desc'] = 'Der Filter wird nur angewandt, wenn der Originaltext im entsprechenden Format vorliegt.';
+
+$string['error_loading_node'] = 'Objekt kann nicht geladen werden.';
+$string['error_loading_resource'] = 'Ressource kann nicht aus der Datenbank geladen werden.';
+$string['error_missing_instance_id'] = 'Ungültige Instanz ID';

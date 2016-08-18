@@ -32,7 +32,7 @@ $resid = optional_param('resId', 0, PARAM_INT); // edusharing instance ID
 if ($resid) {
     $edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resid), '*', MUST_EXIST);
 } else {
-    trigger_error('You must specify an instance ID', E_USER_WARNING);
+    trigger_error(get_string('error_missing_instance_id', 'filter_edusharing'), E_USER_WARNING);
 }
 
 require_login($edusharing->course, true);

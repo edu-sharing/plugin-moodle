@@ -33,7 +33,7 @@ global $DB;
 $resourceid = $_GET['resourceId'];
 
 if (!$edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resourceid))) {
-    trigger_error('Error loading edusharing-object from database.', E_USER_WARNING);
+    trigger_error(get_string('error_loading_instance', 'editor_edusharing'), E_USER_WARNING);
 }
 
 $curlhandle = $edusharing->course;

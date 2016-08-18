@@ -41,7 +41,7 @@ require_once('../../../mod/edusharing/lib.php');
 $id = optional_param('id', 0, PARAM_INT);
 // course id
 if (!$id) {
-    trigger_error("None or invalid course-id given.", E_USER_WARNING);
+    trigger_error(get_string('error_invalid_course_id', 'block_edusharing_workspace'), E_USER_WARNING);
     exit();
 }
 
@@ -49,7 +49,7 @@ $PAGE->set_url('/blocks/edusharing_workspace/helper/cc_workspace.php', array('id
 
 $course = $DB->get_record('course', array('id'  => $id));
 if (!$course) {
-    trigger_error("Course not found.", E_USER_WARNING);
+    trigger_error(get_string('error_course_not_found', 'block_edusharing_workspace'), E_USER_WARNING);
     exit();
 }
 
@@ -66,7 +66,7 @@ if (!$ticket) {
 }
 
 if (empty($appproperties->cc_gui_url)) {
-    trigger_error('No "cc_gui_url" configured.', E_USER_WARNING);
+    trigger_error(get_string('error_no_gui_url_defined', 'block_edusharing_workspace'), E_USER_WARNING);
 }
 
 $link = $appproperties->cc_gui_url;
@@ -92,7 +92,7 @@ $('html, body').css('overflow', 'hidden');
 $('#esContent').width($(document).width());
 $('#esContent').height($(document).height());
 $('#esContent').html("<div id='closer' style='font-size: 1em; padding: 5px 20px 5px 20px; cursor: pointer; color: #000; background: #eee; '>" +
-"<?php echo htmlentities(get_string('back_to', 'block_edusharing_search'))?>&nbsp;\"<?php echo $COURSE->fullname?>\"</div><iframe id='childFrame' name='mainContent'" +
+"<?php echo htmlentities(get_string('back_to', 'block_edusharing_workspace'))?>&nbsp;\"<?php echo $COURSE->fullname?>\"</div><iframe id='childFrame' name='mainContent'" +
 "src='<?php echo htmlentities($link)?>' width='100% ' height='100% ' scrolling='yes'  marginwidth='0' marginheight='0' frameborder='0'>&nbsp;</iframe>");
 $('#closer').click(function() {window.location.href='<?php echo $_SERVER["HTTP_REFERER"]?>';})</script>
 

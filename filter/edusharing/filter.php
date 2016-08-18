@@ -142,14 +142,14 @@ class filter_edusharing extends moodle_text_filter {
             $node = $doc->getElementsByTagName('img')->item(0);
         }
         if (empty($node)) {
-            trigger_error('Could not get node', E_USER_WARNING);
+            trigger_error(get_string('error_loading_node', 'filter_edusharing'), E_USER_WARNING);
             return false;
         }
 
         $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id' => (int) $node->getAttribute('es:resource_id')));
 
         if (!$edusharing) {
-            trigger_error('Error loading resource from db.', E_USER_WARNING);
+            trigger_error(get_string('error_loading_resource', 'filter_edusharing'), E_USER_WARNING);
             return false;
         }
 

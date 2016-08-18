@@ -32,3 +32,6 @@ $string['back_to'] = 'Zurück zu';
 $string['edusharing_search:myaddinstance'] = 'Block edu-sharing Suche zum Dashboard hinzufügen';
 $string['edusharing_search:addinstance'] = 'Block edu-sharing Suche hinzufügen';
 
+$string['error_invalid_course_id'] = 'Ungültige Kurs ID';
+$string['error_course_not_found'] = 'Kurs kann nicht aus der Datenbank geladen werden.';
+$string['error_no_gui_url_defined'] = 'Parameter "cc_gui_url" wurde nicht konfiguriert.';

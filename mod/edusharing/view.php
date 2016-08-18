@@ -43,7 +43,7 @@ if ($id) {
     $vid = $edusharing->id;
     $courseid = $course->id;
 } else {
-    trigger_error('You must specify a course_module ID or an instance ID', E_USER_WARNING);
+    trigger_error(get_string('error_detect_course', 'edusharing'), E_USER_WARNING);
 }
 
 $PAGE->set_url('/mod/edusharing/view.php?id='.$vid);

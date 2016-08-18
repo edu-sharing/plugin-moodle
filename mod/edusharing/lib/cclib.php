@@ -47,7 +47,7 @@ class mod_edusharing_web_service_factory {
         $repproperties = json_decode(get_config('edusharing', 'repProperties'));
         $this->authenticationservicewsdl = $repproperties->authenticationwebservice_wsdl;
         if ( empty($this->authenticationservicewsdl) ) {
-            trigger_error('No "authenticationwebservice_wsdl" configured.', E_USER_WARNING);
+            trigger_error(get_string('error_missing_authwsdl', 'edusharing'), E_USER_WARNING);
         }
     }
 
@@ -71,7 +71,7 @@ class mod_edusharing_web_service_factory {
             try {
                 $eduservice = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl, array());
             } catch (Exception $e) {
-                trigger_error($this->authenticationservicewsdl  . ' not reachable. Cannot utilize edu-sharing network.', E_USER_WARNING);
+                trigger_error($this->authenticationservicewsdl . ' ' . get_string('error_authservice_not_reachable', 'edusharing') , E_USER_WARNING);
             }
 
             try {
@@ -88,7 +88,7 @@ class mod_edusharing_web_service_factory {
                     return $_SESSION["USER"]->ticket;
                 }
             } catch (Exception $e) {
-                 trigger_error('Invalid ticket. Cannot utilize edu-sharing network.', E_USER_WARNING);
+                 trigger_error(get_string('error_invalid_ticket', 'edusharing'), E_USER_WARNING);
             }
 
         }
@@ -104,7 +104,7 @@ class mod_edusharing_web_service_factory {
             $_SESSION["USER"]->ticketvalidationts = time();
             return $ticket;
         } catch (Exception $e) {
-            trigger_error('Cannot utilize edu-sharing network because authentication failed. Error message: ' . $e->getMessage(), E_USER_WARNING);
+            trigger_error(get_string('error_auth_failed', 'edusharing') . ' ' . $e->getMessage(), E_USER_WARNING);
         }
 
         return false;

@@ -163,7 +163,7 @@ function edusharing_get_redirect_url(
 
     $resourcerefenerence = str_replace('/', '', parse_url($edusharing->object_url, PHP_URL_PATH));
     if ( empty($resourcerefenerence) ) {
-        trigger_error('Error replacing resource-url "'.$edusharing->object_url.'".', E_USER_WARNING);
+        trigger_error(get_string('error_get_object_id_from_url', 'edusharing'), E_USER_WARNING);
     }
 
     $url .= '&obj_id='.urlencode($resourcerefenerence);

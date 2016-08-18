@@ -273,7 +273,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     try {
         $connectionurl = $repproperties->usagewebservice_wsdl;
         if (!$connectionurl) {
-            trigger_error('Missing config-param "usagewebservice_wsdl".', E_USER_WARNING);
+            trigger_error(get_string('error_missing_usagewsdl', 'edusharing'), E_USER_WARNING);
         }
 
         $client = new mod_edusharing_sig_soap_client($connectionurl, array());
@@ -351,7 +351,7 @@ function edusharing_delete_instance($id) {
         $ccwsusage->deleteUsage($params);
 
     } catch (Exception $exception) {
-        trigger_error($exception->getmessage(), E_USER_WARNING);
+        trigger_error($exception->getMessage(), E_USER_WARNING);
     }
 
     // Usage is removed->can delete from DATABASE now
@@ -506,7 +506,7 @@ function edusharing_get_coursemodule_info($coursemodule) {
 
     $resource = $DB->get_record(EDUSHARING_TABLE, array('id'  => $coursemodule->instance));
     if ( ! $resource ) {
-        trigger_error('Resource not found.', E_USER_WARNING);
+        trigger_error(get_string('error_load_resource', 'edusharing'), E_USER_WARNING);
     }
 
     if (!empty($resource->popup_window)) {
@@ -569,7 +569,7 @@ function edusharing_postprocess($edusharing) {
 function edusharing_get_object_id_from_url($objecturl) {
     $objectid = parse_url($objecturl, PHP_URL_PATH);
     if ( ! $objectid ) {
-        trigger_error('Error reading object-id from object-url.', E_USER_WARNING);
+        trigger_error(get_string('error_get_object_id_from_url', 'edusharing'), E_USER_WARNING);
         return false;
     }
 
@@ -589,7 +589,7 @@ function edusharing_get_object_id_from_url($objecturl) {
 function edusharing_get_repository_id_from_url($objecturl) {
     $repid = parse_url($objecturl, PHP_URL_HOST);
     if ( ! $repid ) {
-        throw new Exception('Error reading repository-id from object-url.');
+        throw new Exception(get_string('error_get_repository_id_from_url', 'edusharing'));
     }
 
     return $repid;

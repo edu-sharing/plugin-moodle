@@ -61,3 +61,11 @@ $string['update'] = 'Speichern';
 $string['cancel'] = 'Abbrechen';
 
 $string['search'] = 'Suche';
+
+$string['error_resource_not_found'] = 'Ressource kann nicht gefunden werden.';
+$string['error_deleting_instance'] = 'Fehler beim Löschen der edu-sharing Instanz.';
+$string['error_postprocessing'] = 'Fehler beim Postprocessing.';
+$string['error_json'] = 'Fehler beim Abholen der JSON-Daten.';
+$string['error_adding_instance'] = 'Fehler beim Hinzufügen der edu-sharing Instanz.';
+$string['error_updating_instance'] = 'Fehler beim Aktualisieren der edu-sharing Instanz.';
+$string['error_loading_instance'] = 'edu-sharing Objekt kann nicht aus der Datenbank geladen werden.';
