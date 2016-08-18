@@ -44,7 +44,7 @@ try {
     $edusharing->intro = '';
     $edusharing->introformat = FORMAT_MOODLE;
 
-    $edusharing = mod_edusharing_postprocess($edusharing);
+    $edusharing = edusharing_postprocess($edusharing);
     if ( ! $edusharing ) {
         trigger_error(get_string('error_postprocessing', 'editor_edusharing'), E_USER_WARNING);
         header('HTTP/1.1 500 Internal Server Error', true, 500);

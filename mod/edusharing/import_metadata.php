@@ -109,7 +109,9 @@ function get_form($url) {
 
 $filename = '';
 
-if (!empty($_POST['mdataurl'])) {
+
+$metadataurl = optional_param('mdataurl', '', PARAM_NOTAGS);
+if (!empty($metadataurl)) {
 
     try {
 
@@ -117,10 +119,10 @@ if (!empty($_POST['mdataurl'])) {
 
         libxml_use_internal_errors(true);
 
-        if ($xml->load($_POST['mdataurl']) == false) {
-            echo ('<p style="background: #FF8170">could not load ' . $_POST['mdataurl'] .
+        if ($xml->load($metadataurl) == false) {
+            echo ('<p style="background: #FF8170">could not load ' . $metadataurl .
                      ' please check url') . "<br></p>";
-            echo get_form($_POST['mdataurl']);
+            echo get_form($metadataurl);
             exit();
         }
 

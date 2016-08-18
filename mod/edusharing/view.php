@@ -54,7 +54,7 @@ require_login($course, true, $cm);
 $appproperties = json_decode(get_config('edusharing', 'appProperties'));
 $repproperties = json_decode(get_config('edusharing', 'repProperties'));
 
-// authenticate to assure requesting user exists in home-repository
+// Authenticate to assure requesting user exists in home-repository.
 try {
 
     $wsdl = $repproperties->authenticationwebservice_wsdl;

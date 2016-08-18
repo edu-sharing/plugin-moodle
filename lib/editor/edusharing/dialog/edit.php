@@ -77,16 +77,16 @@ $edusharing->course_id = $COURSE->id;
 $edusharing->id = 0;
 $edusharing->resource_type = '';
 $edusharing->resource_version = '';
-$edusharing->title = $_GET['title'];
-$edusharing->window_width = $_GET['window_width'];
-$edusharing->window_height = $_GET['window_height'];
-$edusharing->mimetype = $_GET['mimetype'];
-$edusharing->window_float = $_GET['window_float'];
-$edusharing->window_versionshow = $_GET['window_versionshow'];
+$edusharing->title = optional_param('title', '', PARAM_TEXT);
+$edusharing->window_width = optional_param('window_width', '', PARAM_INT);
+$edusharing->window_height = optional_param('window_height', '', PARAM_INT);
+$edusharing->mimetype = optional_param('mimetype', '', PARAM_TEXT);
+$edusharing->window_float = optional_param('window_float', '', PARAM_TEXT);
+$edusharing->window_versionshow = optional_param('window_versionshow', '', PARAM_TEXT);
 $edusharing->ratio = (int)$edusharing->window_height / (int)$edusharing->window_width;
-$edusharing->prev_src = $_GET['prev_src'];
-$edusharing->window_version = $_GET['window_version'];
-$edusharing->repotype = $_GET['repotype'];
+$edusharing->prev_src = optional_param('prev_src', '', PARAM_TEXT);
+$edusharing->window_version = optional_param('window_version', '', PARAM_TEXT);
+$edusharing->repotype = optional_param('repotype', '', PARAM_TEXT);
 
 /**
  * Return some dummy text

@@ -55,7 +55,7 @@ if ( ! $edusharing ) {
 // $edusharing->instance = $edusharing->id;
 
 // post-process given data
-$edusharing = mod_edusharing_postprocess($update);
+$edusharing = edusharing_postprocess($update);
 if ( ! $edusharing ) {
     trigger_error(get_string('error_postprocessing', 'editor_edusharing'), E_USER_WARNING);
 

@@ -30,7 +30,7 @@ require_login();
 
 global $DB;
 
-$resourceid = $_GET['resourceId'];
+$resourceid = optional_param('resourceId', 0, PARAM_INT);
 
 if (!$edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resourceid))) {
     trigger_error(get_string('error_loading_instance', 'editor_edusharing'), E_USER_WARNING);

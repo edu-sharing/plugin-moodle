@@ -90,9 +90,8 @@ $edusharing->repo_type = '';
 $edusharing->window_version = '';
 
 $repositoryid = $appproperties->homerepid;
-
-if ( ! empty($_GET['resource_id']) ) {
-    $resourceid = $_GET['resource_id'];
+$resourceid = optional_param('resource_id', 0, PARAM_INT);
+if ( ! empty($resourceid) ) {
 
     $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resourceid));
     if ( ! $edusharing ) {

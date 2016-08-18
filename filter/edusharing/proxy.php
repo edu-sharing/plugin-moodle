@@ -74,7 +74,7 @@ class filter_edusharing_edurender {
     public function filter_edusharing_display($html) {
         global $CFG;
         error_reporting(0);
-        $resid = $_GET['resId'];
+        $resid = required_param('resId', PARAM_INT);
 
         $html = str_replace(array("\n", "\r", "\n"
         ), '', $html);
@@ -88,15 +88,15 @@ class filter_edusharing_edurender {
         /*
          * replaces <es:title ...>...</es:title>
          */
-        $html = preg_replace("/<es:title[^>]*>.*<\/es:title>/Uims", $_GET['title'], $html);
+        $html = preg_replace("/<es:title[^>]*>.*<\/es:title>/Uims", optional_param('title', '', PARAM_TEXT), $html);
         /*
          * For images, audio and video show a capture underneath object
          */
         $mimetypes = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'video', 'audio'
         );
         foreach ($mimetypes as $mimetype) {
-            if (strpos($_GET['mimetype'], $mimetype) !== false) {
-                $html .= '<p class="caption">' . $_GET['title'] . '</p>';
+            if (strpos(optional_param('mimetype', '', PARAM_TEXT), $mimetype) !== false) {
+                $html .= '<p class="caption">' . optional_param('title', '', PARAM_TEXT) . '</p>';
             }
         }
         echo $html;
@@ -104,8 +104,7 @@ class filter_edusharing_edurender {
     }
 }
 
-$url = $_GET['URL'];
-
+$url = required_param('URL', PARAM_NOTAGS);
 $parts = parse_url($url);
 parse_str($parts['query'], $query);
 require_login($query['course_id']);

@@ -25,8 +25,9 @@
 require_once(dirname(__FILE__) . '/../../../config.php');
 
 $location = $CFG->wwwroot;
-if ( $_GET['course_id']) {
-    $location .= '/course/view.php?id=' . intval($_GET['course_id']);
+$courseid = optional_param('course_id', 0, PARAM_INT);
+if ( $courseid) {
+    $location .= '/course/view.php?id=' . $courseid;
 }
 
 ?>

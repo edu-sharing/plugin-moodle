@@ -47,6 +47,7 @@ if ( ! $course ) {
 }
 
 require_login($course->id);
+
 echo $OUTPUT->header();
 
 $ccauth = new mod_edusharing_web_service_factory();

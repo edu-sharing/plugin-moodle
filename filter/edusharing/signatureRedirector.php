@@ -24,8 +24,10 @@
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/../../mod/edusharing/lib.php');
+
 require_login();
-$url = $_REQUEST['url'];
+
+$url = required_param('url', PARAM_NOTAGS);
 $appproperties = json_decode(get_config('edusharing', 'appProperties'));
 $ts = $timestamp = round(microtime(true) * 1000);
 $url .= '&ts=' . $ts;

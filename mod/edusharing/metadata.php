@@ -26,10 +26,12 @@ require_once(dirname(__FILE__) . '/../../config.php');
 $appproperties = json_decode(get_config('edusharing', 'appProperties'));
 
 $parsedwwwroot = parse_url($CFG->wwwroot);
-if ($_GET['wsScheme'] == 'http' || $_GET['wsScheme'] == 'https') {
-    $parsedwwwroot['scheme'] = $_GET['wsScheme'];
+$wsscheme = optional_param('wsScheme', '', PARAM_NOTAGS);
+if ($wsscheme == 'http' || $wsscheme == 'https') {
+    $parsedwwwroot['scheme'] = $wsscheme;
 }
-if (isset($_GET['wsForceIpAddress'])) {
+$wsforceipadress = optional_param('wsForceIpAddress', '', PARAM_NOTAGS);
+if (!empty($wsforceipadress)) {
     $parsedwwwroot['host'] = $appproperties->host;
 }
 $parsedwwwroot = $parsedwwwroot['scheme'] . '://' . $parsedwwwroot['host'];
