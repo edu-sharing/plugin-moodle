@@ -30,4 +30,5 @@ $string['settingformats_desc'] = '过滤条件仅在将原始文本插入到选�
 
 $string['error_loading_node'] = 'Error loading object';
 $string['error_loading_resource'] = 'Cannot load resource from database.';
-$string['error_missing_instance_id'] = 'Invalid instance id.';
+$string['error_missing_instance_id'] = 'Invalid instance id';
+$string['error_empty_object_url'] = 'Invalid object url';

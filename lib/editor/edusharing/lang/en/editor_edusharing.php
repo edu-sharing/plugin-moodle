@@ -70,3 +70,7 @@ $string['error_json'] = 'Error fetching json-data.';
 $string['error_adding_instance'] = 'Error adding edu-sharing instance.';
 $string['error_updating_instance'] = 'Error updating edu-sharing instance.';
 $string['error_loading_instance'] = 'Cannot load edu-sharing object from database.';
+$string['error_get_tinymce'] = 'Cannot get_texteditor("tinymce") for version-information.';
+$string['error_determine_yui'] = 'Cannot determine YUI-version.';
+$string['error_no_homerepo'] = 'No home-repository configured.';
+$string['error_get_repository'] = 'Error reading repository-id from object-url.';

@@ -69,3 +69,7 @@ $string['error_json'] = 'Fehler beim Abholen der JSON-Daten.';
 $string['error_adding_instance'] = 'Fehler beim Hinzufügen der edu-sharing Instanz.';
 $string['error_updating_instance'] = 'Fehler beim Aktualisieren der edu-sharing Instanz.';
 $string['error_loading_instance'] = 'edu-sharing Objekt kann nicht aus der Datenbank geladen werden.';
+$string['error_get_tinymce'] = 'get_texteditor("tinymce") ist fehlgeschlagen.';
+$string['error_determine_yui'] = 'YUI-Version kann nicht ermittelt werden.';
+$string['error_no_homerepo'] = 'Kein Heimatrepositorium konfiguriert.';
+$string['error_get_repository'] = 'Objekt id kann nicht ermittelt werden.';

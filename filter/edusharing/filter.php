@@ -213,7 +213,7 @@ class filter_edusharing extends moodle_text_filter {
 
         $objecturl = $edusharing->object_url;
         if (!$objecturl) {
-            throw new Exception('Empty object url.');
+            throw new Exception(get_string('error_empty_object_url', 'filter_edusharing'));
         }
 
         $repositoryid = $this->appproperties->homerepid;

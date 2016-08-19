@@ -37,11 +37,11 @@ require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
 $tinymce = get_texteditor('tinymce');
 if ( ! $tinymce ) {
-    throw new RuntimeException('Could not get_texteditor("tinymce") for version-information.');
+    throw new RuntimeException(get_string('error_get_tinymce', 'editor_edusharing'));
 }
 
 if ( empty($CFG->yui3version) ) {
-    throw new RuntimeException('Could not determine installed YUI-version.');
+    throw new RuntimeException(get_string('error_determine_yui', 'editor_edusharing'));
 }
 
 ?><html xmlns="http://www.w3.org/1999/xhtml">
@@ -100,7 +100,7 @@ function get_preview_text() {
 $repositoryid = $appproperties->homerepid;
 if (!$repositoryid) {
     header('HTTP/1.1 500 Internal Server Error');
-    throw new Exception('No home-repository configured.');
+    throw new Exception(get_string('error_no_homerepo', 'editor_edusharing'));
 }
 
 ?>

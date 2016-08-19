@@ -30,4 +30,5 @@ $string['settingformats_desc'] = 'The filter will be applied only if the origina
 
 $string['error_loading_node'] = 'Error loading object';
 $string['error_loading_resource'] = 'Cannot load resource from database.';
-$string['error_missing_instance_id'] = 'Invalid instance id.';
+$string['error_missing_instance_id'] = 'Invalid instance id';
+$string['error_empty_object_url'] = 'Invalid object url';

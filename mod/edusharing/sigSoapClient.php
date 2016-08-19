@@ -69,7 +69,7 @@ class mod_edusharing_sig_soap_client extends SoapClient {
             $headers[] = new SOAPHeader('http://webservices.edu_sharing.org', 'signed', $signdata);
             parent::__setSoapHeaders($headers);
         } catch (Exception $e) {
-            throw new Exception('Could not set soap headers - ' . $e->getMessage());
+            throw new Exception(get_string('error_set_soap_headers', 'edusharing') . $e->getMessage());
         }
     }
 
@@ -86,7 +86,7 @@ class mod_edusharing_sig_soap_client extends SoapClient {
      */
     public function edusharing_get_app_properties() {
         if (empty($this->appproperties)) {
-            throw new Exception('No appProperties found');
+            throw new Exception(get_string('error_get_app_properties', 'edusharing'));
         }
         return $this->appproperties;
     }

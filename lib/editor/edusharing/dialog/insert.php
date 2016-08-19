@@ -37,11 +37,11 @@ require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
 $tinymce = get_texteditor('tinymce');
 if ( ! $tinymce ) {
-    throw new RuntimeException('Could not get_texteditor("tinymce") for version-information.');
+    throw new RuntimeException(get_string('error_get_tinymce', 'editor_edusharing'));
 }
 
 if ( empty($CFG->yui3version) ) {
-    throw new RuntimeException('Could not determine installed YUI-version.');
+    throw new RuntimeException(get_string('error_determine_yui', 'editor_edusharing'));
 }
 
 ?><html xmlns="http://www.w3.org/1999/xhtml">
@@ -96,13 +96,13 @@ if ( ! empty($resourceid) ) {
     $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resourceid));
     if ( ! $edusharing ) {
         header('HTTP/1.1 500 Internal Server Error');
-        throw new Exception('Error loading edusharing-resource.');
+        throw new Exception(get_string('error_loading_resource', 'editor_edusharing'));
     }
 
     $repositoryid = edusharing_get_repository_id_from_url($edusharing->object_url);
     if ( ! $repositoryid ) {
         header('HTTP/1.1 500 Internal Server Error');
-        throw new Exception('Error reading repository-id from object-url.');
+        throw new Exception(get_string('error_get_repository', 'editor_edusharing'));
     }
 }
 

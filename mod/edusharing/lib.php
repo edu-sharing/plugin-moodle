@@ -227,7 +227,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     // load previous state
     $memento = $DB->get_record(EDUSHARING_TABLE, array('id'  => $edusharing->id));
     if ( ! $memento ) {
-        throw new Exception('Error loading edu-sharing memento.');
+        throw new Exception(get_string('error_loading_memento', 'edusharing'));
     }
 
     // You may have to add extra stuff in here
@@ -323,7 +323,7 @@ function edusharing_delete_instance($id) {
 
     // load from DATABASE to get object-data for repository-operations.
     if (! $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $id))) {
-        throw new Exception('Error loading edusharing-object from database.');
+        throw new Exception(get_string('error_load_resource', 'edusharing'));
     }
 
     $appproperties = json_decode(get_config('edusharing', 'appProperties'));
@@ -335,7 +335,7 @@ function edusharing_delete_instance($id) {
 
         $connectionurl = $repproperties->usagewebservice_wsdl;
         if ( ! $connectionurl ) {
-            throw new Exception('No "usagewebservice_wsdl" configured.');
+            throw new Exception(get_string('error_missing_usagewsdl', 'edusharing'));
         }
 
         $ccwsusage = new mod_edusharing_sig_soap_client($connectionurl, array());

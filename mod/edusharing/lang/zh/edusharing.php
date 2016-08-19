@@ -129,3 +129,6 @@ $string['error_load_resource'] = 'Cannot load resource from database.';
 $string['error_get_object_id_from_url'] = 'Cannot get object id from url.';
 $string['error_get_repository_id_from_url'] = 'Cannot get repository id from url.';
 $string['error_detect_course'] = 'Cannot detect course id';
+$string['error_loading_memento'] = 'Error loading temporary object.';
+$string['error_set_soap_headers'] = 'Cannot set soap headers - ';
+$string['error_get_app_properties'] = 'No app-properties found.';

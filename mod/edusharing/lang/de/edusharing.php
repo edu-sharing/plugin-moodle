@@ -128,3 +128,6 @@ $string['error_load_resource'] = 'Ressource kann nicht aus der Datenbank geladen
 $string['error_get_object_id_from_url'] = 'Objekt id kann nicht ermittelt werden.';
 $string['error_get_repository_id_from_url'] = 'Repositorium id kann nicht ermittelt werden.';
 $string['error_detect_course'] = 'Kurs id kann nicht ermittelt werden.';
+$string['error_loading_memento'] = 'Fehler beim Laden des temporären Objektes.';
+$string['error_set_soap_headers'] = 'SOAP-Header konnten nicht gesetzt werden - ';
+$string['error_get_app_properties'] = 'Pluginkonfiguration konnte nicht geladen werden.';

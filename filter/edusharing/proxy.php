@@ -44,9 +44,6 @@ class filter_edusharing_edurender {
         $inline = "";
         try {
             $curlhandle = curl_init($url);
-            if (!$curlhandle) {
-                throw new Exception('Error initializing CURL.');
-            }
             curl_setopt($curlhandle, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($curlhandle, CURLOPT_HEADER, 0);
             // DO NOT RETURN HTTP HEADERS
