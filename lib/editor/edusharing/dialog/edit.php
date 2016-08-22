@@ -26,6 +26,7 @@ require_once(dirname(__FILE__) . "/../../../../config.php");
 require_once($CFG->dirroot.'/lib/setup.php');
 
 require_login();
+require_sesskey();
 
 global $DB;
 global $CFG;

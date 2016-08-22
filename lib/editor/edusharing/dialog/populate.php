@@ -62,7 +62,7 @@ $eduobjrepotype = addslashes_js(optional_param('repoType', '', PARAM_RAW));
                 inputs[i].disabled = false;
             }
     } catch (err) {
-        alert('Error populating form-fields.' + err);
+        alert('<?php echo get_string('error_populating_formfields', 'editor_edusharing') ?>' + ' ' + err);
     }
 
     try {
@@ -71,7 +71,7 @@ $eduobjrepotype = addslashes_js(optional_param('repoType', '', PARAM_RAW));
         parent.editor_edusharing_set_preview_content();
         parent.focus();
     } catch (err) {
-        alert('Error updating dialog.' + err);
+        alert('<?php echo get_string('error_updating_dialog', 'editor_edusharing')?>' + ' ' + err);
     }
 
 </script>

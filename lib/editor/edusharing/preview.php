@@ -27,6 +27,7 @@ require_once(dirname(__FILE__) . '/../../../config.php');
 require_once(dirname(__FILE__) . '/../../../mod/edusharing/locallib.php');
 
 require_login();
+require_sesskey();
 
 global $DB;
 

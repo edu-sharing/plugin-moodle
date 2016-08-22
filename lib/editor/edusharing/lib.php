@@ -180,6 +180,12 @@ class edusharing_texteditor extends tinymce_texteditor {
             $params['edusharing_dialog_height'] = 400;
 
             $params['convert_urls'] = false;
+
+            $params['moodle_sesskey'] = sesskey();
+
+            $stringman = get_string_manager();
+            $params['edusharing_lang'] = $stringman->load_component_strings('editor_edusharing', current_language());
+
         }
 
         return $params;

@@ -26,6 +26,7 @@ require_once(dirname(__FILE__) . "/../../../../config.php");
 require_once($CFG->dirroot.'/lib/setup.php');
 
 require_login();
+require_sesskey();
 
 global $DB;
 global $CFG;
@@ -283,7 +284,6 @@ function get_preview_text() {
         var object_id = object_url_parts[3];
 
         var remoterepo ='';
-        console.log(repository_id+' - '+object_url_parts[2]);
 
         if ( repository_id != object_url_parts[2]) {
               remoterepo = '&repoId='+object_url_parts[2];
@@ -293,8 +293,6 @@ function get_preview_text() {
         preview_url = preview_url.concat('?nodeId=' + object_id);
         preview_url = preview_url.concat(remoterepo);
         preview_url = preview_url.concat('&ticket=' + document.getElementsByName('edu_ticket')[0].value);
-
-        console.log(preview_url);
 
         return preview_url;
     }

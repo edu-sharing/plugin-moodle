@@ -220,7 +220,7 @@ class filter_edusharing extends moodle_text_filter {
         $url = edusharing_get_redirect_url($edusharing, $this->appproperties,
                 $this->repproperties, EDUSHARING_DISPLAY_MODE_INLINE);
         $inline = '<div class="eduContainer" data-type="esObject" data-url="' . $CFG->wwwroot .
-                 '/filter/edusharing/proxy.php?URL=' . urlencode($url) . '&amp;resId=' .
+                 '/filter/edusharing/proxy.php?sesskey='.sesskey().'&URL=' . urlencode($url) . '&amp;resId=' .
                  $edusharing->id . '&amp;title=' . urlencode($renderparams['title']) .
                  '&amp;mimetype=' . $renderparams['mimetype'] .
                  '"><div class="inner"><div class="spinner1"></div></div>' .

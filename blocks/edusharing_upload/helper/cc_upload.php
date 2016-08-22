@@ -31,6 +31,8 @@ global $SESSION;
 require_once('../../../mod/edusharing/lib/cclib.php');
 require_once('../../../mod/edusharing/lib.php');
 
+require_sesskey();
+
 $id = optional_param('id', 0, PARAM_INT);
 
 if (!$id) {

@@ -80,7 +80,7 @@ class filter_edusharing_edurender {
          * replaces {{{LMS_INLINE_HELPER_SCRIPT}}}
          */
         $html = str_replace("{{{LMS_INLINE_HELPER_SCRIPT}}}",
-                $CFG->wwwroot . "/filter/edusharing/inlineHelper.php?resId=" . $resid, $html);
+                $CFG->wwwroot . "/filter/edusharing/inlineHelper.php?sesskey=".sesskey()."&resId=" . $resid, $html);
 
         /*
          * replaces <es:title ...>...</es:title>
@@ -105,6 +105,7 @@ $url = required_param('URL', PARAM_NOTAGS);
 $parts = parse_url($url);
 parse_str($parts['query'], $query);
 require_login($query['course_id']);
+require_sesskey();
 
 $appproperties = json_decode(get_config('edusharing', 'appProperties'));
 $ts = $timestamp = round(microtime(true) * 1000);

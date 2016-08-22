@@ -26,6 +26,7 @@ require_once(dirname(__FILE__) . '/../../../../config.php');
 require_once(dirname(__FILE__) . '/../../../../lib/setup.php');
 
 require_login();
+require_sesskey();
 
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
@@ -50,9 +51,6 @@ if ( ! $edusharing ) {
     header('HTTP/1.1 404 Not found', true, 404);
     exit();
 }
-
-// set $instance to $id to conform with moodle's resource-handling
-// $edusharing->instance = $edusharing->id;
 
 // post-process given data
 $edusharing = edusharing_postprocess($update);

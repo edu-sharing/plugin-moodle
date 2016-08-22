@@ -25,7 +25,7 @@
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/mod/edusharing/lib.php');
 
-require_login();
+require_sesskey();
 
 $resid = optional_param('resId', 0, PARAM_INT); // edusharing instance ID
 
