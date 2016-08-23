@@ -10,26 +10,42 @@
 	color: rgba(0, 0, 0, 0.0); /*do not change*/
 }
 
+.edusharing_metadata_wrapper {
+	margin-top: 15px;
+}
+
 .edusharing_metadata_toggle_button {
 	cursor: pointer;
 }
 
 .edusharing_metadata {
     position: absolute;
-    padding: 10px;
+    margin-top: 4px;
+    padding: 15px 25px;
     border: 1px solid #ccc;
     background-color: #fff;
+    min-width: 250px;
     z-index: 50;
+    -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.5);
+	box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.5);
+}
+
+.edusharing_metadata_title, .edusharing_metadata_value {
+	display: block;
+	line-height: 13px;
+	margin-bottom: 20px;
 }
 
 .edusharing_metadata_title {
-	font-weight: 800;
+	font-weight: 600;
+	font-size: 18px;
 }
 
 .edusharing_metadata_label {
-	font-size: 10px;
+	display: block;
+	font-size: 12px;
 	color: #999;
-	margin-top: 6px;
 	margin-bottom: 0;
 	cursor: default;
 }
