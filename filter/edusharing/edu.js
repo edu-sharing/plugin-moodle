@@ -49,7 +49,7 @@ function getJQueryCodeSoThatMoodleLikesIt($) {
 		});
 		
 		$(".edu_wrapper").on( "click", ".edusharing_metadata_toggle_button", function() {
-			$(this).parent().find(".edusharing_metadata").toggle(1, function() {
+			$(this).parent().next(".edusharing_metadata").toggle(function() {
 				var toggle_button = $(this).parent().find(".edusharing_metadata_toggle_button");
 				if($(this).is(':visible')) {
 					toggle_button.text(toggle_button.data('textclose'));
