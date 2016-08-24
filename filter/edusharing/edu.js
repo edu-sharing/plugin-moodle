@@ -1,4 +1,4 @@
-// This file is part of Moodle - http://moodle.org/
+// This file is part of edu-sharing created by metaVentis GmbH — http://metaventis.com
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,42 +19,56 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 function getJQueryCodeSoThatMoodleLikesIt($) {
-        $.ajaxSetup({ cache: false });
-        
-        function renderEsObject(esObject, wrapper) {
-            var url = esObject.attr("data-url");
-            if (typeof wrapper == 'undefined')
-                var wrapper = esObject.parent();
-            $.get(url, function(data) {
-                wrapper.html('').append(data).css({height: 'auto', width: 'auto'});
-                if (data.toLowerCase().indexOf('data-view="lock"') >= 0)
-                    setTimeout(function() { renderEsObject(esObject, wrapper);}, 1111);
-            });
-            esObject.removeAttr("data-type");
-        }
-        
-        $("div[data-type='esObject']:near-viewport(400)").each(function() {
-            renderEsObject($(this));
-        })
-        
-        $(window).scroll(function() {
-            $("div[data-type='esObject']:near-viewport(400)").each(function() {
-                renderEsObject($(this));
-            })
-        });
+
+		$.ajaxSetup({ cache: false });
+		
+		function renderEsObject(esObject, wrapper) {
+			var url = esObject.attr("data-url");
+			if(typeof wrapper == 'undefined')
+				var wrapper = esObject.parent();
+			$.get(url, function(data) {
+				wrapper.html('').append(data).css({height: 'auto', width: 'auto'});
+				if (data.toLowerCase().indexOf('data-view="lock"') >= 0)
+					setTimeout(function(){ renderEsObject(esObject, wrapper);}, 1111);
+			});
+			esObject.removeAttr("data-type");
+		}
+		
+		$("div[data-type='esObject']:near-viewport(400)").each(function() {
+			renderEsObject($(this));
+		})
+		
+		$(window).scroll(function() {
+			$("div[data-type='esObject']:near-viewport(400)").each(function() {
+				renderEsObject($(this));
+			})
+		});
+		
+		$(".edu_wrapper").on( "click", ".edusharing_metadata_toggle_button", function() {
+			$(this).parent().find(".edusharing_metadata").toggle();
+		});
+		
+		$(".edu_wrapper").on( "click", ".edusharing_metadata_toggle_button", function() {
+			$(this).parent().find(".edusharing_metadata").toggle(1, function() {
+				var toggle_button = $(this).parent().find(".edusharing_metadata_toggle_button");
+				if($(this).is(':visible')) {
+					toggle_button.text(toggle_button.data('textclose'));
+				} else {
+					toggle_button.text(toggle_button.data('textopen'));
+				}
+			});
+		});
 }
 
-if (typeof require == 'undefined') {
-    $(document).ready(function() {
-        getJQueryCodeSoThatMoodleLikesIt($);
-    });
+if(typeof require == 'undefined') {
+	$(document).ready(function() {
+		getJQueryCodeSoThatMoodleLikesIt($);
+	});
 } else {
-    require(['jquery'], function($) {
-        $(document).ready(function() {
-            getJQueryCodeSoThatMoodleLikesIt($);
-        });
-    });
+	require(['jquery'], function($) {
+		$(document).ready(function() {
+			getJQueryCodeSoThatMoodleLikesIt($);
+		});
+	});
 }
 
-    
-    
