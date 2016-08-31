@@ -5,132 +5,172 @@
  */
 
 .eduContainer {
-    width: 180px;
-    color: rgba(0, 0, 0, 0.0); /*do not change*/
+	width: 180px;
+	color: rgba(0, 0, 0, 0.0); /*do not change*/
+}
+
+.edusharing_metadata_wrapper {
+	margin-top: 15px;
+}
+
+.edusharing_metadata_toggle_button {
+	cursor: pointer;
+}
+
+.edusharing_metadata {
+    position: absolute;
+    margin-top: 4px;
+    padding: 15px 25px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    min-width: 250px;
+    z-index: 50;
+    -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.5);
+	box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.5);
+}
+
+.edusharing_metadata_title, .edusharing_metadata_value {
+	display: block;
+	line-height: 13px;
+	margin-bottom: 20px;
+}
+
+.edusharing_metadata_title {
+	font-weight: 600;
+	font-size: 18px;
+}
+
+.edusharing_metadata_label {
+	display: block;
+	font-size: 12px;
+	color: #999;
+	margin-bottom: 0;
+	cursor: default;
 }
 
 .inner {
-    width: 30px;
-    height: 50px;
-    display: inline-block;
+	width: 30px;
+	height: 50px;
+	display: inline-block;
 }
 .spinner1 {
-    background: url([[pix:edusharing|hex1]]);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 50px;
-    width: 50px;
-    height: 50px;
-    -webkit-animation: spin 2s infinite ease-in;
-    -moz-animation: spin 2s infinite ease-in;
-    -ms-animation: spin 2s infinite ease-in;
-    -o-animation: spin 2s infinite ease-in;
-    animation: spin 2s infinite ease-in;
-    -webkit-animation-delay: 0.1s;
-    -moz-animation-delay: 0.1s;
-    animation-delay: 0.1s;
+	background: url([[pix:edusharing|hex1]]);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 50px;
+	width: 50px;
+	height: 50px;
+	-webkit-animation: spin 2s infinite ease-in;
+	-moz-animation: spin 2s infinite ease-in;
+	-ms-animation: spin 2s infinite ease-in;
+	-o-animation: spin 2s infinite ease-in;
+	animation: spin 2s infinite ease-in;
+	-webkit-animation-delay: 0.1s;
+	-moz-animation-delay: 0.1s;
+	animation-delay: 0.1s;
 }
 
 .spinner2 {
-    background: url([[pix:edusharing|hex2]]);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 50px;
-    width: 50px;
-    height: 50px;
-    -webkit-animation: spin 2s infinite ease-in;
-    -moz-animation: spin 2s infinite ease-in;
-    -ms-animation: spin 2s infinite ease-in;
-    -o-animation: spin 2s infinite ease-in;
-    animation: spin 2s infinite ease-in;
-    -webkit-animation-delay: 0.25s;
-    -moz-animation-delay: 0.25s;
-    animation-delay: 0.25s;
+	background: url([[pix:edusharing|hex2]]);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 50px;
+	width: 50px;
+	height: 50px;
+	-webkit-animation: spin 2s infinite ease-in;
+	-moz-animation: spin 2s infinite ease-in;
+	-ms-animation: spin 2s infinite ease-in;
+	-o-animation: spin 2s infinite ease-in;
+	animation: spin 2s infinite ease-in;
+	-webkit-animation-delay: 0.25s;
+	-moz-animation-delay: 0.25s;
+	animation-delay: 0.25s;
 }
 
 .spinner3 {
-    background: url([[pix:edusharing|hex3]]);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 50px;
-    width: 50px;
-    height: 50px;
-    -webkit-animation: spin 2s infinite ease-in;
-    -moz-animation: spin 2s infinite ease-in;
-    -ms-animation: spin 2s infinite ease-in;
-    -o-animation: spin 2s infinite ease-in;
-    animation: spin 2s infinite ease-in;
-    -webkit-animation-delay: 0.5s;
-    -moz-animation-delay: 0.5s;
-    animation-delay: 0.5s;
+	background: url([[pix:edusharing|hex3]]);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 50px;
+	width: 50px;
+	height: 50px;
+	-webkit-animation: spin 2s infinite ease-in;
+	-moz-animation: spin 2s infinite ease-in;
+	-ms-animation: spin 2s infinite ease-in;
+	-o-animation: spin 2s infinite ease-in;
+	animation: spin 2s infinite ease-in;
+	-webkit-animation-delay: 0.5s;
+	-moz-animation-delay: 0.5s;
+	animation-delay: 0.5s;
 }
 
 @-webkit-keyframes spin {
-    0% {
-        transform: scale(1);
-    }
+	0% {
+		transform: scale(1);
+	}
 
-    50% {
-        transform: scale(0.5);
-    }
+	50% {
+		transform: scale(0.5);
+	}
 
-    100% {
-        transform: scale(1);
-    }
+	100% {
+		transform: scale(1);
+	}
 }
 
 @-moz-keyframes spin {
-    0% {
-        transform: scale(1);
-    }
+	0% {
+		transform: scale(1);
+	}
 
-    50% {
-        transform: scale(0.5);
-    }
+	50% {
+		transform: scale(0.5);
+	}
 
-    100% {
-        transform: scale(1);
-    }
+	100% {
+		transform: scale(1);
+	}
 }
 
 @-ms-keyframes spin {
-    0% {
-        transform: scale(1);
-    }
+	0% {
+		transform: scale(1);
+	}
 
-    50% {
-        transform: scale(0.5);
-    }
+	50% {
+		transform: scale(0.5);
+	}
 
-    100% {
-        transform: scale(1);
-    }
+	100% {
+		transform: scale(1);
+	}
 }
 
 @-o-keyframes spin {
-    0% {
-        transform: scale(1);
-    }
+	0% {
+		transform: scale(1);
+	}
 
-    50% {
-        transform: scale(0.5);
-    }
+	50% {
+		transform: scale(0.5);
+	}
 
-    100% {
-        transform: scale(1);
-    }
+	100% {
+		transform: scale(1);
+	}
 }
 
 @keyframes spin {
-    0% {
-        transform: scale(1);
-    }
+	0% {
+		transform: scale(1);
+	}
 
-    50% {
-        transform: scale(0.5) rotate(90deg);
-    }
+	50% {
+		transform: scale(0.5) rotate(90deg);
+	}
 
-    100% {
-        transform: scale(1);
-    }
+	100% {
+		transform: scale(1);
+	}
 }
