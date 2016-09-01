@@ -24,7 +24,7 @@ The block, filter and editor plugins all depend on the activity module.
 Installation
 ------------
 
-For a full documentation with screenshots of the post installation steps visit the [documentation pages](http://edu-sharing.com/dokumentation/?lang=en).
+For a full documentation with screenshots of the post installation steps visit the [documentation pages](http://docs.edu-sharing.com).
 After installing the Plugins in short the following steps are necessary:
 - connect the activity module to an edu-sharing repository (plugin settings / repository settings)
 - activate the edu-sharing editor plugin for tinymce and push it to the first position in the editor plugin overview list
@@ -34,7 +34,7 @@ After installing the Plugins in short the following steps are necessary:
 Documentation
 -------------
 
-More information can be found on the [homepage](http://www.edu-sharing.com).
+More information can be found on the [homepage](http://edu-sharing.com).
 
 Where can I get the latest release?
 -----------------------------------
