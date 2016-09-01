@@ -293,7 +293,7 @@ function edusharing_update_instance(stdClass $edusharing) {
         );
 
         $setusage = $client->setUsage($params);
-        $edusharing->version = $memento->object_version;
+        $edusharing->object_version = $memento->object_version;
         // throws exception on error, so no further checking required
         $DB->update_record(EDUSHARING_TABLE, $edusharing);
     } catch (SoapFault $exception) {
