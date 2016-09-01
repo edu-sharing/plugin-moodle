@@ -112,7 +112,7 @@ $string['filter_not_authorized'] = 'You are not authorized to access the request
 
 // auth parameters
 $string['convey_global_groups_yes'] = 'Convey cohorts';
-$string['convey_global_groups_no'] = 'Not convey cohorts';
+$string['convey_global_groups_no'] = 'Do not convey cohorts';
 
 $string['mcryptrequired'] = 'The PHP extension mcrypt must be activated.';
 $string['soaprequired'] = 'The PHP extension soap must be activated.';
@@ -128,5 +128,5 @@ $string['error_get_object_id_from_url'] = 'Cannot get object id from url.';
 $string['error_get_repository_id_from_url'] = 'Cannot get repository id from url.';
 $string['error_detect_course'] = 'Cannot detect course id';
 $string['error_loading_memento'] = 'Error loading temporary object.';
-$string['error_set_soap_headers'] = 'Cannot set soap headers - ';
-$string['error_get_app_properties'] = 'Cannaot load plugin config';
+$string['error_set_soap_headers'] = 'Cannot set SOAP headers - ';
+$string['error_get_app_properties'] = 'Cannot load plugin config';
