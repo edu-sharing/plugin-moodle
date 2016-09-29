@@ -94,13 +94,6 @@ class filter_edusharing extends moodle_text_filter {
         global $COURSE;
         global $PAGE;
 
-        // disable page-caching to "renew" render-session-data
-        $PAGE->set_cacheable(false);
-
-        $PAGE->requires->js('/mod/edusharing/js/jquery.min.js');
-        $PAGE->requires->js('/mod/edusharing/js/jquery-near-viewport.min.js');
-        $PAGE->requires->js('/filter/edusharing/edu.js');
-
         if (!isset($options['originalformat'])) {
             return $text;
         }
@@ -115,8 +108,16 @@ class filter_edusharing extends moodle_text_filter {
                     PREG_PATTERN_ORDER);
             $matches = array_merge($matchesimg[0], $matchesa[0]);
 
-            foreach ($matches as $match) {
-                $text = str_replace($match, $this->filter_edusharing_convert_object($match), $text, $count);
+            if (!empty($matches)) {
+                // disable page-caching to "renew" render-session-data
+                $PAGE->set_cacheable(false);
+                $PAGE->requires->js('/mod/edusharing/js/jquery.min.js');
+                $PAGE->requires->js('/mod/edusharing/js/jquery-near-viewport.min.js');
+                $PAGE->requires->js('/filter/edusharing/edu.js');
+
+                foreach ($matches as $match) {
+                    $text = str_replace($match, $this->filter_edusharing_convert_object($match), $text, $count);
+                }
             }
         } catch (Exception $exception) {
             trigger_error($exception->getMessage(), E_USER_WARNING);
