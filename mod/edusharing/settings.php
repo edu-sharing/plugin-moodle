@@ -21,134 +21,137 @@
  * @copyright metaVentis GmbH — http://metaventis.com
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
-global $CFG;
+defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
-    $section = optional_param('section', '', PARAM_NOTAGS);
-    if (!empty($section) && $section == 'modsettingedusharing') {
-        $appproperties = json_decode(get_config('edusharing', 'appProperties'), true);
-        $repproperties = json_decode(get_config('edusharing', 'repProperties'), true);
 
-        foreach ($_REQUEST as $key => $value) {
-            if (strpos($key, 'app_') !== false && !empty($value)) {
-                $appproperties[str_replace('app_', '', $key)] = trim($value);
-            }
-            if (strpos($key, 'rep_') !== false && !empty($value)) {
-                $repproperties[str_replace('rep_', '', $key)] = trim($value);
-            }
-        }
+	$strtxt = get_string('conf_linktext', 'edusharing');
+	$str = '<h4 class="main"><a href="' . $CFG->wwwroot .
+	'/mod/edusharing/import_metadata.php?sesskey=' . $USER->sesskey . '" target="_blank">' .
+	$strtxt . '</a></h4>';
+	$settings->add(
+			new admin_setting_heading('edusharing',
+					get_string('connectToHomeRepository', 'edusharing'), $str));
+	 
+	
+	
+	
+	$settings->add(new admin_setting_heading('edusharing/app', 'Application properties', ''));
 
-        set_config('appProperties', json_encode($appproperties), 'edusharing');
-        set_config('repProperties', json_encode($repproperties), 'edusharing');
-
-        set_config('EDU_AUTH_KEY', optional_param('EDU_AUTH_KEY', '', PARAM_NOTAGS), 'edusharing');
-        set_config('EDU_AUTH_PARAM_NAME_USERID', optional_param('EDU_AUTH_PARAM_NAME_USERID', '', PARAM_NOTAGS) ,
-                'edusharing');
-        set_config('EDU_AUTH_PARAM_NAME_LASTNAME', optional_param('EDU_AUTH_PARAM_NAME_LASTNAME', '', PARAM_NOTAGS),
-                'edusharing');
-        set_config('EDU_AUTH_PARAM_NAME_FIRSTNAME',
-                optional_param('EDU_AUTH_PARAM_NAME_FIRSTNAME', '', PARAM_NOTAGS), 'edusharing');
-        set_config('EDU_AUTH_PARAM_NAME_EMAIL', optional_param('EDU_AUTH_PARAM_NAME_EMAIL', '', PARAM_NOTAGS),
-                'edusharing');
-        set_config('EDU_AUTH_AFFILIATION', optional_param('EDU_AUTH_AFFILIATION', '', PARAM_NOTAGS), 'edusharing');
-        set_config('EDU_AUTH_CONVEYGLOBALGROUPS', optional_param('EDU_AUTH_CONVEYGLOBALGROUPS', '', PARAM_NOTAGS),
-                'edusharing');
-    }
-
-    // (re)load config
-    $appproperties = json_decode(get_config('edusharing', 'appProperties'), true);
-    $repproperties = json_decode(get_config('edusharing', 'repProperties'), true);
-    $strsubmit = '<input class="form-submit" type="submit" value="' .
-             get_string('save', 'edusharing') . '">';
-
-    $strtxt = get_string('conf_linktext', 'edusharing');
-    $str = '<h4 class="main"><a href="' . $CFG->wwwroot .
-             '/mod/edusharing/import_metadata.php?sesskey=' . $USER->sesskey . '" target="_blank">' .
-             $strtxt . '</a></h4>';
-
-    $strapp = '';
-    if (!empty($appproperties)) {
-        ksort($appproperties);
-        foreach ($appproperties as $key => $value) {
-            if (strpos($key, '_key') !== false) {
-                $strapp .= '<label for="app_' . $key . '">mod_edusharing/' . $key . '</label>' .
-                         '<textarea style="width: 700px" id="app_' . $key . '" name="app_' . $key .
-                         '">' . $value . '</textarea><br/>';
-            } else {
-                $strapp .= '<label for="app_' . $key . '">mod_edusharing/' . $key . '</label>' .
-                         '<input style="width: 700px; height: auto;" id="app_' . $key .
-                         '" name="app_' . $key . '" type="text" value="' . $value . '"><br/>';
-            }
-        }
-    }
-
-    $strrep = '';
-    if (!empty($repproperties)) {
-        ksort($repproperties);
-        foreach ($repproperties as $key => $value) {
-            if (strpos($key, '_key') !== false) {
-                $strrep .= '<label for="rep_' . $key . '">mod_edusharing/' . $key . '</label>' .
-                         '<textarea style="width: 700px" id="rep_' . $key . '" name="rep_' . $key .
-                         '">' . $value . '</textarea><br/>';
-            } else {
-                $strrep .= '<label for="rep_' . $key . '">mod_edusharing/' . $key . '</label>' .
-                         '<input style="width: 700px; height: auto;" id="rep_' . $key .
-                         '" name="rep_' . $key . '" type="text" value="' . $value . '"><br/>';
-            }
-        }
-    }
-
-    $strauth = '';
-    $strauth .= '';
-
-    $eduauthparamnameuserid = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
-    $eduauthkey = get_config('edusharing', 'EDU_AUTH_KEY');
-    $eduauthaffiliation = get_config('edusharing', 'EDU_AUTH_AFFILIATION');
-
-    $strauth .= '<label for="EDU_AUTH_KEY">EDU_AUTH_KEY</label><input style="width: 700px; height: auto;" id="EDU_AUTH_KEY" name="EDU_AUTH_KEY" type="text" value="' .
-             get_config('edusharing', 'EDU_AUTH_KEY') . '"><br/>';
-    $strauth .= '<label for="EDU_AUTH_PARAM_NAME_USERID">EDU_AUTH_PARAM_NAME_USERID</label><input style="width: 700px; height: auto;" ' .
-             'id="EDU_AUTH_PARAM_NAME_USERID" name="EDU_AUTH_PARAM_NAME_USERID" type="text" value="' .
-             get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID') . '"><br/>';
-    $strauth .= '<label for="EDU_AUTH_PARAM_NAME_USERID">EDU_AUTH_PARAM_NAME_LASTNAME</label><input style="width: 700px; height: auto;" ' .
-             'id="EDU_AUTH_PARAM_NAME_LASTNAME" name="EDU_AUTH_PARAM_NAME_LASTNAME" type="text" value="' .
-             get_config('edusharing', 'EDU_AUTH_PARAM_NAME_LASTNAME') . '"><br/>';
-    $strauth .= '<label for="EDU_AUTH_PARAM_NAME_FIRSTNAME">EDU_AUTH_PARAM_NAME_FIRSTNAME</label><input style="width: 700px; height: auto;" ' .
-             'id="EDU_AUTH_PARAM_NAME_FIRSTNAME" name="EDU_AUTH_PARAM_NAME_FIRSTNAME" type="text" value="' .
-             get_config('edusharing', 'EDU_AUTH_PARAM_NAME_FIRSTNAME') . '"><br/>';
-    $strauth .= '<label for="EDU_AUTH_PARAM_NAME_EMAIL">EDU_AUTH_PARAM_NAME_EMAIL</label><input style="width: 700px; height: auto;" ' .
-             'id="EDU_AUTH_PARAM_NAME_EMAIL" name="EDU_AUTH_PARAM_NAME_EMAIL" type="text" value="' .
-             get_config('edusharing', 'EDU_AUTH_PARAM_NAME_EMAIL') . '"><br/>';
-
-    $strauth .= '<br/>';
-
-    $strauth .= '<label for="EDU_AUTH_AFFILIATION">EDU_AUTH_AFFILIATION</label><input style="width: 700px; height: auto;" id="EDU_AUTH_AFFILIATION" ' .
-             'name="EDU_AUTH_AFFILIATION" type="text" value="' .
-             get_config('edusharing', 'EDU_AUTH_AFFILIATION') . '"><br/>';
-
-    $conveycohorts = get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS');
-    $checkno = $checkyes = '';
-    if ($conveycohorts == 'yes') {
-        $checkyes = 'checked';
-    } else {
-        $checkno = 'checked';
-    }
-    $strauth .= '<label>EDU_AUTH_CONVEYGLOBALGROUPS</label>&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsYes" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="yes" ' .
-             $checkyes . '><label for="cohortsYes">&nbsp;' .
-             get_string('convey_global_groups_yes', 'edusharing') .
-             '</label><br>&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="cohortsNo" name="EDU_AUTH_CONVEYGLOBALGROUPS" value="no" ' .
-             $checkno . '><label for="cohortsNo">&nbsp;' .
-             get_string('convey_global_groups_no', 'edusharing') . '</label><br/><br/>';
-
-    $settings->add(
-            new admin_setting_heading('edusharing',
-                    get_string('connectToHomeRepository', 'edusharing'), $str));
-    $settings->add(
-            new admin_setting_heading('app', get_string('appProperties', 'edusharing'), $strapp));
-    $settings->add(
-            new admin_setting_heading('rep', get_string('homerepProperties', 'edusharing'), $strrep));
-    $strauth .= $strsubmit;
-    $settings->add(
-            new admin_setting_heading('auth', get_string('authparameters', 'edusharing'), $strauth));
+	$settings->add(new admin_setting_configtext('edusharing/application_appid',
+			'appid',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/application_type',
+			'type',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/application_homerepid',
+			'homerepid',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/application_cc_gui_url',
+			'cc_gui_url',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtextarea('edusharing/application_private_key',
+			'private_key',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtextarea('edusharing/application_public_key',
+			'public_key',
+			'', '', PARAM_TEXT, 50));
+		
+	$settings->add(new admin_setting_configtext('edusharing/application_blowfishkey',
+			'blowfishkey',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/application_blowfishiv',
+			'blowfishiv',
+			'', '', PARAM_TEXT, 50));
+	
+	
+	
+	
+	$settings->add(new admin_setting_heading('edusharing/rep', 'Repository properties', ''));
+	
+	$settings->add(new admin_setting_configtextarea('edusharing/repository_public_key',
+			'public_key',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/repository_clientport',
+			'clientport',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/repository_port',
+			'port',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/repository_domain',
+			'domain',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/repository_authenticationwebservice_wsdl',
+			'authenticationwebservice_wsdl',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/repository_type',
+			'type',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/repository_appid',
+			'appid',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/repository_usagewebservice_wsdl',
+			'usagewebservice_wsdl',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/repository_protocol',
+			'protocol',
+			'', '', PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configtext('edusharing/repository_host',
+			'host',
+			'', '', PARAM_TEXT, 50));
+	
+	
+	
+	$settings->add(new admin_setting_heading('edusharing/auth', 'Authentication properties', ''));
+	
+	//defaults according to locallib.php
+	$settings->add(new admin_setting_configtext('edusharing/EDU_AUTH_KEY',
+			'EDU_AUTH_KEY',
+			'', 'username', PARAM_TEXT, 50));
+	$settings->add(new admin_setting_configtext('edusharing/EDU_AUTH_PARAM_NAME_USERID',
+			'PARAM_NAME_USERID',
+			'', 'userid', PARAM_TEXT, 50));
+	$settings->add(new admin_setting_configtext('edusharing/EDU_AUTH_PARAM_NAME_LASTNAME',
+			'PARAM_NAME_LASTNAME',
+			'', 'lastname', PARAM_TEXT, 50));
+	$settings->add(new admin_setting_configtext('edusharing/EDU_AUTH_PARAM_NAME_FIRSTNAME',
+			'PARAM_NAME_FIRSTNAME',
+			'', 'firstname', PARAM_TEXT, 50));
+	$settings->add(new admin_setting_configtext('edusharing/EDU_AUTH_PARAM_NAME_EMAIL',
+			'PARAM_NAME_EMAIL',
+			'', 'email', PARAM_TEXT, 50));
+	$settings->add(new admin_setting_configtext('edusharing/EDU_AUTH_AFFILIATION',
+			'AFFILIATION',
+			'', $CFG->siteidentifier, PARAM_TEXT, 50));
+	
+	$settings->add(new admin_setting_configcheckbox('edusharing/EDU_AUTH_CONVEYGLOBALGROUPS',
+	 'CONVEYGLOBALGROUPS',
+	 '', ''), 1);
+		
+	$settings->add(new admin_setting_heading('edusharing/guest', 'Guest properties', ''));
+	
+	$settings->add(new admin_setting_configcheckbox('edusharing/edu_guest_option',
+			'guest_option',
+			'', ''), 1);
+	
+	$settings->add(new admin_setting_configtext('edusharing/edu_guest_guest_id',
+			'guest_id',
+			'', 'esguest', PARAM_TEXT, 50));
+	
+	
 }

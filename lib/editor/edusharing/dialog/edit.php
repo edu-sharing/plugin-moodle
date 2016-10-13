@@ -51,7 +51,6 @@ if ( empty($CFG->yui3version) ) {
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/yui/'.$CFG->yui3version.'/build/yui/yui.js', ENT_COMPAT, 'utf-8') ?>"></script>
     <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/tinymce/tiny_mce/'.$tinymce->version.'/tiny_mce_popup.js', ENT_COMPAT, 'utf-8') ?>">
     </script>
 
@@ -69,8 +68,6 @@ if ( empty($CFG->yui3version) ) {
     <h2><?php echo htmlentities(get_string('dialog_title', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></h2>
     <br/>
 <?php
-
-$appproperties = json_decode(get_config('edusharing', 'appProperties'));
 
 $edusharing = new stdClass();
 $edusharing->object_url = '';
@@ -98,7 +95,7 @@ function get_preview_text() {
          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 }
 
-$repositoryid = $appproperties->homerepid;
+$repositoryid = get_config('edusharing', 'application_homerepid');
 if (!$repositoryid) {
     header('HTTP/1.1 500 Internal Server Error');
     throw new Exception(get_string('error_no_homerepo', 'editor_edusharing'));

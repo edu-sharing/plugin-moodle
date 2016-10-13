@@ -46,18 +46,6 @@ class filter_edusharing extends moodle_text_filter {
 
     /**
      *
-     * @var array
-     */
-    protected $appproperties = array();
-
-    /**
-     *
-     * @var array
-     */
-    protected $repproperties = array();
-
-    /**
-     *
      * Enter description here ...
      *
      * @param object $context
@@ -66,16 +54,13 @@ class filter_edusharing extends moodle_text_filter {
     public function __construct($context, array $localconfig) {
         parent::__construct($context, $localconfig);
 
-        $this->appproperties = json_decode(get_config('edusharing', 'appProperties'));
-        $this->repproperties = json_decode(get_config('edusharing', 'repProperties'));
-
         // to force the re-generation of filtered texts we just ...
         reset_text_filters_cache();
 
         // ensure that user exists in repository
         if (isloggedin()) {
             $ccauth = new mod_edusharing_web_service_factory();
-            $ccauth->edusharing_authentication_get_ticket($this->appproperties->appid);
+            $ccauth->edusharing_authentication_get_ticket();
         }
     }
 
@@ -217,9 +202,8 @@ class filter_edusharing extends moodle_text_filter {
             throw new Exception(get_string('error_empty_object_url', 'filter_edusharing'));
         }
 
-        $repositoryid = $this->appproperties->homerepid;
-        $url = edusharing_get_redirect_url($edusharing, $this->appproperties,
-                $this->repproperties, EDUSHARING_DISPLAY_MODE_INLINE);
+        $repositoryid = get_config('edusharing', 'application_homerepid');
+        $url = edusharing_get_redirect_url($edusharing ,EDUSHARING_DISPLAY_MODE_INLINE);
         $inline = '<div class="eduContainer" data-type="esObject" data-url="' . $CFG->wwwroot .
                  '/filter/edusharing/proxy.php?sesskey='.sesskey().'&URL=' . urlencode($url) . '&amp;resId=' .
                  $edusharing->id . '&amp;title=' . urlencode($renderparams['title']) .

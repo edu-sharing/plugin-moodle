@@ -48,12 +48,10 @@ class mod_edusharing_mod_form extends moodleform_mod
         global $CFG;
         global $COURSE;
 
-        $appproperties = json_decode(get_config('edusharing', 'appProperties'));
-
         try {
             // @TODO make dynamic
             $ccauth = new mod_edusharing_web_service_factory();
-            $ticket = $ccauth->edusharing_authentication_get_ticket($appproperties->appid);
+            $ticket = $ccauth->edusharing_authentication_get_ticket();
         } catch (Exception $e) {
             trigger_error($e->getMessage(), E_USER_WARNING);
             return false;
@@ -93,7 +91,7 @@ class mod_edusharing_mod_form extends moodleform_mod
 
         $mylang = edusharing_get_current_users_language_code();
 
-        $ccresourcesearch  = $appproperties->cc_gui_url;
+        $ccresourcesearch  = get_config('edusharing', 'application_cc_gui_url');
         $ccresourcesearch .= "?mode=0";
         $ccresourcesearch .= "&user=".urlencode(edusharing_get_auth_key());
         $ccresourcesearch .= "&locale=".$mylang;
@@ -106,7 +104,7 @@ class mod_edusharing_mod_form extends moodleform_mod
                           . "scrollbars,resizable,width=1000,height=580');");
         $searchbutton->updateAttributes($buttonattributes);
 
-        $ccresourceupload  = $appproperties->cc_gui_url;
+        $ccresourceupload  = get_config('edusharing', 'application_cc_gui_url');
         $ccresourceupload .= "?mode=2";
         $ccresourcesearch .= "&user=".urlencode(edusharing_get_auth_key());
         $ccresourceupload .= "&locale=".$mylang;

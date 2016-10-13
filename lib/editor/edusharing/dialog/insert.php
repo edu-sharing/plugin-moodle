@@ -51,7 +51,6 @@ if ( empty($CFG->yui3version) ) {
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/yui/'.$CFG->yui3version.'/build/yui/yui.js', ENT_COMPAT, 'utf-8') ?>"></script>
     <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/tinymce/tiny_mce/'.$tinymce->version.'/tiny_mce_popup.js', ENT_COMPAT, 'utf-8') ?>">
     </script>
 
@@ -73,8 +72,6 @@ if ( empty($CFG->yui3version) ) {
     <br/>
 <?php
 
-$appproperties = json_decode(get_config('edusharing', 'appProperties'));
-
 $edusharing = new stdClass();
 $edusharing->object_url = '';
 $edusharing->course_id = $COURSE->id;
@@ -90,7 +87,7 @@ $edusharing->window_versionshow = 'latest';
 $edusharing->repo_type = '';
 $edusharing->window_version = '';
 
-$repositoryid = $appproperties->homerepid;
+$repositoryid = get_config('edusharing', 'application_homerepid');
 $resourceid = optional_param('resource_id', 0, PARAM_INT);
 if ( ! empty($resourceid) ) {
 
@@ -110,9 +107,9 @@ if ( ! empty($resourceid) ) {
 
 $ccauth = new mod_edusharing_web_service_factory();
 
-$ticket = $ccauth->edusharing_authentication_get_ticket($appproperties->appid);
+$ticket = $ccauth->edusharing_authentication_get_ticket();
 
-$link = $appproperties->cc_gui_url; // link to the external cc-search
+$link = get_config('edusharing', 'application_cc_gui_url'); // link to the external cc-search
 
 $link .= '/search';
 
@@ -128,7 +125,7 @@ if ( $language ) {
 }
 
 $link .= '&reurl='.urlencode($CFG->wwwroot."/lib/editor/edusharing/dialog/populate.php?");
-$previewurl = $appproperties->cc_gui_url . 'preview';
+$previewurl = get_config('edusharing', 'application_cc_gui_url') . 'preview';
 
 /**
  * Return some dummy text
@@ -149,13 +146,9 @@ function get_preview_text() {
     <input type="hidden"  maxlength="30" name="window_version" id="window_version" />
     <input type="hidden" maxlength="30" name="resourcetype" id="resourcetype" value="<?php echo htmlspecialchars($edusharing->resource_type, ENT_COMPAT, 'utf-8') ?>" />
 
-<!--        {#edusharing_dlg.resourceVersion} -->
     <input type="hidden" maxlength="30" size="15" name="resourceversion" id="resourceversion" />
-
-       <input type="hidden" maxlength="30" size="30" name="repotype" id="repotype" />
-<!--        {#edusharing_dlg.resourceid}-->
+    <input type="hidden" maxlength="30" size="30" name="repotype" id="repotype" />
     <input type="hidden" maxlength="30" size="15" name="resource_id" id="resource_id"  value="<?php echo htmlspecialchars($edusharing->resource_id, ENT_COMPAT, 'utf-8') ?>" />
-<!--        {#edusharing_dlg.ticket}-->
     <input type="hidden" maxlength="40" size="35" name="ticket" id="ticket"  value="<?php echo htmlspecialchars($ticket, ENT_COMPAT, 'utf-8') ?>" />
 
 
@@ -278,7 +271,7 @@ function get_preview_text() {
 
     function editor_edusharing_get_resource_preview() {
 
-            // splitting object-url to get object-id
+        // splitting object-url to get object-id
         var repository_id = '<?php echo $repositoryid; ?>';
         var object_url_parts = document.getElementById('object_url').value.split('/');
         var object_id = object_url_parts[3];

@@ -37,15 +37,13 @@ if ($resid) {
 
 require_login($edusharing->course, true);
 
-$appproperties = json_decode(get_config('edusharing', 'appProperties'));
-$repproperties = json_decode(get_config('edusharing', 'repProperties'));
 
-$redirecturl = edusharing_get_redirect_url($edusharing, $appproperties, $repproperties);
+$redirecturl = edusharing_get_redirect_url($edusharing);
 
 $ts = $timestamp = round(microtime(true) * 1000);
 $redirecturl .= '&ts=' . $ts;
-$redirecturl .= '&sig=' . urlencode(edusharing_get_signature($appproperties->appid . $ts));
-$redirecturl .= '&signed=' . urlencode($appproperties->appid . $ts);
+$redirecturl .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts));
+$redirecturl .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts);
 
 redirect($redirecturl);
 

@@ -107,11 +107,10 @@ parse_str($parts['query'], $query);
 require_login($query['course_id']);
 require_sesskey();
 
-$appproperties = json_decode(get_config('edusharing', 'appProperties'));
 $ts = $timestamp = round(microtime(true) * 1000);
 $url .= '&ts=' . $ts;
-$url .= '&sig=' . urlencode(edusharing_get_signature($appproperties->appid . $ts));
-$url .= '&signed=' . urlencode($appproperties->appid . $ts);
+$url .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts));
+$url .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts);
 
 $e = new filter_edusharing_edurender();
 $html = $e->filter_edusharing_get_render_html($url);
