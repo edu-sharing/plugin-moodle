@@ -42,6 +42,13 @@ function edusharing_get_auth_key() {
         return $_SESSION['sso'][$eduauthparamnameuserid];
     }
 
+    if (!empty(get_config('edusharing', 'edu_guest_option'))) {
+        $guestid = get_config('edusharing', 'edu_guest_guest_id');
+        if (empty($guestid))
+            $guestid = 'esguest';
+        return $guestid;
+    }
+
     if (empty($USER)) {
         $userdata = $_SESSION["USER"];
     } else {
@@ -95,22 +102,22 @@ function edusharing_get_auth_data() {
         $eduauthparamnameuserid = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
         if (empty($eduauthparamnameuserid))
         	$eduauthparamnameuserid = '';
-        
+
         $eduauthparamnamelastname = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_LASTNAME');
         if (empty($eduauthparamnamelastname))
         	$eduauthparamnamelastname = '';
-        
+
         $eduauthparamnamefirstname = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_FIRSTNAME');
         if (empty($eduauthparamnamefirstname))
         	$eduauthparamnamefirstname = '';
-        
+
         $eduauthparamnameemail = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_EMAIL');
         if (empty($eduauthparamnameemail))
         	$eduauthparamnameemail = '';
-        
+
         $eduauthaffiliation = get_config('edusharing', 'EDU_AUTH_AFFILIATION');
 
-        
+
         if (!empty(get_config('edusharing', 'edu_guest_option'))) {
         	$guestid = get_config('edusharing', 'edu_guest_guest_id');
         	if(empty($guestid))
