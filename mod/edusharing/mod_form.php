@@ -99,6 +99,7 @@ class mod_edusharing_mod_form extends moodleform_mod
         $ccresourcesearch .= "&locale=".$mylang;
         $ccresourcesearch .= "&ticket=".$ticket;
         $ccresourcesearch .= "&reurl=".urlencode($CFG->wwwroot."/mod/edusharing/makelink.php");
+        $ccresourcesearch = $CFG->wwwroot .'/mod/edusharing/selectResourceHelper.php?sesskey='.sesskey().'&rurl=' . urlencode($ccresourcesearch);
 
         $searchbutton = $mform->addElement('button', 'searchbutton', get_string('searchrec', EDUSHARING_MODULE_NAME).'...');
         $buttonattributes = array('title' => get_string('searchrec', EDUSHARING_MODULE_NAME), 'onclick' => "return window.open('"
@@ -112,6 +113,7 @@ class mod_edusharing_mod_form extends moodleform_mod
         $ccresourceupload .= "&locale=".$mylang;
         $ccresourceupload .= "&ticket=".$ticket;
         $ccresourceupload .= "&reurl=".urlencode($CFG->wwwroot."/mod/edusharing/makelink.php");
+        $ccresourceupload = $CFG->wwwroot .'/mod/edusharing/selectResourceHelper.php?sesskey='.sesskey().'&rurl=' . urlencode($ccresourceupload);
 
         $uploadbutton = $mform->addElement('button', 'uploadbutton', get_string('uploadrec', EDUSHARING_MODULE_NAME).'...');
         $buttonattributes = array('title' => get_string('uploadrec', EDUSHARING_MODULE_NAME), 'onclick' => "return window.open('"

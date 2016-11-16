@@ -15,29 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Callback script for repo
+ * Popuphelper script for repo
  *
- * Called from repository after selecting a node/resource in the opened popup window
- * Transfers the node-id into the Location field of the opener (edit resource window)
+ * Called to upload/select edu-sharing object.
+ * Intrduces an iframe to retain window.opener
  *
  * @package    mod_edusharing
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../../config.php');
+$url = required_param('rurl', PARAM_NOTAGS);
+require_login();
+require_sesskey();
+?>
 
-$PAGE->set_url($CFG->wwwroot.$SCRIPT);
-$PAGE->set_context(context_system::instance() );
-
-echo $OUTPUT->header();
-
-
-$eduresource = addslashes_js(optional_param('nodeId', '', PARAM_RAW));
-
-echo <<<content
-<script type="text/javascript">
-        window.top.setId('$eduresource');
-</script>
-content;
-
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <script>
+            function setId(id) {
+                window.opener.document.getElementById('id_object_url').value = id;
+                window.opener.focus();
+                window.close();
+            }
+        </script>
+    </head>
+	<body style="padding:0;margin:0;">
+		<iframe src="<?php echo $url ?>" style="height:100%;width:100%;border:0;"></iframe>
+	</body>
+</html>
