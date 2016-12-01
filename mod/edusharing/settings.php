@@ -39,21 +39,29 @@ if ($ADMIN->fulltree) {
             }
         }
 
-        set_config('appProperties', json_encode($appproperties), 'edusharing');
-        set_config('repProperties', json_encode($repproperties), 'edusharing');
+        $cfg_edu_auth = get_config('edusharing', 'EDU_AUTH_KEY');
+            if(empty($cfg_edu_auth)) $cfg_edu_auth = 'username';
+        set_config('EDU_AUTH_KEY', optional_param('EDU_AUTH_KEY', $cfg_edu_auth, PARAM_NOTAGS), 'edusharing');
 
-        set_config('EDU_AUTH_KEY', optional_param('EDU_AUTH_KEY', '', PARAM_NOTAGS), 'edusharing');
-        set_config('EDU_AUTH_PARAM_NAME_USERID', optional_param('EDU_AUTH_PARAM_NAME_USERID', '', PARAM_NOTAGS) ,
-                'edusharing');
-        set_config('EDU_AUTH_PARAM_NAME_LASTNAME', optional_param('EDU_AUTH_PARAM_NAME_LASTNAME', '', PARAM_NOTAGS),
-                'edusharing');
-        set_config('EDU_AUTH_PARAM_NAME_FIRSTNAME',
-                optional_param('EDU_AUTH_PARAM_NAME_FIRSTNAME', '', PARAM_NOTAGS), 'edusharing');
-        set_config('EDU_AUTH_PARAM_NAME_EMAIL', optional_param('EDU_AUTH_PARAM_NAME_EMAIL', '', PARAM_NOTAGS),
-                'edusharing');
-        set_config('EDU_AUTH_AFFILIATION', optional_param('EDU_AUTH_AFFILIATION', '', PARAM_NOTAGS), 'edusharing');
-        set_config('EDU_AUTH_CONVEYGLOBALGROUPS', optional_param('EDU_AUTH_CONVEYGLOBALGROUPS', '', PARAM_NOTAGS),
-                'edusharing');
+        $cfg_edu_userid = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
+            if(empty($cfg_edu_userid)) $cfg_edu_userid = 'userid';
+        set_config('EDU_AUTH_PARAM_NAME_USERID', optional_param('EDU_AUTH_PARAM_NAME_USERID', $cfg_edu_userid, PARAM_NOTAGS) , 'edusharing');
+
+        $cfg_edu_userlastname = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_LASTNAME');
+            if(empty($cfg_edu_userlastname)) $cfg_edu_userlastname = 'lastname';
+        set_config('EDU_AUTH_PARAM_NAME_LASTNAME', optional_param('EDU_AUTH_PARAM_NAME_LASTNAME', $cfg_edu_userlastname, PARAM_NOTAGS),'edusharing');
+
+        $cfg_edu_firstname = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_FIRSTNAME');
+            if(empty($cfg_edu_firstname)) $cfg_edu_firstname = 'firstname';
+        set_config('EDU_AUTH_PARAM_NAME_FIRSTNAME', optional_param('EDU_AUTH_PARAM_NAME_FIRSTNAME', $cfg_edu_firstname, PARAM_NOTAGS), 'edusharing');
+
+        $cfg_edu_email = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_EMAIL');
+            if(empty($cfg_edu_email)) $cfg_edu_email = 'email';
+        set_config('EDU_AUTH_PARAM_NAME_EMAIL', optional_param('EDU_AUTH_PARAM_NAME_EMAIL', $cfg_edu_email, PARAM_NOTAGS),'edusharing');
+
+        set_config('EDU_AUTH_AFFILIATION', optional_param('EDU_AUTH_AFFILIATION', get_config('edusharing', 'EDU_AUTH_AFFILIATION'), PARAM_NOTAGS), 'edusharing');
+
+        set_config('EDU_AUTH_CONVEYGLOBALGROUPS', optional_param('EDU_AUTH_CONVEYGLOBALGROUPS', get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS'), PARAM_NOTAGS),'edusharing');
     }
 
     // (re)load config
