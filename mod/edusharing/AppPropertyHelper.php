@@ -32,8 +32,8 @@ class mod_edusharing_app_property_helper {
     /**
      * Add ssl private and public key to app configuration
      */
-    public function mod_edusharing_add_ssl_keypair_to_home_config() {
-        $sslkeypair = $this->mod_edusharing_get_ssl_keypair();
+    public function edusharing_add_ssl_keypair_to_home_config() {
+        $sslkeypair = $this->edusharing_get_ssl_keypair();
         $appproperties = json_decode(get_config('edusharing', 'appProperties'));
         $appproperties->public_key = $sslkeypair['publicKey'];
         $appproperties->private_key = $sslkeypair['privateKey'];
@@ -44,7 +44,7 @@ class mod_edusharing_app_property_helper {
      * Get ssl private and public key from app configuration
      * @return array $sslkeypair
      */
-    public function mod_edusharing_get_ssl_keypair() {
+    public function edusharing_get_ssl_keypair() {
         $sslkeypair = array();
         $res = openssl_pkey_new();
         openssl_pkey_export($res, $privatekey);
@@ -58,8 +58,8 @@ class mod_edusharing_app_property_helper {
     /**
      * Add signature redirector url to app configuration
      */
-    public function mod_edusharing_add_signature_redirector() {
-        $sslkeypair = $this->mod_edusharing_get_ssl_keypair();
+    public function edusharing_add_signature_redirector() {
+        $sslkeypair = $this->edusharing_get_ssl_keypair();
         $appproperties = json_decode(get_config('edusharing', 'appProperties'));
         $appproperties->signatureRedirector = $this->mod_edusharing_get_signatureRedirector();
         set_config('appProperties', json_encode($appproperties), 'edusharing');
@@ -70,7 +70,7 @@ class mod_edusharing_app_property_helper {
      * Get signature redirector url from app configuration
      * @return string
      */
-    public function mod_edusharing_get_signature_redirector() {
+    public function edusharing_get_signature_redirector() {
         global $CFG;
         return $CFG->wwwroot . '/filter/edusharing/signatureRedirector.php';
     }

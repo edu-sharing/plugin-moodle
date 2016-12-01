@@ -116,3 +116,18 @@ $string['convey_global_groups_yes'] = 'Globale Gruppen übermitteln';
 $string['convey_global_groups_no'] = 'Globale Gruppen nicht übermitteln';
 
 $string['mcryptrequired'] = 'Die PHP-Erweiterung mcrypt muss aktiviert sein.';
+$string['soaprequired'] = 'Die PHP-Erweiterung soap muss aktiviert sein.';
+
+$string['error_missing_authwsdl'] = 'Parameter "authenticationwebservice_wsdl" wurde nicht konfiguriert.';
+$string['error_authservice_not_reachable'] = 'ist nicht erreichbar.';
+$string['error_invalid_ticket'] = 'Ungültiges edu-sharing Ticket.';
+$string['error_auth_failed'] = 'edu-sharing Authentifizierung ist fehlgeschlagen.';
+$string['error_load_course'] = 'Kurs kann nicht aus der Datenbank geladen werden';
+$string['error_missing_usagewsdl'] = 'Parameter "usagewebservice_wsdl" wurde nicht konfiguriert.';
+$string['error_load_resource'] = 'Ressource kann nicht aus der Datenbank geladen werden.';
+$string['error_get_object_id_from_url'] = 'Objekt id kann nicht ermittelt werden.';
+$string['error_get_repository_id_from_url'] = 'Repositorium id kann nicht ermittelt werden.';
+$string['error_detect_course'] = 'Kurs id kann nicht ermittelt werden.';
+$string['error_loading_memento'] = 'Fehler beim Laden des temporären Objektes.';
+$string['error_set_soap_headers'] = 'SOAP-Header konnten nicht gesetzt werden - ';
+$string['error_get_app_properties'] = 'Pluginkonfiguration konnte nicht geladen werden.';

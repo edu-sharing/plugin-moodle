@@ -113,7 +113,22 @@ $string['emptyForDefault'] = 'empty for default';
 
 // auth parameters
 $string['convey_global_groups_yes'] = 'Convey cohorts';
-$string['convey_global_groups_no'] = 'Not convey cohorts';
+$string['convey_global_groups_no'] = 'Do not convey cohorts';
 
 
 $string['mcryptrequired'] = 'The PHP extension mcrypt must be activated.';
+$string['soaprequired'] = 'The PHP extension soap must be activated.';
+
+$string['error_missing_authwsdl'] = 'No "authenticationwebservice_wsdl" configured.';
+$string['error_authservice_not_reachable'] = 'not reachable. Cannot utilize edu-sharing network.';
+$string['error_invalid_ticket'] = 'Invalid ticket. Cannot utilize edu-sharing network.';
+$string['error_auth_failed'] = 'Cannot utilize edu-sharing network because authentication failed.';
+$string['error_load_course'] = 'Cannot load course from database.';
+$string['error_missing_usagewsdl'] = 'No "usagewebservice_wsdl" configured.';
+$string['error_load_resource'] = 'Cannot load resource from database.';
+$string['error_get_object_id_from_url'] = 'Cannot get object id from url.';
+$string['error_get_repository_id_from_url'] = 'Cannot get repository id from url.';
+$string['error_detect_course'] = 'Cannot detect course id';
+$string['error_loading_memento'] = 'Error loading temporary object.';
+$string['error_set_soap_headers'] = 'Cannot set SOAP headers - ';
+$string['error_get_app_properties'] = 'No app-properties found.';

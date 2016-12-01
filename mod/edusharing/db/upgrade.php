@@ -63,7 +63,7 @@ function xmldb_edusharing_upgrade($oldversion=0) {
             trigger_error($e->getMessage(), E_USER_WARNING);
         }
 
-        $homeconf = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'esmain'.DIRECTORY_SEPARATOR.'homeApplication.properties.xml';
+        $homeconf = dirname(__FILE__).'/../conf/esmain/homeApplication.properties.xml';
         if (file_exists($homeconf)) {
             $app = new DOMDocument();
             $app->load($homeconf);
@@ -79,8 +79,8 @@ function xmldb_edusharing_upgrade($oldversion=0) {
             set_config('appProperties', json_encode($homeappproperties), 'edusharing');
         }
 
-        $repoconf = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'esmain'.
-                    DIRECTORY_SEPARATOR.'app-'. $homeappproperties['homerepid'] .'.properties.xml';
+        $repoconf = dirname(__FILE__).'/../conf/esmain/'.
+                    'app-'. $homeappproperties['homerepid'] .'.properties.xml';
         if (file_exists($repoconf)) {
             $app = new DOMDocument();
             $app->load($repoconf);
@@ -104,7 +104,7 @@ function xmldb_edusharing_upgrade($oldversion=0) {
 
         try {
 
-            include(dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'cs_conf.php');
+            include(dirname(__FILE__).'/../conf/cs_conf.php');
 
             set_config('EDU_AUTH_KEY', EDU_AUTH_KEY, 'edusharing');
             set_config('EDU_AUTH_PARAM_NAME_USERID', EDU_AUTH_PARAM_NAME_USERID, 'edusharing');

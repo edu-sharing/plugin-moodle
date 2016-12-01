@@ -26,10 +26,10 @@
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
 
-$id = required_param('id', PARAM_INT);   // course
+$id = required_param('id', PARAM_INT);
 
 if (! $course = $DB->get_record('course', array('id'  => $id))) {
-    trigger_error('Course ID is incorrect', E_USER_WARNING);
+    trigger_error(get_string('error_load_course', 'edusharing'), E_USER_WARNING);
 }
 
 require_course_login($course);
@@ -69,10 +69,10 @@ if ($course->format == 'weeks') {
 
 foreach ($edusharings as $edusharing) {
     if (!$edusharing->visible) {
-        // Show dimmed if the mod is hidden
+        // Show dimmed if the mod is hidden.
         $link = '<a class="dimmed" href="view.php?id='.$edusharing->coursemodule.'">'.format_string($edusharing->name).'</a>';
     } else {
-        // Show normal if the mod is visible
+        // Show normal if the mod is visible.
         $link = '<a href="view.php?id='.$edusharing->coursemodule.'">'.format_string($edusharing->name).'</a>';
     }
 

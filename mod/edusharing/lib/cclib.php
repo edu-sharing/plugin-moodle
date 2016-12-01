@@ -47,7 +47,7 @@ class mod_edusharing_web_service_factory {
         $repproperties = json_decode(get_config('edusharing', 'repProperties'));
         $this->authenticationservicewsdl = $repproperties->authenticationwebservice_wsdl;
         if ( empty($this->authenticationservicewsdl) ) {
-            trigger_error('No "authenticationwebservice_wsdl" configured.', E_USER_WARNING);
+            trigger_error(get_string('error_missing_authwsdl', 'edusharing'), E_USER_WARNING);
         }
     }
 
@@ -58,7 +58,7 @@ class mod_edusharing_web_service_factory {
      * Request a new one if existing ticket is invalid
      * @param string $homeappid
      */
-    public function mod_edusharing_authentication_get_ticket($homeappid) {
+    public function edusharing_authentication_get_ticket($homeappid) {
 
         // ticket available
         if (isset($_SESSION["USER"]->ticket)) {
@@ -71,13 +71,13 @@ class mod_edusharing_web_service_factory {
             try {
                 $eduservice = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl, array());
             } catch (Exception $e) {
-                trigger_error($this->authenticationservicewsdl  . ' not reachable. Cannot utilize edu-sharing network.', E_USER_WARNING);
+                trigger_error($this->authenticationservicewsdl . ' ' . get_string('error_authservice_not_reachable', 'edusharing') , E_USER_WARNING);
             }
 
             try {
                 // ticket is older than 10s
                 $params = array(
-                    "username"  => mod_edusharing_get_auth_key(),
+                    "username"  => edusharing_get_auth_key(),
                     "ticket"  => $_SESSION["USER"]->ticket
                 );
 
@@ -88,14 +88,14 @@ class mod_edusharing_web_service_factory {
                     return $_SESSION["USER"]->ticket;
                 }
             } catch (Exception $e) {
-                 trigger_error('Invalid ticket. Cannot utilize edu-sharing network.', E_USER_WARNING);
+                 trigger_error(get_string('error_invalid_ticket', 'edusharing'), E_USER_WARNING);
             }
 
         }
 
         // no or invalid ticket available
         // request new ticket
-        $paramstrusted = array("applicationId"  => $homeappid, "ticket"  => session_id(), "ssoData"  => mod_edusharing_get_auth_data());
+        $paramstrusted = array("applicationId"  => $homeappid, "ticket"  => session_id(), "ssoData"  => edusharing_get_auth_data());
         try {
             $client = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl, array());
             $return = $client->authenticateByTrustedApp($paramstrusted);
@@ -104,11 +104,11 @@ class mod_edusharing_web_service_factory {
             $_SESSION["USER"]->ticketvalidationts = time();
             return $ticket;
         } catch (Exception $e) {
-            trigger_error('Cannot utilize edu-sharing network because authentication failed. Error message: ' . $e->getMessage(), E_USER_WARNING);
+            trigger_error(get_string('error_auth_failed', 'edusharing') . ' ' . $e->getMessage(), E_USER_WARNING);
         }
 
         return false;
-    } // eof mod_edusharing_authentication_get_ticket
+    } // eof edusharing_authentication_get_ticket
 
 }//eof class mod_edusharing_web_service_factory
 

@@ -46,16 +46,16 @@ class mod_edusharing_render_parameter {
      * Set dataarray and call mod_edusharing_make_xml()
      * @param array $pdataarray
      */
-    public function mod_edusharing_get_xml($pdataarray) {
+    public function edusharing_get_xml($pdataarray) {
         $this->dataarray = $pdataarray;
-        return $this->mod_edusharing_make_xml();
+        return $this->edusharing_make_xml();
     }
 
     /**
      * Generate XML from dataarray
      * @return string
      */
-    protected function mod_edusharing_make_xml() {
+    protected function edusharing_make_xml() {
         $dom = new DOMDocument('1.0');
         $root = $dom->createElement($this->dataarray[0], '');
         $dom->appendChild($root);

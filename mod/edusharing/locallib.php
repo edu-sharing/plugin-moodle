@@ -33,7 +33,7 @@ require_once($CFG->dirroot.'/mod/edusharing/lib.php');
  * Get the parameter for authentication
  * @return string
  */
-function mod_edusharing_get_auth_key() {
+function edusharing_get_auth_key() {
 
     global $USER;
 
@@ -75,7 +75,7 @@ function mod_edusharing_get_auth_key() {
  *
  * @return array
  */
-function mod_edusharing_get_auth_data() {
+function edusharing_get_auth_data() {
 
     global $USER, $CFG;
 
@@ -98,7 +98,7 @@ function mod_edusharing_get_auth_data() {
         $eduauthaffiliation = get_config('edusharing', 'EDU_AUTH_AFFILIATION');
 
         $authparams = array(
-                    array('key'  => $eduauthparamnameuserid, 'value'  => mod_edusharing_get_auth_key()),
+                    array('key'  => $eduauthparamnameuserid, 'value'  => edusharing_get_auth_key()),
                     array('key'  => $eduauthparamnamelastname, 'value'  => $userdata->lastname),
                     array('key'  => $eduauthparamnamefirstname, 'value'  => $userdata->firstname),
                     array('key'  => $eduauthparamnameemail, 'value'  => $userdata->email),
@@ -107,7 +107,7 @@ function mod_edusharing_get_auth_data() {
     }
 
     if (get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS') == 'yes') {
-        $authparams[] = array('key'  => 'globalgroups', 'value'  => mod_edusharing_get_user_cohorts());
+        $authparams[] = array('key'  => 'globalgroups', 'value'  => edusharing_get_user_cohorts());
     }
     return $authparams;
 }
@@ -117,13 +117,14 @@ function mod_edusharing_get_auth_data() {
  *
  * @return array
  */
-function mod_edusharing_get_user_cohorts() {
+function edusharing_get_user_cohorts() {
     global $DB, $USER;
     $cohortmemberships = $DB->get_records('cohort_members', array('userid'  => $USER->id));
     if ($cohortmemberships) {
+        $ret = array();
         foreach ($cohortmemberships as $cohortmembership) {
             $cohort = $DB->get_record('cohort', array('id'  => $cohortmembership->cohortid));
-            $ret = array(
+            $ret[] = array(
                     'id'  => $cohortmembership->cohortid,
                     'contextid'  => $cohort->contextid,
                     'name'  => $cohort->name,
@@ -144,11 +145,11 @@ function mod_edusharing_get_user_cohorts() {
  *
  * @return string
  */
-function mod_edusharing_get_redirect_url(
+function edusharing_get_redirect_url(
     stdClass $edusharing,
     stdClass $appproperties,
     stdClass $repproperties,
-    $displaymode = DISPLAY_MODE_DISPLAY) {
+    $displaymode = EDUSHARING_DISPLAY_MODE_DISPLAY) {
     global $USER;
 
     $url = $appproperties->cc_gui_url . '/renderingproxy';
@@ -158,12 +159,12 @@ function mod_edusharing_get_redirect_url(
     $sessionid = session_id();
     $url .= '&session='.urlencode($sessionid);
 
-    $repid = mod_edusharing_get_repository_id_from_url($edusharing->object_url);
+    $repid = edusharing_get_repository_id_from_url($edusharing->object_url);
     $url .= '&rep_id='.urlencode($repid);
 
     $resourcerefenerence = str_replace('/', '', parse_url($edusharing->object_url, PHP_URL_PATH));
     if ( empty($resourcerefenerence) ) {
-        trigger_error('Error replacing resource-url "'.$edusharing->object_url.'".', E_USER_WARNING);
+        trigger_error(get_string('error_get_object_id_from_url', 'edusharing'), E_USER_WARNING);
     }
 
     $url .= '&obj_id='.urlencode($resourcerefenerence);
@@ -183,7 +184,7 @@ function mod_edusharing_get_redirect_url(
 
     $res = mcrypt_module_open(MCRYPT_BLOWFISH, '', MCRYPT_MODE_CBC, '');
     mcrypt_generic_init($res, $eskey, $esiv);
-    $u = base64_encode(mcrypt_generic($res, mod_edusharing_get_auth_key()));
+    $u = base64_encode(mcrypt_generic($res, edusharing_get_auth_key()));
     mcrypt_generic_deinit($res);
     $url .= '&u='. rawurlencode($u);
 
@@ -196,7 +197,7 @@ function mod_edusharing_get_redirect_url(
  * @param string $data
  * @return string
  */
-function mod_edusharing_get_signature($data) {
+function edusharing_get_signature($data) {
 
     $appproperties = json_decode(get_config('edusharing', 'appProperties'));
     $privkey = $appproperties->private_key;
@@ -213,7 +214,7 @@ function mod_edusharing_get_signature($data) {
  *
  * @return string
  */
-function mod_edusharing_get_current_users_language_code() {
+function edusharing_get_current_users_language_code() {
     global $USER;
 
     $mylang = 'en_EN';

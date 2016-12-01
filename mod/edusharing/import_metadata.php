@@ -59,21 +59,11 @@ fieldset {
 <body>
 <?php
 
-// customize
-define('IMPORT_METADATA', true);
-
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 
 if (!is_siteadmin()) {
     echo 'Access denied!';
     exit();
-}
-
-define('CC_CONF_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
-define('CC_CONF_APPFILE', 'ccapp-registry.properties.xml');
-
-if (!IMPORT_METADATA) {
-    die('metadata import disabled');
 }
 
 /**
@@ -119,7 +109,9 @@ function get_form($url) {
 
 $filename = '';
 
-if (!empty($_POST['mdataurl'])) {
+
+$metadataurl = optional_param('mdataurl', '', PARAM_NOTAGS);
+if (!empty($metadataurl)) {
 
     try {
 
@@ -127,10 +119,10 @@ if (!empty($_POST['mdataurl'])) {
 
         libxml_use_internal_errors(true);
 
-        if ($xml->load($_POST['mdataurl']) == false) {
-            echo ('<p style="background: #FF8170">could not load ' . $_POST['mdataurl'] .
+        if ($xml->load($metadataurl) == false) {
+            echo ('<p style="background: #FF8170">could not load ' . $metadataurl .
                      ' please check url') . "<br></p>";
-            echo get_form($_POST['mdataurl']);
+            echo get_form($metadataurl);
             exit();
         }
 
@@ -148,7 +140,7 @@ if (!empty($_POST['mdataurl'])) {
         $homeappproperties = new stdClass();
         require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
         $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper();
-        $sslkeypair = $modedusharingapppropertyhelper->mod_edusharing_get_ssl_keypair();
+        $sslkeypair = $modedusharingapppropertyhelper->edusharing_get_ssl_keypair();
 
         $homeappproperties->host = $_SERVER['SERVER_ADDR'];
         $homeappproperties->appid = uniqid('moodle_');
@@ -158,7 +150,7 @@ if (!empty($_POST['mdataurl'])) {
                                          $repproperties->domain . ':' . $repproperties->clientport . '/edu-sharing/';
         $homeappproperties->private_key = $sslkeypair['privateKey'];
         $homeappproperties->public_key = $sslkeypair['publicKey'];
-        $homeappproperties->signatureRedirector = $modedusharingapppropertyhelper->mod_edusharing_get_signature_redirector();
+        $homeappproperties->signatureRedirector = $modedusharingapppropertyhelper->edusharing_get_signature_redirector();
         $homeappproperties->blowfishkey = 'thetestkey';
         $homeappproperties->blowfishiv = 'initvect';
 
