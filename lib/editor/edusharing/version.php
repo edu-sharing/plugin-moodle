@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'editor_edusharing';
 $plugin->dependencies = array(
     'mod_edusharing'  => 2016120701,
+    'editor_tinymce' => 2015051100
 );
 $plugin->version  = 2016120701;
 $plugin->requires = 2015051100;

@@ -49,12 +49,12 @@
 	cursor: default;
 }
 
-.inner {
+.edusharing_spinner_inner {
 	width: 30px;
 	height: 50px;
 	display: inline-block;
 }
-.spinner1 {
+.edusharing_spinner1 {
 	background: url([[pix:edusharing|hex1]]);
 	background-repeat: no-repeat;
 	background-position: center;
@@ -71,7 +71,7 @@
 	animation-delay: 0.1s;
 }
 
-.spinner2 {
+.edusharing_spinner2 {
 	background: url([[pix:edusharing|hex2]]);
 	background-repeat: no-repeat;
 	background-position: center;
@@ -88,7 +88,7 @@
 	animation-delay: 0.25s;
 }
 
-.spinner3 {
+.edusharing_spinner3 {
 	background: url([[pix:edusharing|hex3]]);
 	background-repeat: no-repeat;
 	background-position: center;

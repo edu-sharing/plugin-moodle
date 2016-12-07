@@ -132,7 +132,7 @@ function edusharing_add_instance(stdClass $edusharing) {
     }
 
     $data4xml[1]["ccuser"]["id"] = edusharing_get_auth_key();
-    $data4xml[1]["ccuser"]["name"] = $_SESSION["USER"]->firstname." ".$_SESSION["USER"]->lastname;
+    $data4xml[1]["ccuser"]["name"] = $SESSION["USER"]->firstname." ".$SESSION["USER"]->lastname;
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
@@ -174,7 +174,7 @@ function edusharing_add_instance(stdClass $edusharing) {
             "user"  => edusharing_get_auth_key(),
             "lmsId"  => get_config('edusharing', 'application_appid'),
             "courseId"  => $edusharing->course,
-            "userMail"  => $_SESSION["USER"]->email,
+            "userMail"  => $SESSION["USER"]->email,
             "fromUsed"  => '2002-05-30T09:00:00',
             "toUsed"  => '2222-05-30T09:00:00',
             "distinctPersons"  => '0',
@@ -234,7 +234,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     $data4xml = array("ccrender");
 
     $data4xml[1]["ccuser"]["id"] = edusharing_get_auth_key();
-    $data4xml[1]["ccuser"]["name"] = $_SESSION["USER"]->firstname." ".$_SESSION["USER"]->lastname;
+    $data4xml[1]["ccuser"]["name"] = $SESSION["USER"]->firstname." ".$SESSION["USER"]->lastname;
 
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
@@ -275,7 +275,7 @@ function edusharing_update_instance(stdClass $edusharing) {
             "user"  => edusharing_get_auth_key(),
             "lmsId"  => get_config('edusharing', 'application_appid'),
             "courseId"  => $edusharing->course,
-            "userMail"  => $_SESSION["USER"]->email,
+            "userMail"  => $SESSION["USER"]->email,
             "fromUsed"  => '2002-05-30T09:00:00',
             "toUsed"  => '2222-05-30T09:00:00',
             "distinctPersons"  => '0',

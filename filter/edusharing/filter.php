@@ -54,10 +54,10 @@ class filter_edusharing extends moodle_text_filter {
     public function __construct($context, array $localconfig) {
         parent::__construct($context, $localconfig);
 
-        // to force the re-generation of filtered texts we just ...
-        reset_text_filters_cache();
+        // To force the re-generation of filtered texts we just ...
+        // reset_text_filters_cache();
 
-        // ensure that user exists in repository
+        // Ensure that user exists in repository.
         if (isloggedin()) {
             $ccauth = new mod_edusharing_web_service_factory();
             $ccauth->edusharing_authentication_get_ticket();
@@ -83,10 +83,14 @@ class filter_edusharing extends moodle_text_filter {
             return $text;
         }
 
-        // store unfiltered text to return in case of error
-        $memento = $text;
-
         try {
+
+            if (strpos($text, 'es:resource_id') === false) {
+                return $text;
+            }
+
+            $memento = $text;
+
             preg_match_all('#<img(.*)es:resource_id(.*)>#Umsi', $text, $matchesimg,
                     PREG_PATTERN_ORDER);
             preg_match_all('#<a(.*)es:resource_id(.*)>(.*)</a>#Umsi', $text, $matchesa,
@@ -94,7 +98,7 @@ class filter_edusharing extends moodle_text_filter {
             $matches = array_merge($matchesimg[0], $matchesa[0]);
 
             if (!empty($matches)) {
-                // disable page-caching to "renew" render-session-data
+                // Disable page-caching to "renew" render-session-data.
                 $PAGE->set_cacheable(false);
                 $PAGE->requires->js('/mod/edusharing/js/jquery.min.js');
                 $PAGE->requires->js('/mod/edusharing/js/jquery-near-viewport.min.js');
@@ -208,9 +212,10 @@ class filter_edusharing extends moodle_text_filter {
                  '/filter/edusharing/proxy.php?sesskey='.sesskey().'&URL=' . urlencode($url) . '&amp;resId=' .
                  $edusharing->id . '&amp;title=' . urlencode($renderparams['title']) .
                  '&amp;mimetype=' . $renderparams['mimetype'] .
-                 '"><div class="inner"><div class="spinner1"></div></div>' .
-                 '<div class="inner"><div class="spinner2"></div></div><div class="inner">'.
-                 '<div class="spinner3"></div></div>edu sharing object</div>';
+                 '"><div class="edusharing_spinner_inner"><div class="edusharing_spinner1"></div></div>' .
+                 '<div class="edusharing_spinner_inner"><div class="edusharing_spinner2"></div></div>'.
+                 '<div class="edusharing_spinner_inner"><div class="edusharing_spinner3"></div></div>'.
+                 'edu sharing object</div>';
         return $inline;
     }
 }

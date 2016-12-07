@@ -37,9 +37,9 @@ function edusharing_get_auth_key() {
 
     global $USER;
 
-    if (array_key_exists('sso', $_SESSION) && !empty($_SESSION['sso'])) {
+    if (array_key_exists('sso', $SESSION) && !empty($SESSION['sso'])) {
         $eduauthparamnameuserid = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
-        return $_SESSION['sso'][$eduauthparamnameuserid];
+        return $SESSION['sso'][$eduauthparamnameuserid];
     }
 
     if (!empty(get_config('edusharing', 'edu_guest_option'))) {
@@ -51,7 +51,7 @@ function edusharing_get_auth_key() {
     }
 
     if (empty($USER)) {
-        $userdata = $_SESSION["USER"];
+        $userdata = $SESSION["USER"];
     } else {
         $userdata = $USER;
     }
@@ -88,14 +88,14 @@ function edusharing_get_auth_data() {
     global $USER, $CFG;
 
     if (empty($USER)) {
-        $userdata = $_SESSION["USER"];
+        $userdata = $SESSION["USER"];
     } else {
         $userdata = $USER;
     }
 
-    if (array_key_exists('sso', $_SESSION) && !empty($_SESSION['sso'])) {
+    if (array_key_exists('sso', $SESSION) && !empty($SESSION['sso'])) {
         $authparams = array();
-        foreach ($_SESSION['sso'] as $key => $value) {
+        foreach ($SESSION['sso'] as $key => $value) {
             $authparams[] = array('key'  => $key, 'value'  => $value);
         }
     } else {
