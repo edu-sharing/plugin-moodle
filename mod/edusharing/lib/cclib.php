@@ -44,8 +44,7 @@ class mod_edusharing_web_service_factory {
      * @throws Exception
      */
     public function __construct() {
-        $repproperties = json_decode(get_config('edusharing', 'repProperties'));
-        $this->authenticationservicewsdl = $repproperties->authenticationwebservice_wsdl;
+        $this->authenticationservicewsdl = get_config('edusharing', 'repository_authenticationwebservice_wsdl');
         if ( empty($this->authenticationservicewsdl) ) {
             trigger_error(get_string('error_missing_authwsdl', 'edusharing'), E_USER_WARNING);
         }
@@ -58,7 +57,7 @@ class mod_edusharing_web_service_factory {
      * Request a new one if existing ticket is invalid
      * @param string $homeappid
      */
-    public function edusharing_authentication_get_ticket($homeappid) {
+    public function edusharing_authentication_get_ticket() {
 
         // ticket available
         if (isset($_SESSION["USER"]->ticket)) {
@@ -95,16 +94,16 @@ class mod_edusharing_web_service_factory {
 
         // no or invalid ticket available
         // request new ticket
-        $paramstrusted = array("applicationId"  => $homeappid, "ticket"  => session_id(), "ssoData"  => edusharing_get_auth_data());
+        $paramstrusted = array("applicationId"  => get_config('edusharing', 'application_appid'), "ticket"  => session_id(), "ssoData"  => edusharing_get_auth_data());
         try {
-            $client = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl, array());
+            $client = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl);
             $return = $client->authenticateByTrustedApp($paramstrusted);
             $ticket = $return->authenticateByTrustedAppReturn->ticket;
             $_SESSION["USER"]->ticket = $ticket;
             $_SESSION["USER"]->ticketvalidationts = time();
             return $ticket;
         } catch (Exception $e) {
-            trigger_error(get_string('error_auth_failed', 'edusharing') . ' ' . $e->getMessage(), E_USER_WARNING);
+            trigger_error(get_string('error_auth_failed', 'edusharing') . ' ' . $e, E_USER_WARNING);
         }
 
         return false;

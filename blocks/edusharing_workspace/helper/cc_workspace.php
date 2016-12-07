@@ -57,21 +57,15 @@ if (!$course) {
 
 require_login($course->id);
 
-$appproperties = json_decode(get_config('edusharing', 'appProperties'));
-
 echo $OUTPUT->header();
 
 $ccauth = new mod_edusharing_web_service_factory();
-$ticket = $ccauth->edusharing_authentication_get_ticket($appproperties->appid);
+$ticket = $ccauth->edusharing_authentication_get_ticket();
 if (!$ticket) {
     exit();
 }
 
-if (empty($appproperties->cc_gui_url)) {
-    trigger_error(get_string('error_no_gui_url_defined', 'block_edusharing_workspace'), E_USER_WARNING);
-}
-
-$link = $appproperties->cc_gui_url;
+$link = get_config('edusharing', 'application_cc_gui_url');
 // link to the external cc-workspace
 $link .= '?mode=1';
 

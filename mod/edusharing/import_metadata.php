@@ -129,33 +129,25 @@ if (!empty($metadataurl)) {
         $xml->preserveWhiteSpace = false;
         $xml->formatOutput = true;
         $entrys = $xml->getElementsByTagName('entry');
-        $repproperties = new stdClass();
         foreach ($entrys as $entry) {
-            $key = $entry->getAttribute('key');
-            $repproperties->$key = $entry->nodeValue;
+            set_config('repository_'.$entry->getAttribute('key'), $entry->nodeValue, 'edusharing');
         }
-
-        set_config('repProperties', json_encode($repproperties), 'edusharing');
-
-        $homeappproperties = new stdClass();
+        
         require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
         $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper();
         $sslkeypair = $modedusharingapppropertyhelper->edusharing_get_ssl_keypair();
 
-        $homeappproperties->host = $_SERVER['SERVER_ADDR'];
-        $homeappproperties->appid = uniqid('moodle_');
-        $homeappproperties->type = 'LMS';
-        $homeappproperties->homerepid = $repproperties->appid;
-        $homeappproperties->cc_gui_url = $repproperties->clientprotocol . '://' .
-                                         $repproperties->domain . ':' . $repproperties->clientport . '/edu-sharing/';
-        $homeappproperties->private_key = $sslkeypair['privateKey'];
-        $homeappproperties->public_key = $sslkeypair['publicKey'];
-        $homeappproperties->signatureRedirector = $modedusharingapppropertyhelper->edusharing_get_signature_redirector();
-        $homeappproperties->blowfishkey = 'thetestkey';
-        $homeappproperties->blowfishiv = 'initvect';
-
-        set_config('appProperties', json_encode($homeappproperties), 'edusharing');
-
+        set_config('application_host', $_SERVER['SERVER_ADDR'],'edusharing');
+        set_config('application_appid', uniqid('moodle_'),'edusharing');
+        set_config('application_type', 'LMS','edusharing');
+        set_config('application_homerepid', get_config('edusharing', 'repository_appid'),'edusharing');
+        set_config('application_cc_gui_url', get_config('edusharing', 'repository_clientprotocol') . '://' .
+                                         get_config('edusharing', 'repository_domain') . ':' . get_config('edusharing', 'repository_clientport') . '/edu-sharing/','edusharing');
+        set_config('application_private_key', $sslkeypair['privateKey'],'edusharing');
+        set_config('application_public_key', $sslkeypair['publicKey'],'edusharing');
+        set_config('application_blowfishkey', 'thetestkey','edusharing');
+        set_config('application_blowfishiv', 'initvect','edusharing');
+        
         set_config('EDU_AUTH_KEY', 'username', 'edusharing');
         set_config('EDU_AUTH_PARAM_NAME_USERID', 'userid', 'edusharing');
         set_config('EDU_AUTH_PARAM_NAME_LASTNAME', 'lastname', 'edusharing');

@@ -112,9 +112,6 @@ function edusharing_add_instance(stdClass $edusharing) {
     // You may have to add extra stuff in here
     $edusharing = edusharing_postprocess($edusharing);
 
-    $appproperties = json_decode(get_config('edusharing', 'appProperties'));
-    $repproperties = json_decode(get_config('edusharing', 'repProperties'));
-
     // put the data of the new cc-resource into an array and create a neat XML-file out of it
     $data4xml = array("ccrender");
 
@@ -166,7 +163,7 @@ function edusharing_add_instance(stdClass $edusharing) {
 
     $soapclientparams = array();
 
-    $client = new mod_edusharing_sig_soap_client($repproperties->usagewebservice_wsdl, $soapclientparams);
+    $client = new mod_edusharing_sig_soap_client(get_config('edusharing', 'repository_usagewebservice_wsdl'), $soapclientparams);
 
     try {
 
@@ -175,7 +172,7 @@ function edusharing_add_instance(stdClass $edusharing) {
         $params = array(
             "eduRef"  => $edusharing->object_url,
             "user"  => edusharing_get_auth_key(),
-            "lmsId"  => $appproperties->appid,
+            "lmsId"  => get_config('edusharing', 'application_appid'),
             "courseId"  => $edusharing->course,
             "userMail"  => $_SESSION["USER"]->email,
             "fromUsed"  => '2002-05-30T09:00:00',
@@ -233,10 +230,6 @@ function edusharing_update_instance(stdClass $edusharing) {
     // You may have to add extra stuff in here
     $edusharing = edusharing_postprocess($edusharing);
 
-    // fetch current node data
-
-    $appproperties = json_decode(get_config('edusharing', 'appProperties'));
-    $repproperties = json_decode(get_config('edusharing', 'repProperties'));
 
     // put the data of the new cc-resource into an array and create a neat XML-file out of it
     $data4xml = array("ccrender");
@@ -271,7 +264,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     $xml = $myxml->edusharing_get_xml($data4xml);
 
     try {
-        $connectionurl = $repproperties->usagewebservice_wsdl;
+        $connectionurl = get_config('edusharing', 'repository_usagewebservice_wsdl');
         if (!$connectionurl) {
             trigger_error(get_string('error_missing_usagewsdl', 'edusharing'), E_USER_WARNING);
         }
@@ -281,7 +274,7 @@ function edusharing_update_instance(stdClass $edusharing) {
         $params = array(
             "eduRef"  => $edusharing->object_url,
             "user"  => edusharing_get_auth_key(),
-            "lmsId"  => $appproperties->appid,
+            "lmsId"  => get_config('edusharing', 'application_appid'),
             "courseId"  => $edusharing->course,
             "userMail"  => $_SESSION["USER"]->email,
             "fromUsed"  => '2002-05-30T09:00:00',
@@ -326,14 +319,11 @@ function edusharing_delete_instance($id) {
         throw new Exception(get_string('error_load_resource', 'edusharing'));
     }
 
-    $appproperties = json_decode(get_config('edusharing', 'appProperties'));
-    $repproperties = json_decode(get_config('edusharing', 'repProperties'));
-
     try {
         // stop session to avoid deadlock during edu-sharing call-backs
         session_write_close();
 
-        $connectionurl = $repproperties->usagewebservice_wsdl;
+        $connectionurl = get_config('edusharing', 'repository_usagewebservice_wsdl');
         if ( ! $connectionurl ) {
             throw new Exception(get_string('error_missing_usagewsdl', 'edusharing'));
         }
@@ -343,7 +333,7 @@ function edusharing_delete_instance($id) {
         $params = array(
            'eduRef'  => $edusharing->object_url,
            'user'  => edusharing_get_auth_key(),
-           'lmsId'  => $appproperties->appid,
+           'lmsId'  => get_config('edusharing', 'application_appid'),
            'courseId'  => $edusharing->course,
            'resourceId'  => $edusharing->id
         );

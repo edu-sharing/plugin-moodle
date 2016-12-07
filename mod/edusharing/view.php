@@ -51,17 +51,14 @@ $PAGE->set_url('/mod/edusharing/view.php?id='.$vid);
 
 require_login($course, true, $cm);
 
-$appproperties = json_decode(get_config('edusharing', 'appProperties'));
-$repproperties = json_decode(get_config('edusharing', 'repProperties'));
-
 // Authenticate to assure requesting user exists in home-repository.
 try {
 
-    $wsdl = $repproperties->authenticationwebservice_wsdl;
+    $wsdl = get_config('edusharing', 'repository_authenticationwebservice_wsdl');
     $alfservice = new mod_edusharing_sig_soap_client($wsdl, array());
-    $paramsrusted = array("applicationId"  => $appproperties->appid, "ticket"  => session_id(),
+    $paramsrusted = array("applicationId"  => get_config('edusharing', 'application_appid'), "ticket"  => session_id(),
                     "ssoData"  => edusharing_get_auth_data(),
-                    'repoId'  => $appproperties->homerepid);
+                    'repoId'  => get_config('edusharing', 'application_homerepid'));
     $alfreturn = $alfservice->authenticateByTrustedApp($paramsrusted);
     $ticket = $alfreturn->authenticateByTrustedAppReturn->ticket;
 
@@ -70,11 +67,11 @@ try {
     return false;
 }
 
-$redirecturl = edusharing_get_redirect_url($edusharing, $appproperties, $repproperties);
+$redirecturl = edusharing_get_redirect_url($edusharing);
 $ts = $timestamp = round(microtime(true) * 1000);
 $redirecturl .= '&ts=' . $ts;
-$redirecturl .= '&sig=' . urlencode(edusharing_get_signature($appproperties->appid . $ts));
-$redirecturl .= '&signed=' . urlencode($appproperties->appid . $ts);
+$redirecturl .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts));
+$redirecturl .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts);
 
 $backlink = '';
 if (empty($edusharing->popup_window)) {

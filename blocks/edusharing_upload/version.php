@@ -25,9 +25,9 @@
 defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'block_edusharing_upload';
 $plugin->dependencies = array(
-    'mod_edusharing'  => 2016011401,
+    'mod_edusharing'  => 2016101301,
 );
-$plugin->version = 2016090101;
+$plugin->version = 2016101301;
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = 'v3.1';

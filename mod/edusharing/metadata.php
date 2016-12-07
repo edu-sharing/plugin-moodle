@@ -23,58 +23,31 @@
  */
 require_once(dirname(__FILE__) . '/../../config.php');
 
-$appproperties = json_decode(get_config('edusharing', 'appProperties'));
-
-$parsedwwwroot = parse_url($CFG->wwwroot);
-$wsscheme = optional_param('wsScheme', '', PARAM_NOTAGS);
-if ($wsscheme == 'http' || $wsscheme == 'https') {
-    $parsedwwwroot['scheme'] = $wsscheme;
-}
-$wsforceipadress = optional_param('wsForceIpAddress', '', PARAM_NOTAGS);
-if (!empty($wsforceipadress)) {
-    $parsedwwwroot['host'] = $appproperties->host;
-}
-$parsedwwwroot = $parsedwwwroot['scheme'] . '://' . $parsedwwwroot['host'];
-if (!empty($appproperties->port)) {
-    $parsedwwwroot .= ':' . $hc->prop_array['port'];
-}
-$parsedwwwroot .= $parsedwwwroot['path'];
-
-if (empty($appproperties->signatureRedirector)) {
-    require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
-    $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper();
-    $modedusharingapppropertyhelper->edusharing_add_signature_redirector();
-    $appproperties = json_decode(get_config('edusharing', 'appProperties'));
-}
-
-if (empty($appproperties->public_key)) {
+if (empty(get_config('edusharing', 'application_public_key'))) {
     require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
     $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper();
     $modedusharingapppropertyhelper->edusharing_add_ssl_keypair_to_home_config();
-    $appproperties = json_decode(get_config('edusharing', 'appProperties'));
 }
 
 $xml = new SimpleXMLElement(
         '<?xml version="1.0" encoding="utf-8" ?><!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"><properties></properties>');
 
-$entry = $xml->addChild('entry', $appproperties->appid);
+$entry = $xml->addChild('entry', get_config('edusharing', 'application_appid'));
 $entry->addAttribute('key', 'appid');
-$entry = $xml->addChild('entry', $appproperties->type);
+$entry = $xml->addChild('entry', get_config('edusharing', 'application_type'));
 $entry->addAttribute('key', 'type');
 $entry = $xml->addChild('entry', 'moodle');
 $entry->addAttribute('key', 'subtype');
 $entry = $xml->addChild('entry', parse_url($CFG->wwwroot, PHP_URL_HOST));
 $entry->addAttribute('key', 'domain');
-$entry = $xml->addChild('entry', $appproperties->host);
+$entry = $xml->addChild('entry', get_config('edusharing', 'application_host'));
 $entry->addAttribute('key', 'host');
 $entry = $xml->addChild('entry', 'true');
 $entry->addAttribute('key', 'trustedclient');
 $entry = $xml->addChild('entry', 'moodle:course/update');
 $entry->addAttribute('key', 'hasTeachingPermission');
-$entry = $xml->addChild('entry', $appproperties->public_key);
+$entry = $xml->addChild('entry', get_config('edusharing', 'application_public_key'));
 $entry->addAttribute('key', 'public_key');
-$entry = $xml->addChild('entry', $appproperties->signatureRedirector);
-$entry->addAttribute('key', 'signatureRedirector');
 
 header('Content-type: text/xml');
 print(html_entity_decode($xml->asXML()));
