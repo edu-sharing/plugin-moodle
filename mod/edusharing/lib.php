@@ -221,17 +221,16 @@ function edusharing_update_instance(stdClass $edusharing) {
 
     $edusharing->timemodified = time();
 
-    // load previous state
+    // Load previous state.
     $memento = $DB->get_record(EDUSHARING_TABLE, array('id'  => $edusharing->id));
     if ( ! $memento ) {
         throw new Exception(get_string('error_loading_memento', 'edusharing'));
     }
 
-    // You may have to add extra stuff in here
+    // You may have to add extra stuff in here.
     $edusharing = edusharing_postprocess($edusharing);
 
-
-    // put the data of the new cc-resource into an array and create a neat XML-file out of it
+    // Put the data of the new cc-resource into an array and create a neat XML-file out of it.
     $data4xml = array("ccrender");
 
     $data4xml[1]["ccuser"]["id"] = edusharing_get_auth_key();
@@ -242,7 +241,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
     $data4xml[1]["metadata"] = edusharing_get_usage_metadata($edusharing->course);
 
-    // move popup settings to array
+    // Move popup settings to array.
     if (!empty($edusharing->popup)) {
         $parray = explode(',', $edusharing->popup);
         foreach ($parray as $key => $fieldstring) {
@@ -250,7 +249,7 @@ function edusharing_update_instance(stdClass $edusharing) {
             $popupfield->$field[0] = $field[1];
         }
     }
-    // loop trough the list of keys... get the value... put into XML
+    // Loop trough the list of keys... get the value... put into XML.
     $keylist = array('resizable', 'scrollbars', 'directories', 'location', 'menubar', 'toolbar', 'status', 'width', 'height');
     foreach ($keylist as $key) {
         $data4xml[1]["ccwindow"][$key] = isSet($popupfield->{$key}) ? $popupfield->{$key} : 0;
@@ -314,14 +313,12 @@ function edusharing_delete_instance($id) {
     global $CFG;
     global $COURSE;
 
-    // load from DATABASE to get object-data for repository-operations.
+    // Load from DATABASE to get object-data for repository-operations.
     if (! $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $id))) {
         throw new Exception(get_string('error_load_resource', 'edusharing'));
     }
 
     try {
-        // stop session to avoid deadlock during edu-sharing call-backs
-        session_write_close();
 
         $connectionurl = get_config('edusharing', 'repository_usagewebservice_wsdl');
         if ( ! $connectionurl ) {
@@ -344,7 +341,7 @@ function edusharing_delete_instance($id) {
         trigger_error($exception->getMessage(), E_USER_WARNING);
     }
 
-    // Usage is removed->can delete from DATABASE now
+    // Usage is removed so it can be deleted from DATABASE .
     $DB->delete_records(EDUSHARING_TABLE, array('id'  => $edusharing->id));
 
     return true;

@@ -41,7 +41,7 @@ require_sesskey();
             }
         </script>
     </head>
-	<body style="padding:0;margin:0;">
-		<iframe src="<?php echo $url ?>" style="height:100%;width:100%;border:0;"></iframe>
-	</body>
+    <body style="padding:0;margin:0;">
+        <iframe src="<?php echo $url ?>" style="height:100%;width:100%;border:0;"></iframe>
+    </body>
 </html>

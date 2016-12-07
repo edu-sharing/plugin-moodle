@@ -44,8 +44,9 @@ function edusharing_get_auth_key() {
 
     if (!empty(get_config('edusharing', 'edu_guest_option'))) {
         $guestid = get_config('edusharing', 'edu_guest_guest_id');
-        if (empty($guestid))
+        if (empty($guestid)) {
             $guestid = 'esguest';
+        }
         return $guestid;
     }
 
@@ -98,49 +99,55 @@ function edusharing_get_auth_data() {
             $authparams[] = array('key'  => $key, 'value'  => $value);
         }
     } else {
-    	//keep defaults in sync with settings.php
+        // Keep defaults in sync with settings.php.
         $eduauthparamnameuserid = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
-        if (empty($eduauthparamnameuserid))
-        	$eduauthparamnameuserid = '';
+        if (empty($eduauthparamnameuserid)) {
+            $eduauthparamnameuserid = '';
+        }
 
         $eduauthparamnamelastname = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_LASTNAME');
-        if (empty($eduauthparamnamelastname))
-        	$eduauthparamnamelastname = '';
+        if (empty($eduauthparamnamelastname)) {
+            $eduauthparamnamelastname = '';
+        }
 
         $eduauthparamnamefirstname = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_FIRSTNAME');
-        if (empty($eduauthparamnamefirstname))
-        	$eduauthparamnamefirstname = '';
+        if (empty($eduauthparamnamefirstname)) {
+            $eduauthparamnamefirstname = '';
+        }
 
         $eduauthparamnameemail = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_EMAIL');
-        if (empty($eduauthparamnameemail))
-        	$eduauthparamnameemail = '';
+        if (empty($eduauthparamnameemail)) {
+            $eduauthparamnameemail = '';
+        }
 
         $eduauthaffiliation = get_config('edusharing', 'EDU_AUTH_AFFILIATION');
 
-
         if (!empty(get_config('edusharing', 'edu_guest_option'))) {
-        	$guestid = get_config('edusharing', 'edu_guest_guest_id');
-        	if(empty($guestid))
-        		$guestid = 'esguest';
-        	$authparams = array(
-        			array('key'  => $eduauthparamnameuserid, 'value'  => $guestid),
-        			array('key'  => $eduauthparamnamelastname, 'value'  => ''),
-        			array('key'  => $eduauthparamnamefirstname, 'value'  => ''),
-        			array('key'  => $eduauthparamnameemail, 'value'  => ''),
-        			array('key'  => 'affiliation', 'value'  => $eduauthaffiliation),
-        	);
+            $guestid = get_config('edusharing', 'edu_guest_guest_id');
+            if (empty($guestid)) {
+                $guestid = 'esguest';
+            }
+
+            $authparams = array(
+                array('key'  => $eduauthparamnameuserid, 'value'  => $guestid),
+                array('key'  => $eduauthparamnamelastname, 'value'  => ''),
+                array('key'  => $eduauthparamnamefirstname, 'value'  => ''),
+                array('key'  => $eduauthparamnameemail, 'value'  => ''),
+                array('key'  => 'affiliation', 'value'  => $eduauthaffiliation),
+            );
         } else {
-   			$authparams = array(
-                    array('key'  => $eduauthparamnameuserid, 'value'  => edusharing_get_auth_key()),
-                    array('key'  => $eduauthparamnamelastname, 'value'  => $userdata->lastname),
-                    array('key'  => $eduauthparamnamefirstname, 'value'  => $userdata->firstname),
-                    array('key'  => $eduauthparamnameemail, 'value'  => $userdata->email),
-                    array('key'  => 'affiliation', 'value'  => $eduauthaffiliation),
-                   );
+            $authparams = array(
+                array('key'  => $eduauthparamnameuserid, 'value'  => edusharing_get_auth_key()),
+                array('key'  => $eduauthparamnamelastname, 'value'  => $userdata->lastname),
+                array('key'  => $eduauthparamnamefirstname, 'value'  => $userdata->firstname),
+                array('key'  => $eduauthparamnameemail, 'value'  => $userdata->email),
+                array('key'  => 'affiliation', 'value'  => $eduauthaffiliation),
+            );
         }
     }
 
-    if (get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS') == 'yes' || get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS') == '1') {
+    if (get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS') == 'yes' ||
+            get_config('edusharing', 'EDU_AUTH_CONVEYGLOBALGROUPS') == '1') {
         $authparams[] = array('key'  => 'globalgroups', 'value'  => edusharing_get_user_cohorts());
     }
     return $authparams;

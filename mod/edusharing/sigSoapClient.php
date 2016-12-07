@@ -57,7 +57,8 @@ class mod_edusharing_sig_soap_client extends SoapClient {
             $signature = base64_encode($signature);
             openssl_free_key($pkeyid);
             $headers = array();
-            $headers[] = new SOAPHeader('http://webservices.edu_sharing.org', 'appId', get_config('edusharing', 'application_appid'));
+            $headers[] = new SOAPHeader('http://webservices.edu_sharing.org',
+                    'appId', get_config('edusharing', 'application_appid'));
             $headers[] = new SOAPHeader('http://webservices.edu_sharing.org', 'timestamp', $timestamp);
             $headers[] = new SOAPHeader('http://webservices.edu_sharing.org', 'signature', $signature);
             $headers[] = new SOAPHeader('http://webservices.edu_sharing.org', 'signed', $signdata);
