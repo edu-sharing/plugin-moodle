@@ -59,13 +59,15 @@ class mod_edusharing_web_service_factory {
      */
     public function edusharing_authentication_get_ticket() {
 
+        global $SESSION;
+
         // Ticket available.
-        if (isset($SESSION["USER"]->ticket)) {
+        if (isset($SESSION->userticket)) {
 
             // Ticket is younger than 10s, we must not check.
-            if (isset($SESSION["USER"]->ticketvalidationts)
-                    && time() - $SESSION["USER"]->ticketvalidationts < 10) {
-                return $SESSION["USER"]->ticket;
+            if (isset($SESSION->userticketvalidationts)
+                    && time() - $SESSION->userticketvalidationts < 10) {
+                return $SESSION->userticket;
             }
             try {
                 $eduservice = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl, array());
@@ -78,14 +80,14 @@ class mod_edusharing_web_service_factory {
                 // Ticket is older than 10s.
                 $params = array(
                     "username"  => edusharing_get_auth_key(),
-                    "ticket"  => $SESSION["USER"]->ticket
+                    "ticket"  => $SESSION->userticket
                 );
 
                 $alfreturn = $eduservice->checkTicket($params);
 
                 if ($alfreturn->checkTicketReturn) {
-                    $SESSION["USER"]->ticketvalidationts = time();
-                    return $SESSION["USER"]->ticket;
+                    $SESSION->userticketvalidationts = time();
+                    return $SESSION->userticket;
                 }
             } catch (Exception $e) {
                  trigger_error(get_string('error_invalid_ticket', 'edusharing'), E_USER_WARNING);
@@ -100,8 +102,8 @@ class mod_edusharing_web_service_factory {
             $client = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl);
             $return = $client->authenticateByTrustedApp($paramstrusted);
             $ticket = $return->authenticateByTrustedAppReturn->ticket;
-            $SESSION["USER"]->ticket = $ticket;
-            $SESSION["USER"]->ticketvalidationts = time();
+            $SESSION->userticket = $ticket;
+            $SESSION->userticketvalidationts = time();
             return $ticket;
         } catch (Exception $e) {
             trigger_error(get_string('error_auth_failed', 'edusharing') . ' ' . $e, E_USER_WARNING);

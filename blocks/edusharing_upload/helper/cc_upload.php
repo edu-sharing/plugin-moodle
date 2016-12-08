@@ -26,7 +26,6 @@ require_once('../../../config.php');
 
 global $DB;
 global $CFG;
-global $SESSION;
 
 require_once('../../../mod/edusharing/lib/cclib.php');
 require_once('../../../mod/edusharing/lib.php');

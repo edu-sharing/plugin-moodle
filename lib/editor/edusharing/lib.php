@@ -56,20 +56,18 @@ class edusharing_texteditor extends tinymce_texteditor {
      * @return string
      */
     protected function editor_edusharing_init_edusharing_ticket() {
+
+        global $SESSION;
         /*
         * Use previously generated ticket if available. Generates conflict if
         * repository-session closes too early.
         */
-        if ( ! empty($SESSION['edusharing']['editor']['ticket']) ) {
-            return $SESSION['edusharing']['editor']['ticket'];
+        if ( ! empty($SESSION->edusharingeditorticket) ) {
+            return $SESSION->edusharingeditorticket;
         }
 
-        if ( empty($SESSION['edusharing']) ) {
-            $SESSION['edusharing'] = array();
-        }
-
-        if ( empty($SESSION['edusharing']['editor']) ) {
-            $SESSION['edusharing']['editor'] = array();
+        if ( empty($SESSION->edusharingeditor) ) {
+            $SESSION->edusharingeditor = array();
         }
 
         $repositoryid = get_config('edusharing', 'application_homerepid');
@@ -77,12 +75,12 @@ class edusharing_texteditor extends tinymce_texteditor {
         $ccauth = new mod_edusharing_web_service_factory();
         $edusharingticket = $ccauth->edusharing_authentication_get_ticket();
         if ( ! $edusharingticket ) {
-            unset($SESSION['edusharing']['editor']['ticket']);
+            unset($SESSION->edusharingeditorticket);
             return false;
         }
 
         // Store ticket in session.
-        $SESSION['edusharing']['editor']['ticket'] = $edusharingticket;
+        $SESSION->edusharingeditorticket = $edusharingticket;
 
         return $edusharingticket;
     }

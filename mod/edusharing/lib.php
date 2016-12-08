@@ -101,18 +101,15 @@ function edusharing_supports($feature) {
  */
 function edusharing_add_instance(stdClass $edusharing) {
 
-    global $COURSE;
-    global $CFG;
-    global $DB;
-    global $SESSION;
+    global $COURSE, $CFG, $DB, $SESSION, $USER;
 
     $edusharing->timecreated = time();
     $edusharing->timemodified = time();
 
-    // You may have to add extra stuff in here
+    // You may have to add extra stuff in here.
     $edusharing = edusharing_postprocess($edusharing);
 
-    // put the data of the new cc-resource into an array and create a neat XML-file out of it
+    // Put the data of the new cc-resource into an array and create a neat XML-file out of it.
     $data4xml = array("ccrender");
 
     if (isset($edusharing->object_version)) {
@@ -132,13 +129,13 @@ function edusharing_add_instance(stdClass $edusharing) {
     }
 
     $data4xml[1]["ccuser"]["id"] = edusharing_get_auth_key();
-    $data4xml[1]["ccuser"]["name"] = $SESSION["USER"]->firstname." ".$SESSION["USER"]->lastname;
+    $data4xml[1]["ccuser"]["name"] = $USER->firstname." ".$USER->lastname;
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
     $data4xml[1]["metadata"] = edusharing_get_usage_metadata($edusharing->course);
 
-    // move popup settings to array
+    // Move popup settings to array.
     if (!empty($edusharing->popup)) {
         $parray = explode(',', $edusharing->popup);
         foreach ($parray as $key => $fieldstring) {
@@ -174,7 +171,7 @@ function edusharing_add_instance(stdClass $edusharing) {
             "user"  => edusharing_get_auth_key(),
             "lmsId"  => get_config('edusharing', 'application_appid'),
             "courseId"  => $edusharing->course,
-            "userMail"  => $SESSION["USER"]->email,
+            "userMail"  => $USER->email,
             "fromUsed"  => '2002-05-30T09:00:00',
             "toUsed"  => '2222-05-30T09:00:00',
             "distinctPersons"  => '0',
@@ -210,9 +207,7 @@ function edusharing_add_instance(stdClass $edusharing) {
  */
 function edusharing_update_instance(stdClass $edusharing) {
 
-    global $CFG;
-    global $COURSE;
-    global $DB;
+    global $CFG, $COURSE, $DB, $SESSION;
 
     // FIX: when editing a moodle-course-module the $edusharing->id will be named $edusharing->instance
     if ( ! empty($edusharing->instance) ) {
@@ -234,7 +229,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     $data4xml = array("ccrender");
 
     $data4xml[1]["ccuser"]["id"] = edusharing_get_auth_key();
-    $data4xml[1]["ccuser"]["name"] = $SESSION["USER"]->firstname." ".$SESSION["USER"]->lastname;
+    $data4xml[1]["ccuser"]["name"] = $USER->firstname." ".$USER->lastname;
 
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
@@ -275,7 +270,7 @@ function edusharing_update_instance(stdClass $edusharing) {
             "user"  => edusharing_get_auth_key(),
             "lmsId"  => get_config('edusharing', 'application_appid'),
             "courseId"  => $edusharing->course,
-            "userMail"  => $SESSION["USER"]->email,
+            "userMail"  => $USER->email,
             "fromUsed"  => '2002-05-30T09:00:00',
             "toUsed"  => '2222-05-30T09:00:00',
             "distinctPersons"  => '0',
@@ -286,10 +281,10 @@ function edusharing_update_instance(stdClass $edusharing) {
 
         $setusage = $client->setUsage($params);
         $edusharing->object_version = $memento->object_version;
-        // throws exception on error, so no further checking required
+        // Throws exception on error, so no further checking required.
         $DB->update_record(EDUSHARING_TABLE, $edusharing);
     } catch (SoapFault $exception) {
-        // roll back
+        // Roll back.
         $DB->update_record(EDUSHARING_TABLE, $memento);
 
         trigger_error($exception->getMessage(), E_USER_WARNING);
@@ -514,7 +509,6 @@ function edusharing_get_coursemodule_info($coursemodule) {
 function edusharing_postprocess($edusharing) {
     global $CFG;
     global $COURSE;
-    global $SESSION;
 
     if ( empty($edusharing->timecreated) ) {
         $edusharing->timecreated = time();

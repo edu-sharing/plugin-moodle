@@ -31,7 +31,6 @@ require_sesskey();
 global $DB;
 global $CFG;
 global $COURSE;
-global $SESSION;
 
 require_once($CFG->dirroot.'/mod/edusharing/lib/cclib.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');

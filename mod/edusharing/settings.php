@@ -34,8 +34,6 @@ if ($ADMIN->fulltree) {
                 get_string('connectToHomeRepository', 'edusharing'), $str));
 
 
-
-
     $settings->add(new admin_setting_heading('edusharing/app', 'Application properties', ''));
 
     $settings->add(new admin_setting_configtext('edusharing/application_appid', 'appid', '', '', PARAM_TEXT, 50));
