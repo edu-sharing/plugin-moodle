@@ -101,7 +101,6 @@ class filter_edusharing extends moodle_text_filter {
                 // Disable page-caching to "renew" render-session-data.
                 $PAGE->set_cacheable(false);
                 $PAGE->requires->js('/mod/edusharing/js/jquery.min.js');
-                $PAGE->requires->js('/mod/edusharing/js/jquery-near-viewport.min.js');
                 $PAGE->requires->js('/filter/edusharing/edu.js');
 
                 foreach ($matches as $match) {
