@@ -118,14 +118,22 @@ function xmldb_edusharing_upgrade($oldversion=0) {
 
     }
 
-    if ($result && $oldversion < 2016101201) {
+    if ($result && $oldversion < 2016120901) {
 
-        foreach (json_decode(get_config('edusharing', 'appProperties'), true) as $key => $value) {
-            set_config('application_' . $key, $value, 'edusharing');
+        $appproperties = get_config('edusharing', 'appProperties');
+        if (!empty($appproperties)) {
+            foreach (json_decode($appproperties, true) as $key => $value) {
+                set_config('application_' . $key, $value, 'edusharing');
+            }
+            set_config('appProperties', null, 'edusharing');
         }
 
-        foreach (json_decode(get_config('edusharing', 'repProperties'), true) as $key => $value) {
-            set_config('repository_' . $key, $value, 'edusharing');
+        $repproperties = get_config('edusharing', 'repProperties');
+        if (!empty($repproperties)) {
+            foreach (json_decode($repproperties, true) as $key => $value) {
+                set_config('repository_' . $key, $value, 'edusharing');
+            }
+            set_config('repProperties', null, 'edusharing');
         }
     }
 
