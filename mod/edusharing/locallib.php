@@ -150,9 +150,9 @@ function edusharing_get_auth_data() {
  */
 function edusharing_get_user_cohorts() {
     global $DB, $USER;
+    $ret = array();
     $cohortmemberships = $DB->get_records('cohort_members', array('userid'  => $USER->id));
     if ($cohortmemberships) {
-        $ret = array();
         foreach ($cohortmemberships as $cohortmembership) {
             $cohort = $DB->get_record('cohort', array('id'  => $cohortmembership->cohortid));
             $ret[] = array(
@@ -162,8 +162,8 @@ function edusharing_get_user_cohorts() {
                     'idnumber'  => $cohort->idnumber
             );
         }
-        return $ret;
     }
+    return json_encode($ret);
 }
 
 /**
