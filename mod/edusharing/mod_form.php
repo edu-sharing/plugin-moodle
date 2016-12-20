@@ -48,12 +48,10 @@ class mod_edusharing_mod_form extends moodleform_mod
         global $CFG;
         global $COURSE;
 
-        $appproperties = json_decode(get_config('edusharing', 'appProperties'));
-
         try {
             // @TODO make dynamic
             $ccauth = new mod_edusharing_web_service_factory();
-            $ticket = $ccauth->mod_edusharing_authentication_get_ticket($appproperties->appid);
+            $ticket = $ccauth->edusharing_authentication_get_ticket();
         } catch (Exception $e) {
             trigger_error($e->getMessage(), E_USER_WARNING);
             return false;
@@ -91,14 +89,15 @@ class mod_edusharing_mod_form extends moodleform_mod
         $mform->addRule('object_url', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('object_url', 'object_url', EDUSHARING_MODULE_NAME);
 
-        $mylang = mod_edusharing_get_current_users_language_code();
+        $mylang = edusharing_get_current_users_language_code();
 
-        $ccresourcesearch  = $appproperties->cc_gui_url;
+        $ccresourcesearch  = get_config('edusharing', 'application_cc_gui_url');
         $ccresourcesearch .= "?mode=0";
-        $ccresourcesearch .= "&user=".urlencode(mod_edusharing_get_auth_key());
+        $ccresourcesearch .= "&user=".urlencode(edusharing_get_auth_key());
         $ccresourcesearch .= "&locale=".$mylang;
         $ccresourcesearch .= "&ticket=".$ticket;
         $ccresourcesearch .= "&reurl=".urlencode($CFG->wwwroot."/mod/edusharing/makelink.php");
+        $ccresourcesearch = $CFG->wwwroot .'/mod/edusharing/selectResourceHelper.php?sesskey='.sesskey().'&rurl=' . urlencode($ccresourcesearch);
 
         $searchbutton = $mform->addElement('button', 'searchbutton', get_string('searchrec', EDUSHARING_MODULE_NAME).'...');
         $buttonattributes = array('title' => get_string('searchrec', EDUSHARING_MODULE_NAME), 'onclick' => "return window.open('"
@@ -106,12 +105,13 @@ class mod_edusharing_mod_form extends moodleform_mod
                           . "scrollbars,resizable,width=1000,height=580');");
         $searchbutton->updateAttributes($buttonattributes);
 
-        $ccresourceupload  = $appproperties->cc_gui_url;
+        $ccresourceupload  = get_config('edusharing', 'application_cc_gui_url');
         $ccresourceupload .= "?mode=2";
-        $ccresourcesearch .= "&user=".urlencode(mod_edusharing_get_auth_key());
+        $ccresourcesearch .= "&user=".urlencode(edusharing_get_auth_key());
         $ccresourceupload .= "&locale=".$mylang;
         $ccresourceupload .= "&ticket=".$ticket;
         $ccresourceupload .= "&reurl=".urlencode($CFG->wwwroot."/mod/edusharing/makelink.php");
+        $ccresourceupload = $CFG->wwwroot .'/mod/edusharing/selectResourceHelper.php?sesskey='.sesskey().'&rurl=' . urlencode($ccresourceupload);
 
         $uploadbutton = $mform->addElement('button', 'uploadbutton', get_string('uploadrec', EDUSHARING_MODULE_NAME).'...');
         $buttonattributes = array('title' => get_string('uploadrec', EDUSHARING_MODULE_NAME), 'onclick' => "return window.open('"

@@ -46,18 +46,6 @@ class filter_edusharing extends moodle_text_filter {
 
     /**
      *
-     * @var array
-     */
-    protected $appproperties = array();
-
-    /**
-     *
-     * @var array
-     */
-    protected $repproperties = array();
-
-    /**
-     *
      * Enter description here ...
      *
      * @param object $context
@@ -66,16 +54,13 @@ class filter_edusharing extends moodle_text_filter {
     public function __construct($context, array $localconfig) {
         parent::__construct($context, $localconfig);
 
-        $this->appproperties = json_decode(get_config('edusharing', 'appProperties'));
-        $this->repproperties = json_decode(get_config('edusharing', 'repProperties'));
+        // To force the re-generation of filtered texts we just ...
+        // reset_text_filters_cache();
 
-        // to force the re-generation of filtered texts we just ...
-        reset_text_filters_cache();
-
-        // ensure that user exists in repository
+        // Ensure that user exists in repository.
         if (isloggedin()) {
             $ccauth = new mod_edusharing_web_service_factory();
-            $ccauth->mod_edusharing_authentication_get_ticket($this->appproperties->appid);
+            $ccauth->edusharing_authentication_get_ticket();
         }
     }
 
@@ -94,29 +79,33 @@ class filter_edusharing extends moodle_text_filter {
         global $COURSE;
         global $PAGE;
 
-        // disable page-caching to "renew" render-session-data
-        $PAGE->set_cacheable(false);
-
-        $PAGE->requires->js('/mod/edusharing/js/jquery.min.js');
-        $PAGE->requires->js('/mod/edusharing/js/jquery-near-viewport.min.js');
-        $PAGE->requires->js('/filter/edusharing/edu.js');
-
         if (!isset($options['originalformat'])) {
             return $text;
         }
 
-        // store unfiltered text to return in case of error
-        $memento = $text;
-
         try {
+
+            if (strpos($text, 'es:resource_id') === false) {
+                return $text;
+            }
+
+            $memento = $text;
+
             preg_match_all('#<img(.*)es:resource_id(.*)>#Umsi', $text, $matchesimg,
                     PREG_PATTERN_ORDER);
             preg_match_all('#<a(.*)es:resource_id(.*)>(.*)</a>#Umsi', $text, $matchesa,
                     PREG_PATTERN_ORDER);
             $matches = array_merge($matchesimg[0], $matchesa[0]);
 
-            foreach ($matches as $match) {
-                $text = str_replace($match, $this->convertobject($match), $text, $count);
+            if (!empty($matches)) {
+                // Disable page-caching to "renew" render-session-data.
+                $PAGE->set_cacheable(false);
+                $PAGE->requires->js('/mod/edusharing/js/jquery.min.js');
+                $PAGE->requires->js('/filter/edusharing/edu.js');
+
+                foreach ($matches as $match) {
+                    $text = str_replace($match, $this->filter_edusharing_convert_object($match), $text, $count);
+                }
             }
         } catch (Exception $exception) {
             trigger_error($exception->getMessage(), E_USER_WARNING);
@@ -132,7 +121,7 @@ class filter_edusharing extends moodle_text_filter {
      * @param string $object
      * @return boolean|string
      */
-    private function convertobject($object) {
+    private function filter_edusharing_convert_object($object) {
         global $DB;
         $doc = new DOMDocument();
         $doc->loadHTML($object);
@@ -142,14 +131,14 @@ class filter_edusharing extends moodle_text_filter {
             $node = $doc->getElementsByTagName('img')->item(0);
         }
         if (empty($node)) {
-            trigger_error('Could not get node', E_USER_WARNING);
+            trigger_error(get_string('error_loading_node', 'filter_edusharing'), E_USER_WARNING);
             return false;
         }
 
         $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id' => (int) $node->getAttribute('es:resource_id')));
 
         if (!$edusharing) {
-            trigger_error('Error loading resource from db.', E_USER_WARNING);
+            trigger_error(get_string('error_loading_resource', 'filter_edusharing'), E_USER_WARNING);
             return false;
         }
 
@@ -213,18 +202,19 @@ class filter_edusharing extends moodle_text_filter {
 
         $objecturl = $edusharing->object_url;
         if (!$objecturl) {
-            throw new Exception('Empty object url.');
+            throw new Exception(get_string('error_empty_object_url', 'filter_edusharing'));
         }
 
-        $repositoryid = $this->appproperties->homerepid;
-        $url = mod_edusharing_get_redirect_url($edusharing, $this->appproperties,
-                $this->repproperties, DISPLAY_MODE_INLINE);
+        $repositoryid = get_config('edusharing', 'application_homerepid');
+        $url = edusharing_get_redirect_url($edusharing, EDUSHARING_DISPLAY_MODE_INLINE);
         $inline = '<div class="eduContainer" data-type="esObject" data-url="' . $CFG->wwwroot .
-                 '/filter/edusharing/proxy.php?URL=' . urlencode($url) . '&amp;resId=' .
+                 '/filter/edusharing/proxy.php?sesskey='.sesskey().'&URL=' . urlencode($url) . '&amp;resId=' .
                  $edusharing->id . '&amp;title=' . urlencode($renderparams['title']) .
                  '&amp;mimetype=' . $renderparams['mimetype'] .
-                 '"><div class="inner"><div class="spinner1"></div></div>' .
-                 '<div class="inner"><div class="spinner2"></div></div><div class="inner"><div class="spinner3"></div></div>edu sharing object</div>';
+                 '"><div class="edusharing_spinner_inner"><div class="edusharing_spinner1"></div></div>' .
+                 '<div class="edusharing_spinner_inner"><div class="edusharing_spinner2"></div></div>'.
+                 '<div class="edusharing_spinner_inner"><div class="edusharing_spinner3"></div></div>'.
+                 'edu sharing object</div>';
         return $inline;
     }
 }

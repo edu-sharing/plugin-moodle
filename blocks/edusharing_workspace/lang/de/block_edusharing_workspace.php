@@ -26,6 +26,11 @@ $string['pluginname'] = 'edu-sharing - Workspace';
 
 $string['block_title'] = 'edu-sharing Arbeitsplatz';
 $string['button_text'] = 'Zu Ihrem Arbeitsplatz';
+$string['back_to'] = 'Zurück zu';
 
 $string['edusharing_workspace:myaddinstance'] = 'Block edu-sharing Workspace zum Dashboard hinzufügen';
 $string['edusharing_workspace:addinstance'] = 'Block edu-sharing Workspace hinzufügen';
+
+$string['error_invalid_course_id'] = 'Ungültige Kurs ID';
+$string['error_course_not_found'] = 'Kurs kann nicht aus der Datenbank geladen werden.';
+$string['error_no_gui_url_defined'] = 'Parameter "cc_gui_url" wurde nicht konfiguriert.';

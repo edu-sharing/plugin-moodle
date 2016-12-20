@@ -25,27 +25,25 @@
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/mod/edusharing/lib.php');
 
-require_login();
+require_sesskey();
 
 $resid = optional_param('resId', 0, PARAM_INT); // edusharing instance ID
 
 if ($resid) {
     $edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resid), '*', MUST_EXIST);
 } else {
-    trigger_error('You must specify an instance ID', E_USER_WARNING);
+    trigger_error(get_string('error_missing_instance_id', 'filter_edusharing'), E_USER_WARNING);
 }
 
 require_login($edusharing->course, true);
 
-$appproperties = json_decode(get_config('edusharing', 'appProperties'));
-$repproperties = json_decode(get_config('edusharing', 'repProperties'));
 
-$redirecturl = mod_edusharing_get_redirect_url($edusharing, $appproperties, $repproperties);
+$redirecturl = edusharing_get_redirect_url($edusharing);
 
 $ts = $timestamp = round(microtime(true) * 1000);
 $redirecturl .= '&ts=' . $ts;
-$redirecturl .= '&sig=' . urlencode(mod_edusharing_get_signature($appproperties->appid . $ts));
-$redirecturl .= '&signed=' . urlencode($appproperties->appid . $ts);
+$redirecturl .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts));
+$redirecturl .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts);
 
 redirect($redirecturl);
 

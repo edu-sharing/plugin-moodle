@@ -26,17 +26,18 @@ require_once(dirname(__FILE__) . '/../../../../config.php');
 require_once($CFG->dirroot.'/lib/setup.php');
 
 require_login();
+require_sesskey();
 
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
 $input = file_get_contents('php://input');
 if ( ! $input ) {
-    throw new Exception('Error reading json-data from request-body.');
+    throw new Exception(get_string('error_json', 'editor_edusharing'));
 }
 
 $delete = json_decode($input);
 if ( ! $delete ) {
-    throw new Exception('Error decoding json-data for edusharing-object.');
+    throw new Exception(get_string('error_json', 'editor_edusharing'));
 }
 
 $where = array(
@@ -45,14 +46,13 @@ $where = array(
 );
 $edusharing = $DB->get_record(EDUSHARING_TABLE, $where);
 if ( ! $edusharing ) {
-    trigger_error('Resource "'.$delete->id.'" not found for course "'.$delete->course.'".', E_USER_WARNING);
-
+    trigger_error(get_string('error_resource_not_found', 'editor_edusharing'), E_USER_WARNING);
     header('HTTP/1.1 404 Not found', true, 404);
     exit();
 }
 
 if ( ! edusharing_delete_instance($edusharing->id) ) {
-    trigger_error('Error deleting edu-sharing-instance "'.$edusharing->id.'"', E_USER_WARNING);
+    trigger_error(get_string('error_deleting_instance', 'editor_edusharing'), E_USER_WARNING);
 
     header('', true, 500);
 }

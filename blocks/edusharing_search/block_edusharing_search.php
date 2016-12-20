@@ -57,7 +57,8 @@ class block_edusharing_search extends block_base
                                  <input type="hidden" name="id" value="'.htmlentities($COURSE->id).'" /><input type="text" style="max-width: 90%;" name="search"
                                  value="'.htmlentities(get_string('search_field_hint', 'block_edusharing_search')).'"
                                  onclick="if (this.value==\''.htmlentities(get_string('search_field_hint', 'block_edusharing_search')).'\') this.value=\'\';" />
-                                 <input type="submit" value="'.htmlentities(get_string('button_text', 'block_edusharing_search')).'" /></form>';
+                                 <input type="submit" value="'.htmlentities(get_string('button_text', 'block_edusharing_search')).'" />
+                                 <input type="hidden" name="sesskey" value="'.sesskey().'"/></form>';
 
         return $this->content;
     }

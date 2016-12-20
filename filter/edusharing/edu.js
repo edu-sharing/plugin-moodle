@@ -45,20 +45,18 @@ function getJQueryCodeSoThatMoodleLikesIt($) {
 		});
 		
 		$(".edu_wrapper").on( "click", ".edusharing_metadata_toggle_button", function() {
-			$(this).parent().find(".edusharing_metadata").toggle();
-		});
-		
-		$(".edu_wrapper").on( "click", ".edusharing_metadata_toggle_button", function() {
-			$(this).parent().next(".edusharing_metadata").toggle(function() {
-				var toggle_button = $(this).parent().find(".edusharing_metadata_toggle_button");
-				if($(this).is(':visible')) {
-					toggle_button.text(toggle_button.data('textclose'));
-				} else {
-					toggle_button.text(toggle_button.data('textopen'));
-				}
-			});
-		});
+                toggle_button = $(this);
+                $(this).parent().find(".edusharing_metadata").toggle(1, function() {
+                        if($(this).is(':visible')) {
+                                toggle_button.text(toggle_button.data('textclose'));
+                        } else {
+                                toggle_button.text(toggle_button.data('textopen'));
+                        }
+                });
+        });
 }
+
+!function() {function a(a,b) {var c=void 0!==window.pageYOffset?window.pageYOffset:(document.documentElement||document.body.parentNode||document.body).scrollTop,d=document.documentElement.clientHeight,e=c+d;b=b||0;var f=a.getBoundingClientRect();if (0===f.height)return!1;var g=f.top+c-b,h=f.bottom+c+b;return h>c&&e>g}jQuery.expr[":"]["near-viewport"]=function(b,c,d) {var e=parseInt(d[3])||0;return a(b,e)}}();
 
 if(typeof require == 'undefined') {
 	$(document).ready(function() {

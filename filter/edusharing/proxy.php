@@ -44,9 +44,6 @@ class filter_edusharing_edurender {
         $inline = "";
         try {
             $curlhandle = curl_init($url);
-            if (!$curlhandle) {
-                throw new Exception('Error initializing CURL.');
-            }
             curl_setopt($curlhandle, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($curlhandle, CURLOPT_HEADER, 0);
             // DO NOT RETURN HTTP HEADERS
@@ -74,7 +71,7 @@ class filter_edusharing_edurender {
     public function filter_edusharing_display($html) {
         global $CFG;
         error_reporting(0);
-        $resid = $_GET['resId'];
+        $resid = required_param('resId', PARAM_INT);
 
         $html = str_replace(array("\n", "\r", "\n"
         ), '', $html);
@@ -83,20 +80,20 @@ class filter_edusharing_edurender {
          * replaces {{{LMS_INLINE_HELPER_SCRIPT}}}
          */
         $html = str_replace("{{{LMS_INLINE_HELPER_SCRIPT}}}",
-                $CFG->wwwroot . "/filter/edusharing/inlineHelper.php?resId=" . $resid, $html);
+                $CFG->wwwroot . "/filter/edusharing/inlineHelper.php?sesskey=".sesskey()."&resId=" . $resid, $html);
 
         /*
          * replaces <es:title ...>...</es:title>
          */
-        $html = preg_replace("/<es:title[^>]*>.*<\/es:title>/Uims", $_GET['title'], $html);
+        $html = preg_replace("/<es:title[^>]*>.*<\/es:title>/Uims", optional_param('title', '', PARAM_TEXT), $html);
         /*
          * For images, audio and video show a capture underneath object
          */
         $mimetypes = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'video', 'audio'
         );
         foreach ($mimetypes as $mimetype) {
-            if (strpos($_GET['mimetype'], $mimetype) !== false) {
-                $html .= '<p class="caption">' . $_GET['title'] . '</p>';
+            if (strpos(optional_param('mimetype', '', PARAM_TEXT), $mimetype) !== false) {
+                $html .= '<p class="caption">' . optional_param('title', '', PARAM_TEXT) . '</p>';
             }
         }
         echo $html;
@@ -104,17 +101,16 @@ class filter_edusharing_edurender {
     }
 }
 
-$url = $_GET['URL'];
-
+$url = required_param('URL', PARAM_NOTAGS);
 $parts = parse_url($url);
 parse_str($parts['query'], $query);
 require_login($query['course_id']);
+require_sesskey();
 
-$appproperties = json_decode(get_config('edusharing', 'appProperties'));
 $ts = $timestamp = round(microtime(true) * 1000);
 $url .= '&ts=' . $ts;
-$url .= '&sig=' . urlencode(mod_edusharing_get_signature($appproperties->appid . $ts));
-$url .= '&signed=' . urlencode($appproperties->appid . $ts);
+$url .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts));
+$url .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts);
 
 $e = new filter_edusharing_edurender();
 $html = $e->filter_edusharing_get_render_html($url);

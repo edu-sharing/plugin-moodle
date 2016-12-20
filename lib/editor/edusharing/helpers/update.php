@@ -26,17 +26,18 @@ require_once(dirname(__FILE__) . '/../../../../config.php');
 require_once(dirname(__FILE__) . '/../../../../lib/setup.php');
 
 require_login();
+require_sesskey();
 
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
 $input = file_get_contents('php://input');
 if ( ! $input ) {
-    throw new Exception('Error reading json-data from request-body.');
+    throw new Exception(get_string('error_json', 'editor_edusharing'));
 }
 
 $update = json_decode($input);
 if ( ! $update ) {
-    throw new Exception('Error parsing json-text.');
+    throw new Exception(get_string('error_json', 'editor_edusharing'));
 }
 
 $where = array(
@@ -45,26 +46,23 @@ $where = array(
 );
 $edusharing = $DB->get_record(EDUSHARING_TABLE, $where);
 if ( ! $edusharing ) {
-    trigger_error('Resource "'.$update->id.'" not found for course "'.$update->course.'".', E_USER_WARNING);
+    trigger_error(get_string('error_error_updating_instance', 'editor_edusharing'), E_USER_WARNING);
 
     header('HTTP/1.1 404 Not found', true, 404);
     exit();
 }
 
-// set $instance to $id to conform with moodle's resource-handling
-// $edusharing->instance = $edusharing->id;
-
 // post-process given data
-$edusharing = mod_edusharing_postprocess($update);
+$edusharing = edusharing_postprocess($update);
 if ( ! $edusharing ) {
-    trigger_error('Error post-processing resource "'.$edusharing->id.'".', E_USER_WARNING);
+    trigger_error(get_string('error_postprocessing', 'editor_edusharing'), E_USER_WARNING);
 
     header('HTTP/1.1 500 Internal Server Error', true, 500);
     exit();
 }
 
 if ( ! edusharing_update_instance($edusharing) ) {
-    trigger_error('Error updating resource "'.$edusharing->id.'".', E_USER_WARNING);
+    trigger_error(get_string('error_updating_instance', 'editor_edusharing'), E_USER_WARNING);
 
     header('HTTP/1.1 500 Internal Server Error', true, 500);
     exit();

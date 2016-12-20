@@ -55,35 +55,32 @@ class edusharing_texteditor extends tinymce_texteditor {
      *
      * @return string
      */
-    protected function mod_edusharing_init_edusharing_ticket() {
+    protected function editor_edusharing_init_edusharing_ticket() {
+
+        global $SESSION;
         /*
-         * use previously generated ticket if available. Generates conflict if
+        * Use previously generated ticket if available. Generates conflict if
         * repository-session closes too early.
         */
-        if ( ! empty($_SESSION['edusharing']['editor']['ticket']) ) {
-            return $_SESSION['edusharing']['editor']['ticket'];
+        if ( ! empty($SESSION->edusharingeditorticket) ) {
+            return $SESSION->edusharingeditorticket;
         }
 
-        if ( empty($_SESSION['edusharing']) ) {
-            $_SESSION['edusharing'] = array();
+        if ( empty($SESSION->edusharingeditor) ) {
+            $SESSION->edusharingeditor = array();
         }
 
-        if ( empty($SESSION['edusharing']['editor']) ) {
-            $_SESSION['edusharing']['editor'] = array();
-        }
-
-        $appproperties = json_decode(get_config('edusharing', 'appProperties'));
-        $repositoryid = $appproperties->homerepid;
+        $repositoryid = get_config('edusharing', 'application_homerepid');
 
         $ccauth = new mod_edusharing_web_service_factory();
-        $edusharingticket = $ccauth->mod_edusharing_authentication_get_ticket($appproperties->appid);
+        $edusharingticket = $ccauth->edusharing_authentication_get_ticket();
         if ( ! $edusharingticket ) {
-            unset($_SESSION['edusharing']['editor']['ticket']);
+            unset($SESSION->edusharingeditorticket);
             return false;
         }
 
-        // store ticket in session
-        $_SESSION['edusharing']['editor']['ticket'] = $edusharingticket;
+        // Store ticket in session.
+        $SESSION->edusharingeditorticket = $edusharingticket;
 
         return $edusharingticket;
     }
@@ -97,7 +94,7 @@ class edusharing_texteditor extends tinymce_texteditor {
      *
      * @return bool
      */
-    protected function is_edusharing_context(array $options) {
+    protected function editor_edusharing_is_edusharing_context(array $options) {
         global $COURSE;
 
         if ( empty($options['context']) ) {
@@ -120,7 +117,7 @@ class edusharing_texteditor extends tinymce_texteditor {
     }
 
     /**
-     * Het parameters for tinymce
+     * Set parameters for tinymce
      * @param int $elementid
      * @param array $options
      *
@@ -138,8 +135,8 @@ class edusharing_texteditor extends tinymce_texteditor {
         $params = parent::get_init_params($elementid, $options);
 
         // add edu-sharing functionaliy to tinymce ONLY when course-id available
-        if ( $this->is_edusharing_context($options) ) {
-            $edusharingticket = $this->mod_edusharing_init_edusharing_ticket();
+        if ( $this->editor_edusharing_is_edusharing_context($options) ) {
+            $edusharingticket = $this->editor_edusharing_init_edusharing_ticket();
 
             // register tinymce-plugin but DO NOT try to load it as this already happened
             $params['plugins'] .= ',-edusharing';
@@ -180,6 +177,12 @@ class edusharing_texteditor extends tinymce_texteditor {
             $params['edusharing_dialog_height'] = 400;
 
             $params['convert_urls'] = false;
+
+            $params['moodle_sesskey'] = sesskey();
+
+            $stringman = get_string_manager();
+            $params['edusharing_lang'] = $stringman->load_component_strings('editor_edusharing', current_language());
+
         }
 
         return $params;

@@ -26,6 +26,11 @@ $string['pluginname'] = 'edu-sharing - Upload';
 
 $string['block_title'] = 'edu-sharing Hochladen';
 $string['button_text'] = 'Material hochladen';
+$string['back_to'] = 'Zurück zu';
 
 $string['edusharing_upload:myaddinstance'] = 'Block edu-sharing Upload zum Dashboard hinzufügen';
 $string['edusharing_upload:addinstance'] = 'Block edu-sharing Upload hinzufügen';
+
+$string['error_invalid_course_id'] = 'Ungültige Kurs ID';
+$string['error_course_not_found'] = 'Kurs kann nicht aus der Datenbank geladen werden.';
+$string['error_no_gui_url_defined'] = 'Parameter "cc_gui_url" wurde nicht konfiguriert.';

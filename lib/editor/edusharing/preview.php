@@ -27,20 +27,19 @@ require_once(dirname(__FILE__) . '/../../../config.php');
 require_once(dirname(__FILE__) . '/../../../mod/edusharing/locallib.php');
 
 require_login();
+require_sesskey();
 
 global $DB;
 
-$resourceid = $_GET['resourceId'];
+$resourceid = optional_param('resourceId', 0, PARAM_INT);
 
 if (!$edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resourceid))) {
-    trigger_error('Error loading edusharing-object from database.', E_USER_WARNING);
+    trigger_error(get_string('error_loading_instance', 'editor_edusharing'), E_USER_WARNING);
 }
 
 $curlhandle = $edusharing->course;
 
-$appproperties = json_decode(get_config('edusharing', 'appProperties'));
-
-$previewservice = $appproperties->cc_gui_url . '/' . 'preview';
+$previewservice = get_config('edusharing', 'application_cc_gui_url') . '/' . 'preview';
 
 $objecturlparts = str_replace('ccrep://', '', $edusharing->object_url);
 $objecturlparts = explode('/', $objecturlparts);
@@ -51,15 +50,15 @@ $nodeid = $objecturlparts[1];
 $time = round(microtime(true) * 1000);
 
 $url = $previewservice;
-$url .= '?appId=' . $appproperties->appid;
+$url .= '?appId=' . get_config('edusharing', 'application_appid');
 $url .= '&courseId=' . $curlhandle;
 $url .= '&repoId=' . $repoid;
-$url .= '&proxyRepId=' . $appproperties->homerepid;
+$url .= '&proxyRepId=' . get_config('edusharing', 'application_homerepid');
 $url .= '&nodeId=' . $nodeid;
 $url .= '&resourceId=' . $resourceid;
 $url .= '&version=' . $edusharing->object_version;
 
-$sig = urlencode(mod_edusharing_get_signature($appproperties->appid . $time));
+$sig = urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $time));
 
 $url .= '&sig=' . $sig;
 $url .= '&ts=' . $time;

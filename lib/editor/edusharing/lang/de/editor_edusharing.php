@@ -61,3 +61,24 @@ $string['update'] = 'Speichern';
 $string['cancel'] = 'Abbrechen';
 
 $string['search'] = 'Suche';
+
+$string['error_resource_not_found'] = 'Ressource kann nicht gefunden werden.';
+$string['error_deleting_instance'] = 'Fehler beim Löschen der edu-sharing Instanz.';
+$string['error_postprocessing'] = 'Fehler beim Postprocessing.';
+$string['error_json'] = 'Fehler beim Abholen der JSON-Daten.';
+$string['error_adding_instance'] = 'Fehler beim Hinzufügen der edu-sharing Instanz.';
+$string['error_updating_instance'] = 'Fehler beim Aktualisieren der edu-sharing Instanz.';
+$string['error_loading_instance'] = 'edu-sharing Objekt kann nicht aus der Datenbank geladen werden.';
+$string['error_get_tinymce'] = 'get_texteditor("tinymce") ist fehlgeschlagen.';
+$string['error_determine_yui'] = 'YUI-Version kann nicht ermittelt werden.';
+$string['error_no_homerepo'] = 'Kein Heimatrepositorium konfiguriert.';
+$string['error_get_repository'] = 'Objekt id kann nicht ermittelt werden.';
+
+$string['error_importing_node'] = 'Fehler beim Importieren des Objekts.';
+$string['error_saving_object'] = 'Fehler beim Speichern des Objekts.';
+$string['error_setting_usage'] = 'Fehler beim Setzen des Nutzungsrechts.';
+$string['error_deleting_usage'] = 'Fehler beim Löschen des Nutzungsrechts.';
+$string['error_invalid_data'] = 'Ungültige Daten vom Server empfangen.';
+$string['error_no_resource_id'] = 'Keine Ressource-ID verfügbar.';
+$string['error_updating_object'] = 'Fehler beim Aktualisieren des Objektes';// No .
+$string['error_deleting_object'] = 'Fehler beim Löschen des Objektes';// No .

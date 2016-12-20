@@ -26,6 +26,7 @@ require_once(dirname(__FILE__) . '/../../../../config.php');
 require_once($CFG->dirroot.'/lib/setup.php');
 
 require_login();
+require_sesskey();
 
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
@@ -33,27 +34,26 @@ try {
 
     $input = file_get_contents('php://input');
     if ( ! $input ) {
-        throw new Exception('Error reading json-data from request-body.');
+        throw new Exception(get_string('error_json', 'editor_edusharing'));
     }
 
     $edusharing = json_decode($input);
     if ( ! $edusharing ) {
-        throw new Exception('Error decoding json-data for edusharing-object.');
+        throw new Exception(get_string('error_json', 'editor_edusharing'));
     }
 
     $edusharing->intro = '';
     $edusharing->introformat = FORMAT_MOODLE;
 
-    $edusharing = mod_edusharing_postprocess($edusharing);
+    $edusharing = edusharing_postprocess($edusharing);
     if ( ! $edusharing ) {
-        trigger_error('Error post-processing resource "'.$edusharing->id.'".', E_USER_WARNING);
-
+        trigger_error(get_string('error_postprocessing', 'editor_edusharing'), E_USER_WARNING);
         header('HTTP/1.1 500 Internal Server Error', true, 500);
         exit();
     }
     $id = edusharing_add_instance($edusharing);
     if ( ! $id ) {
-        throw new Exception('Error adding edu-sharing instance.');
+        throw new Exception(get_string('error_adding_instance', 'editor_edusharing'));
     }
 
     $edusharing->id = $id;

@@ -26,22 +26,22 @@ require_once(dirname(__FILE__) . "/../../../../config.php");
 require_once($CFG->dirroot.'/lib/setup.php');
 
 require_login();
+require_sesskey();
 
 global $DB;
 global $CFG;
 global $COURSE;
-global $SESSION;
 
 require_once($CFG->dirroot.'/mod/edusharing/lib/cclib.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
 $tinymce = get_texteditor('tinymce');
 if ( ! $tinymce ) {
-    throw new RuntimeException('Could not get_texteditor("tinymce") for version-information.');
+    throw new RuntimeException(get_string('error_get_tinymce', 'editor_edusharing'));
 }
 
 if ( empty($CFG->yui3version) ) {
-    throw new RuntimeException('Could not determine installed YUI-version.');
+    throw new RuntimeException(get_string('error_determine_yui', 'editor_edusharing'));
 }
 
 ?><html xmlns="http://www.w3.org/1999/xhtml">
@@ -50,7 +50,6 @@ if ( empty($CFG->yui3version) ) {
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-    <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/yui/'.$CFG->yui3version.'/build/yui/yui.js', ENT_COMPAT, 'utf-8') ?>"></script>
     <script type="text/javascript" src="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/tinymce/tiny_mce/'.$tinymce->version.'/tiny_mce_popup.js', ENT_COMPAT, 'utf-8') ?>">
     </script>
 
@@ -69,24 +68,22 @@ if ( empty($CFG->yui3version) ) {
     <br/>
 <?php
 
-$appproperties = json_decode(get_config('edusharing', 'appProperties'));
-
 $edusharing = new stdClass();
 $edusharing->object_url = '';
 $edusharing->course_id = $COURSE->id;
 $edusharing->id = 0;
 $edusharing->resource_type = '';
 $edusharing->resource_version = '';
-$edusharing->title = $_GET['title'];
-$edusharing->window_width = $_GET['window_width'];
-$edusharing->window_height = $_GET['window_height'];
-$edusharing->mimetype = $_GET['mimetype'];
-$edusharing->window_float = $_GET['window_float'];
-$edusharing->window_versionshow = $_GET['window_versionshow'];
+$edusharing->title = optional_param('title', '', PARAM_TEXT);
+$edusharing->window_width = optional_param('window_width', '', PARAM_INT);
+$edusharing->window_height = optional_param('window_height', '', PARAM_INT);
+$edusharing->mimetype = optional_param('mimetype', '', PARAM_TEXT);
+$edusharing->window_float = optional_param('window_float', '', PARAM_TEXT);
+$edusharing->window_versionshow = optional_param('window_versionshow', '', PARAM_TEXT);
 $edusharing->ratio = (int)$edusharing->window_height / (int)$edusharing->window_width;
-$edusharing->prev_src = $_GET['prev_src'];
-$edusharing->window_version = $_GET['window_version'];
-$edusharing->repotype = $_GET['repotype'];
+$edusharing->prev_src = optional_param('prev_src', '', PARAM_TEXT);
+$edusharing->window_version = optional_param('window_version', '', PARAM_TEXT);
+$edusharing->repotype = optional_param('repotype', '', PARAM_TEXT);
 
 /**
  * Return some dummy text
@@ -97,10 +94,10 @@ function get_preview_text() {
          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 }
 
-$repositoryid = $appproperties->homerepid;
+$repositoryid = get_config('edusharing', 'application_homerepid');
 if (!$repositoryid) {
     header('HTTP/1.1 500 Internal Server Error');
-    throw new Exception('No home-repository configured.');
+    throw new Exception(get_string('error_no_homerepo', 'editor_edusharing'));
 }
 
 ?>
