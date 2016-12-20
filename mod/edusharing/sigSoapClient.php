@@ -32,20 +32,14 @@
 class mod_edusharing_sig_soap_client extends SoapClient {
 
     /**
-     * @var array $appproperties
-     */
-    private $appproperties;
-
-    /**
      * Set app properties and soap headers
      *
      * @param string $wsdl
      * @param array $options
      */
     public function __construct($wsdl, $options = array()) {
-        $this->mod_edusharing_set_app_properties();
         parent::__construct($wsdl, $options);
-        $this->mod_edusharing_set_soap_headers();
+        $this->edusharing_set_soap_headers();
     }
 
     /**
@@ -53,42 +47,24 @@ class mod_edusharing_sig_soap_client extends SoapClient {
      *
      * @throws Exception
      */
-    private function mod_edusharing_set_soap_headers() {
+    private function edusharing_set_soap_headers() {
         try {
             $timestamp = round(microtime(true) * 1000);
-            $signdata = $this->mod_edusharing_get_app_properties()->appid . $timestamp;
-            $privkey = $this->mod_edusharing_get_app_properties()->private_key;
+            $signdata = get_config('edusharing', 'application_appid') . $timestamp;
+            $privkey = get_config('edusharing', 'application_private_key');
             $pkeyid = openssl_get_privatekey($privkey);
             openssl_sign($signdata, $signature, $pkeyid);
             $signature = base64_encode($signature);
             openssl_free_key($pkeyid);
             $headers = array();
-            $headers[] = new SOAPHeader('http://webservices.edu_sharing.org', 'appId', $this->mod_edusharing_get_app_properties()->appid);
+            $headers[] = new SOAPHeader('http://webservices.edu_sharing.org',
+                    'appId', get_config('edusharing', 'application_appid'));
             $headers[] = new SOAPHeader('http://webservices.edu_sharing.org', 'timestamp', $timestamp);
             $headers[] = new SOAPHeader('http://webservices.edu_sharing.org', 'signature', $signature);
             $headers[] = new SOAPHeader('http://webservices.edu_sharing.org', 'signed', $signdata);
             parent::__setSoapHeaders($headers);
         } catch (Exception $e) {
-            throw new Exception('Could not set soap headers - ' . $e->getMessage());
+            throw new Exception(get_string('error_set_soap_headers', 'edusharing') . $e->getMessage());
         }
     }
-
-    /**
-     * Set app properties
-     */
-    public function mod_edusharing_set_app_properties() {
-        $this->appproperties = json_decode(get_config('edusharing', 'appProperties'));
-    }
-
-    /**
-     * Get app properties
-     * @throws Exception
-     */
-    public function mod_edusharing_get_app_properties() {
-        if (empty($this->appproperties)) {
-            throw new Exception('No appProperties found');
-        }
-        return $this->appproperties;
-    }
-
 }
