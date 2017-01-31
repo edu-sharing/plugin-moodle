@@ -208,9 +208,9 @@ class filter_edusharing extends moodle_text_filter {
         $repositoryid = get_config('edusharing', 'application_homerepid');
         $url = edusharing_get_redirect_url($edusharing, EDUSHARING_DISPLAY_MODE_INLINE);
         $inline = '<div class="eduContainer" data-type="esObject" data-url="' . $CFG->wwwroot .
-                 '/filter/edusharing/proxy.php?sesskey='.sesskey().'&URL=' . urlencode($url) . '&amp;resId=' .
-                 $edusharing->id . '&amp;title=' . urlencode($renderparams['title']) .
-                 '&amp;mimetype=' . $renderparams['mimetype'] .
+                 '/filter/edusharing/proxy.php?sesskey='.sesskey().'&URL=' . urlencode($url) . '&resId=' .
+                 $edusharing->id . '&title=' . urlencode($renderparams['title']) .
+                 '&mimetype=' . urlencode($renderparams['mimetype']) .
                  '"><div class="edusharing_spinner_inner"><div class="edusharing_spinner1"></div></div>' .
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner2"></div></div>'.
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner3"></div></div>'.

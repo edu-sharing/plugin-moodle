@@ -22,8 +22,14 @@ function getJQueryCodeSoThatMoodleLikesIt($) {
 
 		$.ajaxSetup({ cache: false });
 		
+		var videoFormat = 'webm';
+		var v = document.createElement('video');
+		if(v.canPlayType && v.canPlayType('video/mp4').replace(/no/, '')) {
+			videoFormat = 'mp4';
+		}
+
 		function renderEsObject(esObject, wrapper) {
-			var url = esObject.attr("data-url");
+			var url = esObject.attr("data-url")+'&videoFormat='+videoFormat;
 			if(typeof wrapper == 'undefined')
 				var wrapper = esObject.parent();
 			$.get(url, function(data) {

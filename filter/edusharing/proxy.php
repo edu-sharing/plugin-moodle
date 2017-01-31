@@ -111,6 +111,7 @@ $ts = $timestamp = round(microtime(true) * 1000);
 $url .= '&ts=' . $ts;
 $url .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts));
 $url .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts);
+$url .= '&videoFormat=' . optional_param('videoFormat', '', PARAM_TEXT);
 
 $e = new filter_edusharing_edurender();
 $html = $e->filter_edusharing_get_render_html($url);
