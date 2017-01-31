@@ -101,21 +101,15 @@ function edusharing_supports($feature) {
  */
 function edusharing_add_instance(stdClass $edusharing) {
 
-    global $COURSE;
-    global $CFG;
-    global $DB;
-    global $SESSION;
+    global $COURSE, $CFG, $DB, $SESSION, $USER;
 
     $edusharing->timecreated = time();
     $edusharing->timemodified = time();
 
-    // You may have to add extra stuff in here
+    // You may have to add extra stuff in here.
     $edusharing = edusharing_postprocess($edusharing);
 
-    $appproperties = json_decode(get_config('edusharing', 'appProperties'));
-    $repproperties = json_decode(get_config('edusharing', 'repProperties'));
-
-    // put the data of the new cc-resource into an array and create a neat XML-file out of it
+    // Put the data of the new cc-resource into an array and create a neat XML-file out of it.
     $data4xml = array("ccrender");
 
     if (isset($edusharing->object_version)) {
@@ -135,13 +129,13 @@ function edusharing_add_instance(stdClass $edusharing) {
     }
 
     $data4xml[1]["ccuser"]["id"] = edusharing_get_auth_key();
-    $data4xml[1]["ccuser"]["name"] = $_SESSION["USER"]->firstname." ".$_SESSION["USER"]->lastname;
+    $data4xml[1]["ccuser"]["name"] = $USER->firstname." ".$USER->lastname;
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
     $data4xml[1]["metadata"] = edusharing_get_usage_metadata($edusharing->course);
 
-    // move popup settings to array
+    // Move popup settings to array.
     if (!empty($edusharing->popup)) {
         $parray = explode(',', $edusharing->popup);
         foreach ($parray as $key => $fieldstring) {
@@ -166,7 +160,7 @@ function edusharing_add_instance(stdClass $edusharing) {
 
     $soapclientparams = array();
 
-    $client = new mod_edusharing_sig_soap_client($repproperties->usagewebservice_wsdl, $soapclientparams);
+    $client = new mod_edusharing_sig_soap_client(get_config('edusharing', 'repository_usagewebservice_wsdl'), $soapclientparams);
 
     try {
 
@@ -175,9 +169,9 @@ function edusharing_add_instance(stdClass $edusharing) {
         $params = array(
             "eduRef"  => $edusharing->object_url,
             "user"  => edusharing_get_auth_key(),
-            "lmsId"  => $appproperties->appid,
+            "lmsId"  => get_config('edusharing', 'application_appid'),
             "courseId"  => $edusharing->course,
-            "userMail"  => $_SESSION["USER"]->email,
+            "userMail"  => $USER->email,
             "fromUsed"  => '2002-05-30T09:00:00',
             "toUsed"  => '2222-05-30T09:00:00',
             "distinctPersons"  => '0',
@@ -213,9 +207,7 @@ function edusharing_add_instance(stdClass $edusharing) {
  */
 function edusharing_update_instance(stdClass $edusharing) {
 
-    global $CFG;
-    global $COURSE;
-    global $DB;
+    global $CFG, $COURSE, $DB, $SESSION;
 
     // FIX: when editing a moodle-course-module the $edusharing->id will be named $edusharing->instance
     if ( ! empty($edusharing->instance) ) {
@@ -224,32 +216,27 @@ function edusharing_update_instance(stdClass $edusharing) {
 
     $edusharing->timemodified = time();
 
-    // load previous state
+    // Load previous state.
     $memento = $DB->get_record(EDUSHARING_TABLE, array('id'  => $edusharing->id));
     if ( ! $memento ) {
         throw new Exception(get_string('error_loading_memento', 'edusharing'));
     }
 
-    // You may have to add extra stuff in here
+    // You may have to add extra stuff in here.
     $edusharing = edusharing_postprocess($edusharing);
 
-    // fetch current node data
-
-    $appproperties = json_decode(get_config('edusharing', 'appProperties'));
-    $repproperties = json_decode(get_config('edusharing', 'repProperties'));
-
-    // put the data of the new cc-resource into an array and create a neat XML-file out of it
+    // Put the data of the new cc-resource into an array and create a neat XML-file out of it.
     $data4xml = array("ccrender");
 
     $data4xml[1]["ccuser"]["id"] = edusharing_get_auth_key();
-    $data4xml[1]["ccuser"]["name"] = $_SESSION["USER"]->firstname." ".$_SESSION["USER"]->lastname;
+    $data4xml[1]["ccuser"]["name"] = $USER->firstname." ".$USER->lastname;
 
     $data4xml[1]["ccserver"]["ip"] = $_SERVER['SERVER_ADDR'];
     $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
     $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
     $data4xml[1]["metadata"] = edusharing_get_usage_metadata($edusharing->course);
 
-    // move popup settings to array
+    // Move popup settings to array.
     if (!empty($edusharing->popup)) {
         $parray = explode(',', $edusharing->popup);
         foreach ($parray as $key => $fieldstring) {
@@ -257,7 +244,7 @@ function edusharing_update_instance(stdClass $edusharing) {
             $popupfield->$field[0] = $field[1];
         }
     }
-    // loop trough the list of keys... get the value... put into XML
+    // Loop trough the list of keys... get the value... put into XML.
     $keylist = array('resizable', 'scrollbars', 'directories', 'location', 'menubar', 'toolbar', 'status', 'width', 'height');
     foreach ($keylist as $key) {
         $data4xml[1]["ccwindow"][$key] = isSet($popupfield->{$key}) ? $popupfield->{$key} : 0;
@@ -271,7 +258,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     $xml = $myxml->edusharing_get_xml($data4xml);
 
     try {
-        $connectionurl = $repproperties->usagewebservice_wsdl;
+        $connectionurl = get_config('edusharing', 'repository_usagewebservice_wsdl');
         if (!$connectionurl) {
             trigger_error(get_string('error_missing_usagewsdl', 'edusharing'), E_USER_WARNING);
         }
@@ -281,9 +268,9 @@ function edusharing_update_instance(stdClass $edusharing) {
         $params = array(
             "eduRef"  => $edusharing->object_url,
             "user"  => edusharing_get_auth_key(),
-            "lmsId"  => $appproperties->appid,
+            "lmsId"  => get_config('edusharing', 'application_appid'),
             "courseId"  => $edusharing->course,
-            "userMail"  => $_SESSION["USER"]->email,
+            "userMail"  => $USER->email,
             "fromUsed"  => '2002-05-30T09:00:00',
             "toUsed"  => '2222-05-30T09:00:00',
             "distinctPersons"  => '0',
@@ -294,10 +281,10 @@ function edusharing_update_instance(stdClass $edusharing) {
 
         $setusage = $client->setUsage($params);
         $edusharing->object_version = $memento->object_version;
-        // throws exception on error, so no further checking required
+        // Throws exception on error, so no further checking required.
         $DB->update_record(EDUSHARING_TABLE, $edusharing);
     } catch (SoapFault $exception) {
-        // roll back
+        // Roll back.
         $DB->update_record(EDUSHARING_TABLE, $memento);
 
         trigger_error($exception->getMessage(), E_USER_WARNING);
@@ -321,19 +308,14 @@ function edusharing_delete_instance($id) {
     global $CFG;
     global $COURSE;
 
-    // load from DATABASE to get object-data for repository-operations.
+    // Load from DATABASE to get object-data for repository-operations.
     if (! $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $id))) {
         throw new Exception(get_string('error_load_resource', 'edusharing'));
     }
 
-    $appproperties = json_decode(get_config('edusharing', 'appProperties'));
-    $repproperties = json_decode(get_config('edusharing', 'repProperties'));
-
     try {
-        // stop session to avoid deadlock during edu-sharing call-backs
-        session_write_close();
 
-        $connectionurl = $repproperties->usagewebservice_wsdl;
+        $connectionurl = get_config('edusharing', 'repository_usagewebservice_wsdl');
         if ( ! $connectionurl ) {
             throw new Exception(get_string('error_missing_usagewsdl', 'edusharing'));
         }
@@ -343,7 +325,7 @@ function edusharing_delete_instance($id) {
         $params = array(
            'eduRef'  => $edusharing->object_url,
            'user'  => edusharing_get_auth_key(),
-           'lmsId'  => $appproperties->appid,
+           'lmsId'  => get_config('edusharing', 'application_appid'),
            'courseId'  => $edusharing->course,
            'resourceId'  => $edusharing->id
         );
@@ -354,7 +336,7 @@ function edusharing_delete_instance($id) {
         trigger_error($exception->getMessage(), E_USER_WARNING);
     }
 
-    // Usage is removed->can delete from DATABASE now
+    // Usage is removed so it can be deleted from DATABASE .
     $DB->delete_records(EDUSHARING_TABLE, array('id'  => $edusharing->id));
 
     return true;
@@ -527,7 +509,6 @@ function edusharing_get_coursemodule_info($coursemodule) {
 function edusharing_postprocess($edusharing) {
     global $CFG;
     global $COURSE;
-    global $SESSION;
 
     if ( empty($edusharing->timecreated) ) {
         $edusharing->timecreated = time();

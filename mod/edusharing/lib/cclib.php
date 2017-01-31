@@ -44,8 +44,7 @@ class mod_edusharing_web_service_factory {
      * @throws Exception
      */
     public function __construct() {
-        $repproperties = json_decode(get_config('edusharing', 'repProperties'));
-        $this->authenticationservicewsdl = $repproperties->authenticationwebservice_wsdl;
+        $this->authenticationservicewsdl = get_config('edusharing', 'repository_authenticationwebservice_wsdl');
         if ( empty($this->authenticationservicewsdl) ) {
             trigger_error(get_string('error_missing_authwsdl', 'edusharing'), E_USER_WARNING);
         }
@@ -58,34 +57,37 @@ class mod_edusharing_web_service_factory {
      * Request a new one if existing ticket is invalid
      * @param string $homeappid
      */
-    public function edusharing_authentication_get_ticket($homeappid) {
+    public function edusharing_authentication_get_ticket() {
 
-        // ticket available
-        if (isset($_SESSION["USER"]->ticket)) {
+        global $SESSION;
 
-            // ticket is younger than 10s, we must not check
-            if (isset($_SESSION["USER"]->ticketvalidationts)
-                    && time() - $_SESSION["USER"]->ticketvalidationts < 10) {
-                return $_SESSION["USER"]->ticket;
+        // Ticket available.
+        if (isset($SESSION->userticket)) {
+
+            // Ticket is younger than 10s, we must not check.
+            if (isset($SESSION->userticketvalidationts)
+                    && time() - $SESSION->userticketvalidationts < 10) {
+                return $SESSION->userticket;
             }
             try {
                 $eduservice = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl, array());
             } catch (Exception $e) {
-                trigger_error($this->authenticationservicewsdl . ' ' . get_string('error_authservice_not_reachable', 'edusharing') , E_USER_WARNING);
+                trigger_error($this->authenticationservicewsdl . ' ' .
+                        get_string('error_authservice_not_reachable', 'edusharing') , E_USER_WARNING);
             }
 
             try {
-                // ticket is older than 10s
+                // Ticket is older than 10s.
                 $params = array(
                     "username"  => edusharing_get_auth_key(),
-                    "ticket"  => $_SESSION["USER"]->ticket
+                    "ticket"  => $SESSION->userticket
                 );
 
                 $alfreturn = $eduservice->checkTicket($params);
 
                 if ($alfreturn->checkTicketReturn) {
-                    $_SESSION["USER"]->ticketvalidationts = time();
-                    return $_SESSION["USER"]->ticket;
+                    $SESSION->userticketvalidationts = time();
+                    return $SESSION->userticket;
                 }
             } catch (Exception $e) {
                  trigger_error(get_string('error_invalid_ticket', 'edusharing'), E_USER_WARNING);
@@ -93,22 +95,20 @@ class mod_edusharing_web_service_factory {
 
         }
 
-        // no or invalid ticket available
-        // request new ticket
-        $paramstrusted = array("applicationId"  => $homeappid, "ticket"  => session_id(), "ssoData"  => edusharing_get_auth_data());
+        // No or invalid ticket available - request new ticket.
+        $paramstrusted = array("applicationId"  => get_config('edusharing', 'application_appid'),
+                        "ticket"  => session_id(), "ssoData"  => edusharing_get_auth_data());
         try {
-            $client = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl, array());
+            $client = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl);
             $return = $client->authenticateByTrustedApp($paramstrusted);
             $ticket = $return->authenticateByTrustedAppReturn->ticket;
-            $_SESSION["USER"]->ticket = $ticket;
-            $_SESSION["USER"]->ticketvalidationts = time();
+            $SESSION->userticket = $ticket;
+            $SESSION->userticketvalidationts = time();
             return $ticket;
         } catch (Exception $e) {
-            trigger_error(get_string('error_auth_failed', 'edusharing') . ' ' . $e->getMessage(), E_USER_WARNING);
+            trigger_error(get_string('error_auth_failed', 'edusharing') . ' ' . $e, E_USER_WARNING);
         }
-
         return false;
-    } // eof edusharing_authentication_get_ticket
-
-}//eof class mod_edusharing_web_service_factory
+    }
+}
 
