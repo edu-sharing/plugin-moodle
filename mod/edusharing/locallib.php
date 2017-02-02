@@ -113,7 +113,8 @@ function edusharing_get_auth_data() {
 
         $eduauthaffiliation = get_config('edusharing', 'EDU_AUTH_AFFILIATION');
 
-        if (!empty(get_config('edusharing', 'edu_guest_option'))) {
+        $guestoption = get_config('edusharing', 'edu_guest_option');
+        if (!empty($guestoption)) {
             $guestid = get_config('edusharing', 'edu_guest_guest_id');
             if (empty($guestid)) {
                 $guestid = 'esguest';
