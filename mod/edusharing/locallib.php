@@ -43,7 +43,8 @@ function edusharing_get_auth_key() {
         return $_SESSION['sso'][$eduauthparamnameuserid];
     }
 
-    if (!empty(get_config('edusharing', 'edu_guest_option'))) {
+    $guestoption = get_config('edusharing', 'edu_guest_option');
+    if (!empty($guestoption)) {
         $guestid = get_config('edusharing', 'edu_guest_guest_id');
         if (empty($guestid)) {
             $guestid = 'esguest';
