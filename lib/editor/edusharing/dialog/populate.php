@@ -49,7 +49,7 @@ $eduobjrepotype = addslashes_js(optional_param('repoType', '', PARAM_RAW));
     try{
         parent.document.getElementById('object_url').value = '<?php echo $eduobjres ?>';
         parent.document.getElementById('title').value = '<?php echo $eduobjtitle ?>';
-        parent.document.getElementById('mimetype').value = '<?php echo $eduobjmimetype ?>';
+        parent.document.getElementById('mimetype').value = '<?php echo urldecode($eduobjmimetype) ?>';
         parent.document.getElementById('resourcetype').value = '<?php echo $eduobjresourcetype ?>';
         parent.document.getElementById('resourceversion').value = '<?php echo $eduobjresourceversion ?>';
         parent.document.getElementById('window_height').value = '<?php echo $eduobjheight ?>';

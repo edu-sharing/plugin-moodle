@@ -31,6 +31,8 @@ require_sesskey();
 global $DB;
 global $CFG;
 global $COURSE;
+global $USER;
+global $SESSION;
 
 require_once($CFG->dirroot.'/mod/edusharing/lib/cclib.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
@@ -105,25 +107,25 @@ if ( ! empty($resourceid) ) {
 
 
 $ccauth = new mod_edusharing_web_service_factory();
-
 $ticket = $ccauth->edusharing_authentication_get_ticket();
+$link = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
 
-$link = get_config('edusharing', 'application_cc_gui_url'); // link to the external cc-search
-
-$link .= '/search';
-
-$user = edusharing_get_auth_key();
-
-$link .= '?user='.urlencode($user);
-
-$link .= '&ticket='.urlencode($ticket);
-
-$language = edusharing_get_current_users_language_code();
-if ( $language ) {
-    $link .= '&locale=' . urlencode($language);
+if(version_compare(get_config('edusharing', 'repository_version'), '4.0.0' ) >= 0) {
+    $link .= '/ng2/components/search';
+    $link .= '?locale=' . strtolower(substr($USER->lang, 0, 2));
+} else {
+    $link .= '/search';
+    $user = edusharing_get_auth_key();
+    $link .= '?user=' . urlencode($user);
+    $language = edusharing_get_current_users_language_code();
+    if ( $language ) {
+        $link .= '&locale=' . urlencode($language);
+    }
 }
 
+$link .= '&ticket='.$ticket;
 $link .= '&reurl='.urlencode($CFG->wwwroot."/lib/editor/edusharing/dialog/populate.php?");
+
 $previewurl = get_config('edusharing', 'application_cc_gui_url') . 'preview';
 
 /**
