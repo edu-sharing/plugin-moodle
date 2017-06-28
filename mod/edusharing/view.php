@@ -53,15 +53,8 @@ require_login($course, true, $cm);
 
 // Authenticate to assure requesting user exists in home-repository.
 try {
-
-    $wsdl = get_config('edusharing', 'repository_authenticationwebservice_wsdl');
-    $alfservice = new mod_edusharing_sig_soap_client($wsdl, array());
-    $paramsrusted = array("applicationId"  => get_config('edusharing', 'application_appid'), "ticket"  => session_id(),
-                    "ssoData"  => edusharing_get_auth_data(),
-                    'repoId'  => get_config('edusharing', 'application_homerepid'));
-    $alfreturn = $alfservice->authenticateByTrustedApp($paramsrusted);
-    $ticket = $alfreturn->authenticateByTrustedAppReturn->ticket;
-
+    $servicefactory = new mod_edusharing_web_service_factory();
+    $ticket = $servicefactory->edusharing_authentication_get_ticket();
 } catch (Exception $exception) {
     trigger_error($exception->getMessage(), E_USER_WARNING);
     return false;

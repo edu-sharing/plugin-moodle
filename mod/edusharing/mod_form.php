@@ -107,7 +107,7 @@ class mod_edusharing_mod_form extends moodleform_mod
         $ccresourcesearch .= "&reurl=".urlencode($CFG->wwwroot."/mod/edusharing/makelink.php");
         $ccresourcesearch = $CFG->wwwroot .'/mod/edusharing/selectResourceHelper.php?sesskey='.sesskey().'&rurl=' . urlencode($ccresourcesearch);
 
-        $searchbutton = $mform->addElement('button', 'searchbutton', get_string('searchrec', EDUSHARING_MODULE_NAME).'...');
+        $searchbutton = $mform->addElement('button', 'searchbutton', get_string('searchrec', EDUSHARING_MODULE_NAME));
         $buttonattributes = array('title' => get_string('searchrec', EDUSHARING_MODULE_NAME), 'onclick' => "return window.open('"
                           . "$ccresourcesearch', '_blank', 'menubar=0,location=0,directories=0,toolbar=0,"
                           . "scrollbars,resizable,width=1000,height=580');");
@@ -123,7 +123,7 @@ class mod_edusharing_mod_form extends moodleform_mod
             $ccresourceupload = $CFG->wwwroot . '/mod/edusharing/selectResourceHelper.php?sesskey=' . sesskey() . '&rurl=' . urlencode($ccresourceupload);
             $ccresourceupload .= "&reurl=" . urlencode($CFG->wwwroot . "/mod/edusharing/makelink.php");
             $ccresourceupload .= '&ticket='.$ticket;
-            $uploadbutton = $mform->addElement('button', 'uploadbutton', get_string('uploadrec', EDUSHARING_MODULE_NAME).'...');
+            $uploadbutton = $mform->addElement('button', 'uploadbutton', get_string('uploadrec', EDUSHARING_MODULE_NAME));
             $buttonattributes = array('title' => get_string('uploadrec', EDUSHARING_MODULE_NAME), 'onclick' => "return window.open('"
                 . "$ccresourceupload', '_blank', 'menubar=0,location=0,directories=0,toolbar=0,"
                 . "scrollbars,resizable,width=1000,height=580');");
