@@ -26,6 +26,8 @@ require_once('../../../config.php');
 
 global $DB;
 global $CFG;
+global $USER;
+global $SESSION;
 
 require_once('../../../mod/edusharing/lib/cclib.php');
 require_once('../../../mod/edusharing/lib.php');
@@ -56,18 +58,18 @@ $ticket = $ccauth->edusharing_authentication_get_ticket();
 if (!$ticket) {
     exit();
 }
-
-$link = get_config('edusharing', 'application_cc_gui_url');
-// link to the external cc-upload
-$link .= '?mode=2';
-$user = edusharing_get_auth_key();
-$link .= '&user=' . urlencode($user);
-
-$link .= '&ticket=' . urlencode($ticket);
-
 $mylang = edusharing_get_current_users_language_code();
-$link .= '&locale=' . urlencode($mylang);
-
+$link = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
+if(version_compare(get_config('edusharing', 'repository_version'), '4.0.0' ) >= 0) {
+    $link .= '/ng2';
+    $link .= '?locale=' . $mylang;
+} else {
+    $link .= '/?mode=2';
+    $user = edusharing_get_auth_key();
+    $link .= '&user=' . urlencode($user);
+    $link .= '&locale=' . $mylang;
+}
+$link .= '&ticket='.urlencode($ticket);
 $link .= '&reurl=' . urlencode($CFG->wwwroot . '/blocks/edusharing_upload/helper/close_iframe.php?course_id=' . $course->id);
 
 // Open the external edu-sharingSearch page in iframe

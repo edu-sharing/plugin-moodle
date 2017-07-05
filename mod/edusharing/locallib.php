@@ -236,25 +236,17 @@ function edusharing_get_signature($data) {
 }
 
 /**
- * Get locale-code for session-users language. Search the current session
- * and configuration.
+ * Get locale-code for current language.
  *
  * @return string
  */
 function edusharing_get_current_users_language_code() {
-    global $USER;
-
-    $mylang = 'en_EN';
-
-    if (isset($USER->lang)) {
-        switch(strtolower(substr($USER->lang, 0, 2))) {
-            case 'en':
-                $mylang = 'en_EN';
-            break;
-            default:
-                $mylang = 'de_DE';
-        }
+    switch(current_language()) {
+        case 'de':
+            return 'de_DE';
+        break;
+        default:
+            return 'en_EN';
     }
-    return $mylang;
 }
 

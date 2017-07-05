@@ -27,7 +27,7 @@ $plugin->component = 'block_edusharing_upload';
 $plugin->dependencies = array(
     'mod_edusharing'  => 2016121201,
 );
-$plugin->version = 2016120901;
+$plugin->version = 2017070501;
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = 'v3.2';

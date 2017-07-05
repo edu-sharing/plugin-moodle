@@ -54,10 +54,10 @@ class block_edusharing_search extends block_base
 
         $this->content         = new stdClass;
         $this->content->text   = '<form action="'.$CFG->wwwroot.'/blocks/edusharing_search/helper/cc_search.php" method="get">
-                                 <input type="hidden" name="id" value="'.htmlentities($COURSE->id).'" /><input type="text" style="max-width: 90%;" name="search"
+                                 <input type="hidden" name="id" value="'.htmlentities($COURSE->id).'" /><input type="text" style="width: 100%;margin-bottom: 5px;" name="search"
                                  value="'.htmlentities(get_string('search_field_hint', 'block_edusharing_search')).'"
                                  onclick="if (this.value==\''.htmlentities(get_string('search_field_hint', 'block_edusharing_search')).'\') this.value=\'\';" />
-                                 <input type="submit" value="'.htmlentities(get_string('button_text', 'block_edusharing_search')).'" />
+                                 <input type="submit" class="btn btn-primary" value="'.htmlentities(get_string('button_text', 'block_edusharing_search')).'" />
                                  <input type="hidden" name="sesskey" value="'.sesskey().'"/></form>';
 
         return $this->content;

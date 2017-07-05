@@ -25,6 +25,8 @@ require_once('../../../config.php');
 
 global $DB;
 global $CFG;
+global $USER;
+global $SESSION;
 
 require_once('../../../mod/edusharing/lib/cclib.php');
 require_once('../../../mod/edusharing/lib.php');
@@ -55,21 +57,27 @@ if ( ! $ticket ) {
     exit();
 }
 
-$link = get_config('edusharing', 'application_cc_gui_url'); // link to the external cc-search
-$link .= '?mode=0';
-$user = edusharing_get_auth_key();
-$link .= '&user='.urlencode($user);
-$link .= '&ticket='.urlencode($ticket);
 
-$mylang = edusharing_get_current_users_language_code();
-$link .= '&locale=' . urlencode($mylang);
-
-$link .= '&p_startsearch=1';
-
+$link = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
 $search = trim(optional_param('search', '', PARAM_NOTAGS)); // query for the external cc-search
-if (!empty($search)) {
-    $link .= '&p_searchtext='.urlencode($search);
+$mylang = edusharing_get_current_users_language_code();
+if(version_compare(get_config('edusharing', 'repository_version'), '4.0.0' ) >= 0) {
+    $link .= '/ng2/components/search';
+    $link .= '?locale=' . $mylang;
+    if (!empty($search)) {
+        $link .= '&query='.urlencode($search);
+    }
+} else {
+    $link .= '/?mode=0';
+    $user = edusharing_get_auth_key();
+    $link .= '&user='.urlencode($user);
+    $link .= '&locale=' . $mylang;
+    $link .= '&p_startsearch=1';
+    if (!empty($search)) {
+        $link .= '&p_searchtext='.urlencode($search);
+    }
 }
+$link .= '&ticket='.urlencode($ticket);
 
 // Open the external edu-sharingSearch page in iframe
 

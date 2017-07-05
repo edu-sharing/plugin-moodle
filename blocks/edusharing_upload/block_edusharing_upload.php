@@ -55,7 +55,7 @@ class block_edusharing_upload extends block_base {
         $this->content = new stdClass;
         $this->content->text = '<form action="'.htmlentities($CFG->wwwroot.'/blocks/edusharing_upload/helper/cc_upload.php').
                                '" method="get"><input type="hidden" name="id" value="'.htmlentities($COURSE->id).'" />
-                               <input type="submit" value="'.htmlentities(get_string('button_text', 'block_edusharing_upload')).'" />
+                               <input type="submit" class="btn btn-primary" value="'.htmlentities(get_string('button_text', 'block_edusharing_upload')).'" />
                                <input type="hidden" name="sesskey" value="'.sesskey().'"/></form>';
 
         return $this->content;
