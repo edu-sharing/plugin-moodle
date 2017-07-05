@@ -113,22 +113,23 @@ class mod_edusharing_mod_form extends moodleform_mod
                           . "scrollbars,resizable,width=1000,height=580');");
         $searchbutton->updateAttributes($buttonattributes);
 
+        $ccresourceupload  = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
         if(version_compare(get_config('edusharing', 'repository_version'), '4.0.0' ) >= 0) {
-
+            $ccresourceupload .= '/ng2/components/workspace';
+            $ccresourceupload .= '?locale=' . $mylang;
         } else {
-            $ccresourceupload = get_config('edusharing', 'application_cc_gui_url');
             $ccresourceupload .= "?mode=2";
-            $ccresourcesearch .= "&user=" . urlencode(edusharing_get_auth_key());
+            $ccresourceupload .= "&user=" . urlencode(edusharing_get_auth_key());
             $ccresourceupload .= "&locale=" . $mylang;
-            $ccresourceupload = $CFG->wwwroot . '/mod/edusharing/selectResourceHelper.php?sesskey=' . sesskey() . '&rurl=' . urlencode($ccresourceupload);
-            $ccresourceupload .= "&reurl=" . urlencode($CFG->wwwroot . "/mod/edusharing/makelink.php");
-            $ccresourceupload .= '&ticket='.$ticket;
-            $uploadbutton = $mform->addElement('button', 'uploadbutton', get_string('uploadrec', EDUSHARING_MODULE_NAME));
-            $buttonattributes = array('title' => get_string('uploadrec', EDUSHARING_MODULE_NAME), 'onclick' => "return window.open('"
-                . "$ccresourceupload', '_blank', 'menubar=0,location=0,directories=0,toolbar=0,"
-                . "scrollbars,resizable,width=1000,height=580');");
-            $uploadbutton->updateAttributes($buttonattributes);
         }
+        $ccresourceupload .= "&reurl=" . urlencode($CFG->wwwroot . "/mod/edusharing/makelink.php");
+        $ccresourceupload .= '&ticket='.$ticket;
+        $ccresourceupload = $CFG->wwwroot . '/mod/edusharing/selectResourceHelper.php?sesskey=' . sesskey() . '&rurl=' . urlencode($ccresourceupload);
+        $uploadbutton = $mform->addElement('button', 'uploadbutton', get_string('uploadrec', EDUSHARING_MODULE_NAME));
+        $buttonattributes = array('title' => get_string('uploadrec', EDUSHARING_MODULE_NAME), 'onclick' => "return window.open('"
+            . "$ccresourceupload', '_blank', 'menubar=0,location=0,directories=0,toolbar=0,"
+            . "scrollbars,resizable,width=1000,height=580');");
+        $uploadbutton->updateAttributes($buttonattributes);
 
         // version-section
         $mform->addElement('header', 'version_fieldset', get_string('object_version_fieldset', EDUSHARING_MODULE_NAME));
