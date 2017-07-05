@@ -97,7 +97,7 @@ class mod_edusharing_mod_form extends moodleform_mod
         $ccresourcesearch  = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
         if(version_compare(get_config('edusharing', 'repository_version'), '4.0.0' ) >= 0) {
             $ccresourcesearch .= '/ng2/components/search';
-            $ccresourcesearch .= '?locale=' . strtolower(substr($USER->lang, 0, 2));
+            $ccresourcesearch .= '?locale=' . $mylang;
         } else {
             $ccresourcesearch .= "/?mode=0";
             $ccresourcesearch .= "&user=" . urlencode(edusharing_get_auth_key());

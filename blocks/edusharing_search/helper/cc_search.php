@@ -60,10 +60,10 @@ if ( ! $ticket ) {
 
 $link = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
 $search = trim(optional_param('search', '', PARAM_NOTAGS)); // query for the external cc-search
-
+$mylang = edusharing_get_current_users_language_code();
 if(version_compare(get_config('edusharing', 'repository_version'), '4.0.0' ) >= 0) {
     $link .= '/ng2/components/search';
-    $link .= '?locale=' . strtolower(substr($USER->lang, 0, 2));
+    $link .= '?locale=' . $mylang;
     if (!empty($search)) {
         $link .= '&query='.urlencode($search);
     }
@@ -71,8 +71,7 @@ if(version_compare(get_config('edusharing', 'repository_version'), '4.0.0' ) >= 
     $link .= '/?mode=0';
     $user = edusharing_get_auth_key();
     $link .= '&user='.urlencode($user);
-    $mylang = edusharing_get_current_users_language_code();
-    $link .= '&locale=' . urlencode($mylang);
+    $link .= '&locale=' . $mylang;
     $link .= '&p_startsearch=1';
     if (!empty($search)) {
         $link .= '&p_searchtext='.urlencode($search);
