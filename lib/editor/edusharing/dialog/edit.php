@@ -84,6 +84,7 @@ $edusharing->ratio = (int)$edusharing->window_height / (int)$edusharing->window_
 $edusharing->prev_src = optional_param('prev_src', '', PARAM_TEXT);
 $edusharing->window_version = optional_param('window_version', '', PARAM_TEXT);
 $edusharing->repotype = optional_param('repotype', '', PARAM_TEXT);
+$edusharing->mediatype = optional_param('mediatype', '', PARAM_TEXT);
 
 /**
  * Return some dummy text
@@ -208,7 +209,8 @@ if (!$repositoryid) {
         mimeSwitchHelper = '';
         mimetype = '<?php echo $edusharing->mimetype?>';
         repotype = '<?php echo $edusharing->repotype?>';
-        if (mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1)
+        mediatype = '<?php echo $edusharing->mediatype?>';
+        if (mediatype.indexOf('tool_object') !== -1 || mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1)
            mimeSwitchHelper = 'image';
         else if (mimetype.indexOf('audio') !== -1)
            mimeSwitchHelper = 'audio';

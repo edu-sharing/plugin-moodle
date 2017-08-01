@@ -87,6 +87,7 @@ $edusharing->window_float = 'none';
 $edusharing->window_versionshow = 'latest';
 $edusharing->repo_type = '';
 $edusharing->window_version = '';
+$edusharing->mediatype = '';
 
 $repositoryid = get_config('edusharing', 'application_homerepid');
 $resourceid = optional_param('resource_id', 0, PARAM_INT);
@@ -147,6 +148,7 @@ function get_preview_text() {
 
     <input type="hidden" maxlength="30" size="15" name="resourceversion" id="resourceversion" />
     <input type="hidden" maxlength="30" size="30" name="repotype" id="repotype" />
+    <input type="hidden" maxlength="30" size="30" name="mediatype" id="mediatype" />
     <input type="hidden" maxlength="30" size="15" name="resource_id" id="resource_id"  value="<?php echo htmlspecialchars($edusharing->resource_id, ENT_COMPAT, 'utf-8') ?>" />
     <input type="hidden" maxlength="40" size="35" name="ticket" id="ticket"  value="<?php echo htmlspecialchars($ticket, ENT_COMPAT, 'utf-8') ?>" />
 
@@ -292,7 +294,8 @@ function get_preview_text() {
     function editor_edusharing_set_preview_content() {
         mimeSwitchHelper = '';
         mimetype = document.getElementById('mimetype').value;
-        if (mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1)
+        mediatype = document.getElementById('mediatype').value;
+        if (mediatype.indexOf('tool_object') !== -1 || mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1)
            mimeSwitchHelper = 'image';
         else if (mimetype.indexOf('audio') !== -1)
            mimeSwitchHelper = 'audio';

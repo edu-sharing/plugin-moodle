@@ -39,6 +39,7 @@ if (!empty($eduobjheight) && !empty($eduobjwidth)) {
 }
 $eduobjversion = addslashes_js(optional_param('v', '1.0', PARAM_RAW));
 $eduobjrepotype = addslashes_js(optional_param('repoType', '', PARAM_RAW));
+$eduobjmediatype = addslashes_js(optional_param('mediatype', '', PARAM_RAW));
 
 ?>
 <html>
@@ -57,6 +58,8 @@ $eduobjrepotype = addslashes_js(optional_param('repoType', '', PARAM_RAW));
         parent.document.getElementById('ratio').value = '<?php echo  $eduobjratio?>';
         parent.document.getElementById('window_version').value = '<?php echo  $eduobjversion?>';
         parent.document.getElementById('repotype').value = '<?php echo  $eduobjrepotype?>';
+        parent.document.getElementById('mediatype').value = '<?php echo  $eduobjmediatype?>';
+
         var inputs = parent.document.getElementsByTagName("input");
             for (var i = 0; i < inputs.length; i++) {
                 inputs[i].disabled = false;
