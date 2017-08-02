@@ -181,6 +181,9 @@ function edusharing_get_redirect_url(
     $displaymode = EDUSHARING_DISPLAY_MODE_DISPLAY) {
     global $USER;
 
+    if(version_compare(get_config('edusharing', 'repository_version'), '4.0.0' ) >= 0)
+        $displaymode = EDUSHARING_DISPLAY_MODE_DYNAMIC;
+
     $url = get_config('edusharing', 'application_cc_gui_url') . '/renderingproxy';
 
     $url .= '?app_id='.urlencode(get_config('edusharing', 'application_appid'));
