@@ -295,7 +295,9 @@ function get_preview_text() {
         mimeSwitchHelper = '';
         mimetype = document.getElementById('mimetype').value;
         mediatype = document.getElementById('mediatype').value;
-        if (mediatype.indexOf('tool_object') !== -1 || mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1)
+        if(mediatype.indexOf('tool_object') !== -1)
+            mimeSwitchHelper = 'tool';
+        else if (mimetype.indexOf('jpg') !== -1 || mimetype.indexOf('jpeg') !== -1 || mimetype.indexOf('gif') !== -1 || mimetype.indexOf('png') !== -1)
            mimeSwitchHelper = 'image';
         else if (mimetype.indexOf('audio') !== -1)
            mimeSwitchHelper = 'audio';
@@ -307,6 +309,8 @@ function get_preview_text() {
             mimeSwitchHelper = 'textlike';
 
         switch(mimeSwitchHelper) {
+            case 'tool' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/>' +
+                '<?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
             case 'image' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/>' +
                 '<?php echo htmlspecialchars(get_string('titleAuthorLicense', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?><br/>'; break;
             case 'youtube' : content = '<img src="'+editor_edusharing_get_resource_preview()+'" width=80/><br/>' +
@@ -363,7 +367,7 @@ function get_preview_text() {
 
     function editor_edusharing_vis_dimension_inputs(mimeSwitchHelper) {
 
-       if (mimeSwitchHelper == 'image') {
+       if (mimeSwitchHelper == 'image' || mimeSwitchHelper == 'tool') {
            var dimensionsSet = document.getElementsByClassName('dimension');
            for(var i = 0; i < dimensionsSet.length; i++) {
                 dimensionsSet[i].style.visibility = 'visible';
