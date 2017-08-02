@@ -89,13 +89,19 @@ class filter_edusharing_edurender {
         /*
          * For images, audio and video show a capture underneath object
          */
-        $mimetypes = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'video', 'audio'
-        );
+        $mimetypes = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'video', 'audio');
+        $addCaption = false;
         foreach ($mimetypes as $mimetype) {
             if (strpos(optional_param('mimetype', '', PARAM_TEXT), $mimetype) !== false) {
-                $html .= '<p class="caption">' . optional_param('title', '', PARAM_TEXT) . '</p>';
+                $addCaption = true;
             }
         }
+        if(strpos(optional_param('mediatype', '', PARAM_TEXT), 'tool_object') !== false)
+            $addCaption = true;
+
+        if($addCaption)
+            $html .= '<p class="caption">' . optional_param('title', '', PARAM_TEXT) . '</p>';
+
         echo $html;
         exit();
     }
