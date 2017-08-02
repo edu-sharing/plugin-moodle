@@ -33,7 +33,7 @@ $eduobjresourcetype = addslashes_js(optional_param('resourceType', '', PARAM_RAW
 $eduobjresourceversion = addslashes_js(optional_param('resourceVersion', '', PARAM_RAW));
 $eduobjheight = addslashes_js(optional_param('h', '', PARAM_RAW));
 $eduobjwidth = addslashes_js(optional_param('w', '600', PARAM_RAW));
-$eduobjratio = '';
+$eduobjratio = 1;
 if (!empty($eduobjheight) && !empty($eduobjwidth)) {
     $eduobjratio = (int)$eduobjheight / (int)$eduobjwidth;
 }
