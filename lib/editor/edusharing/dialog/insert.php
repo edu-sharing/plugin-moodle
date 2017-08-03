@@ -111,7 +111,7 @@ $ccauth = new mod_edusharing_web_service_factory();
 $ticket = $ccauth->edusharing_authentication_get_ticket();
 $link = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
 $language = edusharing_get_current_users_language_code();
-if(version_compare(get_config('edusharing', 'repository_version'), '4.0.0' ) >= 0) {
+if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0) {
     $link .= '/ng2/components/search';
     $link .= '?locale=' . $language;
 } else {

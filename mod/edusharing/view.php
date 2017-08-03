@@ -61,7 +61,7 @@ try {
 }
 
 $displaymode = '';
-if(version_compare(get_config('edusharing', 'repository_version'), '4.0.0' ) >= 0)
+if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0)
     $displaymode = EDUSHARING_DISPLAY_MODE_DYNAMIC;
 
 $redirecturl = edusharing_get_redirect_url($edusharing, $displaymode);

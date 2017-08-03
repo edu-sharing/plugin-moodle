@@ -95,7 +95,7 @@ class mod_edusharing_mod_form extends moodleform_mod
         $mylang = edusharing_get_current_users_language_code();
 
         $ccresourcesearch  = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
-        if(version_compare(get_config('edusharing', 'repository_version'), '4.0.0' ) >= 0) {
+        if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0) {
             $ccresourcesearch .= '/ng2/components/search';
             $ccresourcesearch .= '?locale=' . $mylang;
         } else {
@@ -114,7 +114,7 @@ class mod_edusharing_mod_form extends moodleform_mod
         $searchbutton->updateAttributes($buttonattributes);
 
         $ccresourceupload  = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
-        if(version_compare(get_config('edusharing', 'repository_version'), '4.0.0' ) >= 0) {
+        if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0) {
             $ccresourceupload .= '/ng2/components/workspace';
             $ccresourceupload .= '?locale=' . $mylang;
         } else {
