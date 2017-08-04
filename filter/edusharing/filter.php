@@ -172,6 +172,8 @@ class filter_edusharing extends moodle_text_filter {
                 break;
         }
 
+        $tagattributes = '';
+
         if ($edusharing->window_width) {
             $styleattr .= ' width: ' . $edusharing->window_width . 'px;';
             $tagattributes = 'width="' . $edusharing->window_width . '"';
