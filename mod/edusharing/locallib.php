@@ -176,12 +176,21 @@ function edusharing_get_user_cohorts() {
  *
  * @return string
  */
+
 function edusharing_get_redirect_url(
     stdClass $edusharing,
     $displaymode = EDUSHARING_DISPLAY_MODE_DISPLAY) {
     global $USER;
 
-    $url = get_config('edusharing', 'application_cc_gui_url') . '/renderingproxy';
+    $resourcerefenerence = str_replace('/', '', parse_url($edusharing->object_url, PHP_URL_PATH));
+    if ( empty($resourcerefenerence) ) {
+        trigger_error(get_string('error_get_object_id_from_url', 'edusharing'), E_USER_WARNING);
+    }
+
+    if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0 && $displaymode == EDUSHARING_DISPLAY_MODE_DISPLAY)
+        $url = get_config('edusharing', 'application_cc_gui_url') . '/ng2/components/render/'.urlencode($resourcerefenerence).'/'.urlencode($edusharing->object_version);
+    else
+        $url = get_config('edusharing', 'application_cc_gui_url') . '/renderingproxy';
 
     $url .= '?app_id='.urlencode(get_config('edusharing', 'application_appid'));
 
@@ -189,11 +198,6 @@ function edusharing_get_redirect_url(
 
     $repid = edusharing_get_repository_id_from_url($edusharing->object_url);
     $url .= '&rep_id='.urlencode($repid);
-
-    $resourcerefenerence = str_replace('/', '', parse_url($edusharing->object_url, PHP_URL_PATH));
-    if ( empty($resourcerefenerence) ) {
-        trigger_error(get_string('error_get_object_id_from_url', 'edusharing'), E_USER_WARNING);
-    }
 
     $url .= '&obj_id='.urlencode($resourcerefenerence);
 

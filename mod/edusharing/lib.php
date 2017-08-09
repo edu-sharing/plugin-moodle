@@ -36,7 +36,6 @@ define('EDUSHARING_TABLE', 'edusharing');
 
 define('EDUSHARING_DISPLAY_MODE_DISPLAY', 'window');
 define('EDUSHARING_DISPLAY_MODE_INLINE', 'inline');
-define('EDUSHARING_DISPLAY_MODE_DYNAMIC', 'dynamic');
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) .'/lib');
 require_once(dirname(__FILE__).'/lib/RenderParameter.php');

@@ -60,11 +60,7 @@ try {
     return false;
 }
 
-$displaymode = '';
-if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0)
-    $displaymode = EDUSHARING_DISPLAY_MODE_DYNAMIC;
-
-$redirecturl = edusharing_get_redirect_url($edusharing, $displaymode);
+$redirecturl = edusharing_get_redirect_url($edusharing);
 $ts = $timestamp = round(microtime(true) * 1000);
 $redirecturl .= '&ts=' . $ts;
 $redirecturl .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts));
