@@ -137,13 +137,17 @@ if (!empty($metadataurl)) {
         $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper();
         $sslkeypair = $modedusharingapppropertyhelper->edusharing_get_ssl_keypair();
 
-        set_config('application_host', $_SERVER['SERVER_ADDR'], 'edusharing');
+        $host = $_SERVER['SERVER_ADDR'];
+        if(empty($host))
+            $host = gethostbyname($_SERVER['SERVER_NAME']);
+
+        set_config('application_host', $host, 'edusharing');
         set_config('application_appid', uniqid('moodle_'), 'edusharing');
         set_config('application_type', 'LMS', 'edusharing');
         set_config('application_homerepid', get_config('edusharing', 'repository_appid'), 'edusharing');
         set_config('application_cc_gui_url', get_config('edusharing', 'repository_clientprotocol') . '://' .
-            get_config('edusharing', 'repository_domain') . ':' .
-            get_config('edusharing', 'repository_clientport') . '/edu-sharing/', 'edusharing');
+        get_config('edusharing', 'repository_domain') . ':' .
+        get_config('edusharing', 'repository_clientport') . '/edu-sharing/', 'edusharing');
         set_config('application_private_key', $sslkeypair['privateKey'], 'edusharing');
         set_config('application_public_key', $sslkeypair['publicKey'], 'edusharing');
         set_config('application_blowfishkey', 'thetestkey', 'edusharing');
