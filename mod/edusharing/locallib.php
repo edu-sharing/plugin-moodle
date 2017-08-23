@@ -187,10 +187,8 @@ function edusharing_get_redirect_url(
         trigger_error(get_string('error_get_object_id_from_url', 'edusharing'), E_USER_WARNING);
     }
 
-    if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0 && $displaymode == EDUSHARING_DISPLAY_MODE_DISPLAY)
-        $url = get_config('edusharing', 'application_cc_gui_url') . '/ng2/components/render/'.urlencode($resourcerefenerence).'/'.urlencode($edusharing->object_version);
-    else
-        $url = get_config('edusharing', 'application_cc_gui_url') . '/renderingproxy';
+
+    $url = get_config('edusharing', 'application_cc_gui_url') . '/renderingproxy';
 
     $url .= '?app_id='.urlencode(get_config('edusharing', 'application_appid'));
 
