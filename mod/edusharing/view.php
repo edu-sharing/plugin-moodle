@@ -66,7 +66,7 @@ $redirecturl .= '&ts=' . $ts;
 $redirecturl .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts));
 $redirecturl .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts);
 
-$backAction = 'closeOnBack=true';
+$backAction = '&closeOnBack=true';
 if (empty($edusharing->popup_window)) {
     $backAction = '&backLink=' . urlencode($CFG->wwwroot . '/course/view.php?id=' . $courseid);
 }
