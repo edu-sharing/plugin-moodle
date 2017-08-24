@@ -44,6 +44,7 @@ $ts = $timestamp = round(microtime(true) * 1000);
 $redirecturl .= '&ts=' . $ts;
 $redirecturl .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts));
 $redirecturl .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts);
+$redirecturl .= '&closeOnBack=true';
 
 redirect($redirecturl);
 
