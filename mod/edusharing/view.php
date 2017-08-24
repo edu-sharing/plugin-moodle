@@ -66,16 +66,15 @@ $redirecturl .= '&ts=' . $ts;
 $redirecturl .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts));
 $redirecturl .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts);
 
-$backlink = '';
+$backAction = 'closeOnBack=true';
 if (empty($edusharing->popup_window)) {
-    $backlink = urlencode($CFG->wwwroot . '/course/view.php?id=' . $courseid);
+    $backAction = '&backLink=' . urlencode($CFG->wwwroot . '/course/view.php?id=' . $courseid);
 }
 if (!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'modedit.php') !== false) {
-    $backlink = urlencode($_SERVER['HTTP_REFERER']);
+    $backAction = '&backLink=' . urlencode($_SERVER['HTTP_REFERER']);
 }
-if (!empty($backlink)) {
-    $redirecturl .= '&backLink=' . $backlink;
-}
+
+$redirecturl .= $backAction;
 
 redirect($redirecturl);
 
