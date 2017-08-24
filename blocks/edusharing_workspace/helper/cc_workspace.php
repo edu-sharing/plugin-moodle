@@ -69,7 +69,6 @@ if (!$ticket) {
 $link = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
 $mylang = edusharing_get_current_users_language_code();
 if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0) {
-    $link .= '/ng2';
     $link .= '?locale=' . $mylang;
 } else {
     $link .= '/?mode=1';

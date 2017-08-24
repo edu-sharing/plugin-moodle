@@ -62,7 +62,7 @@ $link = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
 $search = trim(optional_param('search', '', PARAM_NOTAGS)); // query for the external cc-search
 $mylang = edusharing_get_current_users_language_code();
 if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0) {
-    $link .= '/ng2/components/search';
+    $link .= '/components/search';
     $link .= '?locale=' . $mylang;
     if (!empty($search)) {
         $link .= '&query='.urlencode($search);
