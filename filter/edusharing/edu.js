@@ -18,6 +18,9 @@
  * @copyright  metaVentis GmbH — http://metaventis.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+!function() {function a(a,b) {var c=void 0!==window.pageYOffset?window.pageYOffset:(document.documentElement||document.body.parentNode||document.body).scrollTop,d=document.documentElement.clientHeight,e=c+d;b=b||0;var f=a.getBoundingClientRect();if (0===f.height)return!1;var g=f.top+c-b,h=f.bottom+c+b;return h>c&&e>g}jQuery.expr[":"]["near-viewport"]=function(b,c,d) {var e=parseInt(d[3])||0;return a(b,e)}}();
+
 function getJQueryCodeSoThatMoodleLikesIt($) {
 
 		$.ajaxSetup({ cache: false });
@@ -61,8 +64,6 @@ function getJQueryCodeSoThatMoodleLikesIt($) {
                 });
         });
 }
-
-!function() {function a(a,b) {var c=void 0!==window.pageYOffset?window.pageYOffset:(document.documentElement||document.body.parentNode||document.body).scrollTop,d=document.documentElement.clientHeight,e=c+d;b=b||0;var f=a.getBoundingClientRect();if (0===f.height)return!1;var g=f.top+c-b,h=f.bottom+c+b;return h>c&&e>g}jQuery.expr[":"]["near-viewport"]=function(b,c,d) {var e=parseInt(d[3])||0;return a(b,e)}}();
 
 if(typeof require == 'undefined') {
 	$(document).ready(function() {
