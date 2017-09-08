@@ -52,17 +52,33 @@ function getJQueryCodeSoThatMoodleLikesIt($) {
 				renderEsObject($(this));
 			})
 		});
-		
-		$(".edu_wrapper").on( "click", ".edusharing_metadata_toggle_button", function() {
-                toggle_button = $(this);
-                $(this).parent().find(".edusharing_metadata").toggle(1, function() {
-                        if($(this).is(':visible')) {
-                                toggle_button.text(toggle_button.data('textclose'));
-                        } else {
-                                toggle_button.text(toggle_button.data('textopen'));
-                        }
-                });
-        });
+
+    $("body").click(function(e) {
+        if ($(e.target).closest(".edusharing_metadata").length) {
+            //clicked inside ".edusharing_metadata" - do nothing
+        } else {
+            $(".edusharing_metadata_toggle_button").text($(".edusharing_metadata_toggle_button").data('textopen'));
+            $(".edusharing_metadata").hide();
+            if ($(e.target).closest(".edusharing_metadata_toggle_button").length) {
+                $(".edusharing_metadata_toggle_button").text($(this).data('textopen'));
+                $(".edusharing_metadata").hide();
+                toggle_button = $(e.target);
+                metadata = toggle_button.parent().find(".edusharing_metadata");
+                if(metadata.hasClass('open')) {
+                    metadata.toggleClass('open');
+                    metadata.hide();
+                    toggle_button.text(toggle_button.data('textopen'));
+                } else {
+                    $(".edusharing_metadata").removeClass('open');
+                    metadata.toggleClass('open');
+                    metadata.show();
+                    toggle_button.text(toggle_button.data('textclose'));
+                }
+            } else {
+                $(".edusharing_metadata").removeClass('open');
+            }
+        }
+    });
 }
 
 if(typeof require == 'undefined') {
