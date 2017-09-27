@@ -98,6 +98,9 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configtext('edusharing/EDU_AUTH_AFFILIATION',
             'AFFILIATION', '', $CFG->siteidentifier, PARAM_TEXT, 50));
 
+    $settings->add(new admin_setting_configtext('edusharing/EDU_AUTH_AFFILIATION_NAME',
+        'AFFILIATION_NAME', '', $CFG->siteidentifier, PARAM_TEXT, 50));
+
     $settings->add(new admin_setting_configcheckbox('edusharing/EDU_AUTH_CONVEYGLOBALGROUPS', 'CONVEYGLOBALGROUPS', '', ''));
 
     $settings->add(new admin_setting_heading('edusharing/guest', 'Guest properties', ''));

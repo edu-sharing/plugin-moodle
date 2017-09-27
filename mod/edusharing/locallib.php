@@ -113,6 +113,8 @@ function edusharing_get_auth_data() {
 
         $eduauthaffiliation = get_config('edusharing', 'EDU_AUTH_AFFILIATION');
 
+        $eduauthaffiliationname = get_config('edusharing', 'EDU_AUTH_AFFILIATION_NAME');
+
         $guestoption = get_config('edusharing', 'edu_guest_option');
         if (!empty($guestoption)) {
             $guestid = get_config('edusharing', 'edu_guest_guest_id');
@@ -126,6 +128,7 @@ function edusharing_get_auth_data() {
                 array('key'  => $eduauthparamnamefirstname, 'value'  => ''),
                 array('key'  => $eduauthparamnameemail, 'value'  => ''),
                 array('key'  => 'affiliation', 'value'  => $eduauthaffiliation),
+                array('key'  => 'affiliationname', 'value' => $eduauthaffiliationname)
             );
         } else {
             $authparams = array(
@@ -134,6 +137,7 @@ function edusharing_get_auth_data() {
                 array('key'  => $eduauthparamnamefirstname, 'value'  => $USER->firstname),
                 array('key'  => $eduauthparamnameemail, 'value'  => $USER->email),
                 array('key'  => 'affiliation', 'value'  => $eduauthaffiliation),
+                array('key'  => 'affiliationname', 'value' => $eduauthaffiliationname)
             );
         }
     }

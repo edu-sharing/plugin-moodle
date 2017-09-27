@@ -159,6 +159,7 @@ if (!empty($metadataurl)) {
         set_config('EDU_AUTH_PARAM_NAME_FIRSTNAME', 'firstname', 'edusharing');
         set_config('EDU_AUTH_PARAM_NAME_EMAIL', 'email', 'edusharing');
         set_config('EDU_AUTH_AFFILIATION', $CFG->siteidentifier, 'edusharing');
+        set_config('EDU_AUTH_AFFILIATION_NAME', $CFG->siteidentifier, 'edusharing');
 
         if (empty($sslkeypair['privateKey'])) {
             echo 'Generating of SSL keys failed. Please check your configuration.';
