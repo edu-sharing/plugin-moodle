@@ -78,8 +78,8 @@ $link .= '&reurl=' . urlencode($CFG->wwwroot . '/blocks/edusharing_upload/helper
 <script src="<?php echo $CFG->wwwroot?>/mod/edusharing/js/jquery.min.js"></script>
 <script>
 $('html, body').css('overflow', 'hidden');
-$('#esContent').width($(document).width());
-$('#esContent').height($(document).height());
+$('#esContent').width($(window).width());
+$('#esContent').height((parseInt($(window).height()) - 30) + 'px');
 $('#esContent').html("<div id='closer' style='font-size: 1em; padding: 5px 20px 5px 20px; cursor: pointer; color: #000; background: #eee; '>" +
 "<?php echo htmlentities(get_string('back_to', 'block_edusharing_upload'))?>&nbsp;\"<?php echo $COURSE->fullname?>\"</div><iframe id='childFrame' name='mainContent'" +
 "src='<?php echo htmlentities($link)?>' width='100% ' height='100% ' scrolling='yes'  marginwidth='0' marginheight='0' frameborder='0'>&nbsp;</iframe>");
