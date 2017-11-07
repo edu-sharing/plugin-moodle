@@ -63,8 +63,8 @@ try {
 $redirecturl = edusharing_get_redirect_url($edusharing);
 $ts = $timestamp = round(microtime(true) * 1000);
 $redirecturl .= '&ts=' . $ts;
-$redirecturl .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts));
-$redirecturl .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts);
+$redirecturl .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts . edusharing_get_object_id_from_url($edusharing->object_url())));
+$redirecturl .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts . edusharing_get_object_id_from_url($edusharing->object_url()));
 
 $backAction = '&closeOnBack=true';
 if (empty($edusharing->popup_window)) {

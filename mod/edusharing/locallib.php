@@ -186,12 +186,6 @@ function edusharing_get_redirect_url(
     $displaymode = EDUSHARING_DISPLAY_MODE_DISPLAY) {
     global $USER;
 
-    $resourcerefenerence = str_replace('/', '', parse_url($edusharing->object_url, PHP_URL_PATH));
-    if ( empty($resourcerefenerence) ) {
-        trigger_error(get_string('error_get_object_id_from_url', 'edusharing'), E_USER_WARNING);
-    }
-
-
     $url = get_config('edusharing', 'application_cc_gui_url') . '/renderingproxy';
 
     $url .= '?app_id='.urlencode(get_config('edusharing', 'application_appid'));
@@ -201,7 +195,7 @@ function edusharing_get_redirect_url(
     $repid = edusharing_get_repository_id_from_url($edusharing->object_url);
     $url .= '&rep_id='.urlencode($repid);
 
-    $url .= '&obj_id='.urlencode($resourcerefenerence);
+    $url .= '&obj_id='.urlencode(edusharing_get_object_id_from_url($edusharing->object_url()));
 
     $url .= '&resource_id='.urlencode($edusharing->id);
     $url .= '&course_id='.urlencode($edusharing->course);
@@ -232,7 +226,6 @@ function edusharing_get_redirect_url(
  * @return string
  */
 function edusharing_get_signature($data) {
-
     $privkey = get_config('edusharing', 'application_private_key');
     $pkeyid = openssl_get_privatekey($privkey);
     openssl_sign($data, $signature, $pkeyid);

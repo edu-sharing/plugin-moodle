@@ -115,8 +115,8 @@ require_sesskey();
 
 $ts = $timestamp = round(microtime(true) * 1000);
 $url .= '&ts=' . $ts;
-$url .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts));
-$url .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts);
+$url .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts . $query['obj_id']));
+$url .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts . $query['obj_id']);
 $url .= '&videoFormat=' . optional_param('videoFormat', '', PARAM_TEXT);
 
 $e = new filter_edusharing_edurender();

@@ -37,30 +37,22 @@ if (!$edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resourceid)
     trigger_error(get_string('error_loading_instance', 'editor_edusharing'), E_USER_WARNING);
 }
 
-$curlhandle = $edusharing->course;
-
 $previewservice = get_config('edusharing', 'application_cc_gui_url') . '/' . 'preview';
-
-$objecturlparts = str_replace('ccrep://', '', $edusharing->object_url);
-$objecturlparts = explode('/', $objecturlparts);
-
-$repoid = $objecturlparts[0];
-$nodeid = $objecturlparts[1];
 
 $time = round(microtime(true) * 1000);
 
 $url = $previewservice;
 $url .= '?appId=' . get_config('edusharing', 'application_appid');
-$url .= '&courseId=' . $curlhandle;
-$url .= '&repoId=' . $repoid;
+$url .= '&courseId=' . $edusharing->course;
+$url .= '&repoId=' . edusharing_get_repository_id_from_url($edusharing->object_url());
 $url .= '&proxyRepId=' . get_config('edusharing', 'application_homerepid');
 $url .= '&nodeId=' . $nodeid;
 $url .= '&resourceId=' . $resourceid;
 $url .= '&version=' . $edusharing->object_version;
-
-$sig = urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $time));
-
+$sigdata = get_config('edusharing', 'application_appid') . $time . edusharing_get_object_id_from_url($edusharing->object_url());
+$sig = urlencode(edusharing_get_signature($sigdata));
 $url .= '&sig=' . $sig;
+$url .= '&signed=' . $sigdata;
 $url .= '&ts=' . $time;
 
 $curlhandle = curl_init($url);
@@ -73,5 +65,6 @@ curl_setopt($curlhandle, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
 $output = curl_exec($curlhandle);
 $mimetype = curl_getinfo($curlhandle, CURLINFO_CONTENT_TYPE);
 curl_close($curlhandle);
-header('Content-type: ' . $mimetype);echo $output;
+header('Content-type: ' . $mimetype);
+echo $output;
 exit();
