@@ -195,7 +195,7 @@ function edusharing_get_redirect_url(
     $repid = edusharing_get_repository_id_from_url($edusharing->object_url);
     $url .= '&rep_id='.urlencode($repid);
 
-    $url .= '&obj_id='.urlencode(edusharing_get_object_id_from_url($edusharing->object_url()));
+    $url .= '&obj_id='.urlencode(edusharing_get_object_id_from_url($edusharing->object_url));
 
     $url .= '&resource_id='.urlencode($edusharing->id);
     $url .= '&course_id='.urlencode($edusharing->course);

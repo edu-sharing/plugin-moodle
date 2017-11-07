@@ -41,8 +41,9 @@ $redirecturl = edusharing_get_redirect_url($edusharing);
 
 $ts = $timestamp = round(microtime(true) * 1000);
 $redirecturl .= '&ts=' . $ts;
-$redirecturl .= '&sig=' . urlencode(edusharing_get_signature(get_config('edusharing', 'application_appid') . $ts . edusharing_get_object_id_from_url($edusharing->object_url())));
-$redirecturl .= '&signed=' . urlencode(get_config('edusharing', 'application_appid') . $ts . edusharing_get_object_id_from_url($edusharing->object_url()));
+$data = get_config('edusharing', 'application_appid') . $ts . edusharing_get_object_id_from_url($edusharing->object_url);
+$redirecturl .= '&sig=' . urlencode(edusharing_get_signature($data));
+$redirecturl .= '&signed=' . urlencode($data);
 $redirecturl .= '&closeOnBack=true';
 
 redirect($redirecturl);
