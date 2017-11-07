@@ -53,13 +53,13 @@ class filter_edusharing_edurender {
             curl_setopt($curlhandle, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($curlhandle, CURLOPT_SSL_VERIFYHOST, false);
             $inline = curl_exec($curlhandle);
-            curl_close($curlhandle);
+            if($inline === false) {
+                trigger_error(curl_error($curlhandle), E_USER_WARNING);
+            }
         } catch (Exception $e) {
             trigger_error($e->getMessage(), E_USER_WARNING);
-            curl_close($curlhandle);
-            return false;
         }
-
+        curl_close($curlhandle);
         return $inline;
     }
 

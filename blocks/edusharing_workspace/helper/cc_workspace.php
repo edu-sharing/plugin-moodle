@@ -67,14 +67,13 @@ if (!$ticket) {
 }
 
 $link = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
-$mylang = edusharing_get_current_users_language_code();
 if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0) {
-    $link .= '?locale=' . $mylang;
+    $link .= '/?locale=' . current_language();
 } else {
     $link .= '/?mode=1';
     $user = edusharing_get_auth_key();
     $link .= '&user=' . urlencode($user);
-    $link .= '&locale=' . $mylang;
+    $link .= '&locale=' . current_language();
 }
 
 $link .= '&ticket=' . urlencode($ticket);

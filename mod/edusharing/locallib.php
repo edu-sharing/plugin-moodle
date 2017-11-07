@@ -211,7 +211,7 @@ function edusharing_get_redirect_url(
     $url .= '&width=' . urlencode($edusharing->window_width);
     $url .= '&height=' . urlencode($edusharing->window_height);
     $url .= '&version=' . urlencode($edusharing->object_version);
-    $url .= '&language=' . urlencode(current_language());
+    $url .= '&locale=' . urlencode(current_language());
 
     $eskey = get_config('edusharing', 'application_blowfishkey');
     $esiv = get_config('edusharing', 'application_blowfishiv');
@@ -240,19 +240,3 @@ function edusharing_get_signature($data) {
     openssl_free_key($pkeyid);
     return $signature;
 }
-
-/**
- * Get locale-code for current language.
- *
- * @return string
- */
-function edusharing_get_current_users_language_code() {
-    switch(current_language()) {
-        case 'de':
-            return 'de_DE';
-        break;
-        default:
-            return 'en_EN';
-    }
-}
-

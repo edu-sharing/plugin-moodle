@@ -110,15 +110,14 @@ if ( ! empty($resourceid) ) {
 $ccauth = new mod_edusharing_web_service_factory();
 $ticket = $ccauth->edusharing_authentication_get_ticket();
 $link = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
-$language = edusharing_get_current_users_language_code();
 if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0) {
     $link .= '/components/search';
-    $link .= '?locale=' . $language;
+    $link .= '?locale=' . current_language();
 } else {
     $link .= '/search';
     $user = edusharing_get_auth_key();
     $link .= '?user=' . urlencode($user);
-    $language = edusharing_get_current_users_language_code();
+    $language = current_language();
     $link .= '&locale=' . $language;
 }
 

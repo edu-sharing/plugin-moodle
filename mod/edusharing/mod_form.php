@@ -92,16 +92,14 @@ class mod_edusharing_mod_form extends moodleform_mod
         $mform->addRule('object_url', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('object_url', 'object_url', EDUSHARING_MODULE_NAME);
 
-        $mylang = edusharing_get_current_users_language_code();
-
         $ccresourcesearch  = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
         if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0) {
             $ccresourcesearch .= '/components/search';
-            $ccresourcesearch .= '?locale=' . $mylang;
+            $ccresourcesearch .= '?locale=' . current_language();
         } else {
             $ccresourcesearch .= "/?mode=0";
             $ccresourcesearch .= "&user=" . urlencode(edusharing_get_auth_key());
-            $ccresourcesearch .= "&locale=" . $mylang;
+            $ccresourcesearch .= "&locale=" . current_language();
         }
         $ccresourcesearch .= '&ticket='.$ticket;
         $ccresourcesearch .= "&reurl=".urlencode($CFG->wwwroot."/mod/edusharing/makelink.php");
