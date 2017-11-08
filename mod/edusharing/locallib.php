@@ -205,7 +205,8 @@ function edusharing_get_redirect_url(
     $url .= '&width=' . urlencode($edusharing->window_width);
     $url .= '&height=' . urlencode($edusharing->window_height);
     $url .= '&version=' . urlencode($edusharing->object_version);
-    $url .= '&locale=' . urlencode(current_language());
+    $url .= '&locale=' . urlencode(current_language()); //repository
+    $url .= '&language=' . urlencode(current_language()); //rendering service
 
     $eskey = get_config('edusharing', 'application_blowfishkey');
     $esiv = get_config('edusharing', 'application_blowfishiv');
