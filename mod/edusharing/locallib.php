@@ -161,12 +161,13 @@ function edusharing_get_user_cohorts() {
     if ($cohortmemberships) {
         foreach ($cohortmemberships as $cohortmembership) {
             $cohort = $DB->get_record('cohort', array('id'  => $cohortmembership->cohortid));
-            $ret[] = array(
-                    'id'  => $cohortmembership->cohortid,
-                    'contextid'  => $cohort->contextid,
-                    'name'  => $cohort->name,
-                    'idnumber'  => $cohort->idnumber
-            );
+            if($cohort->contextid == 1)
+                $ret[] = array(
+                        'id'  => $cohortmembership->cohortid,
+                        'contextid'  => $cohort->contextid,
+                        'name'  => $cohort->name,
+                        'idnumber'  => $cohort->idnumber
+                );
         }
     }
     return json_encode($ret);
@@ -233,4 +234,22 @@ function edusharing_get_signature($data) {
     $signature = base64_encode($signature);
     openssl_free_key($pkeyid);
     return $signature;
+}
+
+/**
+ * Return openssl encrypted data
+ * Uses repositorys openssl public key
+ *
+ * @param string $data
+ * @return string
+ */
+function edusharing_encrypt_with_repo_public($data) {
+    $crypted = '';
+    $key = openssl_get_publickey(get_config('edusharing', 'repository_public_key'));
+    openssl_public_encrypt($data ,$crypted, $key);
+    if($crypted === false) {
+        trigger_error(get_string('error_missing_authwsdl', 'edusharing'), E_USER_WARNING);
+        return false;
+    }
+    return $crypted;
 }

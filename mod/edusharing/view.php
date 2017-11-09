@@ -24,6 +24,7 @@
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
+require_once(dirname(__FILE__).'/lib/cclib.php');
 
 global $CFG, $PAGE;
 
@@ -76,6 +77,9 @@ if (!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'modedi
 }
 
 $redirecturl .= $backAction;
+
+$cclib = new mod_edusharing_web_service_factory();
+$redirecturl .= '&ticket=' . urlencode(base64_encode(edusharing_encrypt_with_repo_public($cclib -> edusharing_authentication_get_ticket())));
 
 redirect($redirecturl);
 

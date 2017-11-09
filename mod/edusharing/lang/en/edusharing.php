@@ -130,3 +130,4 @@ $string['error_detect_course'] = 'Cannot detect course id';
 $string['error_loading_memento'] = 'Error loading temporary object.';
 $string['error_set_soap_headers'] = 'Cannot set SOAP headers - ';
 $string['error_get_app_properties'] = 'Cannot load plugin config';
+$string['error_encrypt_with_repo_public'] = 'Cannot encrypt data.';

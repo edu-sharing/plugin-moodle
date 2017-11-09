@@ -24,6 +24,7 @@
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/mod/edusharing/lib.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/mod/edusharing/lib/cclib.php');
 
 require_sesskey();
 
@@ -45,6 +46,8 @@ $data = get_config('edusharing', 'application_appid') . $ts . edusharing_get_obj
 $redirecturl .= '&sig=' . urlencode(edusharing_get_signature($data));
 $redirecturl .= '&signed=' . urlencode($data);
 $redirecturl .= '&closeOnBack=true';
+$cclib = new mod_edusharing_web_service_factory();
+$redirecturl .= '&ticket=' . urlencode(base64_encode(edusharing_encrypt_with_repo_public($cclib -> edusharing_authentication_get_ticket())));
 
 redirect($redirecturl);
 

@@ -131,3 +131,4 @@ $string['error_detect_course'] = 'Kurs id kann nicht ermittelt werden.';
 $string['error_loading_memento'] = 'Fehler beim Laden des temporären Objektes.';
 $string['error_set_soap_headers'] = 'SOAP-Header konnten nicht gesetzt werden - ';
 $string['error_get_app_properties'] = 'Pluginkonfiguration konnte nicht geladen werden.';
+$string['error_encrypt_with_repo_public'] = 'Daten konnten nicht verschlüsselt werden.';
