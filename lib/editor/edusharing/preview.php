@@ -46,7 +46,7 @@ $url .= '?appId=' . get_config('edusharing', 'application_appid');
 $url .= '&courseId=' . $edusharing->course;
 $url .= '&repoId=' . edusharing_get_repository_id_from_url($edusharing->object_url);
 $url .= '&proxyRepId=' . get_config('edusharing', 'application_homerepid');
-$url .= '&nodeId=' . $nodeid;
+$url .= '&nodeId=' . edusharing_get_object_id_from_url($edusharing->object_url);
 $url .= '&resourceId=' . $resourceid;
 $url .= '&version=' . $edusharing->object_version;
 $sigdata = get_config('edusharing', 'application_appid') . $time . edusharing_get_object_id_from_url($edusharing->object_url);
