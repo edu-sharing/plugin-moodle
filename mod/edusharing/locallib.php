@@ -248,7 +248,7 @@ function edusharing_encrypt_with_repo_public($data) {
     $key = openssl_get_publickey(get_config('edusharing', 'repository_public_key'));
     openssl_public_encrypt($data ,$crypted, $key);
     if($crypted === false) {
-        trigger_error(get_string('error_missing_authwsdl', 'edusharing'), E_USER_WARNING);
+        trigger_error(get_string('error_encrypt_with_repo_public', 'edusharing'), E_USER_WARNING);
         return false;
     }
     return $crypted;
