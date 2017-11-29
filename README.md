@@ -24,7 +24,7 @@ The block, filter and editor plugins all depend on the activity module.
 Installation
 ------------
 
-For a full documentation with screenshots of the post installation steps visit the [documentation pages](http://docs.edu-sharing.com).
+For a full documentation with screenshots of the post installation steps visit the [documentation pages](http://docs.edu-sharing.com/confluence/edp/en).
 After installing the Plugins in short the following steps are necessary:
 - connect the activity module to an edu-sharing repository (plugin settings / repository settings)
 - activate the edu-sharing editor plugin for tinymce and push it to the first position in the editor plugin overview list
@@ -38,7 +38,7 @@ More information can be found on the [homepage](http://edu-sharing.com).
 
 Where can I get the latest release?
 -----------------------------------
-You can download source and binaries from our [download page](http://edu-sharing.com/recources/?lang=en).
+You find our latest releases on our [github repository](https://github.com/edu-sharing).
 
 Contributing
 ------------
