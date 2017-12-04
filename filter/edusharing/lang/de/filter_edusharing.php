@@ -24,6 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['pluginname'] = 'edu-sharing Filter';
 $string['filtername'] = 'edu-sharing Filter';
 $string['settingformats'] = 'Aktiv für folgende Textformate';
 $string['settingformats_desc'] = 'Der Filter wird nur angewandt, wenn der Originaltext im entsprechenden Format vorliegt.';

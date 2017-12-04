@@ -24,6 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['pluginname'] = 'edu-sharing 过滤条件';
 $string['filtername'] = 'edu-sharing 过滤条件';
 $string['settingformats'] = '应用格式';
 $string['settingformats_desc'] = '过滤条件仅在将原始文本插入到选中格式中有效.';
