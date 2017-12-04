@@ -25,7 +25,7 @@
 $string['pluginname'] = 'edu-sharing - Search';
 
 $string['block_title'] = 'edu-sharing search';
-$string['search_field_hint'] = 'Search for  ...';
+$string['search_field_hint'] = 'Search for ...';
 $string['button_text'] = 'Search';
 $string['back_to'] = 'Back to';
 

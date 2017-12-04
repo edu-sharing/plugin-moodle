@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['searchrec'] = 'Search in edu-sharing repository ...';
+$string['searchrec'] = 'Search the edu-sharing repository ...';
 $string['uploadrec'] = 'Upload to edu-sharing repository ...';
 $string['pagewindow'] = 'In-page display';
 $string['newwindow'] = 'Display in new window';
