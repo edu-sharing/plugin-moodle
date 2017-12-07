@@ -85,7 +85,7 @@ class filter_edusharing_edurender {
         /*
          * replaces <es:title ...>...</es:title>
          */
-        $html = preg_replace("/<es:title[^>]*>.*<\/es:title>/Uims", optional_param('title', '', PARAM_TEXT), $html);
+        $html = preg_replace("/<es:title[^>]*>.*<\/es:title>/Uims", utf8_decode(optional_param('title', '', PARAM_TEXT)), $html);
         /*
          * For images, audio and video show a capture underneath object
          */
