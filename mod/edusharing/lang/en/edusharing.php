@@ -114,7 +114,6 @@ $string['filter_not_authorized'] = 'You are not authorized to access the request
 $string['convey_global_groups_yes'] = 'Convey cohorts';
 $string['convey_global_groups_no'] = 'Do not convey cohorts';
 
-$string['mcryptrequired'] = 'The PHP extension mcrypt must be activated.';
 $string['soaprequired'] = 'The PHP extension soap must be activated.';
 
 $string['error_missing_authwsdl'] = 'No "authenticationwebservice_wsdl" configured.';

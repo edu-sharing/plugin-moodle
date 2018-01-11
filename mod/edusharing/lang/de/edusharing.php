@@ -115,7 +115,6 @@ $string['emptyForDefault'] = 'leer für';
 $string['convey_global_groups_yes'] = 'Globale Gruppen übermitteln';
 $string['convey_global_groups_no'] = 'Globale Gruppen nicht übermitteln';
 
-$string['mcryptrequired'] = 'Die PHP-Erweiterung mcrypt muss aktiviert sein.';
 $string['soaprequired'] = 'Die PHP-Erweiterung soap muss aktiviert sein.';
 
 $string['error_missing_authwsdl'] = 'Parameter "authenticationwebservice_wsdl" wurde nicht konfiguriert.';

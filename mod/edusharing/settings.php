@@ -48,11 +48,13 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configtextarea('edusharing/application_public_key', 'public_key', '', '', PARAM_TEXT, 50));
 
-    $settings->add(new admin_setting_configtext('edusharing/application_blowfishkey', 'blowfishkey', '', '', PARAM_TEXT, 50));
+    if(version_compare(get_config('edusharing', 'repository_version'), '4.1' ) < 0) {
 
-    $settings->add(new admin_setting_configtext('edusharing/application_blowfishiv', 'blowfishiv', '', '', PARAM_TEXT, 50));
+        $settings->add(new admin_setting_configtext('edusharing/application_blowfishkey', 'blowfishkey', '', '', PARAM_TEXT, 50));
 
+        $settings->add(new admin_setting_configtext('edusharing/application_blowfishiv', 'blowfishiv', '', '', PARAM_TEXT, 50));
 
+    }
 
     $settings->add(new admin_setting_heading('edusharing/rep', 'Repository properties', ''));
 
