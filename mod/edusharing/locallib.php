@@ -209,12 +209,11 @@ function edusharing_get_redirect_url(
     $url .= '&locale=' . urlencode(current_language()); //repository
     $url .= '&language=' . urlencode(current_language()); //rendering service
 
-    $eskey = get_config('edusharing', 'application_blowfishkey');
-    $esiv = get_config('edusharing', 'application_blowfishiv');
-
     if(version_compare(get_config('edusharing', 'repository_version'), '4.1' ) >= 0) {
         $url .= '&u='. rawurlencode(edusharing_encrypt_with_repo_public(edusharing_get_auth_key()));
     } else {
+        $eskey = get_config('edusharing', 'application_blowfishkey');
+        $esiv = get_config('edusharing', 'application_blowfishiv');
         $res = mcrypt_module_open(MCRYPT_BLOWFISH, '', MCRYPT_MODE_CBC, '');
         mcrypt_generic_init($res, $eskey, $esiv);
         $u = base64_encode(mcrypt_generic($res, edusharing_get_auth_key()));
