@@ -210,7 +210,7 @@ function edusharing_get_redirect_url(
     $url .= '&language=' . urlencode(current_language()); //rendering service
 
     if(version_compare(get_config('edusharing', 'repository_version'), '4.1' ) >= 0) {
-        $url .= '&u='. rawurlencode(edusharing_encrypt_with_repo_public(edusharing_get_auth_key()));
+        $url .= '&u='. rawurlencode(base64_encode(edusharing_encrypt_with_repo_public(edusharing_get_auth_key())));
     } else {
         $eskey = get_config('edusharing', 'application_blowfishkey');
         $esiv = get_config('edusharing', 'application_blowfishiv');
