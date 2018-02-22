@@ -48,6 +48,8 @@ $entry = $xml->addChild('entry', 'moodle:course/update');
 $entry->addAttribute('key', 'hasTeachingPermission');
 $entry = $xml->addChild('entry', get_config('edusharing', 'application_public_key'));
 $entry->addAttribute('key', 'public_key');
+$entry = $xml->addChild('entry', get_config('edusharing', 'EDU_AUTH_AFFILIATION_NAME'));
+$entry->addAttribute('key', 'appcaption');
 
 header('Content-type: text/xml');
 print(html_entity_decode($xml->asXML()));
