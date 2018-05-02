@@ -29,5 +29,5 @@ $plugin->dependencies = array(
 );
 $plugin->version = 2017120701;
 $plugin->requires = 2015051100;
-$plugin->maturity = MATURITY_BETA;
+$plugin->maturity = MATURITY_STABLE;
 $plugin->release = 'v4.1';

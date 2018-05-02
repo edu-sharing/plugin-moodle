@@ -90,8 +90,9 @@ $('html, body').css('overflow', 'hidden');
 $('#esContent').width($(window).width());
 $('#esContent').height((parseInt($(window).height()) - 30) + 'px');
 $('#esContent').html("<div id='closer' style='font-size: 1em; padding: 5px 20px 5px 20px; cursor: pointer; color: #000; background: #eee; '>" +
-"<?php echo htmlentities(get_string('back_to', 'block_edusharing_workspace'))?>&nbsp;\"<?php echo $COURSE->fullname?>\"</div><iframe id='childFrame' name='mainContent'" +
-"src='<?php echo htmlentities($link)?>' width='100% ' height='100% ' scrolling='yes'  marginwidth='0' marginheight='0' frameborder='0'>&nbsp;</iframe>");
+"<?php echo htmlentities(get_string('back_to', 'block_edusharing_workspace'))?>&nbsp;\"<?php echo $COURSE->fullname?>\"</div>"+
+"<div style=\"position:fixed;right:0;bottom:0;left:0;top:30px;-webkit-overflow-scrolling: touch;overflow-y: scroll;\"><iframe id='childFrame' name='mainContent'" +
+"src='<?php echo htmlentities($link)?>' width='100% ' height='100% ' scrolling='yes'  marginwidth='0' marginheight='0' frameborder='0'>&nbsp;</iframe></div>");
 $('#closer').click(function() {window.location.href='<?php echo $_SERVER["HTTP_REFERER"]?>';})</script>
 
 <?php
