@@ -56,12 +56,6 @@ class filter_edusharing extends moodle_text_filter {
 
         // To force the re-generation of filtered texts we just ...
         // reset_text_filters_cache();
-
-        // Ensure that user exists in repository.
-        if (isloggedin()) {
-            $ccauth = new mod_edusharing_web_service_factory();
-            $ccauth->edusharing_authentication_get_ticket();
-        }
     }
 
     /**
@@ -87,6 +81,12 @@ class filter_edusharing extends moodle_text_filter {
 
             if (strpos($text, 'es:resource_id') === false) {
                 return $text;
+            }
+
+            // Ensure that user exists in repository.
+            if (isloggedin()) {
+                $ccauth = new mod_edusharing_web_service_factory();
+                $ccauth->edusharing_authentication_get_ticket();
             }
 
             $memento = $text;
