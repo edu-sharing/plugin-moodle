@@ -56,27 +56,21 @@ function getJQueryCodeSoThatMoodleLikesIt($) {
     $("body").click(function(e) {
         if ($(e.target).closest(".edusharing_metadata").length) {
             //clicked inside ".edusharing_metadata" - do nothing
-        } else {
-            $(".edusharing_metadata_toggle_button").text($(".edusharing_metadata_toggle_button").data('textopen'));
+        } else if ($(e.target).closest(".edusharing_metadata_toggle_button").length) {
             $(".edusharing_metadata").hide();
-            if ($(e.target).closest(".edusharing_metadata_toggle_button").length) {
-                $(".edusharing_metadata_toggle_button").text($(this).data('textopen'));
-                $(".edusharing_metadata").hide();
-                toggle_button = $(e.target);
-                metadata = toggle_button.parent().find(".edusharing_metadata");
-                if(metadata.hasClass('open')) {
-                    metadata.toggleClass('open');
-                    metadata.hide();
-                    toggle_button.text(toggle_button.data('textopen'));
-                } else {
-                    $(".edusharing_metadata").removeClass('open');
-                    metadata.toggleClass('open');
-                    metadata.show();
-                    toggle_button.text(toggle_button.data('textclose'));
-                }
+            toggle_button = $(e.target);
+            metadata = toggle_button.parent().find(".edusharing_metadata");
+            if(metadata.hasClass('open')) {
+                metadata.toggleClass('open');
+                metadata.hide();
             } else {
                 $(".edusharing_metadata").removeClass('open');
+                metadata.toggleClass('open');
+                metadata.show();
             }
+        } else {
+            $(".edusharing_metadata").hide();
+            $(".edusharing_metadata").removeClass('open');
         }
     });
 }
