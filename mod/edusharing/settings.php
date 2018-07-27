@@ -80,7 +80,7 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configtext('edusharing/repository_host', 'host', '', '', PARAM_TEXT, 50));
 
-    $settings->add(new admin_setting_configtext('edusharing/repository_version', 'version', '', '4', PARAM_TEXT, 50));
+    $settings->add(new admin_setting_configtext('edusharing/repository_version', 'version', '', '4.1', PARAM_TEXT, 50));
 
 
 

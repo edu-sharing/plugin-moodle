@@ -10,6 +10,11 @@ After installation connect the activity module to an edu-sharing repository (plu
 For a full documentation with screenshots of the post installation steps for the edu-sharing plugin pakage visit the [documentation pages](http://docs.edu-sharing.com/confluence/edp/en).
 Note that PHP SOAP extension must be installed on your webserver.
 
+UPDATE NOTE
+------------
+
+If your edu-sharing repository version is 4.1 you have to configure this in the plugin settings!
+
 Documentation
 -------------
 
