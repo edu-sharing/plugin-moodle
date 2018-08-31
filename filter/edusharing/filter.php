@@ -64,7 +64,6 @@ class filter_edusharing extends moodle_text_filter {
      * @see filter_manager::apply_filter_chain()
      * @param string $text to be processed by the text
      * @param array $options filter options
-     * @todo ensure not to include jQuery twice
      *
      * @return string text after processing
      */
@@ -100,8 +99,7 @@ class filter_edusharing extends moodle_text_filter {
             if (!empty($matches)) {
                 // Disable page-caching to "renew" render-session-data.
                 $PAGE->set_cacheable(false);
-                $PAGE->requires->js('/mod/edusharing/js/jquery.min.js');
-                $PAGE->requires->js('/filter/edusharing/edu.js');
+                $PAGE->requires->js_call_amd('filter_edusharing/edu', 'init');
 
                 foreach ($matches as $match) {
                     $text = str_replace($match, $this->filter_edusharing_convert_object($match), $text, $count);
