@@ -27,8 +27,10 @@ require_once(dirname(dirname(dirname(__FILE__))).'/mod/edusharing/lib.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/mod/edusharing/lib/cclib.php');
 
 require_sesskey();
+require_login($edusharing->course, true);
 
 $resid = optional_param('resId', 0, PARAM_INT); // edusharing instance ID
+$childobject_order = optional_param('childobject_order', -1, PARAM_INT);
 
 if ($resid) {
     $edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resid), '*', MUST_EXIST);
@@ -36,10 +38,7 @@ if ($resid) {
     trigger_error(get_string('error_missing_instance_id', 'filter_edusharing'), E_USER_WARNING);
 }
 
-require_login($edusharing->course, true);
-
 $redirecturl = edusharing_get_redirect_url($edusharing);
-
 $ts = $timestamp = round(microtime(true) * 1000);
 $redirecturl .= '&ts=' . $ts;
 $data = get_config('edusharing', 'application_appid') . $ts . edusharing_get_object_id_from_url($edusharing->object_url);
@@ -48,6 +47,7 @@ $redirecturl .= '&signed=' . urlencode($data);
 $redirecturl .= '&closeOnBack=true';
 $cclib = new mod_edusharing_web_service_factory();
 $redirecturl .= '&ticket=' . urlencode(base64_encode(edusharing_encrypt_with_repo_public($cclib -> edusharing_authentication_get_ticket())));
+$redirecturl .= '&childobject_order=' . $childobject_order;
 
 redirect($redirecturl);
 

@@ -73,8 +73,7 @@ class filter_edusharing_edurender {
         error_reporting(0);
         $resid = required_param('resId', PARAM_INT);
 
-        $html = str_replace(array("\n", "\r", "\n"
-        ), '', $html);
+        $html = str_replace(array("\n", "\r", "\n"), '', $html);
 
         /*
          * replaces {{{LMS_INLINE_HELPER_SCRIPT}}}
@@ -82,22 +81,27 @@ class filter_edusharing_edurender {
         $html = str_replace("{{{LMS_INLINE_HELPER_SCRIPT}}}",
                 $CFG->wwwroot . "/filter/edusharing/inlineHelper.php?sesskey=".sesskey()."&resId=" . $resid, $html);
 
-        /*
-         * replaces <es:title ...>...</es:title>
-         */
-        $html = preg_replace("/<es:title[^>]*>.*<\/es:title>/Uims", utf8_decode(optional_param('title', '', PARAM_TEXT)), $html);
+
+
+        $customTitle = true;
         /*
          * For images, audio and video show a capture underneath object
          */
-        $mimetypes = array('jpg', 'jpeg', 'gif', 'png', 'bmp', 'video', 'audio');
+        $mimetypes = array('image', 'video', 'audio');
         $addCaption = false;
         foreach ($mimetypes as $mimetype) {
             if (strpos(optional_param('mimetype', '', PARAM_TEXT), $mimetype) !== false) {
                 $addCaption = true;
+                $customTitle = false;
             }
         }
-        if(strpos(optional_param('mediatype', '', PARAM_TEXT), 'tool_object') !== false)
+        if(strpos(optional_param('mediatype', '', PARAM_TEXT), 'tool_object') !== false) {
             $addCaption = true;
+            $customTitle = false;
+        }
+
+        if($customTitle)
+            $html = preg_replace("/<es:title[^>]*>.*<\/es:title>/Uims", utf8_decode(optional_param('title', '', PARAM_TEXT)), $html);
 
         if($addCaption)
             $html .= '<p class="caption">' . optional_param('title', '', PARAM_TEXT) . '</p>';
