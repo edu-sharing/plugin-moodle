@@ -142,10 +142,10 @@ class edusharing_texteditor extends tinymce_texteditor {
             $params['plugins'] .= ',-edusharing';
 
             // add tool-button
-            if (empty($params['theme_advanced_buttons3_add'])) {
-                $params['theme_advanced_buttons3_add'] = '';
+            if (empty($params['theme_advanced_buttons1_add'])) {
+                $params['theme_advanced_buttons1_add'] = '';
             }
-            $params['theme_advanced_buttons3_add'] .= ',|,edusharing';
+            $params['theme_advanced_buttons1_add'] .= ',|,edusharing';
 
             // additional params required by edu-sharing.net
             empty($params['extended_valid_elements']) ? $params['extended_valid_elements'] = '' : $params['extended_valid_elements'] .= ',';
