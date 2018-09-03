@@ -71,6 +71,7 @@ class filter_edusharing extends moodle_text_filter {
         global $CFG;
         global $COURSE;
         global $PAGE;
+        global $edusharing_filter_loaded;
 
         if (!isset($options['originalformat'])) {
             return $text;
@@ -99,7 +100,10 @@ class filter_edusharing extends moodle_text_filter {
             if (!empty($matches)) {
                 // Disable page-caching to "renew" render-session-data.
                 $PAGE->set_cacheable(false);
-                $PAGE->requires->js_call_amd('filter_edusharing/edu', 'init');
+                if(!$edusharing_filter_loaded) {
+                    $PAGE->requires->js_call_amd('filter_edusharing/edu', 'init');
+                    $edusharing_filter_loaded = true;
+                }
 
                 foreach ($matches as $match) {
                     $text = str_replace($match, $this->filter_edusharing_convert_object($match), $text, $count);

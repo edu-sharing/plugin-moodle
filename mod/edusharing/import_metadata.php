@@ -119,13 +119,21 @@ if (!empty($metadataurl)) {
 
         libxml_use_internal_errors(true);
 
-        if ($xml->load($metadataurl) == false) {
+        $curlhandle = curl_init($metadataurl);
+        curl_setopt($curlhandle, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($curlhandle, CURLOPT_HEADER, 0);
+        curl_setopt($curlhandle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlhandle, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+        curl_setopt($curlhandle, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curlhandle, CURLOPT_SSL_VERIFYHOST, false);
+        $properties = curl_exec($curlhandle);
+        if ($xml->loadXML($properties) == false) {
             echo ('<p style="background: #FF8170">could not load ' . $metadataurl .
-                     ' please check url') . "<br></p>";
+                    ' please check url') . "<br></p>";
             echo get_form($metadataurl);
             exit();
         }
-
+        curl_close($curlhandle);
         $xml->preserveWhiteSpace = false;
         $xml->formatOutput = true;
         $entrys = $xml->getElementsByTagName('entry');
