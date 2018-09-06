@@ -38,8 +38,12 @@ if (!empty($eduobjheight) && !empty($eduobjwidth)) {
     $eduobjratio = (int)$eduobjheight / (int)$eduobjwidth;
 }
 $eduobjversion = addslashes_js(optional_param('v', '1.0', PARAM_RAW));
+$eduIconUrl = addslashes_js(optional_param('iconUrl', '', PARAM_RAW));
 $eduobjrepotype = addslashes_js(optional_param('repoType', '', PARAM_RAW));
 $eduobjmediatype = addslashes_js(optional_param('mediatype', '', PARAM_RAW));
+if('true' === optional_param('isDirectory', 'false', PARAM_RAW)) {
+    $eduobjmediatype = 'directory';
+}
 
 ?>
 <html>
@@ -50,15 +54,18 @@ $eduobjmediatype = addslashes_js(optional_param('mediatype', '', PARAM_RAW));
     try{
         parent.document.getElementById('object_url').value = '<?php echo $eduobjres ?>';
         parent.document.getElementById('title').value = '<?php echo $eduobjtitle ?>';
+        parent.document.getElementById('headerTitle').innerHTML = '<?php echo $eduobjtitle ?>';
         parent.document.getElementById('mimetype').value = '<?php echo urldecode($eduobjmimetype) ?>';
         parent.document.getElementById('resourcetype').value = '<?php echo $eduobjresourcetype ?>';
         parent.document.getElementById('resourceversion').value = '<?php echo $eduobjresourceversion ?>';
         parent.document.getElementById('window_height').value = '<?php echo $eduobjheight ?>';
         parent.document.getElementById('window_width').value = '<?php echo $eduobjwidth ?>';
-        parent.document.getElementById('ratio').value = '<?php echo  $eduobjratio?>';
-        parent.document.getElementById('window_version').value = '<?php echo  $eduobjversion?>';
-        parent.document.getElementById('repotype').value = '<?php echo  $eduobjrepotype?>';
-        parent.document.getElementById('mediatype').value = '<?php echo  $eduobjmediatype?>';
+        parent.document.getElementById('ratio').value = '<?php echo $eduobjratio?>';
+        parent.document.getElementById('window_version').value = '<?php echo $eduobjversion?>';
+        parent.document.getElementById('repotype').value = '<?php echo $eduobjrepotype?>';
+        parent.document.getElementById('mediatype').value = '<?php echo $eduobjmediatype?>';
+        parent.document.getElementById('headerIcon').src = '<?php echo $eduIconUrl?>';
+
 
         var inputs = parent.document.getElementsByTagName("input");
             for (var i = 0; i < inputs.length; i++) {
@@ -74,7 +81,7 @@ $eduobjmediatype = addslashes_js(optional_param('mediatype', '', PARAM_RAW));
         parent.editor_edusharing_set_preview_content();
         parent.focus();
     } catch (err) {
-        alert('<?php echo get_string('error_updating_dialog', 'editor_edusharing')?>' + ' ' + err);
+       // alert('<?php echo get_string('error_updating_dialog', 'editor_edusharing')?>' + ' ' + err);
     }
 
 </script>

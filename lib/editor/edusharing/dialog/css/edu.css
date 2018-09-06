@@ -7,11 +7,13 @@
 #preview {
     width: 200px;
     height: 250px;
-    border: 1px solid #999;
-    margin-left: 320px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    float: right;
     font-size: 0.6em;
-    padding: 5px;
+    padding: 10px;
     color: #999;
+    border-radius: 2px;
 }
 
 #preview_resource_wrapper {
@@ -25,10 +27,17 @@
     display: none;
 }
 
+#form_wrapper {
+    margin-top: -7px;
+ }
 
 #form_wrapper td {
     padding: 5px;
     font-size: 12px;
+}
+
+#form_wrapper td:first-child {
+    padding-left: 0;
 }
 
 #form_wrapper input, #form_wrapper button {
@@ -61,6 +70,81 @@
     
 }
 
-#cancel {
-    margin-right: 10px !important; 
+input.edusharing_dialog_button {
+    font-size: 1.2em !important;
+    font-weight: initial !important;
+    text-transform: uppercase !important;
+    padding: 7px 15px !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+input.edusharing_dialog_button_insert {
+    background-color: #48708e !important;
+    background-image: unset !important;
+    float: right !important;
+    color: #fff !important;
+    border-radius: 2px !important;
+}
+
+input.edusharing_dialog_button_cancel {
+    background-image: unset !important;
+    color: #48708e !important;
+    margin-right: 2px !important;
+}
+
+html, body.edusharing_body {
+    background: #fff !important;
+    font-family: "Open Sans", "Arial", "Verdana" !important;
+}
+
+body.edusharing_body {
+    padding: 20px !important;
+    margin: 0px !important;
+    padding-right: 30px !important;
+    overflow: hidden;
+}
+
+h1, h2, h3, h4 {
+    color: #48708e !important;
+    margin-left: -10px;
+}
+
+#form_wrapper input[type="text"] {
+    padding: 4px 10px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 2px !important;
+    text-align: center !important;
+}
+
+#form_wrapper #title {
+    text-align: left !important;
+}
+
+#eduHeader {
+    color: rgba(0, 0, 0, 0.87) !important;
+    padding: 15px 20px;
+    margin: -20px -20px 20px -20px !important;
+    background: #f6f6f6 !important;
+    font-size: 2em;
+    display: flex;
+    align-items: center;
+    width: 110%;
+}
+
+#directory {
+    margin-bottom: 35px;
+}
+
+#directory p {
+    font-size: 14px;
+}
+
+#headerIcon {
+    height: 30px;
+}
+
+#headerTitle {
+    margin-top: 3px;
+    margin-left: 20px;
 }

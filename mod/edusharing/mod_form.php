@@ -102,6 +102,7 @@ class mod_edusharing_mod_form extends moodleform_mod
             $ccresourcesearch .= "&locale=" . current_language();
         }
         $ccresourcesearch .= '&ticket='.$ticket;
+        $ccresourcesearch .= '&applyDirectories=true';
         $ccresourcesearch .= "&reurl=".urlencode($CFG->wwwroot."/mod/edusharing/makelink.php");
         $ccresourcesearch = $CFG->wwwroot .'/mod/edusharing/selectResourceHelper.php?sesskey='.sesskey().'&rurl=' . urlencode($ccresourcesearch);
 
