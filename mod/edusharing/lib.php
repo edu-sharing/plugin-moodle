@@ -109,9 +109,6 @@ function edusharing_add_instance(stdClass $edusharing) {
     // You may have to add extra stuff in here.
     $edusharing = edusharing_postprocess($edusharing);
 
-    // Put the data of the new cc-resource into an array and create a neat XML-file out of it.
-    $data4xml = array("ccrender");
-
     if (isset($edusharing->object_version)) {
         if ($edusharing->object_version == 1) {
             $updateversion = true;
@@ -128,40 +125,10 @@ function edusharing_add_instance(stdClass $edusharing) {
         }
     }
 
-    $data4xml[1]["ccuser"]["id"] = edusharing_get_auth_key();
-    $data4xml[1]["ccuser"]["name"] = $USER->firstname." ".$USER->lastname;
-    $data4xml[1]["ccserver"]["ip"] = get_config('edusharing', 'application_host');
-    $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
-    $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
-    $data4xml[1]["metadata"] = edusharing_get_usage_metadata($edusharing->course);
-
-    // Move popup settings to array.
-    if (!empty($edusharing->popup)) {
-        $parray = explode(',', $edusharing->popup);
-        foreach ($parray as $key => $fieldstring) {
-            $field = explode('=', $fieldstring);
-            $popupfield->$field[0] = $field[1];
-        }
-    }
-
-    // loop trough the list of keys... get the value... put into XML
-    $keylist = array('resizable', 'scrollbars', 'directories', 'location', 'menubar', 'toolbar', 'status', 'width', 'height');
-    foreach ($keylist as $key) {
-        $data4xml[1]["ccwindow"][$key] = isSet($popupfield->{$key}) ? $popupfield->{$key} : 0;
-    }
-
-    $data4xml[1]["ccwindow"]["forcepopup"] = isSet($edusharing->popup_window) ? 1 : 0;
-    $data4xml[1]["ccdownload"]["download"] = isSet($edusharing->force_download) ? 1 : 0;
-
-    $myxml  = new mod_edusharing_render_parameter();
-    $xml = $myxml->edusharing_get_xml($data4xml);
-
     $id = $DB->insert_record(EDUSHARING_TABLE, $edusharing);
-
     $soapclientparams = array();
-
     $client = new mod_edusharing_sig_soap_client(get_config('edusharing', 'repository_usagewebservice_wsdl'), $soapclientparams);
-
+    $xml = edusharing_get_usage_xml($edusharing);
     try {
 
         session_write_close();
@@ -179,7 +146,6 @@ function edusharing_add_instance(stdClass $edusharing) {
             "resourceId"  => $id,
             "xmlParams"  => $xml,
         );
-
         $setusage = $client->setUsage($params);
 
         if (isset($updateversion) && $updateversion === true) {
@@ -225,36 +191,7 @@ function edusharing_update_instance(stdClass $edusharing) {
     // You may have to add extra stuff in here.
     $edusharing = edusharing_postprocess($edusharing);
 
-    // Put the data of the new cc-resource into an array and create a neat XML-file out of it.
-    $data4xml = array("ccrender");
-
-    $data4xml[1]["ccuser"]["id"] = edusharing_get_auth_key();
-    $data4xml[1]["ccuser"]["name"] = $USER->firstname." ".$USER->lastname;
-    $data4xml[1]["ccserver"]["ip"] = get_config('edusharing', 'application_host');
-    $data4xml[1]["ccserver"]["hostname"] = $_SERVER['SERVER_NAME'];
-    $data4xml[1]["ccserver"]["mnet_localhost_id"] = $CFG->mnet_localhost_id;
-    $data4xml[1]["metadata"] = edusharing_get_usage_metadata($edusharing->course);
-
-    // Move popup settings to array.
-    if (!empty($edusharing->popup)) {
-        $parray = explode(',', $edusharing->popup);
-        foreach ($parray as $key => $fieldstring) {
-            $field = explode('=', $fieldstring);
-            $popupfield->$field[0] = $field[1];
-        }
-    }
-    // Loop trough the list of keys... get the value... put into XML.
-    $keylist = array('resizable', 'scrollbars', 'directories', 'location', 'menubar', 'toolbar', 'status', 'width', 'height');
-    foreach ($keylist as $key) {
-        $data4xml[1]["ccwindow"][$key] = isSet($popupfield->{$key}) ? $popupfield->{$key} : 0;
-    }
-
-    $data4xml[1]["ccwindow"]["forcepopup"] = isSet($edusharing->popup_window) ? 1 : 0;
-    $data4xml[1]["ccdownload"]["download"] = isSet($edusharing->force_download) ? 1 : 0;
-    $data4xml[1]["cctracking"]["tracking"] = ($edusharing->tracking == 0) ? 0 : 1;
-
-    $myxml = new mod_edusharing_render_parameter();
-    $xml = $myxml->edusharing_get_xml($data4xml);
+    $xml = edusharing_get_usage_xml($edusharing);
 
     try {
         $connectionurl = get_config('edusharing', 'repository_usagewebservice_wsdl');
@@ -322,11 +259,11 @@ function edusharing_delete_instance($id) {
         $ccwsusage = new mod_edusharing_sig_soap_client($connectionurl, array());
 
         $params = array(
-           'eduRef'  => $edusharing->object_url,
-           'user'  => edusharing_get_auth_key(),
-           'lmsId'  => get_config('edusharing', 'application_appid'),
-           'courseId'  => $edusharing->course,
-           'resourceId'  => $edusharing->id
+            'eduRef'  => $edusharing->object_url,
+            'user'  => edusharing_get_auth_key(),
+            'lmsId'  => get_config('edusharing', 'application_appid'),
+            'courseId'  => $edusharing->course,
+            'resourceId'  => $edusharing->id
         );
 
         $ccwsusage->deleteUsage($params);
@@ -575,30 +512,33 @@ function edusharing_get_repository_id_from_url($objecturl) {
     return $repid;
 }
 
-
 /**
- * Get some additional metadata for usage
- * @param string $courseid
- * @return array
+ * Get additional usage information
+ *
+ * @param stdClass $edusharing
+ * @return string
  */
-function edusharing_get_usage_metadata($courseid) {
+function edusharing_get_usage_xml($edusharing) {
     global $DB;
 
-    if (empty($courseid)) {
-           return '';
-    }
-
-    $course = $DB->get_record('course', array('id'  => $courseid));
+    $course = $DB->get_record('course', array('id'  => $edusharing->course));
     $category = $DB->get_record('course_categories', array('id'  => $course->category));
+    $site = get_site();
 
-    $usagemetadata = array();
-    $usagemetadata['courseId'] = $courseid;
-    $usagemetadata['courseFullname'] = $course->fullname;
-    $usagemetadata['courseShortname'] = $course->shortname;
-    $usagemetadata['courseSummary'] = $course->summary;
-    $usagemetadata['categoryId'] = $course->category;
-    $usagemetadata['categoryName'] = $category->name;
+    $data4xml = array("usage");
 
-    return $usagemetadata;
+    $data4xml[1]["general"]['referencedInName'] = $course->fullname;
+    $data4xml[1]["general"]['referencedInType'] = 'course';
+    $data4xml[1]["general"]['referencedInInstance'] = $site->fullname;
 
+    $data4xml[1]["specific"]['type'] = 'moodle';
+    $data4xml[1]["specific"]['courseId'] = $edusharing->course;
+    $data4xml[1]["specific"]['courseFullname'] = $course->fullname;
+    $data4xml[1]["specific"]['courseShortname'] = $course->shortname;
+    $data4xml[1]["specific"]['courseSummary'] = $course->summary;
+    $data4xml[1]["specific"]['categoryId'] = $course->category;
+    $data4xml[1]["specific"]['categoryName'] = $category->name;
+    $myxml  = new mod_edusharing_render_parameter();
+    $xml = $myxml->edusharing_get_xml($data4xml);
+    return $xml;
 }
