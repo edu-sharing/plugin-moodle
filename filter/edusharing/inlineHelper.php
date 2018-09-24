@@ -27,7 +27,6 @@ require_once(dirname(dirname(dirname(__FILE__))).'/mod/edusharing/lib.php');
 require_once(dirname(dirname(dirname(__FILE__))).'/mod/edusharing/lib/cclib.php');
 
 require_sesskey();
-require_login($edusharing->course, true);
 
 $resid = optional_param('resId', 0, PARAM_INT); // edusharing instance ID
 $childobject_order = optional_param('childobject_order', -1, PARAM_INT);
@@ -38,6 +37,8 @@ if ($resid) {
 } else {
     trigger_error(get_string('error_missing_instance_id', 'filter_edusharing'), E_USER_WARNING);
 }
+
+require_login($edusharing->course, true);
 
 $redirecturl = edusharing_get_redirect_url($edusharing);
 $ts = $timestamp = round(microtime(true) * 1000);
