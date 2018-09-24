@@ -54,23 +54,15 @@ function edusharing_get_auth_key() {
 
     $eduauthkey = get_config('edusharing', 'EDU_AUTH_KEY');
 
-    switch($eduauthkey) {
-        case 'id':
-            return $USER->id;
-        break;
-
-        case 'idnumber':
-            return $USER->idnumber;
-        break;
-
-        case 'email':
-            return $USER->email;
-        break;
-
-        case 'username':
-        default:
-            return $USER->username;
-    }
+    if($eduauthkey == 'id')
+        return $USER->id;
+    if($eduauthkey == 'idnumber')
+        return $USER->idnumber;
+    if($eduauthkey == 'email')
+        return $USER->email;
+    if(isset($USER->profile[$eduauthkey]))
+        return $USER->profile[$eduauthkey];
+    return $USER->username;
 }
 
 
