@@ -30,7 +30,7 @@ require_sesskey();
 require_login($edusharing->course, true);
 
 $resid = optional_param('resId', 0, PARAM_INT); // edusharing instance ID
-$childobject_order = optional_param('childobject_order', -1, PARAM_INT);
+$childobject = optional_param('childobject', '', PARAM_TEXT);
 
 if ($resid) {
     $edusharing  = $DB->get_record(EDUSHARING_TABLE, array('id'  => $resid), '*', MUST_EXIST);
@@ -47,7 +47,7 @@ $redirecturl .= '&signed=' . urlencode($data);
 $redirecturl .= '&closeOnBack=true';
 $cclib = new mod_edusharing_web_service_factory();
 $redirecturl .= '&ticket=' . urlencode(base64_encode(edusharing_encrypt_with_repo_public($cclib -> edusharing_authentication_get_ticket())));
-$redirecturl .= '&childobject_order=' . $childobject_order;
+$redirecturl .= '&childobject=' . $childobject;
 
 redirect($redirecturl);
 
