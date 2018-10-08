@@ -115,10 +115,10 @@ if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0) {
     $link .= '?user=' . urlencode($user);
     $language = current_language();
     $link .= '&locale=' . $language;
-    $link .= '&applyDirectories=true';
 }
 
 $link .= '&ticket='.$ticket;
+$link .= '&applyDirectories=true'; // used in 4.2 or higher, allow directories to be included
 $link .= '&reurl='.urlencode($CFG->wwwroot."/lib/editor/edusharing/dialog/populate.php?");
 
 $previewurl = get_config('edusharing', 'application_cc_gui_url') . 'preview';
