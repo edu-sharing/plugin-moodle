@@ -1,36 +1,28 @@
-*
+/*
 !/blocks
 /blocks/*
 !/blocks/edusharing_search
-!/blocks/edusharing_search/*
 !/blocks/edusharing_upload
-!/blocks/edusharing_upload/*
 !/blocks/edusharing_workspace
-!/blocks/edusharing_workspace/*
 
 !/filter
 /filter/*
 !/filter/edusharing
-!/filter/edusharing/*
 
 !/lib
 /lib/*
 !/lib/editor
 /lib/editor/*
 !/lib/editor/edusharing
-!/lib/editor/edusharing/*
 !/lib/editor/atto
 /lib/editor/atto/*
 !/lib/editor/atto/plugins
 /lib/editor/atto/plugins/*
 !/lib/editor/atto/plugins/edusharing
-!/lib/editor/atto/plugins/edusharing/*
 
 !/mod
 /mod/*
 !/mod/edusharing
-!/mod/edusharing/*
-
 
 !LICENSE
 !README.md
