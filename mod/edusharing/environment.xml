@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<COMPATIBILITY_MATRIX>
+    <PLUGIN name="mod_edusharing">
+        <PHP_EXTENSIONS>
+            <PHP_EXTENSION name="soap" level="required"/>
+            <PHP_EXTENSION name="curl" level="required"/>
+        </PHP_EXTENSIONS>
+    </PLUGIN>
+</COMPATIBILITY_MATRIX>
