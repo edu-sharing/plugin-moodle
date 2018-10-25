@@ -1,3 +1,31 @@
-#eduFrame {
+#edusharing_form {
+    padding: 0;
+}
 
+#edusharing_preview {
+    float: right;
+    width: 300px;
+    max-height: 300px;
+}
+
+.edusharing_form_wrapper {
+    margin-top: 30px;
+}
+
+#edusharing_wrapper_buttons {
+    text-align: right;
+}
+
+.atto_form label.edusharing_label_inline {
+    display: inline-block;
+}
+
+#edusharing_height,
+#edusharing_width {
+    width: 70px;
+    text-align: center;
+}
+
+#edusharing_wrapper_buttons {
+    clear: both;
 }

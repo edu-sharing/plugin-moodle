@@ -45,27 +45,21 @@ function atto_edusharing_strings_for_js() {
  */
 function atto_edusharing_params_for_js($elementid, $options, $fpoptions) {
 	global $USER, $COURSE;
-	//coursecontext
-	$coursecontext=context_course::instance($COURSE->id);	
-	
-	//usercontextid
-	$usercontextid=context_user::instance($USER->id)->id;
-	$disabled=false;
-	
-	//config our array of data
-	$params = array();
-	$params['usercontextid'] = $usercontextid;
 
-		//If they don't have permission don't show it
-		if(!has_capability('atto/edusharing:visible', $coursecontext) ){
-			$disabled=true;
-		 }
-        
-        //add our disabled param
-        $params['disabled'] = $disabled;
-        
-        //add our default flavor
-        $params['defaultflavor'] = get_config('atto_edusharing','defaultflavor');
+    $params = array();
+
+	$coursecontext=context_course::instance($COURSE->id);
+	$disabled=false;
+    if(!has_capability('atto/edusharing:visible', $coursecontext) ){
+        $disabled=true;
+     }
+    $params['disabled'] = $disabled;
+    $params['repourl'] = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
+    $params['courseid'] = $COURSE->id;
+
+    $ccauth = new mod_edusharing_web_service_factory();
+    $ticket = $ccauth->edusharing_authentication_get_ticket();
+    $params['ticket'] = $ticket;
 
     return $params;
 }
