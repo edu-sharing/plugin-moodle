@@ -1,23 +1,29 @@
-*
+/*
 !/blocks
 /blocks/*
 !/blocks/edusharing_search
+!/blocks/edusharing_search/*
 !/blocks/edusharing_upload
+!/blocks/edusharing_upload/*
 !/blocks/edusharing_workspace
+!/blocks/edusharing_workspace/*
 
 !/filter
 /filter/*
-!/edusharing
+!/filter/edusharing
+!/filter/edusharing/*
 
 !/lib
 /lib/*
-!/editor
-/editor/*
-!/edusharing
+!/lib/editor
+/lib/editor/*
+!/lib/editor/edusharing
+!/lib/editor/edusharing/*
 
 !/mod
 /mod/*
-!/edusharing
+!/mod/edusharing
+!/mod/edusharing/*
 
 
 !LICENSE
