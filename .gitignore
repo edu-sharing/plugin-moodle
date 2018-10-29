@@ -1,4 +1,4 @@
-*
+/*
 !/blocks
 /blocks/*
 !/blocks/edusharing_search
@@ -19,12 +19,6 @@
 /lib/editor/*
 !/lib/editor/edusharing
 !/lib/editor/edusharing/*
-!/lib/editor/atto
-/lib/editor/atto/*
-!/lib/editor/atto/plugins
-/lib/editor/atto/plugins/*
-!/lib/editor/atto/plugins/edusharing
-!/lib/editor/atto/plugins/edusharing/*
 
 !/mod
 /mod/*
