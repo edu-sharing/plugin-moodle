@@ -37,7 +37,7 @@ define(['jquery'], function($) {
                     return h > c && e > g
                 }
 
-                jQuery.expr[":"]["near-viewport"] = function (b, c, d) {
+                $.expr[":"]["near-viewport"] = function (b, c, d) {
                     var e = parseInt(d[3]) || 0;
                     return a(b, e)
                 }
