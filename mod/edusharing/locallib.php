@@ -35,12 +35,12 @@ require_once($CFG->dirroot.'/mod/edusharing/lib.php');
  */
 function edusharing_get_auth_key() {
 
-    global $USER;
+    global $USER, $SESSION;
 
-    // Set by external sso script. Do not change to moodle $SESSION!
-    if (array_key_exists('sso', $_SESSION) && !empty($_SESSION['sso'])) {
+    // Set by external sso script.
+    if (isset($SESSION -> edusharing_sso) && !empty($SESSION -> edusharing_sso)) {
         $eduauthparamnameuserid = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
-        return $_SESSION['sso'][$eduauthparamnameuserid];
+        return $SESSION -> edusharing_sso[$eduauthparamnameuserid];
     }
 
     $guestoption = get_config('edusharing', 'edu_guest_option');
@@ -73,12 +73,12 @@ function edusharing_get_auth_key() {
  */
 function edusharing_get_auth_data() {
 
-    global $USER, $CFG;
+    global $USER, $CFG, $SESSION;
 
-    // Set by external sso script. Do not change to moodle $SESSION!
-    if (array_key_exists('sso', $_SESSION) && !empty($_SESSION['sso'])) {
+    // Set by external sso script.
+    if (isset($SESSION -> edusharing_sso) && !empty($SESSION -> edusharing_sso)) {
         $authparams = array();
-        foreach ($_SESSION['sso'] as $key => $value) {
+        foreach ($SESSION -> edusharing_sso as $key => $value) {
             $authparams[] = array('key'  => $key, 'value'  => $value);
         }
     } else {
