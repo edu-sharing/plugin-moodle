@@ -32,11 +32,26 @@ defined('MOODLE_INTERNAL') || die();
 function atto_edusharing_strings_for_js() {
     global $PAGE;
 
-    $PAGE->requires->strings_for_js(array('insert',
-                                          'cancel',
-                                          'enterflavor',
-                                          'dialogtitle'),
-                                    'atto_edusharing');
+    $PAGE->requires->strings_for_js(array(
+            'pluginname',
+            'dialogtitle',
+            'settings',
+            'insert',
+            'cancel',
+            'alwaysShowLatestVersion',
+            'alignment',
+            'alignmentLeft',
+            'alignmentRight',
+            'alignmentNone',
+            'dimensions',
+            'dimensionsWidth',
+            'dimensionsheight',
+            'hint',
+            'skipHint',
+            'openRepo',
+            'directoryHint',
+            ),
+        'atto_edusharing');
 }
 
 /**

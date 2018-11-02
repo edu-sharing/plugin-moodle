@@ -26,10 +26,3 @@
 defined('MOODLE_INTERNAL') || die();
 
 $ADMIN->add('editoratto', new admin_category('atto_edusharing', new lang_string('pluginname', 'atto_edusharing')));
-
-$settings = new admin_settingpage('atto_edusharing_settings', new lang_string('settings', 'atto_edusharing'));
-if ($ADMIN->fulltree) {
-	// An option setting
-	$settings->add(new admin_setting_configtext('atto_edusharing/defaultflavor',
-		get_string('defaultflavor', 'atto_edusharing'), '', 'vanilla', PARAM_TEXT));
-}
