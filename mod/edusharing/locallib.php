@@ -199,6 +199,12 @@ function edusharing_get_redirect_url(
     $url .= '&resource_id='.urlencode($edusharing->id);
     $url .= '&course_id='.urlencode($edusharing->course);
 
+    $context = context_course::instance($edusharing->course);
+    $roles = get_user_roles($context, $USER->id);
+    foreach ($roles as $role) {
+        $url .= '&role=' = urlencode(role_get_name($role, $context));
+    }
+
     $url .= '&display='.urlencode($displaymode);
 
     $url .= '&width=' . urlencode($edusharing->window_width);
