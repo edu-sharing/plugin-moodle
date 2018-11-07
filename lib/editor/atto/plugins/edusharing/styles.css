@@ -29,3 +29,16 @@
 #edusharing_wrapper_buttons {
     clear: both;
 }
+
+#edusharing_hint {
+    text-align: center;
+}
+
+.edusharing_center {
+    display: block;
+    text-align: center;
+}
+
+.edusharing_hint_buttons {
+    margin: 30px 0 10px 0;
+}

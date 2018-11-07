@@ -28,7 +28,7 @@ require_once($CFG->dirroot.'/lib/setup.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
 require_login();
-require_sesskey();
+//require_sesskey();
 
 global $DB;
 
