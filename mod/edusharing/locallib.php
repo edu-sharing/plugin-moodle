@@ -196,7 +196,7 @@ function edusharing_get_redirect_url(
     $context = context_course::instance($edusharing->course);
     $roles = get_user_roles($context, $USER->id);
     foreach ($roles as $role) {
-        $url .= '&role=' = urlencode(role_get_name($role, $context));
+        $url .= '&role=' . urlencode(role_get_name($role, $context));
     }
 
     $url .= '&display='.urlencode($displaymode);
