@@ -37,32 +37,38 @@ function edusharing_get_auth_key() {
 
     global $USER, $SESSION;
 
-    // Set by external sso script.
-    if (isset($SESSION -> edusharing_sso) && !empty($SESSION -> edusharing_sso)) {
-        $eduauthparamnameuserid = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
-        return $SESSION -> edusharing_sso[$eduauthparamnameuserid];
-    }
-
+    $id = '';
     $guestoption = get_config('edusharing', 'edu_guest_option');
-    if (!empty($guestoption)) {
-        $guestid = get_config('edusharing', 'edu_guest_guest_id');
-        if (empty($guestid)) {
-            $guestid = 'esguest';
-        }
-        return $guestid;
+
+    switch(true) {
+        case (isset($SESSION -> edusharing_sso) && !empty($SESSION -> edusharing_sso)):
+            $eduauthparamnameuserid = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
+            $id = $SESSION -> edusharing_sso[$eduauthparamnameuserid];
+            var_dump('tosrti');
+            break;
+        case ($guestoption == 1):
+            $id = get_config('edusharing', 'edu_guest_guest_id');
+            if(empty($id))
+                $id = 'esguest';
+            break;
+        default:
+            $eduauthkey = get_config('edusharing', 'EDU_AUTH_KEY');
+            if($eduauthkey == 'id')
+                $id = $USER->id;
+            if($eduauthkey == 'idnumber')
+                $id = $USER->idnumber;
+            if($eduauthkey == 'email')
+                $id = $USER->email;
+            if(isset($USER->profile[$eduauthkey]))
+                $id = $USER->profile[$eduauthkey];
+            if(empty($id))
+                $id = $USER->username;
     }
 
-    $eduauthkey = get_config('edusharing', 'EDU_AUTH_KEY');
+    if(get_config('edusharing', 'EDU_AUTH_OBFUSCATE_USER') && !$guestoption)
+        $id = md5($id);
 
-    if($eduauthkey == 'id')
-        return $USER->id;
-    if($eduauthkey == 'idnumber')
-        return $USER->idnumber;
-    if($eduauthkey == 'email')
-        return $USER->email;
-    if(isset($USER->profile[$eduauthkey]))
-        return $USER->profile[$eduauthkey];
-    return $USER->username;
+    return $id;
 }
 
 

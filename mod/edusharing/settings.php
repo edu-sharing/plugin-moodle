@@ -89,6 +89,7 @@ if ($ADMIN->fulltree) {
     // Defaults according to locallib.php.
     $settings->add(new admin_setting_configtext('edusharing/EDU_AUTH_KEY', 'EDU_AUTH_KEY',
             '', 'username', PARAM_TEXT, 50));
+    $settings->add(new admin_setting_configcheckbox('edusharing/EDU_AUTH_OBFUSCATE_USER', 'OBFUSCATE_USER', '', ''));
     $settings->add(new admin_setting_configtext('edusharing/EDU_AUTH_PARAM_NAME_USERID',
             'PARAM_NAME_USERID', '', 'userid', PARAM_TEXT, 50));
     $settings->add(new admin_setting_configtext('edusharing/EDU_AUTH_PARAM_NAME_LASTNAME',
