@@ -23,10 +23,13 @@
  */
 
 $string['pluginname'] = 'edu-sharing';
-$string['dialogtitle'] = 'edu-sharing Material einfügen';
+$string['dialogtitle'] = 'edu-sharing Material';
 $string['settings'] = 'edu-sharing (Atto)';
 $string['insert'] = 'Einfügen';
+$string['update'] = 'Aktualisieren';
 $string['cancel'] = 'Abbrechen';
+$string['title'] = 'Titel';
+$string['subtitle'] = 'Untertitel';
 $string['alwaysShowLatestVersion'] = 'Immer aktuelle Version anzeigen';
 $string['alignment'] = 'Ausrichtung';
 $string['alignmentLeft'] = 'Links umfließend';

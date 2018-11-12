@@ -148,6 +148,7 @@ class filter_edusharing extends moodle_text_filter {
         $renderparams['title'] = $node->getAttribute('title');
         $renderparams['mimetype'] = $node->getAttribute('es:mimetype');
         $renderparams['mediatype'] = $node->getAttribute('es:mediatype');
+        $renderparams['caption'] = $node->getAttribute('es:caption');
         $converted = $this->filter_edusharing_render_inline($edusharing, $renderparams);
         $wrapperattributes = array();
 
@@ -217,6 +218,7 @@ class filter_edusharing extends moodle_text_filter {
                  $edusharing->id . '&title=' . urlencode($renderparams['title']) .
                  '&mimetype=' . urlencode($renderparams['mimetype']) .
                  '&mediatype=' . urlencode($renderparams['mediatype']) .
+                 '&caption=' . urlencode($renderparams['caption']) .
                  '"><div class="edusharing_spinner_inner"><div class="edusharing_spinner1"></div></div>' .
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner2"></div></div>'.
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner3"></div></div>'.
