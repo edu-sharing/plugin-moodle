@@ -42,15 +42,6 @@ try {
         throw new Exception(get_string('error_json', 'editor_edusharing'));
     }
 
-    $edusharing->intro = '';
-    $edusharing->introformat = FORMAT_MOODLE;
-
-    $edusharing = edusharing_postprocess($edusharing);
-    if ( ! $edusharing ) {
-        trigger_error(get_string('error_postprocessing', 'editor_edusharing'), E_USER_WARNING);
-        header('HTTP/1.1 500 Internal Server Error', true, 500);
-        exit();
-    }
     $id = edusharing_add_instance($edusharing);
     if ( ! $id ) {
         throw new Exception(get_string('error_adding_instance', 'editor_edusharing'));

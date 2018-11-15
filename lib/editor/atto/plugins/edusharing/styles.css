@@ -2,13 +2,23 @@
     padding: 0;
 }
 
+#edusharing_form input {
+    border-radius: 3px;
+    border: 1px solid #bbb;
+    padding: 5px 10px;
+}
+
+#edusharing_form input[type=number] {
+    padding-right: 0;
+}
+
 #edusharing_form h2 {
     font-size: 1.4em;
 }
 
 #edusharing_preview {
     float: right;
-    width: 300px;
+    max-width: 300px;
     max-height: 300px;
 }
 
@@ -53,4 +63,19 @@ input#edusharing_title {
     font-size: 2em;
     padding: 0;
     width: auto;
+}
+
+#edusharing_title_pencil {
+    display: none;
+    margin-left: 15px;
+    font-size: 1.5em;
+    vertical-align: baseline;
+}
+
+input#edusharing_title:hover + #edusharing_title_pencil {
+    display: inline-block;
+}
+
+#edusharing_caption {
+    width: 300px;
 }
