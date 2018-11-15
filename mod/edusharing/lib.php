@@ -101,7 +101,7 @@ function edusharing_supports($feature) {
  */
 function edusharing_add_instance(stdClass $edusharing) {
 
-    global $COURSE, $CFG, $DB, $SESSION, $USER;
+    global $DB, $USER;
 
     $edusharing->timecreated = time();
     $edusharing->timemodified = time();
@@ -109,11 +109,11 @@ function edusharing_add_instance(stdClass $edusharing) {
     // You may have to add extra stuff in here.
     $edusharing = edusharing_postprocess($edusharing);
 
-    //use simple version handling for atto plugin
+    //use simple version handling for atto plugin or legacy code
     if($edusharing -> editor_atto) {
-        $edusharing->object_version = $edusharing->window_version;
+        //avoid database error
+        $edusharing->introformat = 0;
     } else {
-    //legacy
         if (isset($edusharing->object_version)) {
             if ($edusharing->object_version == 1) {
                 $updateversion = true;
@@ -136,9 +136,6 @@ function edusharing_add_instance(stdClass $edusharing) {
     $client = new mod_edusharing_sig_soap_client(get_config('edusharing', 'repository_usagewebservice_wsdl'), $soapclientparams);
     $xml = edusharing_get_usage_xml($edusharing);
     try {
-
-        session_write_close();
-
         $params = array(
             "eduRef"  => $edusharing->object_url,
             "user"  => edusharing_get_auth_key(),
@@ -449,7 +446,6 @@ function edusharing_get_coursemodule_info($coursemodule) {
  *
  */
 function edusharing_postprocess($edusharing) {
-    global $CFG;
     global $COURSE;
 
     if ( empty($edusharing->timecreated) ) {
