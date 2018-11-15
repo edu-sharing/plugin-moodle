@@ -109,19 +109,25 @@ function edusharing_add_instance(stdClass $edusharing) {
     // You may have to add extra stuff in here.
     $edusharing = edusharing_postprocess($edusharing);
 
-    if (isset($edusharing->object_version)) {
-        if ($edusharing->object_version == 1) {
-            $updateversion = true;
-            $edusharing->object_version = '';
-        } else {
-            $edusharing->object_version = 0;
-        }
+    //use simple version handling for atto plugin
+    if($edusharing -> editor_atto) {
+        $edusharing->object_version = $edusharing->window_version;
     } else {
-
-        if (isset($edusharing->window_versionshow) && $edusharing->window_versionshow == 'current') {
-            $edusharing->object_version = $edusharing->window_version;
+    //legacy
+        if (isset($edusharing->object_version)) {
+            if ($edusharing->object_version == 1) {
+                $updateversion = true;
+                $edusharing->object_version = '';
+            } else {
+                $edusharing->object_version = 0;
+            }
         } else {
-            $edusharing->object_version = 0;
+
+            if (isset($edusharing->window_versionshow) && $edusharing->window_versionshow == 'current') {
+                $edusharing->object_version = $edusharing->window_version;
+            } else {
+                $edusharing->object_version = 0;
+            }
         }
     }
 

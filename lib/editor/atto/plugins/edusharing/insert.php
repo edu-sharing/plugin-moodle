@@ -42,6 +42,8 @@ try {
         throw new Exception(get_string('error_json', 'editor_edusharing'));
     }
 
+    $edusharing -> editor_atto = true;
+
     $id = edusharing_add_instance($edusharing);
     if ( ! $id ) {
         throw new Exception(get_string('error_adding_instance', 'editor_edusharing'));
