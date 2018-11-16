@@ -28,15 +28,18 @@ require_once($CFG->dirroot.'/lib/setup.php');
 require_once($CFG->dirroot.'/mod/edusharing/lib.php');
 
 require_login();
-//require_sesskey();
 
-global $DB;
+global $DB, $USER;
 
 $resourceid = optional_param('resourceId', 0, PARAM_INT);
 
 if (!$edusharing = $DB->get_record('edusharing', array('id'  => $resourceid))) {
     trigger_error(get_string('error_loading_instance', 'editor_edusharing'), E_USER_WARNING);
 }
+
+$context = context_course::instance($edusharing->course);
+if(!is_enrolled($context, $USER->id, '', true) && !is_siteadmin())
+    exit();
 
 $previewservice = get_config('edusharing', 'application_cc_gui_url') . '/' . 'preview';
 
