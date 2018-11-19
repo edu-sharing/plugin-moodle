@@ -79,3 +79,20 @@ input#edusharing_title:hover + #edusharing_title_pencil {
 #edusharing_caption {
     width: 300px;
 }
+
+
+.editor_atto .edusharing {
+    background-color: #efefef;
+    background-repeat: no-repeat;
+    background-image: url(http://127.0.0.1/plugin-moodle/lib/editor/atto/plugins/edusharing/pix/icon.png);
+}
+
+.editor_atto img.edusharing {
+    object-position: 0 -30px;
+    background-position: bottom 5px left 5px;
+}
+
+.editor_atto a.edusharing {
+    background-position: center left 5px;
+    padding: 6px 10px 6px 30px;
+}
