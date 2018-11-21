@@ -1,3 +1,7 @@
+.moodle-dialogue-base .moodle-dialogue .moodle-dialogue-bd {
+    padding: 1rem !important;
+}
+
 #edusharing_form {
     padding: 0;
 }
@@ -32,6 +36,11 @@
 
 .atto_form label.edusharing_label_inline {
     display: inline-block;
+    margin-left: 10px;
+}
+
+.atto_form label.edusharing_label_block {
+    display: block;
 }
 
 #edusharing_height,
