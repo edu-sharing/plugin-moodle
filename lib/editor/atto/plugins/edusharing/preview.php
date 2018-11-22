@@ -38,7 +38,7 @@ if (!$edusharing = $DB->get_record('edusharing', array('id'  => $resourceid))) {
 }
 
 $context = context_course::instance($edusharing->course);
-if(!is_enrolled($context, $USER->id, '', true) && !is_siteadmin())
+if(!is_viewing($context, $USER->id))
     exit();
 
 $previewservice = get_config('edusharing', 'application_cc_gui_url') . '/' . 'preview';
