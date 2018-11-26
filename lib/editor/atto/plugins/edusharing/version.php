@@ -28,6 +28,10 @@ $plugin->version   = 2018111902;        // The current plugin version (Date: YYY
 $plugin->requires  = 2013110500;        // Requires this Moodle version.
 $plugin->component = 'atto_edusharing';  // Full name of the plugin (used for diagnostics).
 $plugin->maturity  = MATURITY_BETA;
+$plugin->dependencies = array(
+    'mod_edusharing'  => 2018110801
+);
 // Human readable version information
-$plugin->release   = '1.0.0 (Build 2018111902)';
+$plugin->release   = '4.2';
+
 
