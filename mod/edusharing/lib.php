@@ -159,6 +159,7 @@ function edusharing_add_instance(stdClass $edusharing) {
 
     } catch (Exception $e) {
         $DB->delete_records(EDUSHARING_TABLE, array('id'  => $id));
+        error_log(print_r($e, true));
         trigger_error($e->getMessage());
         return false;
     }
