@@ -32,6 +32,9 @@
 
 #edusharing_wrapper_buttons {
     text-align: right;
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
 }
 
 .atto_form label.edusharing_label_inline {
