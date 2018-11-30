@@ -110,7 +110,7 @@ function edusharing_add_instance(stdClass $edusharing) {
     $edusharing = edusharing_postprocess($edusharing);
 
     //use simple version handling for atto plugin or legacy code
-    if($edusharing -> editor_atto) {
+    if(isset($edusharing -> editor_atto)) {
         //avoid database error
         $edusharing->introformat = 0;
     } else {
