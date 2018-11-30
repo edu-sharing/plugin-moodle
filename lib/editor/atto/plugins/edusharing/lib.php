@@ -62,13 +62,14 @@ function atto_edusharing_strings_for_js() {
  * @return array of additional params to pass to javascript init function for this module.
  */
 function atto_edusharing_params_for_js($elementid, $options, $fpoptions) {
-	global $USER, $COURSE;
+	global $PAGE, $COURSE;
 
     $params = array();
 
 	$coursecontext=context_course::instance($COURSE->id);
+
 	$disabled=false;
-    if(!has_capability('atto/edusharing:visible', $coursecontext) ){
+    if(!has_capability('atto/edusharing:visible', $coursecontext) || is_a ($PAGE->context, 'context_module')){
         $disabled=true;
      }
     $params['disabled'] = $disabled;
