@@ -39,6 +39,6 @@ $string['dimensions'] = 'Dimensions';
 $string['dimensionsWidth'] = 'Width';
 $string['dimensionsheight'] = 'Height';
 $string['hint'] = 'Select an edu-sharing object from the repository to embed it in Moodle. Click on "Open repository". Search for the desired object and click the "APPLY" button.';
-$string['skipHint'] = 'Open the search engine right away next time';
+$string['skipHint'] = 'Open the search engine right away next time.';
 $string['openRepo'] = 'OPEN REPOSITORY';
 $string['directoryHint'] = 'The folder was embedded. Elements of the folder will be displayed, but not its subfolders.';
