@@ -104,8 +104,6 @@ class edusharing_texteditor extends tinymce_texteditor {
         $result = false;
         switch( $options['context']->contextlevel ) {
             case CONTEXT_COURSE:
-            case CONTEXT_MODULE:
-            case CONTEXT_BLOCK:
                 $result = true;
                 break;
 

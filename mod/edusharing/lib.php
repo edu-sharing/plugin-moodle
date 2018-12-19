@@ -101,7 +101,7 @@ function edusharing_supports($feature) {
  */
 function edusharing_add_instance(stdClass $edusharing) {
 
-    global $COURSE, $CFG, $DB, $SESSION, $USER;
+    global $DB, $USER;
 
     $edusharing->timecreated = time();
     $edusharing->timemodified = time();
@@ -109,19 +109,25 @@ function edusharing_add_instance(stdClass $edusharing) {
     // You may have to add extra stuff in here.
     $edusharing = edusharing_postprocess($edusharing);
 
-    if (isset($edusharing->object_version)) {
-        if ($edusharing->object_version == 1) {
-            $updateversion = true;
-            $edusharing->object_version = '';
-        } else {
-            $edusharing->object_version = 0;
-        }
+    //use simple version handling for atto plugin or legacy code
+    if(isset($edusharing -> editor_atto)) {
+        //avoid database error
+        $edusharing->introformat = 0;
     } else {
-
-        if (isset($edusharing->window_versionshow) && $edusharing->window_versionshow == 'current') {
-            $edusharing->object_version = $edusharing->window_version;
+        if (isset($edusharing->object_version)) {
+            if ($edusharing->object_version == 1) {
+                $updateversion = true;
+                $edusharing->object_version = '';
+            } else {
+                $edusharing->object_version = 0;
+            }
         } else {
-            $edusharing->object_version = 0;
+
+            if (isset($edusharing->window_versionshow) && $edusharing->window_versionshow == 'current') {
+                $edusharing->object_version = $edusharing->window_version;
+            } else {
+                $edusharing->object_version = 0;
+            }
         }
     }
 
@@ -130,9 +136,6 @@ function edusharing_add_instance(stdClass $edusharing) {
     $client = new mod_edusharing_sig_soap_client(get_config('edusharing', 'repository_usagewebservice_wsdl'), $soapclientparams);
     $xml = edusharing_get_usage_xml($edusharing);
     try {
-
-        session_write_close();
-
         $params = array(
             "eduRef"  => $edusharing->object_url,
             "user"  => edusharing_get_auth_key(),
@@ -156,6 +159,7 @@ function edusharing_add_instance(stdClass $edusharing) {
 
     } catch (Exception $e) {
         $DB->delete_records(EDUSHARING_TABLE, array('id'  => $id));
+        error_log(print_r($e, true));
         trigger_error($e->getMessage());
         return false;
     }
@@ -443,7 +447,6 @@ function edusharing_get_coursemodule_info($coursemodule) {
  *
  */
 function edusharing_postprocess($edusharing) {
-    global $CFG;
     global $COURSE;
 
     if ( empty($edusharing->timecreated) ) {

@@ -1,12 +1,12 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
 //
-// This program is free software: you can redistribute it and/or modify
+// Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// This program is distributed in the hope that it will be useful,
+// Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
@@ -15,16 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the version of the edu-sharing plugin
+ * Atto edusharing  version file.
  *
- * @package    mod_edusharing
- * @copyright  metaVentis GmbH — http://metaventis.com
+ * @package    atto_edusharing
+ * @copyright  COPYRIGHTINFO
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-$plugin->component = 'mod_edusharing';
-$plugin->version = 2018121901;
-$plugin->requires = 2015051100;
-$plugin->cron = 0;
-$plugin->release = 'v4.2';
+
+$plugin->version   = 2018121103;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2013110500;        // Requires this Moodle version.
+$plugin->component = 'atto_edusharing';  // Full name of the plugin (used for diagnostics).
+$plugin->maturity  = MATURITY_BETA;
+$plugin->dependencies = array(
+    'mod_edusharing'  => 2018110801
+);
+// Human readable version information
+$plugin->release   = '4.2';
+
+

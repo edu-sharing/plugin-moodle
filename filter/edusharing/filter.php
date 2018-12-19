@@ -145,9 +145,14 @@ class filter_edusharing extends moodle_text_filter {
         }
 
         $renderparams = array();
+        $height = $node->getAttribute('height');
+        $width = $node->getAttribute('width');
+        $renderparams['height'] = $height;
+        $renderparams['width'] = $width;
         $renderparams['title'] = $node->getAttribute('title');
         $renderparams['mimetype'] = $node->getAttribute('es:mimetype');
         $renderparams['mediatype'] = $node->getAttribute('es:mediatype');
+        $renderparams['caption'] = $node->getAttribute('es:caption');
         $converted = $this->filter_edusharing_render_inline($edusharing, $renderparams);
         $wrapperattributes = array();
 
@@ -157,33 +162,30 @@ class filter_edusharing extends moodle_text_filter {
             $wrapperattributes[] = 'data-id="' . (int) $node->getAttribute('es:resource_id') . '"';
         }
 
+        $nodestyle = $node->getAttribute('style');
         $styleattr = '';
-        switch ($edusharing->window_float) {
-            case 'left':
+        switch (true) {
+            case (strpos($nodestyle, 'left') > -1):
                 $styleattr .= 'display: block; float: left; margin: 0 5px 5px 0;';
                 break;
-            case 'right':
+            case (strpos($nodestyle, 'right') > -1):
                 $styleattr .= 'display: block; float: right; margin: 0 0 5px 5px;';
                 break;
-            case 'inline':
-                $styleattr .= 'display: inline-block; margin: 0 5px;';
-                break;
-            case 'none':
             default:
-                $styleattr .= 'display: block; float: none; margin: 5px 0;';
+                $styleattr .= 'display: inline-block; margin: 5px 0;';
                 break;
         }
 
         $tagattributes = '';
 
-        if ($edusharing->window_width) {
-            $styleattr .= ' width: ' . $edusharing->window_width . 'px;';
-            $tagattributes = 'width="' . $edusharing->window_width . '"';
+        if ($width) {
+            $styleattr .= ' width: ' . $width . 'px;';
+            $tagattributes = 'width="' . $width . '"';
         }
 
-        if ($edusharing->window_height) {
-            $styleattr .= ' height: ' . $edusharing->window_height . 'px;';
-            $tagattributes = 'height="' . $edusharing->window_height . '"';
+        if ($height) {
+            $styleattr .= ' height: ' . $height . 'px;';
+            $tagattributes = 'height="' . $height . '"';
         }
 
         $wrapperattributes[] = 'style="' . $styleattr . '"';
@@ -209,14 +211,15 @@ class filter_edusharing extends moodle_text_filter {
         if (!$objecturl) {
             throw new Exception(get_string('error_empty_object_url', 'filter_edusharing'));
         }
-
-        $repositoryid = get_config('edusharing', 'application_homerepid');
         $url = edusharing_get_redirect_url($edusharing, EDUSHARING_DISPLAY_MODE_INLINE);
+        $url .=  '&height=' . urlencode($renderparams['height']) . '&width=' . urlencode($renderparams['width']);
+
         $inline = '<div class="eduContainer" data-type="esObject" data-url="' . $CFG->wwwroot .
                  '/filter/edusharing/proxy.php?sesskey='.sesskey().'&URL=' . urlencode($url) . '&resId=' .
                  $edusharing->id . '&title=' . urlencode($renderparams['title']) .
                  '&mimetype=' . urlencode($renderparams['mimetype']) .
                  '&mediatype=' . urlencode($renderparams['mediatype']) .
+                 '&caption=' . urlencode($renderparams['caption']) .
                  '"><div class="edusharing_spinner_inner"><div class="edusharing_spinner1"></div></div>' .
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner2"></div></div>'.
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner3"></div></div>'.
