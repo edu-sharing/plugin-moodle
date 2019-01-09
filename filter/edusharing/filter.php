@@ -155,7 +155,6 @@ class filter_edusharing extends moodle_text_filter {
         $renderparams['caption'] = $node->getAttribute('es:caption');
         $converted = $this->filter_edusharing_render_inline($edusharing, $renderparams);
         $wrapperattributes = array();
-
         $wrapperattributes[] = 'id="' . (int) $node->getAttribute('es:resource_id') . '"';
         $wrapperattributes[] = 'class="edu_wrapper"';
         if (strpos($renderparams['mimetype'], 'image') !== false) {
@@ -170,6 +169,9 @@ class filter_edusharing extends moodle_text_filter {
                 break;
             case (strpos($nodestyle, 'right') > -1):
                 $styleattr .= 'display: block; float: right; margin: 0 0 5px 5px;';
+                break;
+            case ($renderparams['mediatype'] == 'directory'):
+                $styleattr .= 'display: block; margin: 5px 0;';
                 break;
             default:
                 $styleattr .= 'display: inline-block; margin: 5px 0;';
