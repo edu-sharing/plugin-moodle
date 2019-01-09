@@ -170,7 +170,7 @@ class filter_edusharing extends moodle_text_filter {
             case (strpos($nodestyle, 'right') > -1):
                 $styleattr .= 'display: block; float: right; margin: 0 0 5px 5px;';
                 break;
-            case ($renderparams['mediatype'] == 'directory'):
+            case ($renderparams['mediatype'] == 'directory' || $renderparams['mediatype'] == 'folder'):
                 $styleattr .= 'display: block; margin: 5px 0;';
                 break;
             default:
