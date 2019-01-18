@@ -57,7 +57,22 @@
 }
 
 #edusharing_hint {
+    text-align: left;
+}
+
+#edusharing_hint_help {
+    float: left;
+    width: 340px;
+    margin-right: 40px;
+}
+
+#edusharing_hint_skip {
     text-align: center;
+    margin-top: 60px;
+}
+
+#edusharing_hint_check {
+    margin-right: 10px;
 }
 
 .edusharing_center {
@@ -73,7 +88,7 @@
     display: block;
     margin: 0 auto;
     margin-bottom: 30px;
-    max-height: 200px;
+    max-height: 120px;
 }
 
 input#edusharing_title {
