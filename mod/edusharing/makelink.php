@@ -32,12 +32,11 @@ $PAGE->set_context(context_system::instance() );
 
 echo $OUTPUT->header();
 
-
 $eduresource = addslashes_js(optional_param('nodeId', '', PARAM_RAW));
-
+$title = addslashes_js(optional_param('title', '', PARAM_RAW));
 echo <<<content
 <script type="text/javascript">
-        window.top.setId('$eduresource');
+        window.top.setNode('$eduresource', '$title');
 </script>
 content;
 

@@ -35,8 +35,9 @@ require_sesskey();
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <script>
-            function setId(id) {
+            function setNode(id, title) {
                 window.opener.document.getElementById('id_object_url').value = id;
+                window.opener.document.getElementById('id_name').value = title;
                 window.opener.focus();
                 window.close();
             }
