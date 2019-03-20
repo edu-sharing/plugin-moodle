@@ -38,6 +38,7 @@ class mod_edusharing_sig_soap_client extends SoapClient {
      * @param array $options
      */
     public function __construct($wsdl, $options = array()) {
+        ini_set('default_socket_timeout', 15);
         parent::__construct($wsdl, $options);
         $this->edusharing_set_soap_headers();
     }
