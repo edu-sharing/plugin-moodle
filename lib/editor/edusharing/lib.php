@@ -74,23 +74,11 @@ class edusharing_texteditor extends tinymce_texteditor {
      * @return bool
      */
     protected function editor_edusharing_is_edusharing_context(array $options) {
-        global $COURSE;
+        global $COURSE, $PAGE;
 
-        if ( empty($options['context']) ) {
-            return false;
-        }
+        // context is not reliable here, because when creating a new module context is "context_course"
+        return strpos($PAGE->url->get_path(), 'modedit.php') === false;
 
-        $result = false;
-        switch( $options['context']->contextlevel ) {
-            case CONTEXT_COURSE:
-                $result = true;
-                break;
-
-            default:
-                $result = false;
-        }
-
-        return $result;
     }
 
     /**
