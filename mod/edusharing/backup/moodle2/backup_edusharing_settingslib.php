@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,23 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Atto edusharing  version file.
- *
- * @package    atto_edusharing
- * @copyright  COPYRIGHTINFO
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_edusharing
+ * @subpackage backup-moodle2
+ * @copyright 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version   = 2019032101;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2013110500;        // Requires this Moodle version.
-$plugin->component = 'atto_edusharing';  // Full name of the plugin (used for diagnostics).
-$plugin->maturity  = MATURITY_BETA;
-$plugin->dependencies = array(
-    'mod_edusharing'  => 2018110801
-);
-// Human readable version information
-$plugin->release   = '4.2';
-
-
+// This activity has not particular settings but the inherited from the generic
+// backup_activity_task so here there isn't any class definition, like the ones
+// existing in /backup/moodle2/backup_settingslib.php (activities section)
