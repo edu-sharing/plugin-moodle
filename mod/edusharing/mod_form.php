@@ -54,7 +54,7 @@ class mod_edusharing_mod_form extends moodleform_mod
         try {
             // @TODO make dynamic
             $ccauth = new mod_edusharing_web_service_factory();
-            $ticket = $ccauth->edusharing_authentication_get_ticket();
+            $ticket = $ccauth->edusharing_authentication_get_ticket(mod_edusharing_web_service_factory::CONTEXT_EDITOR);
         } catch (Exception $e) {
             trigger_error($e->getMessage(), E_USER_WARNING);
             return false;

@@ -57,7 +57,7 @@ class edusharing_texteditor extends tinymce_texteditor {
      */
     protected function editor_edusharing_init_edusharing_ticket() {
         $ccauth = new mod_edusharing_web_service_factory();
-        $edusharingticket = $ccauth->edusharing_authentication_get_ticket();
+        $edusharingticket = $ccauth->edusharing_authentication_get_ticket(mod_edusharing_web_service_factory::CONTEXT_EDITOR);
         if ( ! $edusharingticket ) {
             return false;
         }
