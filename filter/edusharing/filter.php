@@ -207,7 +207,7 @@ class filter_edusharing extends moodle_text_filter {
      * @return string
      */
     protected function filter_edusharing_render_inline(stdClass $edusharing, $renderparams) {
-        global $CFG;
+        global $CFG, $COURSE;
 
         $objecturl = $edusharing->object_url;
         if (!$objecturl) {
@@ -222,6 +222,7 @@ class filter_edusharing extends moodle_text_filter {
                  '&mimetype=' . urlencode($renderparams['mimetype']) .
                  '&mediatype=' . urlencode($renderparams['mediatype']) .
                  '&caption=' . urlencode($renderparams['caption']) .
+                 '&course_id=' . urlencode($COURSE -> id) .
                  '"><div class="edusharing_spinner_inner"><div class="edusharing_spinner1"></div></div>' .
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner2"></div></div>'.
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner3"></div></div>'.
