@@ -64,6 +64,9 @@ class mod_edusharing_web_service_factory {
 
         global $USER;
 
+        if(!isset($USER->edusharing_userticket_context))
+            $USER->edusharing_userticket_context = CONTEXT_VIEWER;
+
         // Ticket available and has the right context.
         if (isset($USER->edusharing_userticket) && $USER->edusharing_userticket_context >= $context) {
 
