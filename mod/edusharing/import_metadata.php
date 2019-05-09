@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 // This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
@@ -58,8 +59,6 @@ fieldset {
 </head>
 <body>
 <?php
-
-require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 
 if (!is_siteadmin()) {
     echo 'Access denied!';
