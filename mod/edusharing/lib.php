@@ -34,7 +34,7 @@ defined('MOODLE_INTERNAL') || die();
 define('EDUSHARING_MODULE_NAME', 'edusharing');
 define('EDUSHARING_TABLE', 'edusharing');
 
-define('EDUSHARING_DISPLAY_MODE_DISPLAY', 'window');
+define('EDUSHARING_DISPLAY_MODE_DISPLAY', '');
 define('EDUSHARING_DISPLAY_MODE_INLINE', 'inline');
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) .'/lib');

@@ -115,19 +115,19 @@ input#edusharing_title:hover + #edusharing_title_pencil {
 }
 
 
-.editor_atto .edusharing {
+.editor_atto .edusharing_atto {
     background-color: #efefef;
     background-repeat: no-repeat;
     background-size: 16px;
     background-image: url('[[pix:atto_edusharing|/icon]]');
 }
 
-.editor_atto img.edusharing {
+.editor_atto img.edusharing_atto {
     object-position: 0 -30px;
     background-position: bottom 5px left 5px;
 }
 
-.editor_atto a.edusharing {
+.editor_atto a.edusharing_atto {
     background-position: center left 5px;
     padding: 6px 10px 6px 30px;
 }

@@ -68,11 +68,8 @@ function atto_edusharing_params_for_js($elementid, $options, $fpoptions) {
     $params = array();
 	$coursecontext=context_course::instance($COURSE->id);
 
-    // context is not reliable here, because when creating a new module context is "context_course"
-    $showEduPlugin = strpos($PAGE->url->get_path(), 'modedit.php') === false;
-
 	$disabled=false;
-    if(!has_capability('atto/edusharing:visible', $coursecontext) || !$showEduPlugin){
+    if(!has_capability('atto/edusharing:visible', $coursecontext)){
         $disabled=true;
      }
     $params['disabled'] = $disabled;
