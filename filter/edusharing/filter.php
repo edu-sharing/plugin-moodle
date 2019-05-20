@@ -79,7 +79,7 @@ class filter_edusharing extends moodle_text_filter {
 
         try {
 
-            if (strpos($text, 'edusharing_atto') === false) {
+            if (strpos($text, 'edusharing_atto') === false && strpos($text, 'es:resource_id') === false) {
                 return $text;
             }
 
@@ -91,13 +91,20 @@ class filter_edusharing extends moodle_text_filter {
 
             $memento = $text;
 
-            preg_match_all('#<img(.*)class="(.*)edusharing_atto(.*)"(.*)>#Umsi', $text, $matchesimg,
+            preg_match_all('#<img(.*)class="(.*)edusharing_atto(.*)"(.*)>#Umsi', $text, $matchesimg_atto,
                     PREG_PATTERN_ORDER);
-            preg_match_all('#<a(.*)class="(.*)edusharing_atto(.*)">(.*)</a>#Umsi', $text, $matchesa,
+            preg_match_all('#<a(.*)class="(.*)edusharing_atto(.*)">(.*)</a>#Umsi', $text, $matchesa_atto,
                     PREG_PATTERN_ORDER);
-            $matches = array_merge($matchesimg[0], $matchesa[0]);
+            $matches_atto = array_merge($matchesimg_atto[0], $matchesa_atto[0]);
 
-            if (!empty($matches)) {
+
+            preg_match_all('#<img(.*)es:resource_id(.*)>#Umsi', $text, $matchesimg_tinymce,
+                PREG_PATTERN_ORDER);
+            preg_match_all('#<a(.*)es:resource_id(.*)>(.*)</a>#Umsi', $text, $matchesa_tinymce,
+                PREG_PATTERN_ORDER);
+            $matches_tinymce = array_merge($matchesimg_tinymce[0], $matchesa_tinymce[0]);
+
+            if (!empty($matches_atto) || !empty($matches_tinymce)) {
                 // Disable page-caching to "renew" render-session-data.
                 $PAGE->set_cacheable(false);
                 if(!$edusharing_filter_loaded) {
@@ -105,8 +112,12 @@ class filter_edusharing extends moodle_text_filter {
                     $edusharing_filter_loaded = true;
                 }
 
-                foreach ($matches as $match) {
+                foreach ($matches_atto as $match) {
                     $text = str_replace($match, $this->filter_edusharing_convert_object($match), $text, $count);
+                }
+
+                foreach ($matches_tinymce as $match) {
+                    $text = str_replace($match, $this->filter_edusharing_convert_object($match, true), $text, $count);
                 }
             }
         } catch (Exception $exception) {
@@ -123,25 +134,44 @@ class filter_edusharing extends moodle_text_filter {
      * @param string $object
      * @return boolean|string
      */
-    private function filter_edusharing_convert_object($object) {
+    private function filter_edusharing_convert_object($object, $tinymce = false) {
         global $DB;
         $doc = new DOMDocument();
         $doc->loadHTML($object);
 
-        $node = $doc->getElementsByTagName('a')->item(0);
-/*todo get params from attributes (tinymce) or from src/href*/
-        if (empty($node)) {
-            $node = $doc->getElementsByTagName('img')->item(0);
-            $qs = $node->getAttribute('src');
-        } else {
-            $qs = $node->getAttribute('href');
-        }
-        if (empty($node)) {
-            trigger_error(get_string('error_loading_node', 'filter_edusharing'), E_USER_WARNING);
-            return false;
-        }
+        if($tinymce) {
+            $node = $doc->getElementsByTagName('a')->item(0);
+            if (empty($node)) {
+                $node = $doc->getElementsByTagName('img')->item(0);
+            }
+            if (empty($node)) {
+                trigger_error(get_string('error_loading_node', 'filter_edusharing'), E_USER_WARNING);
+                return false;
+            }
 
-        parse_str(parse_url($qs, PHP_URL_QUERY), $params);
+            $params = array();
+            $params['mimetype'] = $node->getAttribute('es:mimetype');
+            $params['mediatype'] = $node->getAttribute('es:mediatype');
+            $params['caption'] = $node->getAttribute('es:caption');
+            $params['resourceId'] = $node->getAttribute('es:resource_id');
+
+
+
+        } else {
+            $node = $doc->getElementsByTagName('a')->item(0);
+            if (empty($node)) {
+                $node = $doc->getElementsByTagName('img')->item(0);
+                $qs = $node->getAttribute('src');
+            } else {
+                $qs = $node->getAttribute('href');
+            }
+            if (empty($node)) {
+                trigger_error(get_string('error_loading_node', 'filter_edusharing'), E_USER_WARNING);
+                return false;
+            }
+
+            parse_str(parse_url($qs, PHP_URL_QUERY), $params);
+        }
 
 
         $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id' => (int) $params['resourceId']));
