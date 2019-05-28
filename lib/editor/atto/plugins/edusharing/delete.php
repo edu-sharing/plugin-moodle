@@ -22,36 +22,36 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once __DIR__ . '/../../../../../config.php';
-require_once($CFG->dirroot.'/lib/setup.php');
+require_once(__DIR__ . '/../../../../../config.php');
+require_once($CFG->dirroot . '/lib/setup.php');
 
 require_login();
 require_sesskey();
 
-require_once($CFG->dirroot.'/mod/edusharing/lib.php');
+require_once($CFG->dirroot . '/mod/edusharing/lib.php');
 
 $input = file_get_contents('php://input');
-if ( ! $input ) {
+if (!$input) {
     throw new Exception(get_string('error_json', 'editor_edusharing'));
 }
 
 $delete = json_decode($input);
-if ( ! $delete ) {
+if (!$delete) {
     throw new Exception(get_string('error_json', 'editor_edusharing'));
 }
 
 $where = array(
-        'id'  => $delete->id,
-        'course'  => $delete->course,
+    'id' => $delete->id,
+    'course' => $delete->course,
 );
 $edusharing = $DB->get_record(EDUSHARING_TABLE, $where);
-if ( ! $edusharing ) {
+if (!$edusharing) {
     trigger_error(get_string('error_resource_not_found', 'editor_edusharing'), E_USER_WARNING);
     header('HTTP/1.1 404 Not found', true, 404);
     exit();
 }
 
-if ( ! edusharing_delete_instance($edusharing->id) ) {
+if (!edusharing_delete_instance($edusharing->id)) {
     trigger_error(get_string('error_deleting_instance', 'editor_edusharing'), E_USER_WARNING);
 
     header('', true, 500);

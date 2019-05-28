@@ -22,10 +22,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// create preview link with signature
+// Create preview link with signature.
 require_once(__DIR__ . '/../../../../../config.php');
-require_once($CFG->dirroot.'/lib/setup.php');
-require_once($CFG->dirroot.'/mod/edusharing/lib.php');
+require_once($CFG->dirroot . '/lib/setup.php');
+require_once($CFG->dirroot . '/mod/edusharing/lib.php');
 
 require_login();
 
@@ -33,13 +33,14 @@ global $DB, $USER;
 
 $resourceid = optional_param('resourceId', 0, PARAM_INT);
 
-if (!$edusharing = $DB->get_record('edusharing', array('id'  => $resourceid))) {
+if (!$edusharing = $DB->get_record('edusharing', array('id' => $resourceid))) {
     trigger_error(get_string('error_loading_instance', 'editor_edusharing'), E_USER_WARNING);
 }
 
 $context = context_course::instance($edusharing->course);
-if(!is_viewing($context, $USER->id))
+if (!is_viewing($context, $USER->id)) {
     exit();
+}
 
 $previewservice = get_config('edusharing', 'application_cc_gui_url') . '/' . 'preview';
 
