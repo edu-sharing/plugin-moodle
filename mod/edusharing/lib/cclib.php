@@ -38,9 +38,6 @@ class mod_edusharing_web_service_factory {
      */
     private $authenticationservicewsdl = '';
 
-    const CONTEXT_VIEWER = 0;
-    const CONTEXT_EDITOR = 1;
-
     /**
      * Get repository properties and set auth service url
      *
@@ -58,17 +55,14 @@ class mod_edusharing_web_service_factory {
      * Get repository ticket
      * Check existing ticket vor validity
      * Request a new one if existing ticket is invalid
-     * @param string $context
+     * @param string $homeappid
      */
-    public function edusharing_authentication_get_ticket($context = self::CONTEXT_VIEWER) {
+    public function edusharing_authentication_get_ticket() {
 
         global $USER;
 
-        if(!isset($USER->edusharing_userticket_context))
-            $USER->edusharing_userticket_context = self::CONTEXT_VIEWER;
-
-        // Ticket available and has the right context.
-        if (isset($USER->edusharing_userticket) && $USER->edusharing_userticket_context >= $context) {
+        // Ticket available.
+        if (isset($USER->edusharing_userticket)) {
 
             // Ticket is younger than 10s, we must not check.
             if (isset($USER->edusharing_userticketvalidationts)
@@ -103,14 +97,13 @@ class mod_edusharing_web_service_factory {
 
         // No or invalid ticket available - request new ticket.
         $paramstrusted = array("applicationId"  => get_config('edusharing', 'application_appid'),
-                        "ticket"  => session_id(), "ssoData"  => edusharing_get_auth_data($context));
+                        "ticket"  => session_id(), "ssoData"  => edusharing_get_auth_data());
         try {
             $client = new mod_edusharing_sig_soap_client($this->authenticationservicewsdl);
             $return = $client->authenticateByTrustedApp($paramstrusted);
             $ticket = $return->authenticateByTrustedAppReturn->ticket;
             $USER->edusharing_userticket = $ticket;
             $USER->edusharing_userticketvalidationts = time();
-            $USER->edusharing_userticket_context = $context;
             return $ticket;
         } catch (Exception $e) {
             trigger_error(get_string('error_auth_failed', 'edusharing') . ' ' . $e, E_USER_WARNING);

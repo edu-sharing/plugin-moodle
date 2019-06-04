@@ -77,7 +77,7 @@ function atto_edusharing_params_for_js($elementid, $options, $fpoptions) {
     $params['courseid'] = $COURSE->id;
 
     $ccauth = new mod_edusharing_web_service_factory();
-    $ticket = $ccauth->edusharing_authentication_get_ticket(mod_edusharing_web_service_factory::CONTEXT_EDITOR);
+    $ticket = $ccauth->edusharing_authentication_get_ticket();
     $params['ticket'] = $ticket;
 
     return $params;

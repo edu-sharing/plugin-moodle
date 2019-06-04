@@ -104,7 +104,7 @@ if ( ! empty($resourceid) ) {
 
 
 $ccauth = new mod_edusharing_web_service_factory();
-$ticket = $ccauth->edusharing_authentication_get_ticket(mod_edusharing_web_service_factory::CONTEXT_EDITOR);
+$ticket = $ccauth->edusharing_authentication_get_ticket();
 $link = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
 if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0) {
     $link .= '/components/search';

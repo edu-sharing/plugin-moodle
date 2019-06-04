@@ -52,7 +52,7 @@ require_login($course->id);
 echo $OUTPUT->header();
 
 $ccauth = new mod_edusharing_web_service_factory();
-$ticket = $ccauth->edusharing_authentication_get_ticket(mod_edusharing_web_service_factory::CONTEXT_EDITOR);
+$ticket = $ccauth->edusharing_authentication_get_ticket();
 if ( ! $ticket ) {
     exit();
 }
