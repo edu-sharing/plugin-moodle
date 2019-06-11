@@ -37,11 +37,6 @@ if (!$edusharing = $DB->get_record('edusharing', array('id' => $resourceid))) {
     trigger_error(get_string('error_loading_instance', 'editor_edusharing'), E_USER_WARNING);
 }
 
-$context = context_course::instance($edusharing->course);
-if (!is_viewing($context, $USER->id)) {
-    exit();
-}
-
 $previewservice = get_config('edusharing', 'application_cc_gui_url') . '/' . 'preview';
 
 $time = round(microtime(true) * 1000);
