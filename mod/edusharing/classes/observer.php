@@ -50,24 +50,31 @@ class mod_edusharing_observer {
         error_log('course_module_created: '.$module->intro);
     }
 
+    /*
+     *
+     * @todo implement course_module_updated (same function as course_module_created)
+     *
+     * */
 
-    public static function course_category_created(\core\event\course_category_created $event) {
-        $descr = $event->get_description();
-        error_log($descr);
-    }
 
-    public static function course_category_updated(\core\event\course_category_updated $event) {
-        $descr = $event->get_description();
-        error_log($descr);
-    }
+    /*
+     * @todo
+     *
+     * course section (+ course??) delete parse content for
+     *
+     * \core\event\course_section_deleted
+     *
 
-    public static function course_created(\core\event\course_created $event) {
-        $descr = $event->get_description();
-        error_log($descr);
-    }
+     *
+     *
+     * */
 
-    public static function user_signup(\core\event\user_created $event) {
-        $descr = $event->get_description();
-        error_log($descr);
-    }
+    /*
+     *
+     * course deleted -> delete all edu records with course id x
+     *
+     * */
+
+
+
 }
