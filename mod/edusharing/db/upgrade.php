@@ -141,5 +141,29 @@ function xmldb_edusharing_upgrade($oldversion=0) {
         set_config('repository_version', '4.1', 'edusharing');
     }
 
+    if ($result && $oldversion < 2019062110) {
+
+        try {
+            $xmldbtable = new xmldb_table('edusharing');
+            $xmldbfield = new xmldb_field(
+                'module_id',
+                XMLDB_TYPE_INTEGER,
+                '10',
+                null,
+                false,
+                false,
+                null,
+                'name'
+            );
+            $dbman->add_field($xmldbtable, $xmldbfield);
+        } catch (Exception $e) {
+            trigger_error($e->getMessage(), E_USER_WARNING);
+            error_log($e->getMessage());
+        }
+
+    }
+
+
+
     return $result;
 }

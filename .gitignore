@@ -24,5 +24,7 @@
 /mod/*
 !/mod/edusharing
 
+/.idea/*
+
 !LICENSE
 !README.md

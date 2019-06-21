@@ -12,12 +12,12 @@ $observers = array(
         'callback' => 'mod_edusharing_observer::course_module_created',
     ),
     array(
-        'eventname' => '\core\event\course_module_updated',
-        'callback' => 'mod_edusharing_observer::course_module_updated',
+        'eventname' => '\core\event\course_category_created',
+        'callback' => 'mod_edusharing_observer::course_category_created',
     ),
     array(
-        'eventname' => '\core\event\course_updated',
-        'callback' => 'mod_edusharing_observer::course_updated',
+        'eventname' => '\core\event\course_category_updated',
+        'callback' => 'mod_edusharing_observer::course_category_updated',
     ),
     array(
         'eventname' => '\core\event\course_created',

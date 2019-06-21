@@ -31,16 +31,13 @@ class mod_edusharing_observer {
         if (!empty($matches_atto)) {
 
             foreach ($matches_atto as $match) {
-                //$text = str_replace($match, $this->filter_edusharing_convert_object($match), $text, $count);
-
-                //$DB->set_field('edusharing', 'moduleID', $descr['other']['instanceid'], array('id' => $descr['objectid']));
                 $resourceId = '';
                 if (($pos = strpos($match, "resourceId=")) !== FALSE) {
                     $resourceId = substr($match, $pos+11);
                     $resourceId = substr($resourceId, 0, strpos($resourceId, "&"));
                 }
 
-                $DB->set_field('edusharing', 'moduleID', $descr['other']['instanceid'], array('id' => $resourceId));
+                $DB->set_field('edusharing', 'module_id', $descr['objectid'], array('id' => $resourceId));
 
                 error_log('resourceId: ' . $resourceId );
             }
@@ -50,12 +47,12 @@ class mod_edusharing_observer {
     }
 
 
-    public static function course_module_updated(\core\event\course_module_updated $event) {
+    public static function course_category_created(\core\event\course_category_created $event) {
         $descr = $event->get_description();
         error_log($descr);
     }
 
-    public static function course_updated(\core\event\course_updated $event) {
+    public static function course_category_updated(\core\event\course_category_updated $event) {
         $descr = $event->get_description();
         error_log($descr);
     }
