@@ -4,14 +4,18 @@ defined('MOODLE_INTERNAL') || die();
 class mod_edusharing_observer {
 
 
+    /*
+     * delete edu-sharing record and usage contained in deleted module
+     *
+     * */
     public static function course_module_deleted(\core\event\course_module_deleted $event) {
-        $descr = $event->get_description();
-        //echo "<script>console.log( 'course_module_created: ".$descr."' );</script>";
-        //echo '<script>';
-        //echo 'console.log('. json_encode( $descr ) .')';
-        //echo '</script>';
-        error_log($descr);
-       //var_dump($event);die();
+        global $DB;
+        $data = $event->get_data();
+        $objectid = $data['objectid'];
+        $eduObjects = $DB -> get_records('edusharing', array('module_id' => $objectid));
+        foreach($eduObjects as $object) {
+            edusharing_delete_instance($object['id']);
+        }
     }
 
     public static function course_module_created(\core\event\course_module_created $event) {
