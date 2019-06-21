@@ -248,6 +248,9 @@ function edusharing_delete_instance($id) {
     global $CFG;
     global $COURSE;
 
+    error_log('edusharing_delete_instance id: '.$id);
+    echo 'edusharing_delete_instance';
+
     // Load from DATABASE to get object-data for repository-operations.
     if (! $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id'  => $id))) {
         throw new Exception(get_string('error_load_resource', 'edusharing'));
@@ -271,6 +274,7 @@ function edusharing_delete_instance($id) {
         );
 
         $ccwsusage->deleteUsage($params);
+        error_log($edusharing->id . ' usage deleted :)');
 
     } catch (Exception $exception) {
         trigger_error($exception->getMessage(), E_USER_WARNING);
@@ -475,6 +479,7 @@ function edusharing_postprocess($edusharing) {
         $edusharing->course = $COURSE->id;
     }
 
+
     return $edusharing;
 }
 
@@ -544,4 +549,26 @@ function edusharing_get_usage_xml($edusharing) {
     $myxml  = new mod_edusharing_render_parameter();
     $xml = $myxml->edusharing_get_xml($data4xml);
     return $xml;
+}
+
+/**
+ * Hook called before we delete a course module.
+ *
+ * @param \stdClass $cm The course module record.
+ */
+function edusharing_pre_course_module_delete($cm) {
+    //echo 'edusharing_pre_course_module_delete';
+    //$descr = $cm->get_description();
+    error_log('edusharing_pre_course_module_delete: '.print_r($cm, true));
+    //var_dump($cm);die();
+}
+
+function edusharing_course_module_background_deletion_recommended() {
+    return false;
+}
+
+function edusharing_pre_block_delete($cm) {
+    //echo 'edusharing_pre_block_delete';
+    error_log('edusharing_pre_block_delete');
+    //var_dump($cm);die();
 }
