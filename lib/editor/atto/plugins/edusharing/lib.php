@@ -33,28 +33,28 @@ function atto_edusharing_strings_for_js() {
     global $PAGE;
 
     $PAGE->requires->strings_for_js(array(
-            'pluginname',
-            'dialogtitle',
-            'settings',
-            'insert',
-            'update',
-            'cancel',
-            'title',
-            'subtitle',
-            'alwaysShowLatestVersion',
-            'alignment',
-            'alignmentLeft',
-            'alignmentRight',
-            'alignmentNone',
-            'dimensions',
-            'dimensionsWidth',
-            'dimensionsheight',
-            'hint1',
-            'hint2',
-            'skipHint',
-            'openRepo',
-            'directoryHint',
-            ),
+        'pluginname',
+        'dialogtitle',
+        'settings',
+        'insert',
+        'update',
+        'cancel',
+        'title',
+        'subtitle',
+        'alwaysShowLatestVersion',
+        'alignment',
+        'alignmentLeft',
+        'alignmentRight',
+        'alignmentNone',
+        'dimensions',
+        'dimensionsWidth',
+        'dimensionsheight',
+        'hint1',
+        'hint2',
+        'skipHint',
+        'openRepo',
+        'directoryHint',
+    ),
         'atto_edusharing');
 }
 
@@ -63,21 +63,21 @@ function atto_edusharing_strings_for_js() {
  * @return array of additional params to pass to javascript init function for this module.
  */
 function atto_edusharing_params_for_js($elementid, $options, $fpoptions) {
-	global $PAGE, $COURSE;
+    global $PAGE, $COURSE;
 
     $params = array();
-	$coursecontext=context_course::instance($COURSE->id);
+    $coursecontext = context_course::instance($COURSE->id);
 
-	$disabled=false;
-    if(!has_capability('atto/edusharing:visible', $coursecontext)){
-        $disabled=true;
-     }
+    $disabled = false;
+    if (!has_capability('atto/edusharing:visible', $coursecontext)) {
+        $disabled = true;
+    }
     $params['disabled'] = $disabled;
     $params['repourl'] = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
     $params['courseid'] = $COURSE->id;
 
     $ccauth = new mod_edusharing_web_service_factory();
-    $ticket = $ccauth->edusharing_authentication_get_ticket(mod_edusharing_web_service_factory::CONTEXT_EDITOR);
+    $ticket = $ccauth->edusharing_authentication_get_ticket();
     $params['ticket'] = $ticket;
 
     return $params;

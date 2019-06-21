@@ -22,30 +22,30 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once __DIR__ . '/../../../../../config.php';
-require_once($CFG->dirroot.'/lib/setup.php');
+require_once( __DIR__ . '/../../../../../config.php');
+require_once($CFG->dirroot . '/lib/setup.php');
 
 require_login();
 require_sesskey();
 
-require_once($CFG->dirroot.'/mod/edusharing/lib.php');
+require_once($CFG->dirroot . '/mod/edusharing/lib.php');
 
 try {
 
     $input = file_get_contents('php://input');
-    if ( ! $input ) {
+    if (!$input) {
         throw new Exception(get_string('error_json', 'editor_edusharing'));
     }
 
     $edusharing = json_decode($input);
-    if ( ! $edusharing ) {
+    if (!$edusharing) {
         throw new Exception(get_string('error_json', 'editor_edusharing'));
     }
 
-    $edusharing -> editor_atto = true;
+    $edusharing->editor_atto = true;
 
     $id = edusharing_add_instance($edusharing);
-    if ( ! $id ) {
+    if (!$id) {
         throw new Exception(get_string('error_adding_instance', 'editor_edusharing'));
     }
 

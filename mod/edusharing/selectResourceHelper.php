@@ -37,7 +37,8 @@ require_sesskey();
         <script>
             function setNode(id, title) {
                 window.opener.document.getElementById('id_object_url').value = id;
-                window.opener.document.getElementById('id_name').value = title;
+                if(window.opener.document.getElementById('id_name').value === '')
+                    window.opener.document.getElementById('id_name').value = title;
                 window.opener.focus();
                 window.close();
             }
