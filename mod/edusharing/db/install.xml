@@ -41,6 +41,16 @@
                         SEQUENCE="false"
                         COMMENT="The module this edu-sharing activity belongs to"
                         PREVIOUS="course"
+                        NEXT="section_id" />
+                <FIELD
+                        NAME="section_id"
+                        TYPE="int"
+                        LENGTH="10"
+                        NOTNULL="false"
+                        UNSIGNED="true"
+                        SEQUENCE="false"
+                        COMMENT="The section this edu-sharing activity belongs to"
+                        PREVIOUS="module_id"
                         NEXT="name" />
                 <FIELD
                     NAME="name"

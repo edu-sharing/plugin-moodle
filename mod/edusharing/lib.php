@@ -557,10 +557,8 @@ function edusharing_get_usage_xml($edusharing) {
  * @param \stdClass $cm The course module record.
  */
 function edusharing_pre_course_module_delete($cm) {
-    //echo 'edusharing_pre_course_module_delete';
     //$descr = $cm->get_description();
-    error_log('edusharing_pre_course_module_delete: '.print_r($cm, true));
-    //var_dump($cm);die();
+    //error_log('edusharing_pre_course_module_delete: '.print_r($cm, true));
 }
 
 function edusharing_course_module_background_deletion_recommended() {
@@ -569,6 +567,5 @@ function edusharing_course_module_background_deletion_recommended() {
 
 function edusharing_pre_block_delete($cm) {
     //echo 'edusharing_pre_block_delete';
-    error_log('edusharing_pre_block_delete');
-    //var_dump($cm);die();
+    //error_log('edusharing_pre_block_delete');
 }
