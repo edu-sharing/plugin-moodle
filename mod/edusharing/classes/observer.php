@@ -79,20 +79,18 @@ class mod_edusharing_observer {
     /*
      * delete edu-sharing record and usage contained in deleted course (wysiwyg)
      *
+     * triggered immediately on deletion
+     *
      * */
     public static function course_deleted(\core\event\course_deleted $event) {
-
-
-        //triggered immediately on deletion not by cron ?!?!?!?!??!?!?!!?? why????????? What to do??????????????????????
-
-
         global $DB;
         $data = $event->get_data();
-        var_dump($data);
-        echo '#########################################';
-        die();
+        $objectid = $data['objectid'];
+        $eduObjects = $DB -> get_records('edusharing', array('course_id' => $objectid));
+        foreach($eduObjects as $object) {
+            edusharing_delete_instance($object['id']);
+        }
     }
-
 }
 
 function set_module_id_in_db($text, $data, $id_type){
