@@ -91,9 +91,17 @@ class mod_edusharing_observer {
             edusharing_delete_instance($object['id']);
         }
     }
+
+
+    public static function course_restored(\core\event\course_restored $event) {
+        $eventData = $event->get_data();
+        $courseId = $eventData['courseid'];
+        mod_edusharing_restorehelper::edusharing_convert_inline_objects($courseId);
+    }
 }
 
-function set_module_id_in_db($text, $data, $id_type){
+function set_module_id_in_db($text, $data, $id_type)
+{
     global $DB;
     preg_match_all('#<img(.*)class="(.*)edusharing_atto(.*)"(.*)>#Umsi', $text, $matchesimg_atto,
         PREG_PATTERN_ORDER);
@@ -105,7 +113,7 @@ function set_module_id_in_db($text, $data, $id_type){
         foreach ($matches_atto as $match) {
             $resourceId = '';
             if (($pos = strpos($match, "resourceId=")) !== FALSE) {
-                $resourceId = substr($match, $pos+11);
+                $resourceId = substr($match, $pos + 11);
                 $resourceId = substr($resourceId, 0, strpos($resourceId, "&"));
             }
             $DB->set_field('edusharing', $id_type, $data['objectid'], array('id' => $resourceId));
@@ -113,3 +121,4 @@ function set_module_id_in_db($text, $data, $id_type){
     }
     return true;
 }
+

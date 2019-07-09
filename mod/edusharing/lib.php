@@ -66,6 +66,7 @@ function edusharing_supports($feature) {
             return MOD_ARCHETYPE_RESOURCE;
             break;
         case FEATURE_MOD_INTRO:
+        case FEATURE_BACKUP_MOODLE2:
             return true;
             break;
         case FEATURE_GRADE_HAS_GRADE:
@@ -81,7 +82,6 @@ function edusharing_supports($feature) {
         case FEATURE_MODEDIT_DEFAULT_COMPLETION:
         case FEATURE_COMMENT:
         case FEATURE_RATE:
-        case FEATURE_BACKUP_MOODLE2:
             return false;
         default:
             return false;

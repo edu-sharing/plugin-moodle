@@ -27,4 +27,9 @@ $observers = array(
         'eventname' => 'core\event\course_deleted',
         'callback' => 'mod_edusharing_observer::course_deleted',
     ),
+    array(
+        'eventname' => '\core\event\course_restored',
+        'callback' => 'mod_edusharing_observer::course_restored',
+    )
 );
+
