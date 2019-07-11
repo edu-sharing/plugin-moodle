@@ -5,18 +5,52 @@ class mod_edusharing_restorehelper {
 
     public static function edusharing_convert_inline_objects($courseId) {
         global $DB;
+
         $sections = $DB -> get_records('course_sections', array('course' => $courseId));
         foreach ($sections as $section) {
-            self::edusharing_restore_objects($section);
+            $matches_atto = self::edusharing_get_inline_objects($section->summary);
+            if (!empty($matches_atto)) {
+                foreach ($matches_atto as $match) {
+                    $section -> summary = str_replace($match, self::edusharing_convert_object($match, $courseId), $section -> summary);
+                    $DB -> update_record('course_sections', $section);
+                }
+            }
+        }
+
+
+        $modules = get_course_mods($courseId);
+        $course = get_course($courseId);
+        foreach($modules as $module) {
+            $modinfo = get_fast_modinfo($course);
+            $cm = $modinfo -> get_cm($module -> id);
+            if(!empty($cm -> content)) {
+                $matches_atto = self::edusharing_get_inline_objects($cm->content);
+                if (!empty($matches_atto)) {
+                    foreach ($matches_atto as $match) {
+                        $cm -> set_content(str_replace($match, self::edusharing_convert_object($match, $courseId), $cm->content));
+                    }
+                }
+            }
+            $module = $DB->get_record($cm->name,array('id' => $cm->instance));
+            if(!empty($module -> intro)) {
+                $matches_atto = self::edusharing_get_inline_objects($module -> intro);
+                if (!empty($matches_atto)) {
+                    foreach ($matches_atto as $match) {
+                        $module -> intro = str_replace($match, self::edusharing_convert_object($match, $courseId), $module -> intro);
+                    }
+                }
+            }
+            $DB -> update_record($cm -> name, $module);
+
         }
         rebuild_course_cache($courseId);
     }
 
-    public static function edusharing_restore_objects($section) {
+    public static function edusharing_get_inline_objects($text) {
         global $DB;
         try {
 
-            if (strpos($section -> summary, 'es:resource_id') === false) {
+            if (strpos($text, 'edusharing_atto') === false) {
                 return;
             }
 
@@ -26,42 +60,47 @@ class mod_edusharing_restorehelper {
                 $ccauth->edusharing_authentication_get_ticket();
             }
 
-            preg_match_all('#<img(.*)es:resource_id(.*)>#Umsi', $section -> summary, $matchesimg,
+            preg_match_all('#<img(.*)class="(.*)edusharing_atto(.*)"(.*)>#Umsi', $text, $matchesimg_atto,
                 PREG_PATTERN_ORDER);
-            preg_match_all('#<a(.*)es:resource_id(.*)>(.*)</a>#Umsi', $section -> summary, $matchesa,
+            preg_match_all('#<a(.*)class="(.*)edusharing_atto(.*)">(.*)</a>#Umsi', $text, $matchesa_atto,
                 PREG_PATTERN_ORDER);
-            $matches = array_merge($matchesimg[0], $matchesa[0]);
-            if (!empty($matches)) {
-                foreach ($matches as $match) {
-                    $section -> summary = str_replace($match, self::edusharing_convert_object($match, $section), $section -> summary);
-                    $DB -> update_record('course_sections', $section);
-                }
-            }
+            $matches_atto = array_merge($matchesimg_atto[0], $matchesa_atto[0]);
+
+            return $matches_atto;
+
         } catch (Exception $exception) {
             trigger_error($exception->getMessage(), E_USER_WARNING);
         }
     }
 
-    public static function edusharing_convert_object($object, $section) {
+    public static function edusharing_convert_object($object, $courseId) {
         global $DB;
         $doc = new DOMDocument();
         $doc->loadHTML($object, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
         $node = $doc->getElementsByTagName('a')->item(0);
+        $type = 'a';
         if (empty($node)) {
             $node = $doc->getElementsByTagName('img')->item(0);
-        }
-        if (empty($node)) {
-            trigger_error(get_string('error_loading_node', 'filter_edusharing'), E_USER_WARNING);
-            return false;
+            $qs = $node->getAttribute('src');
+            $type = 'img';
+        } else {
+            $qs = $node->getAttribute('href');
         }
 
+        if (empty($node)) {
+            throw Exception(get_string('error_loading_node', 'filter_edusharing'));
+        }
+
+        $params = array();
+        parse_str(parse_url($qs, PHP_URL_QUERY), $params);
+
         $edusharing = new stdClass();
-        $edusharing -> course = $section -> course;
-        $edusharing -> name = $node->getAttribute('alt');
+        $edusharing -> course = $courseId;
+        $edusharing -> name = $params['title'];
         $edusharing -> introformat = 0;
-        $edusharing -> object_url = $node->getAttribute('es:object_url');
-        $edusharing -> object_version = $node->getAttribute('es:window_version');
+        $edusharing -> object_url = $params['object_url'];
+        $edusharing -> object_version = $params['window_version'];
         $edusharing -> timecreated = time();
         $edusharing -> timemodified = time();
 
@@ -72,19 +111,21 @@ class mod_edusharing_restorehelper {
         }
 
         if($usage) {
-            $node->setAttribute('es:resource_id', $id);
-            $prewUrl = $node -> getAttribute('src');
-            if(!empty($prewUrl)) {
-                $prewUrl = explode('resourceId=', $prewUrl)[0];
-                $prewUrl .= 'resourceId=' . $id;
-                $node -> setAttribute('src', $prewUrl);
+            $params['resourceId'] = $id;
+            $url = strtok($qs, '?'). '?';
+            foreach($params as $paramn => $paramv) {
+                $url .= $paramn . '=' . $paramv . '&';
             }
+            if($type === 'a')
+                $node -> setAttribute('href', $url);
+            else
+                $node -> setAttribute('src', $url);
+
         } else {
-            $DB->delete_records('edusharing', array('id' => $id));
+            $DB -> delete_records('edusharing', array('id' => $id));
             return $object;
         }
         return $doc -> saveHTML();
-
     }
 
     public static function edusharing_add_usage($data, $newitemid) {
