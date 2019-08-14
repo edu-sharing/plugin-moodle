@@ -61,11 +61,10 @@ if ( empty($CFG->yui3version) ) {
     <link rel="stylesheet" media="all" href="<?php echo htmlentities($CFG->wwwroot.'/lib/editor/edusharing/dialog/css/edu.css', ENT_COMPAT, 'utf-8') ?>">
 </head>
 
-<body">
+<body class="edusharing_body">
 
 <form>
-    <h2><?php echo htmlentities(get_string('dialog_title', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></h2>
-    <br/>
+
 <?php
 
 $edusharing = new stdClass();
@@ -108,15 +107,14 @@ if (!$repositoryid) {
     <input type="hidden" maxlength="30" size="30" name="repotype" id="repotype" value="<?php echo $edusharing->repotype?>"/>
     <input type="hidden" value="<?php echo $edusharing->ratio?>" id="ratio" />
     <input type="hidden" value="<?php echo $edusharing->window_version?>" id="window_version" />
-
     <div id="form_wrapper" style="float:left">
         <table>
             <tr>
                 <td><span id="titleLabel"><?php echo htmlentities(get_string('caption', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></span></td>
-                <td><input type="text" maxlength="50" style="width: 160px" name="title" id="title"
+                <td><input type="text" maxlength="50" style="width: 200px" name="title" id="title"
                 value="<?php echo htmlspecialchars($edusharing->title, ENT_COMPAT, 'utf-8') ?>"></input></td>
             </tr>
-            <tr class="versionShowTr">
+            <tr class="versionShowTr" style="display: none">
                 <td><?php echo  htmlentities(get_string('version', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
                 <td>
                     <input type="radio" disabled value="latest" name="window_versionshow" <?php echo ($edusharing->window_versionshow == 'latest') ? 'checked="checked"' : ''?> />
@@ -128,14 +126,12 @@ if (!$repositoryid) {
             <tr id="floatTr">
                 <td><?php echo  htmlentities(get_string('float', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
                 <td>
+                    <input type="radio" value="none" name="window_float" <?php echo ($edusharing->window_float == 'none') ? 'checked="checked"' : ''?>
+                           onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatNone', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
                     <input type="radio" value="left" name="window_float" <?php echo ($edusharing->window_float == 'left') ? 'checked="checked"' : ''?>
                     onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatLeft', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                    <input type="radio" value="none" name="window_float" <?php echo ($edusharing->window_float == 'none') ? 'checked="checked"' : ''?>
-                    onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatNone', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
                     <input type="radio" value="right" name="window_float" <?php echo ($edusharing->window_float == 'right') ? 'checked="checked"' : ''?>
                     onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatRight', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
-                    <input type="radio" value="inline" name="window_float" <?php echo ($edusharing->window_float == 'inline') ? 'checked="checked"' : ''?>
-                    onClick="editor_edusharing_handle_click(this)"/><?php echo  htmlentities(get_string('floatInline', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>
                 </td>
             </tr>
             <tr class="dimension">
@@ -150,8 +146,6 @@ if (!$repositoryid) {
             </tr>
             <tr class="dimension heightProp">
                 <td></td>
-                <td><input type="checkbox" name="constrainProps" id="constrainProps" value="1" checked="checked"/>
-                <?php echo htmlspecialchars(get_string('constrainProportions', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?></td>
             </tr>
         </table>
     </div>
@@ -163,10 +157,10 @@ if (!$repositoryid) {
 
     </div>
 
-    <div style="clear: both" class="mceActionPanel">
-        <input type="button" id="update" name="update" class="button" value="<?php echo htmlspecialchars(get_string('update', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>"
+    <div style="clear: both" class="mceActionPanel edusharing_mceActionPanel">
+        <input type="button" id="update" name="update" class="edusharing_dialog_button edusharing_dialog_button_insert" value="<?php echo htmlspecialchars(get_string('update', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>"
         onclick="edusharingDialog.on_click_update(document.forms[0]);" />
-        <input type="button" id="cancel" name="cancel" class="button" value="<?php echo htmlspecialchars(get_string('cancel', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>"
+        <input type="button" id="cancel" name="cancel" class="edusharing_dialog_button edusharing_dialog_button_cancel" value="<?php echo htmlspecialchars(get_string('cancel', 'editor_edusharing'), ENT_COMPAT, 'utf-8') ?>"
         onclick="edusharingDialog.on_click_cancel();" />
     </div>
 
@@ -185,19 +179,11 @@ if (!$repositoryid) {
     }
 
     function editor_edusharing_set_width() {
-        if (!editor_edusharing_get_ratio_cb_status())
-            return;
         document.getElementById('window_width').value = Math.round(document.getElementById('window_height').value / editor_edusharing_get_ratio());
     }
 
     function editor_edusharing_set_height() {
-        if (!editor_edusharing_get_ratio_cb_status())
-            return;
         document.getElementById('window_height').value = Math.round(document.getElementById('window_width').value * editor_edusharing_get_ratio());
-    }
-
-    function editor_edusharing_get_ratio_cb_status() {
-        return document.getElementById('constrainProps').checked;
     }
 
     function editor_edusharing_get_ratio() {
@@ -303,9 +289,22 @@ if (!$repositoryid) {
        }
     }
 
+    function editor_edusharing_shrink_dialog(width, height) {
+        var width = (typeof width === 'undefined') ? '560' : width;
+        var height = (typeof height === 'undefined') ? '520' : height;
+
+        parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].style.width = width + 'px';
+        parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].style.height = height + 'px';
+        parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].getElementsByTagName('iframe')[0].style.width = width + 'px';
+        parent.parent.document.querySelectorAll('div[id^="mce_inlinepopups_"]')[0].getElementsByTagName('iframe')[0].style.height = height + 'px';
+    }
+
+
+
     editor_edusharing_refresh_preview('<?php echo $edusharing->window_float?>');
     editor_edusharing_set_preview_content();
     setTextPreview();
+    editor_edusharing_shrink_dialog();
 
     onload = function () {
         title = document.getElementById('title');

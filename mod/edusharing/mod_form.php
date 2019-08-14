@@ -117,7 +117,7 @@ class mod_edusharing_mod_form extends moodleform_mod
             $ccresourceupload  = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
             $ccresourceupload .= "?mode=2";
             $ccresourceupload .= "&user=" . urlencode(edusharing_get_auth_key());
-            $ccresourceupload .= "&locale=" . $mylang;
+            $ccresourceupload .= "&locale=" . current_language();
             $ccresourceupload .= "&reurl=" . urlencode($CFG->wwwroot . "/mod/edusharing/makelink.php");
             $ccresourceupload .= '&ticket='.$ticket;
             $ccresourceupload = $CFG->wwwroot . '/mod/edusharing/selectResourceHelper.php?sesskey=' . sesskey() . '&rurl=' . urlencode($ccresourceupload);

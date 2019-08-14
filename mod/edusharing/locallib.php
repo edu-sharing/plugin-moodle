@@ -37,10 +37,10 @@ function edusharing_get_auth_key() {
 
     global $USER, $SESSION;
 
-    // Set by external sso script
-    if (array_key_exists('sso', $_SESSION) && !empty($_SESSION['sso'])) {
+    // Set by external sso script.
+    if (isset($SESSION -> edusharing_sso) && !empty($SESSION -> edusharing_sso)) {
         $eduauthparamnameuserid = get_config('edusharing', 'EDU_AUTH_PARAM_NAME_USERID');
-        return $SESSION['sso'][$eduauthparamnameuserid];
+        return $SESSION -> edusharing_sso[$eduauthparamnameuserid];
     }
 
     $guestoption = get_config('edusharing', 'edu_guest_option');
@@ -75,10 +75,10 @@ function edusharing_get_auth_data() {
 
     global $USER, $CFG, $SESSION;
 
-    // Set by external sso script. Do not change to moodle $SESSION!
-    if (array_key_exists('sso', $SESSION) && !empty($SESSION['sso'])) {
+    // Set by external sso script.
+    if (isset($SESSION -> edusharing_sso) && !empty($SESSION -> edusharing_sso)) {
         $authparams = array();
-        foreach ($SESSION['sso'] as $key => $value) {
+        foreach ($SESSION -> edusharing_sso as $key => $value) {
             $authparams[] = array('key'  => $key, 'value'  => $value);
         }
     } else {
@@ -193,10 +193,14 @@ function edusharing_get_redirect_url(
     $url .= '&resource_id='.urlencode($edusharing->id);
     $url .= '&course_id='.urlencode($edusharing->course);
 
-    $url .= '&display='.urlencode($displaymode);
+    $context = context_course::instance($edusharing->course);
+    $roles = get_user_roles($context, $USER->id);
+    foreach ($roles as $role) {
+        $url .= '&role=' . urlencode($role -> shortname);
+    }
 
-    $url .= '&width=' . urlencode($edusharing->window_width);
-    $url .= '&height=' . urlencode($edusharing->window_height);
+    $url .= '&display='.urlencode($displaymode);
+    
     $url .= '&version=' . urlencode($edusharing->object_version);
     $url .= '&locale=' . urlencode(current_language()); //repository
     $url .= '&language=' . urlencode(current_language()); //rendering service

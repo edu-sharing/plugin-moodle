@@ -81,30 +81,11 @@ class filter_edusharing_edurender {
         $html = str_replace("{{{LMS_INLINE_HELPER_SCRIPT}}}",
                 $CFG->wwwroot . "/filter/edusharing/inlineHelper.php?sesskey=".sesskey()."&resId=" . $resid, $html);
 
+        $html = preg_replace("/<es:title[^>]*>.*<\/es:title>/Uims", utf8_decode(optional_param('title', '', PARAM_TEXT)), $html);
 
-
-        $customTitle = true;
-        /*
-         * For images, audio and video show a capture underneath object
-         */
-        $mimetypes = array('image', 'video', 'audio');
-        $addCaption = false;
-        foreach ($mimetypes as $mimetype) {
-            if (strpos(optional_param('mimetype', '', PARAM_TEXT), $mimetype) !== false) {
-                $addCaption = true;
-                $customTitle = false;
-            }
-        }
-        if(strpos(optional_param('mediatype', '', PARAM_TEXT), 'tool_object') !== false) {
-            $addCaption = true;
-            $customTitle = false;
-        }
-
-        if($customTitle)
-            $html = preg_replace("/<es:title[^>]*>.*<\/es:title>/Uims", utf8_decode(optional_param('title', '', PARAM_TEXT)), $html);
-
-        if($addCaption)
-            $html .= '<p class="caption">' . optional_param('title', '', PARAM_TEXT) . '</p>';
+        $caption = utf8_decode(optional_param('caption', '', PARAM_TEXT));
+        if($caption)
+            $html .= '<p class="caption">' . $caption . '</p>';
 
         echo $html;
         exit();

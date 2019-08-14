@@ -111,4 +111,3 @@ class mod_edusharing_web_service_factory {
         return false;
     }
 }
-

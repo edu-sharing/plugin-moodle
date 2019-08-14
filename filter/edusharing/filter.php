@@ -79,7 +79,7 @@ class filter_edusharing extends moodle_text_filter {
 
         try {
 
-            if (strpos($text, 'es:resource_id') === false) {
+            if (strpos($text, 'edusharing_atto') === false && strpos($text, 'es:resource_id') === false) {
                 return $text;
             }
 
@@ -91,13 +91,20 @@ class filter_edusharing extends moodle_text_filter {
 
             $memento = $text;
 
-            preg_match_all('#<img(.*)es:resource_id(.*)>#Umsi', $text, $matchesimg,
+            preg_match_all('#<img(.*)class="(.*)edusharing_atto(.*)"(.*)>#Umsi', $text, $matchesimg_atto,
                     PREG_PATTERN_ORDER);
-            preg_match_all('#<a(.*)es:resource_id(.*)>(.*)</a>#Umsi', $text, $matchesa,
+            preg_match_all('#<a(.*)class="(.*)edusharing_atto(.*)">(.*)</a>#Umsi', $text, $matchesa_atto,
                     PREG_PATTERN_ORDER);
-            $matches = array_merge($matchesimg[0], $matchesa[0]);
+            $matches_atto = array_merge($matchesimg_atto[0], $matchesa_atto[0]);
 
-            if (!empty($matches)) {
+
+            preg_match_all('#<img(.*)es:resource_id(.*)>#Umsi', $text, $matchesimg_tinymce,
+                PREG_PATTERN_ORDER);
+            preg_match_all('#<a(.*)es:resource_id(.*)>(.*)</a>#Umsi', $text, $matchesa_tinymce,
+                PREG_PATTERN_ORDER);
+            $matches_tinymce = array_merge($matchesimg_tinymce[0], $matchesa_tinymce[0]);
+
+            if (!empty($matches_atto) || !empty($matches_tinymce)) {
                 // Disable page-caching to "renew" render-session-data.
                 $PAGE->set_cacheable(false);
                 if(!$edusharing_filter_loaded) {
@@ -105,8 +112,12 @@ class filter_edusharing extends moodle_text_filter {
                     $edusharing_filter_loaded = true;
                 }
 
-                foreach ($matches as $match) {
+                foreach ($matches_atto as $match) {
                     $text = str_replace($match, $this->filter_edusharing_convert_object($match), $text, $count);
+                }
+
+                foreach ($matches_tinymce as $match) {
+                    $text = str_replace($match, $this->filter_edusharing_convert_object($match, true), $text, $count);
                 }
             }
         } catch (Exception $exception) {
@@ -123,21 +134,47 @@ class filter_edusharing extends moodle_text_filter {
      * @param string $object
      * @return boolean|string
      */
-    private function filter_edusharing_convert_object($object) {
+    private function filter_edusharing_convert_object($object, $tinymce = false) {
         global $DB;
         $doc = new DOMDocument();
         $doc->loadHTML($object);
 
-        $node = $doc->getElementsByTagName('a')->item(0);
-        if (empty($node)) {
-            $node = $doc->getElementsByTagName('img')->item(0);
-        }
-        if (empty($node)) {
-            trigger_error(get_string('error_loading_node', 'filter_edusharing'), E_USER_WARNING);
-            return false;
+        if($tinymce) {
+            $node = $doc->getElementsByTagName('a')->item(0);
+            if (empty($node)) {
+                $node = $doc->getElementsByTagName('img')->item(0);
+            }
+            if (empty($node)) {
+                trigger_error(get_string('error_loading_node', 'filter_edusharing'), E_USER_WARNING);
+                return false;
+            }
+
+            $params = array();
+            $params['mimetype'] = $node->getAttribute('es:mimetype');
+            $params['mediatype'] = $node->getAttribute('es:mediatype');
+            $params['caption'] = $node->getAttribute('es:caption');
+            $params['resourceId'] = $node->getAttribute('es:resource_id');
+
+
+
+        } else {
+            $node = $doc->getElementsByTagName('a')->item(0);
+            if (empty($node)) {
+                $node = $doc->getElementsByTagName('img')->item(0);
+                $qs = $node->getAttribute('src');
+            } else {
+                $qs = $node->getAttribute('href');
+            }
+            if (empty($node)) {
+                trigger_error(get_string('error_loading_node', 'filter_edusharing'), E_USER_WARNING);
+                return false;
+            }
+
+            parse_str(parse_url($qs, PHP_URL_QUERY), $params);
         }
 
-        $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id' => (int) $node->getAttribute('es:resource_id')));
+
+        $edusharing = $DB->get_record(EDUSHARING_TABLE, array('id' => (int) $params['resourceId']));
 
         if (!$edusharing) {
             trigger_error(get_string('error_loading_resource', 'filter_edusharing'), E_USER_WARNING);
@@ -145,45 +182,49 @@ class filter_edusharing extends moodle_text_filter {
         }
 
         $renderparams = array();
+        $height = $node->getAttribute('height');
+        $width = $node->getAttribute('width');
+        $renderparams['height'] = $height;
+        $renderparams['width'] = $width;
         $renderparams['title'] = $node->getAttribute('title');
-        $renderparams['mimetype'] = $node->getAttribute('es:mimetype');
-        $renderparams['mediatype'] = $node->getAttribute('es:mediatype');
+        $renderparams['mimetype'] = $params['mimetype'];
+        $renderparams['mediatype'] = $params['mediatype'];
+        $renderparams['caption'] = $params['caption'];
         $converted = $this->filter_edusharing_render_inline($edusharing, $renderparams);
         $wrapperattributes = array();
-
-        $wrapperattributes[] = 'id="' . (int) $node->getAttribute('es:resource_id') . '"';
+        $wrapperattributes[] = 'id="' . (int) $params['resourceId'] . '"';
         $wrapperattributes[] = 'class="edu_wrapper"';
         if (strpos($renderparams['mimetype'], 'image') !== false) {
-            $wrapperattributes[] = 'data-id="' . (int) $node->getAttribute('es:resource_id') . '"';
+            $wrapperattributes[] = 'data-id="' . (int) $params['resourceId'] . '"';
         }
 
+        $nodestyle = $node->getAttribute('style');
         $styleattr = '';
-        switch ($edusharing->window_float) {
-            case 'left':
+        switch (true) {
+            case (strpos($nodestyle, 'left') > -1):
                 $styleattr .= 'display: block; float: left; margin: 0 5px 5px 0;';
                 break;
-            case 'right':
+            case (strpos($nodestyle, 'right') > -1):
                 $styleattr .= 'display: block; float: right; margin: 0 0 5px 5px;';
                 break;
-            case 'inline':
-                $styleattr .= 'display: inline-block; margin: 0 5px;';
+            case ($renderparams['mediatype'] == 'directory' || $renderparams['mediatype'] == 'folder'):
+                $styleattr .= 'display: block; margin: 5px 0;';
                 break;
-            case 'none':
             default:
-                $styleattr .= 'display: block; float: none; margin: 5px 0;';
+                $styleattr .= 'display: inline-block; margin: 5px 0;';
                 break;
         }
 
         $tagattributes = '';
 
-        if ($edusharing->window_width) {
-            $styleattr .= ' width: ' . $edusharing->window_width . 'px;';
-            $tagattributes = 'width="' . $edusharing->window_width . '"';
+        if ($width) {
+            $styleattr .= ' width: ' . $width . 'px;';
+            $tagattributes = 'width="' . $width . '"';
         }
 
-        if ($edusharing->window_height) {
-            $styleattr .= ' height: ' . $edusharing->window_height . 'px;';
-            $tagattributes = 'height="' . $edusharing->window_height . '"';
+        if ($height) {
+            $styleattr .= ' height: ' . $height . 'px;';
+            $tagattributes = 'height="' . $height . '"';
         }
 
         $wrapperattributes[] = 'style="' . $styleattr . '"';
@@ -203,20 +244,22 @@ class filter_edusharing extends moodle_text_filter {
      * @return string
      */
     protected function filter_edusharing_render_inline(stdClass $edusharing, $renderparams) {
-        global $CFG;
+        global $CFG, $COURSE;
 
         $objecturl = $edusharing->object_url;
         if (!$objecturl) {
             throw new Exception(get_string('error_empty_object_url', 'filter_edusharing'));
         }
-
-        $repositoryid = get_config('edusharing', 'application_homerepid');
         $url = edusharing_get_redirect_url($edusharing, EDUSHARING_DISPLAY_MODE_INLINE);
+        $url .=  '&height=' . urlencode($renderparams['height']) . '&width=' . urlencode($renderparams['width']);
+
         $inline = '<div class="eduContainer" data-type="esObject" data-url="' . $CFG->wwwroot .
                  '/filter/edusharing/proxy.php?sesskey='.sesskey().'&URL=' . urlencode($url) . '&resId=' .
                  $edusharing->id . '&title=' . urlencode($renderparams['title']) .
                  '&mimetype=' . urlencode($renderparams['mimetype']) .
                  '&mediatype=' . urlencode($renderparams['mediatype']) .
+                 '&caption=' . urlencode($renderparams['caption']) .
+                 '&course_id=' . urlencode($COURSE -> id) .
                  '"><div class="edusharing_spinner_inner"><div class="edusharing_spinner1"></div></div>' .
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner2"></div></div>'.
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner3"></div></div>'.

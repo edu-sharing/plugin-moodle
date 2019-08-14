@@ -65,23 +65,6 @@ class edusharing_texteditor extends tinymce_texteditor {
     }
 
     /**
-     * As edu-sharing cannot be used in every context (like editing a user's
-     * profile) we have to detect the current editor-context and decide if
-     * edu-sharing is applicable to this context.
-     *
-     * @param array $options the editor-options from tinymce_texteditor::use_editor()
-     *
-     * @return bool
-     */
-    protected function editor_edusharing_is_edusharing_context(array $options) {
-        global $COURSE, $PAGE;
-
-        // context is not reliable here, because when creating a new module context is "context_course"
-        return strpos($PAGE->url->get_path(), 'modedit.php') === false;
-
-    }
-
-    /**
      * Set parameters for tinymce
      * @param int $elementid
      * @param array $options
@@ -99,58 +82,54 @@ class edusharing_texteditor extends tinymce_texteditor {
         // retrieve params from default tinymce-editor
         $params = parent::get_init_params($elementid, $options);
 
-        // add edu-sharing functionaliy to tinymce ONLY when course-id available
-        if ( $this->editor_edusharing_is_edusharing_context($options) ) {
-            $edusharingticket = $this->editor_edusharing_init_edusharing_ticket();
+        $edusharingticket = $this->editor_edusharing_init_edusharing_ticket();
 
-            // register tinymce-plugin but DO NOT try to load it as this already happened
-            $params['plugins'] .= ',-edusharing';
+        // register tinymce-plugin but DO NOT try to load it as this already happened
+        $params['plugins'] .= ',-edusharing';
 
-            // add tool-button
-            if (empty($params['theme_advanced_buttons3_add'])) {
-                $params['theme_advanced_buttons3_add'] = '';
-            }
-            $params['theme_advanced_buttons3_add'] .= ',|,edusharing';
-
-            // additional params required by edu-sharing.net
-            empty($params['extended_valid_elements']) ? $params['extended_valid_elements'] = '' : $params['extended_valid_elements'] .= ',';
-
-            $params['extended_valid_elements'] .= 'a[href|data|type|width|height|alt|title|xmlns::'.self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
-            $params['extended_valid_elements'] .= ',object[data|type|width|height|alt|title|xmlns::'.self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::mediatype|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
-            $params['extended_valid_elements'] .= ',img[style|longdesc|usemap|src|border|alt=|title|hspace|vspace|width|height|align|xmlns::'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::mediatype|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.
-                                                    self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
-
-            $params['moodle_wwwroot'] = $CFG->wwwroot;
-            $params['edusharing_course_id'] = $COURSE->id;
-            $params['edusharing_ticket'] = $edusharingticket;
-
-            $params['edusharing_namespace_uri'] = self::ATTRIBUTE_NAMESPACE_URI;
-            $params['edusharing_namespace_prefix'] = self::ATTRIBUTE_NAMESPACE_PREFIX;
-
-            $params['edusharing_dialog_width'] = 550;
-            $params['edusharing_dialog_height'] = 400;
-
-            $params['convert_urls'] = false;
-
-            $params['moodle_sesskey'] = sesskey();
-
-            $stringman = get_string_manager();
-            $params['edusharing_lang'] = $stringman->load_component_strings('editor_edusharing', current_language());
-
+        // add tool-button
+        if (empty($params['theme_advanced_buttons1_add'])) {
+            $params['theme_advanced_buttons1_add'] = '';
         }
+        $params['theme_advanced_buttons1_add'] .= ',|,edusharing';
+
+        // additional params required by edu-sharing.net
+        empty($params['extended_valid_elements']) ? $params['extended_valid_elements'] = '' : $params['extended_valid_elements'] .= ',';
+
+        $params['extended_valid_elements'] .= 'a[href|data|type|width|height|alt|title|xmlns::'.self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
+        $params['extended_valid_elements'] .= ',object[data|type|width|height|alt|title|xmlns::'.self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::mediatype|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
+        $params['extended_valid_elements'] .= ',img[style|longdesc|usemap|src|border|alt=|title|hspace|vspace|width|height|align|xmlns::'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::object_url|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::mediatype|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::resource_id|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::mimetype|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_float|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_versionshow|'.
+                                                self::ATTRIBUTE_NAMESPACE_PREFIX.'::window_version|'.self::ATTRIBUTE_NAMESPACE_PREFIX.'::repotype]';
+
+        $params['moodle_wwwroot'] = $CFG->wwwroot;
+        $params['edusharing_course_id'] = $COURSE->id;
+        $params['edusharing_ticket'] = $edusharingticket;
+
+        $params['edusharing_namespace_uri'] = self::ATTRIBUTE_NAMESPACE_URI;
+        $params['edusharing_namespace_prefix'] = self::ATTRIBUTE_NAMESPACE_PREFIX;
+
+        $params['edusharing_dialog_width'] = 550;
+        $params['edusharing_dialog_height'] = 400;
+
+        $params['convert_urls'] = false;
+
+        $params['moodle_sesskey'] = sesskey();
+
+        $stringman = get_string_manager();
+        $params['edusharing_lang'] = $stringman->load_component_strings('editor_edusharing', current_language());
 
         return $params;
     }

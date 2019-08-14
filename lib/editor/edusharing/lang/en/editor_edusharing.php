@@ -86,3 +86,5 @@ $string['error_invalid_data'] = 'Received invalid data from sever.';
 $string['error_no_resource_id'] = 'Cannot get resource id.';
 $string['error_updating_object'] = 'Error updating object';
 $string['error_deleting_object'] = 'Error deleting object';
+$string['directory1'] = 'Only materials within this directory will be inserted and published.';
+$string['directory2'] = 'Subdirectories will not be shown.';

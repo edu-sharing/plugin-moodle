@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="41px" height="33px" viewBox="0 0 41 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>Diallog Copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-47.000000, -72.000000)">
+            <g id="Diallog-Copy" transform="translate(43.000000, 65.000000)">
+                <g id="Group">
+                    <g id="Icon/folder/blue">
+                        <g id="ic_folder_black_24px">
+                            <path d="M20.4166667,7.83333333 L8.16666667,7.83333333 C5.92083333,7.83333333 4.10375,9.59583333 4.10375,11.75 L4.08333333,35.25 C4.08333333,37.4041667 5.92083333,39.1666667 8.16666667,39.1666667 L40.8333333,39.1666667 C43.0791667,39.1666667 44.9166667,37.4041667 44.9166667,35.25 L44.9166667,15.6666667 C44.9166667,13.5125 43.0791667,11.75 40.8333333,11.75 L24.5,11.75 L20.4166667,7.83333333 Z" id="Shape" fill="#4D799A" fill-rule="nonzero"></path>
+                            <polygon id="Shape" points="0 0 49 0 49 47 0 47"></polygon>
+                        </g>
+                    </g>
+                    <g id="edu-Grafik-Copy" transform="translate(14.291667, 15.666667)">
+                        <ellipse id="Oval" cx="12.25" cy="11.75" rx="10.2083333" ry="9.79166667"></ellipse>
+                        <g id="edu-sharing-Wabe-weiss" fill="#FFFFFF" fill-rule="nonzero">
+                            <polyline id="Fill-12" points="12.7600654 13.9880952 10.2083333 9.79099254 12.7600654 5.5952381 17.8649346 5.5952381 20.4166667 9.79234079 17.8649346 13.9880952 12.7600654 13.9880952"></polyline>
+                            <polyline id="Fill-13" points="2.55173205 8.39285714 0 4.1971027 2.55173205 0 7.65660128 0 10.2083333 4.1971027 7.65660128 8.39285714 2.55173205 8.39285714"></polyline>
+                            <polyline id="Fill-14" points="2.55173205 19.5833333 0 15.3862306 2.55173205 11.1904762 7.65660128 11.1904762 10.2083333 15.3862306 7.65660128 19.5833333 2.55173205 19.5833333"></polyline>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

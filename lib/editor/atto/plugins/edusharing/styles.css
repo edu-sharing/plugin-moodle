@@ -1,0 +1,133 @@
+.moodle-dialogue-base .moodle-dialogue .moodle-dialogue-bd {
+    padding: 1rem !important;
+}
+
+#edusharing_form {
+    padding: 0;
+}
+
+#edusharing_form input {
+    border-radius: 3px;
+    border: 1px solid #bbb;
+    padding: 5px 10px;
+}
+
+#edusharing_form input[type=number] {
+    padding-right: 0;
+}
+
+#edusharing_form h2 {
+    font-size: 1.4em;
+}
+
+#edusharing_preview {
+    float: right;
+    max-width: 300px;
+    max-height: 300px;
+}
+
+.edusharing_form_wrapper {
+    margin-top: 30px;
+}
+
+#edusharing_wrapper_buttons {
+    text-align: right;
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+}
+
+.atto_form label.edusharing_label_inline {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.atto_form label.edusharing_label_block {
+    display: block;
+}
+
+#edusharing_height,
+#edusharing_width {
+    width: 70px;
+    text-align: center;
+}
+
+#edusharing_wrapper_buttons {
+    clear: both;
+}
+
+#edusharing_hint {
+    text-align: left;
+}
+
+#edusharing_hint_help {
+    float: left;
+    width: 340px;
+    margin-right: 40px;
+}
+
+#edusharing_hint_skip {
+    text-align: center;
+    margin-top: 60px;
+}
+
+#edusharing_hint_check {
+    margin-right: 10px;
+}
+
+.edusharing_center {
+    display: block;
+    text-align: center;
+}
+
+.edusharing_hint_buttons {
+    margin: 30px 0 10px 0;
+}
+
+#edusharing_hint_logo {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    max-height: 120px;
+}
+
+input#edusharing_title {
+    border: none;
+    font-family: inherit;
+    font-size: 2em;
+    padding: 0;
+    width: auto;
+}
+
+#edusharing_title_pencil {
+    display: none;
+    margin-left: 15px;
+    font-size: 1.5em;
+    vertical-align: baseline;
+}
+
+input#edusharing_title:hover + #edusharing_title_pencil {
+    display: inline-block;
+}
+
+#edusharing_caption {
+    width: 300px;
+}
+
+
+.editor_atto .edusharing_atto {
+    background-color: #efefef;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    background-image: url('[[pix:atto_edusharing|/icon]]');
+}
+
+.editor_atto img.edusharing_atto {
+    object-position: 0 -30px;
+    background-position: bottom 5px left 5px;
+}
+
+.editor_atto a.edusharing_atto {
+    background-position: center left 5px;
+    padding: 6px 10px 6px 30px;
+}
