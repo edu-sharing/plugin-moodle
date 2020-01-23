@@ -26,7 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 function xmldb_atto_edusharing_uninstall() {
     // Remove 'edusharing' from the toolbar editor_atto config variable.
-    error_log('uninstalling edusharing from atto');
     $toolbar = get_config('editor_atto', 'toolbar');
     if (strpos($toolbar, 'edusharing') !== false) {
         $groups = explode("\n", $toolbar);

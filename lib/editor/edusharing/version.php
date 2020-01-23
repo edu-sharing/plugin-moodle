@@ -28,7 +28,7 @@ $plugin->dependencies = array(
     'mod_edusharing'  => 2018072701,
     'editor_tinymce' => 2015051100
 );
-$plugin->version  = 2019032101;
+$plugin->version  = 2020012301;  //YYYYMMDDXX
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'v4.2';
+$plugin->release = 'v5.1';

@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 // This file is part of Moodle - http://moodle.org/
 //
 // This program is free software: you can redistribute it and/or modify
@@ -22,48 +21,41 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
  * @copyright metaVentis GmbH — http://metaventis.com
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
+require_once($CFG->dirroot.'/mod/edusharing/locallib.php');
 ?>
 <html>
 <head>
-<title>edu-sharing metadata import</title>
-<style type="text/css" id="vbulletin_css">
-body {
-    background: #e4f3f9;
-    color: #000000;
-    font: 11pt verdana, geneva, lucida, 'lucida grande', arial, helvetica,
-    sans-serif;
-    margin: 5px 10px 10px 10px;
-    padding: 0px;
-}
-
-table {
-    background: #e4f3f9;
-    color: #000000;
-    font: 10pt verdana, geneva, lucida, 'lucida grande', arial, helvetica,
-    sans-serif;
-    margin: 5px 10px 10px 10px;
-    padding: 0px;
-}
-
-p {
-    margin: 10px;
-    padding: 20px;
-    background: #AEF2AC;
-}
-
-fieldset {
-    margin: 10px;
-    border: 1px solid #ddd;
-}
-</style>
+    <title>edu-sharing metadata import</title>
+    <link rel="stylesheet" href="import_metadata_style.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+<div class="h5p-header">
+    <h1>Import metadata from an edu-sharing repository</h1>
+</div>
+
+<div class="wrap">
+
 <?php
 
 if (!is_siteadmin()) {
-    echo 'Access denied!';
+    echo '<h3>Access denied!</h3>';
     exit();
 }
+
+$filename = '';
+
+$metadataurl = optional_param('mdataurl', '', PARAM_NOTAGS);
+if (!empty($metadataurl)) {
+    edusharing_import_metadata($metadataurl);
+    exit();
+}
+
+echo get_form('');
+echo '</div></body></html>';
+exit();
 
 /**
  * Form for importing repository properties
@@ -72,113 +64,24 @@ if (!is_siteadmin()) {
  *
  */
 function get_form($url) {
-    $form = '
+    global $CFG;
+    return '
         <form action="import_metadata.php" method="post" name="mdform">
-            <fieldset>
-                <legend>
-                    Import application metadata
-                </legend>
-                <table>
-                    <tr>
-                        <td colspan="2"> Example metadata endpoints:
-                        <br>
-                        <table>
-                            <tr>
-                                <td>Repository: </td><td><a href="javascript:void();"
-                                    onclick="document.forms[0].mdataurl.value=\'http://your-server-name/edu-sharing/metadata?format=lms\'">
-                                    http://edu-sharing-server/edu-sharing/metadata?format=lms</a>
-                                <br>
-                                </td>
-                            </tr>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="metadata">Metadata endpoint:</label></td>
-                        <td>
-                        <input type="text" size="80" id="metadata" name="mdataurl" value="' . $url . '">
-                        <input type="submit" value="import">
-                        </td>
-                    </tr>
-                </table>
-            </fieldset>
-        </form>';
-
-    return $form;
+            <h3>Enter your metadata Endpoint here:</h3>
+            <p>Hint: Just click on the example to copy it into the input-field.</p>
+            <div class="edu_metadata">                
+                <div class="edu_endpoint">
+                    <p>Metadata endpoint:</p>
+                    <input type="text" id="metadata" name="mdataurl" value="' . $url . '">
+                    <input class="btn" type="submit" value="Import">
+                </div>
+                <div class="edu_example">
+                    <p>(Example: <a href="javascript:void();"
+                                   onclick="document.forms[0].mdataurl.value=\'http://your-server-name/edu-sharing/metadata?format=lms\'">
+                                   http://your-server-name/edu-sharing/metadata?format=lms</a>)
+                   </p>
+                </div>
+            </div>
+        </form>
+        <p>To export the edu-sharing plugin metadata use the following url: <span class="edu_export">' . $CFG->wwwroot . '/mod/edusharing/metadata.php</span></p>';
 }
-
-$filename = '';
-
-
-$metadataurl = optional_param('mdataurl', '', PARAM_NOTAGS);
-if (!empty($metadataurl)) {
-
-    try {
-
-        $xml = new DOMDocument();
-
-        libxml_use_internal_errors(true);
-
-        $curlhandle = curl_init($metadataurl);
-        curl_setopt($curlhandle, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($curlhandle, CURLOPT_HEADER, 0);
-        curl_setopt($curlhandle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curlhandle, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-        curl_setopt($curlhandle, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curlhandle, CURLOPT_SSL_VERIFYHOST, false);
-        $properties = curl_exec($curlhandle);
-        if ($xml->loadXML($properties) == false) {
-            echo ('<p style="background: #FF8170">could not load ' . $metadataurl .
-                    ' please check url') . "<br></p>";
-            echo get_form($metadataurl);
-            exit();
-        }
-        curl_close($curlhandle);
-        $xml->preserveWhiteSpace = false;
-        $xml->formatOutput = true;
-        $entrys = $xml->getElementsByTagName('entry');
-        foreach ($entrys as $entry) {
-            set_config('repository_'.$entry->getAttribute('key'), $entry->nodeValue, 'edusharing');
-        }
-
-        require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
-        $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper();
-        $sslkeypair = $modedusharingapppropertyhelper->edusharing_get_ssl_keypair();
-
-        $host = $_SERVER['SERVER_ADDR'];
-        if(empty($host))
-            $host = gethostbyname($_SERVER['SERVER_NAME']);
-
-        set_config('application_host', $host, 'edusharing');
-        set_config('application_appid', uniqid('moodle_'), 'edusharing');
-        set_config('application_type', 'LMS', 'edusharing');
-        set_config('application_homerepid', get_config('edusharing', 'repository_appid'), 'edusharing');
-        set_config('application_cc_gui_url', get_config('edusharing', 'repository_clientprotocol') . '://' .
-        get_config('edusharing', 'repository_domain') . ':' .
-        get_config('edusharing', 'repository_clientport') . '/edu-sharing/', 'edusharing');
-        set_config('application_private_key', $sslkeypair['privateKey'], 'edusharing');
-        set_config('application_public_key', $sslkeypair['publicKey'], 'edusharing');
-        set_config('application_blowfishkey', 'thetestkey', 'edusharing');
-        set_config('application_blowfishiv', 'initvect', 'edusharing');
-
-        set_config('EDU_AUTH_KEY', 'username', 'edusharing');
-        set_config('EDU_AUTH_PARAM_NAME_USERID', 'userid', 'edusharing');
-        set_config('EDU_AUTH_PARAM_NAME_LASTNAME', 'lastname', 'edusharing');
-        set_config('EDU_AUTH_PARAM_NAME_FIRSTNAME', 'firstname', 'edusharing');
-        set_config('EDU_AUTH_PARAM_NAME_EMAIL', 'email', 'edusharing');
-        set_config('EDU_AUTH_AFFILIATION', $CFG->siteidentifier, 'edusharing');
-        set_config('EDU_AUTH_AFFILIATION_NAME', $CFG->siteidentifier, 'edusharing');
-
-        if (empty($sslkeypair['privateKey'])) {
-            echo 'Generating of SSL keys failed. Please check your configuration.';
-        } else {
-            echo 'Import sucessfull.';
-        }
-        exit();
-    } catch (Exception $e) {
-        echo $e->getMessage();
-        exit();
-    }
-}
-
-echo get_form('');
-exit();

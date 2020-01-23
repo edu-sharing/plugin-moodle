@@ -15,19 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the version of the edu-sharing plugin
+ * Filter converting edu-sharing URIs in the text to edu-sharing rendering links
  *
- * @package    filter_edusharing
- * @copyright  metaVentis GmbH — http://metaventis.com
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_edusharing
+ * @copyright metaVentis GmbH — http://metaventis.com
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
-$plugin->component = 'filter_edusharing';
-$plugin->dependencies = array(
-    'mod_edusharing'  => 2018072701,
-);
-$plugin->version = 2020012301; //YYYYMMDDXX
-$plugin->requires = 2015051100;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'v5.1';
+
+require_once($CFG->dirroot.'/mod/edusharing/locallib.php');
+
+function xmldb_edusharing_install() {
+
+    $metadataurl = 'http://localhost:8080/edu-sharing/metadata?format=lms';
+
+    if (!empty($metadataurl)){
+        if (edusharing_import_metadata($metadataurl)){
+            error_log('Successfully imported metadata from '.$metadataurl);
+        }else{
+            error_log('Could not import metadata from '.$metadataurl);
+        }
+    }
+}
+
