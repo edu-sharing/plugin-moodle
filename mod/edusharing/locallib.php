@@ -329,3 +329,66 @@ function edusharing_import_metadata($metadataurl){
         return false;
     }
 }
+
+function callRepoAPI($method, $url, $ticket=NULL, $auth=NULL, $data=NULL){
+    $curl = curl_init();
+    switch ($method){
+        case "POST":
+            curl_setopt($curl, CURLOPT_POST, 1);
+            if ($data){
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            }
+            break;
+        case "PUT":
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+            if ($data){
+                $fields = array(
+                    'file[0]' => new CURLFile($data, 'text/xml', 'metadata.xml')
+                );
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            }
+            break;
+        default:
+            if ($data){
+                $url = sprintf("%s?%s", $url, http_build_query($data));
+            }
+    }
+    // OPTIONS:
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_USERPWD, $auth);
+    if (empty($ticket)){
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Accept: application/json',
+            'Content-Type: application/json',
+        ));
+    }else{
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Authorization: EDU-TICKET '.$ticket,
+            'Accept: application/json',
+            'Content-Type: application/json',
+        ));
+    }
+
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+
+    // EXECUTE:
+    try{
+        $result = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        error_log('$httpcode: '.$httpcode);
+        if($result === false) {
+            error_log('error-1: '.curl_error($curl));
+            trigger_error(curl_error($curl), E_USER_WARNING);
+        }
+    } catch (Exception $e) {
+        error_log('error: '.$e->getMessage());
+        trigger_error($e->getMessage(), E_USER_WARNING);
+    }
+    //error_log('api called: '.$result);
+    if(!$result){
+        $result = "Connection Failure";
+    }
+    curl_close($curl);
+    return $result;
+}
