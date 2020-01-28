@@ -45,17 +45,78 @@ if (!is_siteadmin()) {
     exit();
 }
 
+if(isset($_POST['repoReg'])){
+    callRepo($_POST['repoAdmin'], $_POST['repoPwd']);
+    exit();
+}
+
 $filename = '';
 
 $metadataurl = optional_param('mdataurl', '', PARAM_NOTAGS);
 if (!empty($metadataurl)) {
     edusharing_import_metadata($metadataurl);
+    echo getRepoForm();
     exit();
 }
 
 echo get_form('');
+echo getRepoForm();
+
+
 echo '</div></body></html>';
 exit();
+
+function callRepo($user, $pwd){
+    global $CFG;
+
+    $repo_url = get_config('edusharing', 'application_cc_gui_url');
+    $apiUrl = $repo_url.'rest/admin/v1/applications?url='.$CFG->wwwroot.'/mod/edusharing/metadata.php';
+    $auth = $user.':'.$pwd;
+    $answer = json_decode(callRepoAPI('PUT', $apiUrl, null, $auth), true);
+    if ( isset($answer['appid']) ){
+        echo('<h3 class="edu_success">Successfully registered the edusharing-moodle-plugin at: '.$repo_url.'</h3>');
+    }else{
+        echo('<h3 class="edu_error">ERROR: Could not register the edusharing-moodle-plugin at: '.$repo_url.'</h3><br>');
+        echo '<p class="edu_error">'.$answer['message'].'</p>';
+        echo '
+            <p class="edu_metadata"> To register the Moodle-PlugIn in the Repository manually got to the 
+            <a href="'.$repo_url.'" target="_blank">Repository</a> and open the "APPLICATIONS"-tab of the "Admin-Tools" interface. 
+            Only the system administrator may use this tool.<br>
+            Enter the URL of the Moodle you want to connect. The URL should look like this:  
+            „[Moodle-install-directory]/mod/edusharing/metadata.php".<br>
+            Click on "CONNECT" to register the LMS. You will be notified with a feedback message and your LMS instance 
+            will appear as an entry in the list of registered applications.<br>
+            If the automatic registration failed due to a connection issue caused by a proxy-server, you also need to 
+            add the proxy-server IP-address as a "host_aliases"-attribute.
+            </p>
+        ';
+    }
+}
+
+function getRepoForm(){
+    $repo_url = get_config('edusharing', 'application_cc_gui_url');
+    if (!empty($repo_url)){
+        return '
+            <form class="repo-reg" action="import_metadata.php" method="post">
+                <h3>Try to register the edu-sharing moodle-plugin with a repository:</h3>
+                <p>If your moodle is behind a proxy-server, this might not work and you have to register the plugin manually.</p>
+                <div class="edu_metadata">
+                    <div class="repo_input">
+                        <p>Repo-URL:</p><input type="text" value="'.$repo_url.'" name=repoUrl />
+                    </div>
+                    <div class="repo_input">
+                        <p>Repo-Admin-User:</p><input class="short_input" type="text" name="repoAdmin">
+                        <p>Repo-Admin-Password:</p><input class="short_input" type="password" name="repoPwd">
+                    </div>
+                    <input class="btn" type="submit" value="Register Repo" name="repoReg">
+                </div>            
+            </form>
+         ';
+    }else{
+        return false;
+    }
+
+}
 
 /**
  * Form for importing repository properties

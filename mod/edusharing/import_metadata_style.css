@@ -144,3 +144,18 @@ input[type="text"]{
     background: #e8e8e8;
     padding: 2px 8px;
 }
+
+.repo-reg{
+    margin-top: 80px;
+}
+
+.repo_input{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.repo_input .short_input{
+    min-width: 50px;
+    max-width: 194px;
+}

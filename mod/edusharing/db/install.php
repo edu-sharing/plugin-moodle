@@ -38,12 +38,12 @@ function xmldb_edusharing_install() {
     if (!empty($metadataurl)){
         if (edusharing_import_metadata($metadataurl)){
             error_log('Successfully imported metadata from '.$metadataurl);
-            $apiUrl = $repo_url.'rest/admin/v1/applications?url'.$CFG->wwwroot.'/mod/edusharing/metadata.php';
+            $apiUrl = $repo_url.'rest/admin/v1/applications?url='.$CFG->wwwroot.'/mod/edusharing/metadata.php';
             $answer = json_decode(callRepoAPI('PUT', $apiUrl, null, $auth), true);
-            if ($answer['appid'] == get_config('edusharing', 'application_appid')){
+            if (isset($answer['appid'])){
                 error_log('Successfully registered the edusharing-moodle-plugin at: '.$repo_url);
             }else{
-                error_log('INSTALL ERROR: Could not register the edusharing-moodle-plugin at: '.$repo_url);
+                error_log('INSTALL ERROR: Could not register the edusharing-moodle-plugin at: '.$repo_url).' because: '.$answer['message'];
             }
         }else{
             error_log('INSTALL ERROR: Could not import metadata from '.$metadataurl);
