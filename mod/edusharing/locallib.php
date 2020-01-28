@@ -376,10 +376,12 @@ function callRepoAPI($method, $url, $ticket=NULL, $auth=NULL, $data=NULL){
     try{
         $result = curl_exec($curl);
         $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        error_log('$httpcode: '.$httpcode);
+        //error_log('$httpcode: '.$httpcode);
         if($result === false) {
-            error_log('error-1: '.curl_error($curl));
             trigger_error(curl_error($curl), E_USER_WARNING);
+        }
+        if ($httpcode === 401){
+            $result = json_encode(array('message' => 'Error 401: Unauthorized. Please check your credentials.'));
         }
     } catch (Exception $e) {
         error_log('error: '.$e->getMessage());

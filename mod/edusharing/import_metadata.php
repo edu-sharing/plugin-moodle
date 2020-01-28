@@ -42,6 +42,7 @@ require_once($CFG->dirroot.'/mod/edusharing/locallib.php');
 
 if (!is_siteadmin()) {
     echo '<h3>Access denied!</h3>';
+    echo '<p>Please login with your admin account in moodle.</p>';
     exit();
 }
 
@@ -59,7 +60,7 @@ if (!empty($metadataurl)) {
     exit();
 }
 
-echo get_form('');
+echo get_form();
 echo getRepoForm();
 
 
@@ -76,11 +77,14 @@ function callRepo($user, $pwd){
     if ( isset($answer['appid']) ){
         echo('<h3 class="edu_success">Successfully registered the edusharing-moodle-plugin at: '.$repo_url.'</h3>');
     }else{
-        echo('<h3 class="edu_error">ERROR: Could not register the edusharing-moodle-plugin at: '.$repo_url.'</h3><br>');
-        echo '<p class="edu_error">'.$answer['message'].'</p>';
+        echo('<h3 class="edu_error">ERROR: Could not register the edusharing-moodle-plugin at: '.$repo_url.'</h3>');
+        if ( isset($answer['message']) ){
+            echo '<p class="edu_error">'.$answer['message'].'</p>';
+        }
+        echo '<h3>Register the Moodle-Plugin in the Repository manually:</h3>';
         echo '
-            <p class="edu_metadata"> To register the Moodle-PlugIn in the Repository manually got to the 
-            <a href="'.$repo_url.'" target="_blank">Repository</a> and open the "APPLICATIONS"-tab of the "Admin-Tools" interface. 
+            <p class="edu_metadata"> To register the Moodle-PlugIn manually got to the 
+            <a href="'.$repo_url.'" target="_blank">Repository</a> and open the "APPLICATIONS"-tab of the "Admin-Tools" interface.<br>
             Only the system administrator may use this tool.<br>
             Enter the URL of the Moodle you want to connect. The URL should look like this:  
             „[Moodle-install-directory]/mod/edusharing/metadata.php".<br>
@@ -124,16 +128,16 @@ function getRepoForm(){
  * @return string
  *
  */
-function get_form($url) {
+function get_form() {
     global $CFG;
     return '
         <form action="import_metadata.php" method="post" name="mdform">
-            <h3>Enter your metadata Endpoint here:</h3>
+            <h3>Enter your metadata endpoint here:</h3>
             <p>Hint: Just click on the example to copy it into the input-field.</p>
             <div class="edu_metadata">                
                 <div class="edu_endpoint">
-                    <p>Metadata endpoint:</p>
-                    <input type="text" id="metadata" name="mdataurl" value="' . $url . '">
+                    <p>Metadata-Endpoint:</p>
+                    <input type="text" id="metadata" name="mdataurl" value="">
                     <input class="btn" type="submit" value="Import">
                 </div>
                 <div class="edu_example">
