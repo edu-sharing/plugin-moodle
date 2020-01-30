@@ -102,10 +102,13 @@ $string['exc_UNKNOWN_ERROR'] = 'Unknown error.';
 
 // metadata
 $string['connectToHomeRepository'] = 'Connect to Home Reposiory';
-$string['conf_linktext'] = 'To connect moodle to home repository click here';
+$string['conf_linktext'] = 'Connect moodle to home repository:';
+$string['conf_btntext'] = 'Connect';
+$string['conf_hinttext'] = 'This will open a new window where you can load the repository metadata and register the plugin with the repository.';
 $string['appProperties'] = 'Application Properties';
 $string['homerepProperties'] = 'Home Repository Properties';
 $string['authparameters'] = 'Authentication Parameters';
+$string['guestProperties'] = 'Guest properties';
 $string['save'] = 'Save changes';
 $string['emptyForDefault'] = 'empty for default';
 $string['filter_not_authorized'] = 'You are not authorized to access the requested content.';

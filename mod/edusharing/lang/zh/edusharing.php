@@ -101,13 +101,16 @@ $string['exc_NO_PERMISSION'] = '权限不够';
 $string['exc_UNKNOWN_ERROR'] = '未知错误';
 
 // metadata
-$string['conf_linktext'] = '点击此处将moodle连接到edu-sharing资源库和渲染服务';
+$string['conf_linktext'] = 'Connect moodle to home repository:';
+$string['conf_btntext'] = 'Connect';
+$string['conf_hinttext'] = 'This will open a new window where you can load the repository metadata and register the plugin with the repository';
 $string['filter_not_authorized'] = 'You are not authorized to access the requested content.';
 $string['connectToHomeRepository'] = 'Connect to Home Reposiory';
 $string['conf_linktext'] = 'To connect moodle to home repository click here';
 $string['appProperties'] = 'Application Properties';
 $string['homerepProperties'] = 'Home Repository Properties';
 $string['authparameters'] = 'Authentication Parameters';
+$string['guestProperties'] = 'Guest properties';
 $string['save'] = 'Save changes';
 $string['emptyForDefault'] = 'empty for default';
 

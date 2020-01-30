@@ -63,7 +63,6 @@ if (!empty($metadataurl)) {
 echo get_form();
 echo getRepoForm();
 
-
 echo '</div></body></html>';
 exit();
 
