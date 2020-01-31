@@ -27,7 +27,7 @@ $plugin->component = 'block_edusharing_search';
 $plugin->dependencies = array(
     'mod_edusharing'  => 2018072701,
 );
-$plugin->version = 2018102901;
+$plugin->version = 2020013121;
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = 'v4.1';
