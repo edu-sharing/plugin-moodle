@@ -36,7 +36,13 @@ class block_edusharing_search extends block_base
      *
      */
     public function init() {
-        $this->title   = get_string('block_title', 'block_edusharing_search');
+        $eduIcon = '<svg  version="1.1" id="Layer_1" xmlns="&ns_svg;" xmlns:xlink="&ns_xlink;" width="19.938" height="19.771"
+                         viewBox="0 0 19.938 19.771" overflow="visible" enable-background="new 0 0 19.938 19.771" xml:space="preserve">
+                        <polygon fill="#3162A7" points="2.748,19.771 0.027,15.06 2.748,10.348 8.188,10.348 10.908,15.06 8.188,19.771 "/>
+                        <polygon fill="#7F91C3" points="11.776,14.54 9.056,9.829 11.776,5.117 17.218,5.117 19.938,9.829 17.218,14.54 "/>
+                        <polygon fill="#C1C6E3" points="2.721,9.423 0,4.712 2.721,0 8.161,0 10.882,4.712 8.161,9.423 "/>
+                    </svg>';
+        $this->title   = $eduIcon . ' ' . get_string('block_title', 'block_edusharing_search');
         $this->version = 2015060901;
     }
 
