@@ -25,6 +25,7 @@
     border-radius: 6px;
     border: 4px solid #fff;
     overflow-scrolling: touch;
+    transition: ease-in-out 0.5s;
 }
 
 #closer a{
@@ -49,4 +50,11 @@
 
 #closer a:hover{
     color: lightcoral;
+}
+
+@media only screen and (max-width: 900px) {
+    .esOuter{
+        width: 95%;
+        height: 95%;
+    }
 }
