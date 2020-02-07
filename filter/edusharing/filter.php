@@ -262,8 +262,8 @@ class filter_edusharing extends moodle_text_filter {
                  '&mediatype=' . urlencode($renderparams['mediatype']) .
                  '&caption=' . urlencode($renderparams['caption']) .
                  '&course_id=' . urlencode($COURSE -> id) .
-                 '&ticket=' . $ticket .
-                 '"><div class="edusharing_spinner_inner"><div class="edusharing_spinner1"></div></div>' .
+                 '&ticket=' . $ticket . '">'.
+                 '<div class="edusharing_spinner_inner"><div class="edusharing_spinner1"></div></div>' .
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner2"></div></div>'.
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner3"></div></div>'.
                  'edu sharing object</div>';

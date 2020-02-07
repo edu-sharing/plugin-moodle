@@ -25,16 +25,28 @@ defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
 
-    $strtxt = get_string('conf_linktext', 'edusharing');
-    $str = '<h4 class="main"><a href="' . $CFG->wwwroot .
-    '/mod/edusharing/import_metadata.php?sesskey=' . $USER->sesskey . '" target="_blank">' .
-    $strtxt . '</a></h4>';
+    $hint = '<div class="form-defaultinfo small text-muted " style="margin-top: 6px">'.get_string('conf_hinttext', 'edusharing').'</div>';
+    $hint = '';
+    $str = '<div class="form-item row">
+                <div class="form-label col-sm-3 text-sm-right">
+                    <p>'.get_string('conf_linktext', 'edusharing').'</p>
+                    
+                </div>
+                <div class="form-setting col-sm-9">
+                    <div class="form-text defaultsnext">
+                        <a class="btn btn-primary" style="margin-top: 5px;" href="' . $CFG->wwwroot .
+                        '/mod/edusharing/import_metadata.php?sesskey=' . $USER->sesskey . '" target="_blank">'.
+                        get_string('conf_btntext', 'edusharing').'</a>
+                    </div>'.$hint.'
+                </div>
+        </div>';
+
     $settings->add(
             new admin_setting_heading('edusharing',
                 get_string('connectToHomeRepository', 'edusharing'), $str));
 
 
-    $settings->add(new admin_setting_heading('edusharing/app', 'Application properties', ''));
+    $settings->add(new admin_setting_heading('edusharing/app', get_string('appProperties', 'edusharing'), ''));
 
     $settings->add(new admin_setting_configtext('edusharing/application_appid', 'appid', '', '', PARAM_TEXT, 50));
 
@@ -56,7 +68,7 @@ if ($ADMIN->fulltree) {
 
     }
 
-    $settings->add(new admin_setting_heading('edusharing/rep', 'Repository properties', ''));
+    $settings->add(new admin_setting_heading('edusharing/rep', get_string('homerepProperties', 'edusharing'), ''));
 
     $settings->add(new admin_setting_configtextarea('edusharing/repository_public_key', 'public_key', '', '', PARAM_TEXT, 50));
 
@@ -84,7 +96,7 @@ if ($ADMIN->fulltree) {
 
 
 
-    $settings->add(new admin_setting_heading('edusharing/auth', 'Authentication properties', ''));
+    $settings->add(new admin_setting_heading('edusharing/auth', get_string('authparameters', 'edusharing'), ''));
 
     // Defaults according to locallib.php.
     $settings->add(new admin_setting_configtext('edusharing/EDU_AUTH_KEY', 'EDU_AUTH_KEY',
@@ -105,11 +117,14 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configcheckbox('edusharing/EDU_AUTH_CONVEYGLOBALGROUPS', 'CONVEYGLOBALGROUPS', '', ''));
 
-    $settings->add(new admin_setting_heading('edusharing/guest', 'Guest properties', ''));
+    $settings->add(new admin_setting_heading('edusharing/guest', get_string('guestProperties', 'edusharing'), ''));
 
     $settings->add(new admin_setting_configcheckbox('edusharing/edu_guest_option', 'guest_option', '', ''));
 
     $settings->add(new admin_setting_configtext('edusharing/edu_guest_guest_id', 'guest_id', '', 'esguest', PARAM_TEXT, 50));
+
+
+    $settings->add(new admin_setting_heading('edusharing/save', get_string('save', 'edusharing'), ''));
 
 
 }

@@ -27,4 +27,4 @@ $plugin->component = 'mod_edusharing';
 $plugin->version = 2020013101; //YYYYMMDDXX
 $plugin->requires = 2015051100; //YYYYMMDDXX
 $plugin->cron = 0;
-$plugin->release = 'v4.2';
+$plugin->release = 'v5.1';

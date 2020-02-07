@@ -25,23 +25,27 @@ define(['jquery'], function($) {
     return {
         init: function() {
 
-
-            !function () {
+            !(function() {
                 function a(a, b) {
-                    var c = void 0 !== window.pageYOffset ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop,
-                        d = document.documentElement.clientHeight, e = c + d;
+                    var c = void 0 !== window.pageYOffset ? window.pageYOffset : (document.documentElement ||
+                            document.body.parentNode || document.body).scrollTop,
+                        d = document.documentElement.clientHeight,
+                        e = c + d;
                     b = b || 0;
                     var f = a.getBoundingClientRect();
-                    if (0 === f.height) return !1;
-                    var g = f.top + c - b, h = f.bottom + c + b;
-                    return h > c && e > g
+                    if (0 === f.height) {
+                     return !1;
+                    }
+                    var g = f.top + c - b,
+                        h = f.bottom + c + b;
+                    return h > c && e > g;
                 }
 
-                $.expr[":"]["near-viewport"] = function (b, c, d) {
+                $.expr[":"]["near-viewport"] = function(b, c, d) {
                     var e = parseInt(d[3]) || 0;
-                    return a(b, e)
-                }
-            }();
+                    return a(b, e);
+                };
+            }());
 
             $.ajaxSetup({cache: false});
 
@@ -53,47 +57,50 @@ define(['jquery'], function($) {
 
             function renderEsObject(esObject, wrapper) {
                 var url = esObject.attr("data-url") + '&videoFormat=' + videoFormat;
-                if (typeof wrapper == 'undefined')
+                if (typeof wrapper == 'undefined') {
                     var wrapper = esObject.parent();
-                $.get(url, function (data) {
-                    wrapper.html('').append(data).css({height: 'auto', width: 'auto'});
-                    if (data.toLowerCase().indexOf('data-view="lock"') >= 0)
-                        setTimeout(function () {
+                }
+                $.get(url, function(data) {
+                    wrapper.html('').append(data).css({display: 'none', height: 'auto', width: 'auto'}).fadeIn('slow', 'linear');
+                    if (data.toLowerCase().indexOf('data-view="lock"') >= 0) {
+                        setTimeout(function() {
                             renderEsObject(esObject, wrapper);
                         }, 1111);
+                    }
                 });
                 esObject.removeAttr("data-type");
             }
 
-            $("div[data-type='esObject']:near-viewport(400)").each(function () {
+            $("div[data-type='esObject']:near-viewport(400)").each(function() {
                 renderEsObject($(this));
-            })
-
-            $(window).scroll(function () {
-                $("div[data-type='esObject']:near-viewport(400)").each(function () {
-                    renderEsObject($(this));
-                })
             });
 
-            $("body").click(function (e) {
+            $(window).scroll(function() {
+                $("div[data-type='esObject']:near-viewport(400)").each(function() {
+                    renderEsObject($(this));
+                });
+            });
+
+            $("body").click(function(e) {
                 if ($(e.target).closest(".edusharing_metadata").length) {
-                    //clicked inside ".edusharing_metadata" - do nothing
+                    // Clicked inside ".edusharing_metadata" - do nothing
                 } else if ($(e.target).closest(".edusharing_metadata_toggle_button").length) {
-                    $(".edusharing_metadata").hide();
-                    toggle_button = $(e.target);
-                    metadata = toggle_button.parent().find(".edusharing_metadata");
+                    $(".edusharing_metadata").hide('fast', 'linear');
+                    let toggle_button = $(e.target);
+                    let metadata = toggle_button.parent().find(".edusharing_metadata");
                     if (metadata.hasClass('open')) {
                         metadata.toggleClass('open');
-                        metadata.hide();
+                        metadata.hide('fast', 'linear');
                     } else {
                         $(".edusharing_metadata").removeClass('open');
                         metadata.toggleClass('open');
-                        metadata.show();
+                        metadata.show('fast', 'linear');
                     }
                 } else {
-                    $(".edusharing_metadata").hide();
+                    $(".edusharing_metadata").hide('fast', 'linear');
                     $(".edusharing_metadata").removeClass('open');
                 }
             });
-        }}
+        }
+    };
 });
