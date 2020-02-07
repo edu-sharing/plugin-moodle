@@ -85,19 +85,19 @@ define(['jquery'], function($) {
                 if ($(e.target).closest(".edusharing_metadata").length) {
                     // Clicked inside ".edusharing_metadata" - do nothing
                 } else if ($(e.target).closest(".edusharing_metadata_toggle_button").length) {
-                    $(".edusharing_metadata").hide('fast', 'linear');
+                    $(".edusharing_metadata").fadeOut('fast');
                     let toggle_button = $(e.target);
                     let metadata = toggle_button.parent().find(".edusharing_metadata");
                     if (metadata.hasClass('open')) {
                         metadata.toggleClass('open');
-                        metadata.hide('fast', 'linear');
+                        metadata.fadeOut('fast');
                     } else {
                         $(".edusharing_metadata").removeClass('open');
                         metadata.toggleClass('open');
-                        metadata.show('fast', 'linear');
+                        metadata.fadeIn('fast');
                     }
                 } else {
-                    $(".edusharing_metadata").hide('fast', 'linear');
+                    $(".edusharing_metadata").fadeOut('fast');
                     $(".edusharing_metadata").removeClass('open');
                 }
             });
