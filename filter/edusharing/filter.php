@@ -84,11 +84,13 @@ class filter_edusharing extends moodle_text_filter {
                 return $text;
             }
 
+            $context = context_course::instance($COURSE->id);
             // Ensure that user exists in repository.
-            if (isloggedin()) {
+            if ( isloggedin() && has_capability('moodle/course:view', $context) ) {
                 $ccauth = new mod_edusharing_web_service_factory();
                 $ticket = $ccauth->edusharing_authentication_get_ticket();
             }else{
+                error_log('Cant use edu-sharing filter: Not logged in or not allowed to view course.');
                 return $text;
             }
 

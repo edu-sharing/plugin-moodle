@@ -28,10 +28,12 @@ require_once($CFG->dirroot.'/mod/edusharing/locallib.php');
 function xmldb_edusharing_install() {
     global $CFG;
 
+    // Fill this to automatically register the plugin with the repo upon installation
     //$metadataurl = 'http://localhost:8080/edu-sharing/metadata?format=lms';
     $metadataurl = null;
     $repo_admin = 'admin';
-    $repo_pw = 'admin';
+    $repo_pw = 'pw';
+
     $auth = $repo_admin.':'.$repo_pw;
 
     if (!empty($metadataurl)){
