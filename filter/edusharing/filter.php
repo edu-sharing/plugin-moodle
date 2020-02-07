@@ -88,6 +88,8 @@ class filter_edusharing extends moodle_text_filter {
             if (isloggedin()) {
                 $ccauth = new mod_edusharing_web_service_factory();
                 $ticket = $ccauth->edusharing_authentication_get_ticket();
+            }else{
+                return $text;
             }
 
             $memento = $text;
@@ -125,7 +127,6 @@ class filter_edusharing extends moodle_text_filter {
             trigger_error($exception->getMessage(), E_USER_WARNING);
             return $memento;
         }
-
         return $text;
     }
 
