@@ -45,7 +45,7 @@ function xmldb_edusharing_install() {
             if (isset($answer['appid'])){
                 error_log('Successfully registered the edusharing-moodle-plugin at: '.$repo_url);
             }else{
-                error_log('INSTALL ERROR: Could not register the edusharing-moodle-plugin at: '.$repo_url).' because: '.$answer['message'];
+                error_log('INSTALL ERROR: Could not register the edusharing-moodle-plugin at: '.$repo_url.' because: '.$answer['message']);
             }
         }else{
             error_log('INSTALL ERROR: Could not import metadata from '.$metadataurl);

@@ -321,7 +321,7 @@ function edusharing_import_metadata($metadataurl){
         if (empty($sslkeypair['privateKey'])) {
             echo '<h3 class="edu_error">Generating of SSL keys failed. Please check your configuration.</h3>';
         } else {
-            echo '<h3 class="edu_success">Import sucessfull.</h3>';
+            echo '<h3 class="edu_success">Import successful.</h3>';
         }
         return true;
     } catch (Exception $e) {
