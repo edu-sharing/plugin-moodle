@@ -83,6 +83,8 @@ class filter_edusharing_edurender {
 
         $html = preg_replace("/<es:title[^>]*>.*<\/es:title>/Uims", utf8_decode(optional_param('title', '', PARAM_TEXT)), $html);
 
+        $html = str_replace('" data-es-auth-required="true"', '&ticket='.$_GET['ticket'].'"', $html);
+
         $caption = utf8_decode(optional_param('caption', '', PARAM_TEXT));
         if($caption)
             $html .= '<p class="caption">' . $caption . '</p>';

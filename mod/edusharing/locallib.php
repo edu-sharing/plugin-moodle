@@ -252,3 +252,145 @@ function edusharing_encrypt_with_repo_public($data) {
     }
     return $crypted;
 }
+
+/**
+ * Fill in the metadata from the repository
+ * Returns true on success
+ *
+ * @param string $metadataurl
+ * @return bool
+ */
+function edusharing_import_metadata($metadataurl){
+    global $CFG;
+    try {
+
+        $xml = new DOMDocument();
+
+        libxml_use_internal_errors(true);
+
+        $curlhandle = curl_init($metadataurl);
+        curl_setopt($curlhandle, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($curlhandle, CURLOPT_HEADER, 0);
+        curl_setopt($curlhandle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlhandle, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+        curl_setopt($curlhandle, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curlhandle, CURLOPT_SSL_VERIFYHOST, false);
+        $properties = curl_exec($curlhandle);
+        if ($xml->loadXML($properties) == false) {
+            echo ('<p style="background: #FF8170">could not load ' . $metadataurl .
+                    ' please check url') . "<br></p>";
+            echo get_form($metadataurl);
+            return false;
+        }
+        curl_close($curlhandle);
+        $xml->preserveWhiteSpace = false;
+        $xml->formatOutput = true;
+        $entrys = $xml->getElementsByTagName('entry');
+        foreach ($entrys as $entry) {
+            set_config('repository_'.$entry->getAttribute('key'), $entry->nodeValue, 'edusharing');
+        }
+
+        require_once(dirname(__FILE__) . '/AppPropertyHelper.php');
+        $modedusharingapppropertyhelper = new mod_edusharing_app_property_helper();
+        $sslkeypair = $modedusharingapppropertyhelper->edusharing_get_ssl_keypair();
+
+        $host = $_SERVER['SERVER_ADDR'];
+        if(empty($host))
+            $host = gethostbyname($_SERVER['SERVER_NAME']);
+
+        set_config('application_host', $host, 'edusharing');
+        set_config('application_appid', uniqid('moodle_'), 'edusharing');
+        set_config('application_type', 'LMS', 'edusharing');
+        set_config('application_homerepid', get_config('edusharing', 'repository_appid'), 'edusharing');
+        set_config('application_cc_gui_url', get_config('edusharing', 'repository_clientprotocol') . '://' .
+            get_config('edusharing', 'repository_domain') . ':' .
+            get_config('edusharing', 'repository_clientport') . '/edu-sharing/', 'edusharing');
+        set_config('application_private_key', $sslkeypair['privateKey'], 'edusharing');
+        set_config('application_public_key', $sslkeypair['publicKey'], 'edusharing');
+        set_config('application_blowfishkey', 'thetestkey', 'edusharing');
+        set_config('application_blowfishiv', 'initvect', 'edusharing');
+
+        set_config('EDU_AUTH_KEY', 'username', 'edusharing');
+        set_config('EDU_AUTH_PARAM_NAME_USERID', 'userid', 'edusharing');
+        set_config('EDU_AUTH_PARAM_NAME_LASTNAME', 'lastname', 'edusharing');
+        set_config('EDU_AUTH_PARAM_NAME_FIRSTNAME', 'firstname', 'edusharing');
+        set_config('EDU_AUTH_PARAM_NAME_EMAIL', 'email', 'edusharing');
+        set_config('EDU_AUTH_AFFILIATION', $CFG->siteidentifier, 'edusharing');
+        set_config('EDU_AUTH_AFFILIATION_NAME', $CFG->siteidentifier, 'edusharing');
+
+        if (empty($sslkeypair['privateKey'])) {
+            echo '<h3 class="edu_error">Generating of SSL keys failed. Please check your configuration.</h3>';
+        } else {
+            echo '<h3 class="edu_success">Import successful.</h3>';
+        }
+        return true;
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        return false;
+    }
+}
+
+function callRepoAPI($method, $url, $ticket=NULL, $auth=NULL, $data=NULL){
+    $curl = curl_init();
+    switch ($method){
+        case "POST":
+            curl_setopt($curl, CURLOPT_POST, 1);
+            if ($data){
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            }
+            break;
+        case "PUT":
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+            if ($data){
+                $fields = array(
+                    'file[0]' => new CURLFile($data, 'text/xml', 'metadata.xml')
+                );
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            }
+            break;
+        default:
+            if ($data){
+                $url = sprintf("%s?%s", $url, http_build_query($data));
+            }
+    }
+    // OPTIONS:
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_USERPWD, $auth);
+    if (empty($ticket)){
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Accept: application/json',
+            'Content-Type: application/json',
+        ));
+    }else{
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Authorization: EDU-TICKET '.$ticket,
+            'Accept: application/json',
+            'Content-Type: application/json',
+        ));
+    }
+
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+
+    // EXECUTE:
+    try{
+        $result = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        //error_log('$httpcode: '.$httpcode);
+        if($result === false) {
+            trigger_error(curl_error($curl), E_USER_WARNING);
+        }
+        if ($httpcode === 401){
+            $result = json_encode(array('message' => 'Error 401: Unauthorized. Please check your credentials.'));
+        }
+    } catch (Exception $e) {
+        error_log('error: '.$e->getMessage());
+        trigger_error($e->getMessage(), E_USER_WARNING);
+    }
+    //error_log('api called: '.$result);
+    if(!$result){
+        $result = "Connection Failure";
+    }
+    curl_close($curl);
+    return $result;
+}

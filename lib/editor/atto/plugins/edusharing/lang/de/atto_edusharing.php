@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'atto_edusharing', language 'en'.
+ * Strings for component 'atto_edusharing', language 'de'.
  *
  * @package    atto_edusharing
  * @copyright  COPYRIGHTINFO
@@ -30,7 +30,7 @@ $string['update'] = 'AKTUALISIEREN';
 $string['cancel'] = 'ABBRECHEN';
 $string['title'] = 'Title';
 $string['subtitle'] = 'Untertitel';
-$string['alwaysShowLatestVersion'] = 'Immer aktuelle Version anzeigen';
+$string['alwaysShowLatestVersion'] = 'Immer die neuste Version anzeigen';
 $string['alignment'] = 'Ausrichtung';
 $string['alignmentLeft'] = 'Links umfließend';
 $string['alignmentRight'] = 'Rechts umfließend';

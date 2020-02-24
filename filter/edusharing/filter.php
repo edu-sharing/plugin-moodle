@@ -72,6 +72,7 @@ class filter_edusharing extends moodle_text_filter {
         global $COURSE;
         global $PAGE;
         global $edusharing_filter_loaded;
+        global $ticket;
 
         if (!isset($options['originalformat'])) {
             return $text;
@@ -83,10 +84,14 @@ class filter_edusharing extends moodle_text_filter {
                 return $text;
             }
 
+            $context = context_course::instance($COURSE->id);
             // Ensure that user exists in repository.
-            if (isloggedin()) {
+            if ( isloggedin() && has_capability('moodle/course:view', $context) ) {
                 $ccauth = new mod_edusharing_web_service_factory();
-                $ccauth->edusharing_authentication_get_ticket();
+                $ticket = $ccauth->edusharing_authentication_get_ticket();
+            }else{
+                error_log('Cant use edu-sharing filter: Not logged in or not allowed to view course.');
+                return $text;
             }
 
             $memento = $text;
@@ -124,7 +129,6 @@ class filter_edusharing extends moodle_text_filter {
             trigger_error($exception->getMessage(), E_USER_WARNING);
             return $memento;
         }
-
         return $text;
     }
 
@@ -202,23 +206,23 @@ class filter_edusharing extends moodle_text_filter {
         $styleattr = '';
         switch (true) {
             case (strpos($nodestyle, 'left') > -1):
-                $styleattr .= 'display: block; float: left; margin: 0 5px 5px 0;';
+                $styleattr .= 'display: block; float: left; margin: 0 14px 14px 0;';
                 break;
             case (strpos($nodestyle, 'right') > -1):
-                $styleattr .= 'display: block; float: right; margin: 0 0 5px 5px;';
+                $styleattr .= 'display: block; float: right; margin: 0 0 14px 14px;';
                 break;
             case ($renderparams['mediatype'] == 'directory' || $renderparams['mediatype'] == 'folder'):
-                $styleattr .= 'display: block; margin: 5px 0;';
+                $styleattr .= 'display: block; margin: 14px 0;';
                 break;
             default:
-                $styleattr .= 'display: inline-block; margin: 5px 0;';
+                $styleattr .= 'display: inline-block; margin: 14px 0;';
                 break;
         }
 
         $tagattributes = '';
 
         if ($width) {
-            $styleattr .= ' width: ' . $width . 'px;';
+            $styleattr .= ' width: ' . $width . 'px; max-width: 100%;';
             $tagattributes = 'width="' . $width . '"';
         }
 
@@ -244,7 +248,7 @@ class filter_edusharing extends moodle_text_filter {
      * @return string
      */
     protected function filter_edusharing_render_inline(stdClass $edusharing, $renderparams) {
-        global $CFG, $COURSE;
+        global $CFG, $COURSE, $ticket;
 
         $objecturl = $edusharing->object_url;
         if (!$objecturl) {
@@ -260,7 +264,8 @@ class filter_edusharing extends moodle_text_filter {
                  '&mediatype=' . urlencode($renderparams['mediatype']) .
                  '&caption=' . urlencode($renderparams['caption']) .
                  '&course_id=' . urlencode($COURSE -> id) .
-                 '"><div class="edusharing_spinner_inner"><div class="edusharing_spinner1"></div></div>' .
+                 '&ticket=' . $ticket . '">'.
+                 '<div class="edusharing_spinner_inner"><div class="edusharing_spinner1"></div></div>' .
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner2"></div></div>'.
                  '<div class="edusharing_spinner_inner"><div class="edusharing_spinner3"></div></div>'.
                  'edu sharing object</div>';

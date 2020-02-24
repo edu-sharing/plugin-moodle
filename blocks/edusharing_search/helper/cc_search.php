@@ -39,7 +39,7 @@ if ( ! $id ) {
     exit();
 }
 
-$PAGE->set_url('/blocks/edusharing_search/helper/cc_search.php', array('id' => $id, 'search' => 'test'));
+$PAGE->set_url('/blocks/edusharing_search/helper/cc_search.php', array('id' => $id, 'search' => ''));
 
 $course = $DB->get_record('course', array('id'  => $id));
 if ( ! $course ) {
@@ -56,7 +56,6 @@ $ticket = $ccauth->edusharing_authentication_get_ticket();
 if ( ! $ticket ) {
     exit();
 }
-
 
 $link = trim(get_config('edusharing', 'application_cc_gui_url'), '/');
 $search = trim(optional_param('search', '', PARAM_NOTAGS)); // query for the external cc-search
@@ -79,26 +78,21 @@ if(version_compare(get_config('edusharing', 'repository_version'), '4' ) >= 0) {
 $link .= '&ticket='.urlencode($ticket);
 
 // Open the external edu-sharingSearch page in iframe
-
 ?>
 
+<div id="esContent">
+    <div class="esOuter">
+        <div id="closer"><a href="<?php echo $_SERVER['HTTP_REFERER'];?>">&times;</a></div>
+        <iframe id="childFrame" name="mainContent" src="<?php echo htmlentities($link);?>" width="100%" height="100%" scrolling="yes"
+                marginwidth="0" marginheight="0" frameborder="0">
+        </iframe>
+    </div>
+</div>
 
-
-<div id="esContent" style="position: fixed; top: 0; left: 0; z-index: 5000;"></div>
-<script src="<?php echo $CFG->wwwroot?>/mod/edusharing/js/jquery.min.js"></script>
 <script>
-    $('html, body').css('overflow', 'hidden');
-    $('#esContent').width($(document).width());
-    $('#esContent').height((parseInt($(window).height()) - 30) + 'px');
-    $('#esContent').html("<div id='closer' style='font-size: 1em; padding: 5px 20px 5px 20px; cursor: pointer; color: #000; background: #eee; '>" +
-        "<?php echo htmlentities(get_string('back_to', 'block_edusharing_search'))?>&nbsp;\"<?php echo $COURSE->fullname?>\"</div>" +
-        "<div style=\"position:fixed;right:0;bottom:0;left:0;top:30px;-webkit-overflow-scrolling: touch;overflow-y: scroll;\"><iframe id='childFrame' name='mainContent' " +
-  "src='<?php echo htmlentities($link)?>' width='100%' height='100%' scrolling='yes'  marginwidth='0' marginheight='0' frameborder='0'>&nbsp;</iframe></div>");
-    $('#closer').click(function() {window.location.href='<?php echo $_SERVER["HTTP_REFERER"]?>';})
+    document.getElementById("esContent").style.opacity = '1';
 </script>
+
 <?php
-
-// -------------------------------------------------------------------------
-
 $OUTPUT->footer();
 exit();

@@ -102,12 +102,15 @@ $string['exc_NO_PERMISSION'] = 'Zugriffsrechte nicht ausreichend.';
 $string['exc_UNKNOWN_ERROR'] = 'Unbekannter Fehler.';
 
 // metadata
-$string['conf_linktext'] = 'Um moodle mit dem Heimat-Repositorium zu verknüpfen klicken Sie hier';
+$string['conf_linktext'] = 'Moodle mit dem Heimat-Repositorium verbinden:';
+$string['conf_btntext'] = 'Verbinden';
+$string['conf_hinttext'] = 'Dies öffnet ein neues Fenster in dem die Metadaten vom Repo geladen werden können und das Plugin beim Repo registriert werden kann.';
 $string['filter_not_authorized'] = 'Sie sind nicht authorisiert auf den angefragten Inhalt zuzugreifen.';
 $string['connectToHomeRepository'] = 'Mit Heimat-Repositorium verbinden';
-$string['appProperties'] = 'Konfiguration moodle';
+$string['appProperties'] = 'Konfiguration Moodle-Plugin';
 $string['homerepProperties'] = 'Konfiguration Heim-Repositorium';
 $string['authparameters'] = 'Authentifizierungsparameter';
+$string['guestProperties'] = 'Konfiguration Gäste';
 $string['save'] = 'Änderungen sichern';
 $string['emptyForDefault'] = 'leer für';
 
