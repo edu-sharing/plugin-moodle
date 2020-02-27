@@ -1,0 +1,7 @@
+<?php
+
+// rename to install_config.php and fill this to automatically register the plugin with the repo upon installation
+
+define('REPO_URL', 'http://localhost:8080/edu-sharing');
+define('REPO_ADMIN', '');
+define('REPO_PW', '');

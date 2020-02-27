@@ -32,3 +32,13 @@ filter/edusharing/version_BACKUP_24080.php
 filter/edusharing/version_BASE_24080.php
 filter/edusharing/version_LOCAL_24080.php
 filter/edusharing/version_REMOTE_24080.php
+filter/edusharing/.idea/.gitignore
+filter/edusharing/.idea/edusharing.iml
+filter/edusharing/.idea/misc.xml
+filter/edusharing/.idea/modules.xml
+filter/edusharing/.idea/vcs.xml
+mod/edusharing/.idea/.gitignore
+mod/edusharing/.idea/edusharing.iml
+mod/edusharing/.idea/misc.xml
+mod/edusharing/.idea/modules.xml
+mod/edusharing/.idea/vcs.xml
