@@ -1,3 +1,14 @@
+:warning: **Warning: This is an old repository!**
+
+  Please use the following for the current version:
+  - Main-Plugin: https://github.com/edu-sharing/plugin-moodle-edu-sharing
+  - Filter-Plugin: https://github.com/edu-sharing/plugin-moodle-edu-sharing-filter
+  - Atto-Editor-Plugin: https://github.com/edu-sharing/moodle-atto_edusharing
+  - Wokspace-Plugin (optional): https://github.com/edu-sharing/plugin-moodle-edu-sharing-workspace 
+  
+  ----
+
+
 edu-sharing moodle-Plugin
 ===========================
 
